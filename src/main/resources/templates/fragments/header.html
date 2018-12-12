@@ -1,0 +1,177 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<header class="topbar">
+	<nav class="navbar top-navbar navbar-expand-md navbar-light">
+		<!-- ============================================================== -->
+		<!-- Logo -->
+		<!-- ============================================================== -->
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/inicio"> <!-- Logo icon --> <b>
+					<!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+					<!-- Dark Logo icon -->
+					<img th:src="@{/images/logo/IMAGOTIPO.png}" width="57px" height="57px" alt="homepage" class="dark-logo" />
+					<!-- Light Logo icon -->
+					<img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+				</b> <!--End Logo icon --> <!-- Logo text --> <span>
+					<!-- dark Logo text -->
+					<img th:src="@{/images/logo/NOMBRE2.png}" width="103px" height="40px" alt="homepage" class="dark-logo" />
+					<!-- Light Logo text -->
+					<img src="../assets/images/logo-light-text.png"  class="light-logo" alt="homepage" />
+				</span>
+			</a>
+		</div>
+		<!-- ============================================================== -->
+		<!-- End Logo -->
+		<!-- ============================================================== -->
+		<div class="navbar-collapse">
+
+			<!-- ============================================================== -->
+			<!-- toggle and nav items -->
+			<!-- ============================================================== -->
+			<ul class="navbar-nav mr-auto mt-md-0 ">
+				<!-- This is  -->
+				<li class="nav-item"><a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"> <i class="ti-menu text-white"></i>
+				</a></li>
+				<li class="nav-item"><a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"> <i class="icon-arrow-left-circle text-white"></i>
+				</a></li>
+				<!-- ============================================================== -->
+				<!-- Comment -->
+				<!-- ============================================================== -->
+<!-- 				<li sec:authorize="isAuthenticated() and hasAnyRole('SOCIO_BI')" class="nav-item dropdown"><a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+<!-- 						<i class="mdi mdi-message"></i> -->
+<!-- 						<div class="notify"> -->
+<!-- 							<span th:unless="${#lists.isEmpty(session.notificaciones)}" class="heartbit"></span> -->
+<!-- 							<span th:unless="${#lists.isEmpty(session.notificaciones)}" class="point"></span> -->
+<!-- 						</div> -->
+<!-- 				</a> -->
+<!-- 					<div class="dropdown-menu mailbox animated bounceInDown"> -->
+<!-- 						<ul> -->
+<!-- 							<li> -->
+<!-- 								<div class="drop-title" th:text="#{etiqueta.notificaciones}"></div> -->
+<!-- 							</li> -->
+<!-- 							<li> -->
+<!-- 								<div class="message-center"> -->
+<!-- 									Message -->
+<!-- 									<th:block th:each="notificacion : ${session.notificaciones}"> -->
+<!-- 										<a th:href="${'/notificaciones/' + notificacion.id}"  > -->
+<!-- 											<div class="btn btn-danger btn-circle"> -->
+<!-- 												<i class="fa fa-link"></i> -->
+<!-- 											</div> -->
+<!-- 											<div class="mail-contnet"> -->
+<!-- 												<h5 th:text="${notificacion.titulo}"></h5> -->
+<!-- 												<span class="time" th:text="${notificacion.fechaModificacion}"></span> -->
+<!-- 											</div> -->
+<!-- 										</a> -->
+<!-- 									</th:block> -->
+<!-- 									Message -->
+<!-- 								</div> -->
+<!-- 							</li> -->
+<!-- 							<li><a class="nav-link text-center" th:href="@{/notificaciones}"> <strong th:text="#{etiqueta.notifiaciones.todas}"></strong> <i class="fa fa-angle-right"></i> -->
+<!-- 							</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</div></li> -->
+				<!-- ============================================================== -->
+				<!-- End Comment -->
+				<!-- ============================================================== -->
+				
+
+			</ul>
+			<ul class="navbar-nav w-100 justify-content-center">
+	            <li class="nav-item">
+	            	<span class="text-white frase_principal" th:text="#{header.frase.publicitaria}"></span>
+	            </li>
+	        </ul>
+			<!-- ============================================================== -->
+			<!-- User profile and search -->
+			<!-- ============================================================== -->
+			<ul class="navbar-nav my-lg-0">
+				<li class="nav-item dropdown">
+                    <a class="nav-link text-white"  target="_blank" th:href="#{header.facebook}"> <i class="fa fa-facebook"></i> </a>
+                </li>
+                <li class="nav-item dropdown">
+					 <a class="nav-link text-white"  target="_blank" th:href="#{header.twiter}"> <i class="fa fa-twitter"></i> </a>
+                </li>
+                <li class="nav-item dropdown">
+				 	 <a class="nav-link text-white"  target="_blank" th:href="#{header.youtube}"> <i class="fa fa-youtube"></i> </a>
+                </li>
+
+				<li sec:authorize="!isAuthenticated()" class="nav-item dropdown d-flex align-items-center">
+				 	 <a class="nav-link btn btn-xs btn-default text-white"  th:href="@{/login}"> <i class="mdi mdi-account-key"></i> <span th:text="#{menu.ingresosocios}"></span> </a>
+                </li>
+                
+                 <li sec:authorize="isAuthenticated() and hasAnyRole('SOCIO_BI')" class="nav-item dropdown">
+                 	<a class="nav-link dropdown-toggle text-white text-white waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="mdi mdi-bell"></i>
+						<div class="notify">
+							<span th:unless="${#lists.isEmpty(session.notificaciones)}" class="heartbit"></span>
+							<span th:unless="${#lists.isEmpty(session.notificaciones)}" class="point"></span>
+						</div>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+						<ul>
+							<li>
+								<div class="drop-title" th:text="#{notificaciones.titulo.principal}"></div>
+							</li>
+							<li>
+								<div class="message-center">
+									<!-- Message -->
+									<th:block th:each="notificacion : ${session.notificaciones}">
+										<a th:href="${'/notificaciones/' + notificacion.id}"  >
+											<div class="btn btn-danger btn-circle">	
+												<i class="fa fa-link"></i>
+											</div>
+											<div class="mail-contnet">
+												<h5 th:text="${notificacion.titulo}"></h5>
+												<span class="time" th:text="${notificacion.fechaModificacion}"></span>
+											</div>
+										</a>
+									</th:block>
+									<!-- Message -->
+								</div>
+							</li>
+							<li><a class="nav-link text-center" th:href="@{/notificaciones}"> <strong th:text="#{notificaciones.vertodas}"></strong> <i class="fa fa-angle-right"></i>
+							</a></li>
+						</ul>
+					</div>
+				</li>
+                
+				<li sec:authorize="isAuthenticated()" class="nav-item dropdown"><a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"> 
+						<img th:if="${#authentication.principal.usuario.fotoUrl == null}" th:src="@{/images/header/default-user.png}" alt="user" class="profile-pic">
+						<img th:if="${#authentication.principal.usuario.fotoUrl != null}" th:src="${#authentication.principal.usuario.fotoUrl}" alt="user" class="profile-pic" />
+				</a>
+					<div class="dropdown-menu dropdown-menu-right animated flipInY">
+						<ul class="dropdown-user">
+							<li>
+								<div class="dw-user-box">
+									<div class="u-img">
+										<img th:if="${#authentication.principal.usuario.fotoUrl == null}" th:src="@{/images/header/default-user.png}" alt="user">
+										<img th:if="${#authentication.principal.usuario.fotoUrl != null}" th:src="${#authentication.principal.usuario.fotoUrl}" alt="user" />
+									</div>
+									<div class="u-text">
+										<h4 sec:authentication="name"></h4><br/>
+										<a th:href="@{/usuarios/perfil}" class="btn btn-rounded btn-gesco btn-sm" th:text="#{etiqueta.header.miperfil}"></a>
+									</div>
+								</div>
+							</li>
+							<li><a th:href="@{/logout}"> <i class="fa fa-power-off"></i> <span th:text="#{etiqueta.header.salir}"></span></a></li>
+						</ul>
+					</div></li>
+				
+				<li class="nav-item hidden-sm-down "><th:block th:switch="__${#locale}__">
+						<a class="nav-link text-muted force-p-r-0" aria-expanded="false"th:case="en" th:href="@{?lang=es_MX}"><i class="flag-icon flag-icon-mx"></i></a>
+						<a class="nav-link text-muted force-p-r-0" aria-expanded="false" th:case="es_MX" th:href="@{?lang=en}" ><i class="flag-icon flag-icon-us"></i></a>
+					</th:block>
+				</li>
+				<li class="nav-item hidden-sm-down "><th:block th:switch="__${#locale}__">
+						<a class="nav-link text-white force-p-l-5 " aria-expanded="false" th:case="en" th:href="@{?lang=es_MX}" th:text="#{etiqueta.header.idioma.espaniol}"></a>
+						<a class="nav-link text-white force-p-l-5 " aria-expanded="false"  th:case="es_MX" th:href="@{?lang=en}" th:text="#{etiqueta.header.idioma.ingles}"></a>
+					</th:block>
+				</li>
+				
+
+
+			</ul>
+		</div>
+	</nav>
+</header>

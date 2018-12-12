@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{colonia.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+var serverContext = [[@{/}]];
+
+$(document).ready(function() {
+  addControlState(document.getElementById('divZona'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divColonia'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divCodigoPostal'),/*[[#{campo.requerido}]]*/);
+});
+
+function cargarColonias() {
+	var codigoPostal = $("#codigoPostal").val();
+    $.getJSON(serverContext + "api/colonias?codigoPostal=" + codigoPostal, function(data) {
+        var html = '';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#colonia').html(html);
+    });
+};
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{colonia.titulo}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/catalogos/colonias}" th:text="#{colonia.titulo}"></a></li>
+            <li class="breadcrumb-item active" th:text="#{colonia.crear.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card ">
+        <div class="card-body">
+          <h3 class="card-title" th:text="#{colonia.crear.titulo}"></h3>
+          <h6 class="card-subtitle" th:text="#{colonia.crear.subtitulo}"></h6>
+          <form name="crearColoniaForm" action="#" th:action="@{/catalogos/colonia-agregar}" th:object="${coloniaDto}" method="post">
+            <div id="divZona" th:class="${#fields.hasErrors('zonaCodigo')}? 'form-group has-danger':'form-group'">
+              <label class="form-control-label" th:text="#{colonia.zona}"></label>
+              <select name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required>
+                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+                <option th:each="zona : ${session.zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} -${zona.nombre}|"></option>
+              </select>
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('zonaCodigo')}" th:errors="*{zonaCodigo}"></span>
+              </span>
+            </div>
+            <div id="divCodigoPostal" th:class="${#fields.hasErrors('codigoPostal')}? 'form-group has-danger':'form-group'">
+              <label class="form-control-label" th:text="#{colonia.codigopostal}"></label>
+              <div class="input-group">
+                <input name="codigoPostal" id="codigoPostal" class="form-control" th:field="*{codigoPostal}" required pattern="^\d{5}$" th:title="#{colonia.codigoPostal.mensajes.validacion}" />
+                <div class="input-group-append">
+                  <button type="button" name="buscar" onclick="cargarColonias();" class="btn btn-info" th:text="#{boton.buscar}"></button>
+                </div>
+              </div>
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('codigoPostal')}" th:errors="*{codigoPostal}"></span>
+              </span>
+            </div>
+            <div id="divColonia" th:class="${#fields.hasErrors('id')}? 'form-group has-danger':'form-group'" >
+              <label class="form-control-label" th:text="#{colonia.nombre}"></label>
+              <select name="id" id="colonia" class="form-control" th:field="*{id}" required>
+                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+              </select>
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
+              </span>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-info-gesco" th:text="#{boton.guardar}"></button>
+              <a th:href="@{/catalogos/colonias}" class="btn btn-danger" th:text="#{boton.cancelar}"></a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

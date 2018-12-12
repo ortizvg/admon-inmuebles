@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{inmueble.titulo}"></title>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	$(document).ready(function() {
+	});
+	/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{etiqueta.inmueble.titulo2}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a class="text-gesco-secundario" th:href="@{/inmuebles}" th:text="#{etiqueta.inmueble.titulo2}"></a>
+            </li>
+            <li class="breadcrumb-item active" th:text="#{etiqueta.inmueble.detalle.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="form-body">
+            <div th:object="${inmuebleDto}">
+              <h3 class="box-title m-t-40" th:text="#{etiqueta.inmueble.direccion}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divColonia" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>
+                  <p class="form-control-static" th:text="*{direccionAsentamientoNombre}"></p>
+                </div>
+                <div id="divCalle" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.calle}"></label>
+                  <p class="form-control-static" th:text="*{direccionCalle}"></p>
+                </div>
+                <div id="divNumeroExterior" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numeroexterior}"></label>
+                  <p class="form-control-static" th:text="*{direccionNumeroExterior}"></p>
+                </div>
+
+              </div>
+              <div class="row">
+                <div id="divNumeroInterior" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerointerior}"></label>
+                  <p class="form-control-static" th:text="*{direccionNumeroInterior}"></p>
+                </div>
+                <div id="divEntreCalles" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.entrecalles}"></label>
+                  <p class="form-control-static" th:text="*{direccionEntreCalles}"></p>
+                </div>
+                <div id="divReferencias" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.referencias}"></label>
+                  <p class="form-control-static" th:text="*{direccionReferencias}"></p>
+                </div>
+              </div>
+              <h3 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divNombre" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{etiqueta.inmueble.nombre}"></label>
+                  <p class="form-control-static" th:text="*{nombre}"></p>
+                </div>
+                <div id="divDiaCuotaOrdinaria" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.diacuotaordinaria}"></label>
+                  <p class="form-control-static" th:text="*{diaCuotaOrdinaria}"></p>
+                </div>
+                <div id="divMontoCuotaOrdinaria" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.montocuotaordinaria}"></label>
+                  <p class="form-control-static" th:text="*{montoCuotaOrdinaria}"></p>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divAdministradorInmueble" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.administradorinmueble}"></label>
+                  <p class="form-control-static" th:text="|*{adminBiNombre} *{adminBiApellidoPaterno} *{adminBiApellidoMaterno}|"></p>
+                </div>
+                <div id="divNombreRepresentante" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label>
+                  <p class="form-control-static" th:text="*{datosAdicionalesNombreRepresentante}"></p>
+                </div>
+                <div id="divRazonSocial" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.razonsocial}"></label>
+                  <p class="form-control-static" th:text="*{datosAdicionalesRazonSocial}"></p>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divRfc" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label>
+                  <p class="form-control-static" th:text="*{datosAdicionalesRfc}"></p>
+                </div>
+                <div id="divTelefono" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label>
+                  <p class="form-control-static" th:text="*{datosAdicionalesTelefono}"></p>
+                </div>
+                <div id="divCorreo" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label>
+                  <p class="form-control-static" th:text="*{datosAdicionalesCorreo}"></p>
+                </div>
+
+              </div>
+              <div class="row">
+                <div id="divNumeroCuenta" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerocuenta}"></label>
+                  <p class="form-control-static" th:text="*{datosAdicionalesNumeroCuenta}"></p>
+                </div>
+                <div id="divImagen" class="col-md-4">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.imagen}"></label>
+                  <div class="el-card-item">
+                    <div class="el-card-avatar el-overlay-1">
+                      <a class="image-popup-vertical-fit" th:href="*{imagenUrl}"> <img th:src="*{imagenUrl}">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <a th:href="@{/inmuebles}" class="btn btn-danger" th:text="#{boton.cerrar}"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

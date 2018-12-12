@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{ticket.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+  addControlState(document.getElementById('divTitulo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divAreaServicio'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divDescripcion'),/*[[#{campo.requerido}]]*/);
+
+});
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+               <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{ticket.titulo.principal}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/tickets}" th:text="#{ticket.titulo.principal}"></a></li>
+            <li class="breadcrumb-item active" th:text="#{ticket.crear.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <form name="crearTicketForm" action="#" th:action="@{/ticket}" th:object="${ticketDto}" method="post">
+            <input type="hidden" class="form-control" th:field="*{id}" />
+            <div class="form-body">
+              <h3 class="card-title" th:text="#{ticket.crear.subtitulo}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divTitulo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('titulo')}? ' has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.nombre}"></label>
+                  <input name="titulo" class="form-control" th:field="*{titulo}" pattern="^[\S\s]{1,100}$" maxlength="100" th:title="#{mensaje.ticket.titulo.validacion}" required />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
+                  </span>
+                </div>
+                <div id="divAreaServicio" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaServicioId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.areaservicio}"></label>
+                  <select name="areaServicioId" class="form-control" th:field="*{areaServicioId}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="areaServicio : ${session.areasServicio}" th:value="${areaServicio.id}" th:text="${areaServicio.nombre}"></option>
+                  </select>
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('areaServicioId')}" th:errors="*{areaServicioId}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divDescripcion" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('descripcion')}? ' has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.descripcion}"></label>
+                  <textarea name="descripcion" class="form-control" th:field="*{descripcion}" maxlength="4000" rows="10" required></textarea>
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-info-gesco" th:text="#{boton.guardar}"></button>
+                <a th:href="@{/tickets}" class="btn btn-danger" th:text="#{boton.cancelar}"></a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

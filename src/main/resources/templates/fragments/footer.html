@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<footer class="footer footer-fixed text-center font-weight-normal footer-font-size" style="position:fixed; z-index: 10"> 
+
+	<div class="row d-flex align-items-center">
+		<div class="col-lg-2 ">
+			<small class="text-white" th:text="#{footer.derechoautor}"></small>
+		</div>
+		<div class="col-lg-2 ">
+			<small class="text-white" th:text="#{footer.cdmx}"> </small>
+		</div>
+		<div class="col-lg-2">
+			<small class="text-white" th:text="#{footer.aguascalientes}">  </small>
+		</div>
+		<div class="col-lg-2">
+			<small class="text-white" th:text="#{footer.cancun}"> </small>
+		</div>
+		<div class="col-lg-2">
+			<small class="text-white" th:text="#{footer.queretaro}"> </small>
+		</div>
+		<div class="col-lg-2">
+			<a target="_blank" th:href="@{/api/aviso-privacidad}"><small class="text-white" th:text="#{footer.avisoprivacidad}"> </small></a>
+		</div>
+	</div>
+
+</footer>

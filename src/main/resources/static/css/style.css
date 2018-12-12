@@ -1,0 +1,188 @@
+iframe {
+ max-width: 100%;
+ height: auto;
+}
+
+.force-p-r-0 {
+  padding-right: 0px !important; 
+}
+
+.force-p-l-0 {
+  padding-left: 0px !important; 
+}
+
+.force-p-l-5 {
+  padding-left: 5px !important; 
+}
+
+.fondo-sombreado {
+	background: #f2f7f8;
+}
+
+.spacer {
+    padding: 90px 0px;
+}
+.spacer_2 {
+    padding: 150px 0px;
+}
+
+.display-7 {
+  font-size: 4rem; 
+}
+
+.footer-fixed {
+	position: fixed;
+}
+
+/* background: #00445C; */
+.text-gesco {
+	color: #008688 !important;
+}
+
+.text-gesco-secundario {
+	color: #00445C !important;
+}
+
+.btn-gesco,
+.btn-gesco.disabled {
+  background: #008688;
+  border: 1px solid #008688; 
+  color: #ffffff;}
+  .btn-gesco:hover,
+  .btn-gesco.disabled:hover {
+    background: #008688 !important;
+    opacity: 0.7;
+    border: 1px solid #008688; 
+    color: #ffffff;}
+  .btn-gesco.active, .btn-gesco:focus,
+  .btn-gesco.disabled.active,
+  .btn-gesco.disabled:focus {
+    background: #008688;
+    color: #ffffff; }
+    
+    
+.btn-info-gesco,
+.btn-info-gesco.disabled {
+  background: #008688;
+  border: 1px solid #008688; 
+  color: #ffffff;}
+  .btn-info-gesco:hover,
+  .btn-info-gesco.disabled:hover {
+    background: #008688;
+    opacity: 0.7;
+    border: 1px solid #008688;
+    color: #ffffff; }
+  .btn-info-gesco.active, .btn-info:focus,
+  .btn-info-gesco.disabled.active,
+  .btn-info-gesco.disabled:focus {
+    background: #008688; 
+    color: #ffffff;}
+
+    
+    
+.footer-login {
+  bottom: 0;
+  color: #54667a;
+  left: 0px;
+  padding: 7px 15px;
+  position: absolute;
+  right: 0;
+  border-top: 1px solid rgba(120, 130, 140, 0.13);
+  background: #008688; 
+}
+
+.footer-font-size {
+	font-size: 12px;
+}
+
+
+
+
+/* RIBBON GESCO */
+.ribbon-gesco {
+/* 	background: rgb(0, 96, 62); */
+	background: #00445C;
+}
+
+
+.ribbon-bookmark.ribbon-gesco:before {
+  border-color: #00445C;
+  border-right-color: transparent; }
+
+.ribbon-bookmark.ribbon-right.ribbon-gesco:before {
+  border-right-color: #00445C;
+  border-left-color: transparent; }
+
+.ribbon-bookmark.ribbon-vertical-l.ribbon-gesco:before,
+.ribbon-bookmark.ribbon-vertical-r.ribbon-gesco:before {
+  border-right-color: #00445C;
+  border-bottom-color: transparent; }
+
+.ribbon-gesco.ribbon-corner:before {
+  border-top-color: #00445C;
+  border-left-color: #00445C; }
+
+.ribbon-gesco.ribbon-corner.ribbon-right:before {
+  border-right-color: #00445C;
+  border-left-color: transparent; }
+
+.ribbon-gesco.ribbon-corner.ribbon-bottom:before {
+  border-top-color: transparent;
+  border-bottom-color: #00445C; }
+  
+  
+.color-secundario-gesco {
+/* 	background: rgb(0, 96, 62); */
+	background: #00445C;
+	
+}
+
+
+/* CARDS */
+.card-color-secunadario-gesco {
+  background: #00445C;
+  border-color: #00445C; 
+ }
+ 
+ .tarjeta_alto_400 {
+ 	min-height: 400px;
+	height: auto;
+ }
+ 
+.tarjeta_alto_350 {
+	min-height: 350px;
+	height: auto;
+}
+ 
+ 
+ .tarjeta_alto_360 {
+ 	min-height: 360px;
+	height: auto;
+ }
+ 
+ .tarjeta_alto_290 {
+ 	min-height: 290px;
+	height: auto;
+ }
+ 
+/* Frase publicituria */
+.frase_principal {
+	font-family: 'salarymanregular';
+	font-size:1.5vw;
+}
+
+/* FONTS */
+/* @font-face{  */
+/* 	font-family: salarymanregular; */
+/* 	src: url(SALARYMA-webfont.woff); */
+/* } */
+
+@font-face{ 
+	font-family: 'salarymanregular';
+	src: url('SALARYMA-webfont.eot');
+	src: url('SALARYMA-webfont.eot?iefix') format('eot'),
+	     url('SALARYMA-webfont.woff') format('woff'),
+	     url('SALARYMA-webfont.ttf') format('truetype'),
+	     url('SALARYMA-webfont.svg#webfont') format('svg');
+}
+

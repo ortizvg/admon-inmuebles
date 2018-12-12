@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{servicio.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+  $('.dropify').dropify();
+  addControlState(document.getElementById('divTitulo'),/*[[#{mensaje.titulo.requerido}]]*/);
+  addControlState(document.getElementById('divNombre'),/*[[#{mensaje.descripcion.requerido}]]*/);
+  addControlState(document.getElementById('divImagen'),/*[[#{mensaje.imagen.requerido}]]*/);
+});
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0" th:text="#{servicio.titulo}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)" th:text="#{catalogos.titulo}"></a></li>
+            <li class="breadcrumb-item active" th:text="#{servicio.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="card card-body">
+          <h3 class="card-title" th:text="#{servicio.titulo}"></h3>
+          <h6 class="card-subtitle" th:text="#{servicio.subtitulo}"></h6>
+          <form name="crearServicioForm" action="#" th:action="@{/catalogos/servicio-crear}" th:object="${servicioDto}" method="post" enctype="multipart/form-data">
+            <div id="divTitulo" th:class="${#fields.hasErrors('titulo')}? 'form-group has-danger':'form-group'">
+              <label class="form-control-label" th:text="#{etiqueta.titulo}"></label>
+              <input name="titulo" class="form-control" th:field="*{titulo}" required pattern="^[\w\W]{5,50}$$" th:title="#{mensaje.titulo.validacion}" />
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
+              </span>
+            </div>
+            <div id="divNombre" th:class="${#fields.hasErrors('descripcion')}? 'form-group has-danger':'form-group'">
+              <label class="form-control-label" th:text="#{etiqueta.descripcion}"></label>
+              <input name="descripcion" class="form-control" th:field="*{descripcion}" required pattern="^[\w\W]{10,200}$" th:title="#{mensaje.descripcion.validacion}" />
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+              </span>
+            </div>
+
+            <div id="divImagen" th:class="${#fields.hasErrors('imagen')}? 'form-group has-danger':'form-group'">
+              <label class="form-control-label" th:text="#{etiqueta.imagen}"></label>
+              <span class="text-danger">*</span>
+              <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" th:title="#{mensaje.imagen.validacion}" required>
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></span>
+              </span>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success btn-rounded" th:text="#{etiqueta.guardar}"></button>
+              <a th:href="@{/catalogos/servicios}" class="btn btn-danger btn-rounded" th:text="#{etiqueta.cancelar}"></a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

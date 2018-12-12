@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+	
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+		 <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0">Estatus Ticket</h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Catalogos</a></li>
+                            <li class="breadcrumb-item active">Estatus Ticket</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Estatus Ticket</h4>
+                                <h6 class="card-subtitle">Editar estatus Ticket</h6>
+     							<form name="editarEstatusTicketForm" action="#" th:action="@{/catalogos/editar-estatus-ticket}" th:object="${estatusTicketDto}" method="post">
+	                  					<input type="hidden" class="form-control" th:field="*{idEstatusTicket}"/>
+	                                    <from class="form-horizontal form-material">
+	                                        <div class="form-group">
+	                                            <div class="col-md-12 m-b-20">
+	                                                <input name="nombre" type="text" class="form-control" placeholder="Nombre"   th:field="*{nombre}" required="required"/> 
+	                                            </div>
+	                                        </div>
+	                                    </from>
+	                           
+	                      
+	                                    <button type="submit" class="btn btn-info waves-effect" >Guardar</button>
+	                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Regresar</button>
+	                       
+                               </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                </div>
+	</div>
+</body>
+</html>

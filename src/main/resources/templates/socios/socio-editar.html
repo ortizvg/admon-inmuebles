@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{socio.crear.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+var serverContext = [[@{/}]];
+
+$(document).ready(function() {
+  $('.dropify').dropify();
+  addControlState(document.getElementById('divUsername'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divTelefonoOficina'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divTelefonoAlternativo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);   
+});
+
+
+
+function cargarColoniasPorZona() {
+	var zonaCodigo = $("#zona").val();
+    $.getJSON(serverContext + "api/colonias?zonaCodigo=" + zonaCodigo, function(data) {
+    	var html = '<option selected="selected" value="">' + /*[[#{etiqueta.seleccione}]]*/ + '</option>';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#colonia').html(html);
+    });
+}
+
+function cargarInmueblesPorColonia() {
+	var coloniaId = $("#colonia").val();
+    $.getJSON(serverContext + "api/inmuebles?coloniaId=" + coloniaId, function(data) {
+        var html = '<option selected="selected" value="">' + /*[[#{etiqueta.seleccione}]]*/ + '</option>';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#inmueble').html(html);
+    });
+}
+
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0" th:text="#{socios.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/socios}" th:text="#{socios.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{socios.editar.titulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							
+                               <h4 class="card-title"><span th:text="#{socios.editar.titulo}"></span></h4>
+                               <h6 class="card-subtitle"><span th:text="#{socios.editar.subtitulo}"></span></h6>
+    							
+                              
+                              <form  name="crearSocioForm" action="#" th:action="@{/socio-editar}" th:object="${usuarioDto}" method="post"  role="form">
+                              			<input type="hidden" class="form-control" th:field="*{id}"/>
+                              			<input type="hidden" class="form-control" th:field="*{username}"/>
+                                        <div class="row">
+                                            <div id="divUsername" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('username')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="username" th:text="#{usuario.usuario}"></label>
+                                                <input type="text" th:field="*{username}" required class="form-control" id="username" th:disabled="true" maxlength="25" pattern="^[\w\s]{6,25}$" th:title="#{usuario.usuario.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+								              	</span>
+                                            </div>
+                                             <div id="divCorreo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('correo')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="correo" th:text="#{usuario.correo}"></label>
+                                                <input type="text" th:field="*{correo}" required class="form-control" id="correo" maxlength="100" 
+                                               		pattern="^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" th:title="#{usuario.correo.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+								             	 </span>
+                                            </div>
+                                            <div id="divNombre" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="nombre" th:text="#{usuario.nombre}"></label>
+                                                <input type="text" th:field="*{nombre}" class="form-control" id="nombre" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.nombre.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+								              	</span>
+                                            </div>
+                                         </div>
+                                          <div class="row">
+                                            <div id="divApellidoPaterno" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('apellidoPaterno')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="apellidoPaterno" th:text="#{usuario.apellido.paterno}"></label>
+                                                <input type="text" th:field="*{apellidoPaterno}" class="form-control" id="apellidoPaterno" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.apellido.paterno.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></span>
+									              </span>
+                                            </div>
+                                            <div id="divApellidoMaterno" class="col-md-4 form-group">
+	                                            <label class="form-control-label" for="apellidoMaterno" th:text="#{usuario.apellido.materno}"></label>
+	                                            <input type="text" th:field="*{apellidoMaterno}" class="form-control" id="apellidoMaterno" maxlength="100">
+                                            </div>
+                                             <div id="divGoogleMapsDir" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('googleMapsDir')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="googleMapsDir" th:text="#{usuario.googlemaps}"></label>
+                                                <input type="text" th:field="*{googleMapsDir}" class="form-control" id="googleMapsDir" maxlength="1000">
+                                                <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('googleMapsDir')}" th:errors="*{googleMapsDir}"></span>
+									              </span>
+                                            </div>
+                                         </div>
+                                         
+                                      <div class="row">
+						                <div id="divDatosDomicilio" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('datosDomicilio')}? 'has-danger'">
+						                  <label class="form-control-label" th:text="#{usuario.datosdomicilio}"></label>
+						                  <input name="datosDomicilio" class="form-control" th:field="*{datosDomicilio}" maxlength="256" />
+						                  <span class="form-control-feedback">
+						                    <span th:if="${#fields.hasErrors('datosDomicilio')}" th:errors="*{datosDomicilio}"></span>
+						                  </span>
+						                </div>
+						              </div>
+                                          
+                                         <div class="row">
+                                         	<div id="divRol" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'">
+												 <label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label>
+		                                        <select  name="rolId" class="form-control" th:field="*{rolSeleccionado}" required >	
+													<option th:each="rol : ${session.rolesDto}" th:value="${{rol.id}}" th:text="${rol.descripcion}"></option>
+		                                        </select>
+		                                        <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('rolSeleccionado')}" th:errors="*{rolSeleccionado}"></span>
+									             </span>
+	                                		</div>
+                                          </div>
+                                          
+                                          <div class="row">
+                                          	<div class="col-md-12 m-b-20">
+			                                    <label class="custom-control custom-checkbox">
+	                                                <input type="checkbox" class="custom-control-input" th:field="*{activo}">
+	                                                <span class="custom-control-label" th:text="#{usuario.estatus.activo}"></span>
+	                                            </label>
+                                            </div>
+                                          </div>
+								              
+							              <h3 class="box-title m-t-40" th:text="#{socio.telefonos}"></h3>
+							              <hr>
+								           <div class="row">
+                                             <div id="divTelefonoOficina" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoOficina')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="telefonoOficina" th:text="#{usuario.telefono.oficina}"></label>
+                                                <input type="text" th:field="*{telefonoOficina}" class="form-control" id="telefonoOficina" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('telefonoOficina')}" th:errors="*{telefonoOficina}"></span>
+									              </span>
+                                            </div>
+                                             <div id="divTelefonoMovil" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoMovil')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="telefonoMovil" th:text="#{usuario.telefono.movil}"></label>
+                                                <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></span>
+									              </span>
+                                            </div>
+                                            <div id="divTelefonoAlternativo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoAlternativo')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="telefonoAlternativo" th:text="#{usuario.telefono.alternativo}"></label>
+                                                <input type="text" th:field="*{telefonoAlternativo}" class="form-control" id="telefonoAlternativo" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('telefonoAlternativo')}" th:errors="*{telefonoAlternativo}"></span>
+									              </span>
+                                            </div>
+                                          </div>
+                                          
+                                          <h3 class="box-title m-t-20" th:text="#{usuario.inmueble}"></h3>
+							              <hr>
+								           <div class="row">
+                                             <div id="divZona" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleDireccionAsentamientoZonaCodigo')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="rolId" th:text="#{usuario.zona}"></label>
+			                                        <select  name="zona" id="zona" class="form-control" th:field="*{inmuebleDireccionAsentamientoZonaCodigo}" onchange="cargarColoniasPorZona();">	
+														<option th:each="zona : ${session.zonasDto}" 
+																th:selected="${usuarioDto.inmuebleDireccionAsentamientoZonaCodigo}"
+																th:value="${{zona.codigo}}" 
+																th:text="${zona.nombre}"></option>
+			                                        </select>
+			                                        <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('inmuebleDireccionAsentamientoZonaCodigo')}" th:errors="inmuebleDireccionAsentamientoZonaCodigo"></span>
+										             </span>
+                                            </div>
+                                             <div id="divColonia" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleDireccionAsentamientoId')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="colonia" th:text="#{usuario.colonia}"></label>
+			                                        <select  name="colonia" id="colonia" class="form-control" th:field="*{inmuebleDireccionAsentamientoId}" onchange="cargarInmueblesPorColonia();">
+														<option th:each="colonia : ${session.coloniasDto}" 
+																th:selected="${usuarioDto.inmuebleDireccionAsentamientoId}"
+																th:value="${{colonia.id}}" 
+																th:text="${colonia.nombre}"></option>
+			                                        </select>
+			                                        <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('inmuebleDireccionAsentamientoId')}" th:errors="*{inmuebleDireccionAsentamientoId}"></span>
+										             </span>
+                                            </div>
+                                            <div id="divInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="inmueble" th:text="#{usuario.inmueble}"></label>
+			                                        <select name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required >	
+														<option th:each="inmueble : ${session.inmueblesDto}" 
+																th:selected="${usuarioDto.inmuebleId}"
+																th:value="${{inmueble.id}}" 
+																th:text="${inmueble.nombre}"></option>
+			                                        </select>
+			                                        <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('inmuebleId')}" th:errors="*{inmuebleId}"></span>
+										             </span>
+                                            </div>
+                                          </div>
+								              
+                                             <div class="row">
+	                                             <div class="col-md-12 m-b-20">
+				                                    <button type="submit" class="btn btn-info-gesco waves-effect m-r-10" th:text="#{boton.guardar}"></button>
+				                                    <a th:href="@{/socios}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>
+	                                           </div>
+                                           </div>
+                                    </form>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

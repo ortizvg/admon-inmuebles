@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{sucursal.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var serverContext = [[@{/}]];
+	
+	
+$(document).ready(function() {
+  $('.dropify').dropify();
+  addControlState(document.getElementById('divNombre'),/*[[#{mensaje.nombre.requerido}]]*/);
+  addControlState(document.getElementById('divCorreo'),/*[[#{mensaje.correo.requerido}]]*/);
+  addControlState(document.getElementById('divTelefono'),/*[[#{mensaje.telefono.requerido}]]*/);
+  addControlState(document.getElementById('divDireccionMaps'),/*[[#{mensaje.direccionmaps.requerido}]]*/);
+  addControlState(document.getElementById('divColonia'),/*[[#{mensaje.colonia.requerido}]]*/);
+  addControlState(document.getElementById('divCalle'),/*[[#{mensaje.calle.requerido}]]*/);
+  addControlState(document.getElementById('divNumeroExterior'),/*[[#{mensaje.numeroexterior.requerido}]]*/);  
+  addControlState(document.getElementById('divNombreResponsable'),/*[[#{mensaje.divNombreresponsable.requerido}]]*/); 
+});
+
+function cargarColonias() {
+	var codigoPostal = $("#codigoPostal").val();
+    $.getJSON(serverContext + "api/colonias?codigoPostal=" + codigoPostal, function(data) {
+        var html = '';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#colonia').html(html);
+    });
+}
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0" th:text="#{sucursal.titulo}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)" th:text="#{catalogos.titulo}"></a></li>
+            <li class="breadcrumb-item active" th:text="#{sucursal.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <form name="crearInmuebleForm" action="#" th:action="@{/catalogos/sucursal-crear}" th:object="${sucursalDto}" method="post">
+            <div class="form-body">
+              <h3 class="card-title" th:text="#{sucursal.titulo}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divNombre" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('nombre')}? ' has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.nombre}"></label>
+                  <input name="nombre" class="form-control" th:field="*{nombre}" required pattern="^[\w\s]{1,100}$" th:title="#{mensaje.nombre.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                  </span>
+                </div>
+                <div id="divCorreo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('correo')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.correo}"></label>
+                  <input name="correo" class="form-control" th:field="*{correo}" required  />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+                  </span>
+                </div>
+                <div id="divTelefono" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefono')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.telefono}"></label>
+                  <input name="telefono" class="form-control" th:field="*{telefono}" required pattern="^[\w\s]{1,50}$" th:title="#{mensaje.telefono.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divDireccionMaps" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('direccionMaps')}? ' has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.direccionmaps}"></label>
+                  <input name="direccionmaps" class="form-control" th:field="*{direccionMaps}" required />
+                  <a  th:href="@{/informacion/mapa-google}"><small class="text-muted p-t-30 db" th:text="#{label.usuario.tutorial.googlemapa}"> </small></a>
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionMaps')}" th:errors="*{direccionMaps}"></span>
+                  </span>
+                </div>
+                <div id="divNombreResponsable" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('nombreResponsable')}? ' has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.nombreresponsable}"></label>
+                  <input name="nombreResponsable" class="form-control" th:field="*{nombreResponsable}" required />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('nombreResponsable')}" th:errors="*{nombreResponsable}"></span>
+                  </span>
+                </div>
+
+              </div>
+              <h3 class="box-title m-t-40" th:text="#{sucursal.direccion}"></h3>
+              <hr>
+              <div class="row">
+      			<div id="divCodigoPostal" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.codigopostal}"></label>
+                  <input  onblur="cargarColonias();" name="codigoPostal" id="codigoPostal" class="form-control" th:field="*{codigoPostal}" />
+                   <small class="form-text text-muted" th:text="#{etiqueta.instruccion.busquedacolonia}"></small>
+                </div>
+                <div id="divColonia" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionAsentamientoId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.colonia}"></label>
+                 <select name="colonia" id="colonia" class="form-control" th:field="*{direccionAsentamientoId}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                  </select>
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionAsentamientoId')}" th:errors="*{direccionAsentamientoId}"></span>
+                  </span>
+                </div>
+                <div id="divCalle" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionCalle')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.calle}"></label>
+                  <input name="direccionCalle" class="form-control" th:field="*{direccionCalle}" required pattern="^[\w\s]{1,100}$" th:title="#{mensaje.direccionCalle.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionCalle')}" th:errors="*{direccionCalle}"></span>
+                  </span>
+                </div>
+
+              </div>
+              <div class="row">
+                <div id="divNumeroExterior" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionNumeroExterior')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.numeroexterior}"></label>
+                  <input name="direccionNumeroExterior" class="form-control" th:field="*{direccionNumeroExterior}" required pattern="^[\w\s]{1,50}$" th:title="#{mensaje.direccionNumeroExterior.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionNumeroExterior')}" th:errors="*{direccionNumeroExterior}"></span>
+                  </span>
+                </div>
+                <div id="divNumeroInterior" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionNumeroInterior')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.numerointerior}"></label>
+                  <input name="direccionNumeroInterior" class="form-control" th:field="*{direccionNumeroInterior}" pattern="^[\w\s]{0,50}$" th:title="#{mensaje.direccionNumeroInterior.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionNumeroInterior')}" th:errors="*{direccionNumeroInterior}"></span>
+                  </span>
+                </div>
+                <div id="divEntreCalles" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionEntreCalles')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.entrecalles}"></label>
+                  <input name="direccionEntreCalles" class="form-control" th:field="*{direccionEntreCalles}" pattern="^[\w\s]{0,50}$" th:title="#{mensaje.direccionEntreCalles.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionEntreCalles')}" th:errors="*{direccionEntreCalles}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divReferencias" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionReferencias')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.referencias}"></label>
+                  <input name="direccionReferencias" class="form-control" th:field="*{direccionReferencias}" pattern="^[\w\s]{0,100}$" th:title="#{mensaje.direccionReferencias.validacion}" />
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('direccionReferencias')}" th:errors="*{direccionReferencias}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success btn-rounded" th:text="#{etiqueta.guardar}"></button>
+                <a th:href="@{/catalogos/sucursales}" class="btn btn-danger btn-rounded" th:text="#{etiqueta.cancelar}"></a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

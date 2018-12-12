@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+  $('.dropify').dropify();
+  addControlState(document.getElementById('divContrasenia'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divConfirmacionContrasenia'),/*[[#{campo.requerido}]]*/);
+  
+});
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+				 <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{usuario.activacion.cuenta}"></h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/login}" th:text="#{usuario.activacion.cuenta.login}"></a></li>
+                            <li class="breadcrumb-item active" th:text="#{usuario.activacion.cuenta}"></li>
+                        </ol>
+                    </div>
+                </div>
+		         <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="#{usuario.activacion.cuenta}"></h4>
+                                <h6 class="card-subtitle" th:text="#{usuario.activacion.subtitulo}"></h6>
+                                <form name="verificarUsuarioForm" action="#" th:action="@{/usuarios/activar}" th:object="${activacionUsuarioDto}" method="post" class="form-control-line m-t-40">
+	                                <div th:if="${#fields.hasGlobalErrors()}" >
+	                                	<p class="text-danger" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+					                </div>
+                                    <input type="hidden" class="form-control" th:field="*{token}" th:value="${activacionUsuarioDto.token}"/>
+                                    <div id="divContrasenia" th:class="${#fields.hasErrors('contrasenia')}? 'form-group has-danger':'form-group'">
+                                        <label th:text="#{usuario.activacion.contrasenia}"></label>
+                                        <input id="contrasenia" type="password" class="form-control" required th:field="*{contrasenia}" maxlength="25" pattern="^[\w\s]{8,25}$" th:title="#{usuario.contrasenia.mensaje.validacion}"> 
+                                        <span class="form-control-feedback">
+							                <span th:if="${#fields.hasErrors('contrasenia')}" th:errors="*{contrasenia}"></span>
+							              </span>
+                                    </div>
+                                     <div id="divConfirmacionContrasenia" th:class="${#fields.hasErrors('confirmacionContrasenia')}? 'form-group has-danger':'form-group'">
+                                        <label th:text="#{usuario.activacion.confirmacontrasenia}"></label>
+                                        <input id="confirmacionContrasenia" type="password" class="form-control" required th:field="*{confirmacionContrasenia}" maxlength="25" pattern="^[\w\s]{8,25}$" th:title="#{usuario.contrasenia.mensaje.validacion}"> 
+                                         <span class="form-control-feedback">
+						                	<span th:if="${#fields.hasErrors('confirmacionContrasenia')}" th:errors="*{confirmacionContrasenia}"></span>
+						              	</span>
+                                    </div>
+                                    <div class="col-md-12 m-b-20">
+	                                    <button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.activar}"></button>
+	                                </div>
+                                   
+                                </form>
+                            </div>
+                        </div>
+			</div>
+		</div>
+		</div>
+	</div>
+</body>
+</html>

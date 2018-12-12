@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+	
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+	<div class="container-fluid">
+		 <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0">Tipo Pago</h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Catalogos</a></li>
+                            <li class="breadcrumb-item active">Tipo Pago</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Tipo Pago</h4>
+                                <h6 class="card-subtitle">Catálogo de Tipo Pago</h6>
+                                <div class="table-responsive">
+                                    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                                        <thead>
+                                            <tr>
+                                                <th>ID #</th>
+                                                <th>nombre</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        	<th:block th:each="tipoPago : ${tiposPago}">
+	                                            <tr>
+	                                                <td th:text="${tipoPago.idTipoPago}"></td>
+	                                                <td th:text="${tipoPago.nombre}"></td>
+	             
+	                                                <td>
+<!-- 	                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="modal" data-target=".bs-example-modal-sm" data-original-title="Eliminar"><i class="fa fa-close text-danger" aria-hidden="true"></i></button> -->
+	                                                	<a th:href="${'/catalogos/tipo-pago-editar/'  + tipoPago.idTipoPago}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
+	                                                	<a th:href="${'/catalogos/tipo-pago-eliminar/'  + tipoPago.idTipoPago}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a>
+	                                                </td>
+	                                            </tr>
+                                             </th:block>
+                                           
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <button type="button" class="btn btn-info-gesco waves-effect" data-toggle="modal" data-target="#add-contact">Nuevo Tipo de Pago</button>
+                                                </td>
+                                                
+                                                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+				                                    <div class="modal-dialog modal-sm">
+				                                        <div class="modal-content">
+				                                            <div class="modal-header">
+				                                                <h4 class="modal-title" id="mySmallModalLabel">¿Eliminar Tipo de Pago?</h4>
+				                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				                                            </div>
+				                                            <div class="modal-footer">
+				                                                <button type="button" class="btn btn-danger waves-effect waves-light">Si</button>
+				                                            </div>
+				                                        </div>
+				                                        <!-- /.modal-content -->
+				                                    </div>
+				                                    <!-- /.modal-dialog -->
+				                                </div>
+                                                
+                                                <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="myModalLabel">Crear nuevo Tipo de Pago</h4>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                            </div>
+                                                            <form name="crearTipoPagoForm" action="#" th:action="@{/catalogos/tipo-pago}" th:object="${tipoPagoDto}" method="post">
+	                                                            <div class="modal-body">
+	                                                                <from class="form-horizontal form-material">
+	                                                                    <div class="form-group">
+	                                                                        <div class="col-md-12 m-b-20">
+	                                                                            <input name="nombre" type="text" class="form-control" placeholder="Nombre"   th:field="*{nombre}" required="required"/> 
+	                                                                        </div>
+	                                                                    </div>
+	                                                                </from>
+	                                                            </div>
+	                                                            <div class="modal-footer">
+	                                                                <button type="submit" class="btn btn-info waves-effect" >Guardar</button>
+	                                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancelar</button>
+	                                                            </div>
+                                                            </form>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                                <td colspan="6">
+                                                    <div class="text-right">
+                                                        <ul class="pagination"> </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                </div>
+	</div>
+</body>
+</html>
+

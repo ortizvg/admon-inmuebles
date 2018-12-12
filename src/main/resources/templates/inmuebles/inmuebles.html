@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{inmueble.titulo}"></title>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var serverContext = [[@{/}]];
+	var seleccione = /*[[#{etiqueta.seleccione}]]*/
+	var opcionSeleccione= '<option selected="selected" value="">'+seleccione+'</option>';
+    $(document).ready(function() {
+        addControlState(document.getElementById('divColonia'),/*[[#{mensaje.inmueble.colonia.requerido}]]*/);
+        $('.modal-show').click(function(event) {
+            event.preventDefault();
+            var id = $(this).data('id')
+            var nombre = $(this).data('nombre')
+
+            var modal = $("#modalEliminar")
+            var mensaje = /*[[#{etiqueta.inmueble.modal.mensaje.eliminar}]]*/
+            modal.find('.modal-title').text(/*[[#{modal.eliminar.encabezado}]]*/)
+            modal.find('.modal-body p').text(mensaje.format(nombre))
+            modal.find('.modal-footer a').attr('href', '/inmueble-eliminar/' + id).text(/*[[#{boton.eliminar}]]*/)
+            modal.modal("show");
+        });
+
+        $('#zonaCodigo').on('change', function() {
+            $.getJSON(serverContext + "api/colonias?zonaCodigo=" + this.value, function(data) {
+                var html = opcionSeleccione;
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+                }
+                html += '</option>';
+                $('#colonias').html(html);
+            });
+        });
+    });
+    /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{etiqueta.inmueble.titulo}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{etiqueta.inmueble.subtitulo}"></h6>
+              <!--               <a th:href="@{/inmueble-crear}" class="btn btn-info btn-rounded waves-effect" th:text="#{inmueble.nuevo}"></a> -->
+              <form name="buscarInmuebleForm" action="#" th:action="@{/inmuebles}" th:object="${inmuebleDto}" method="get">
+                <div class="form-body">
+                  <div class="row">
+                    <div id="divZona" class="col-md-4 form-group">
+                      <label class="form-control-label" th:text="#{colonia.zona}"></label>
+                      <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required>
+                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                        <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option>
+                      </select>
+                      <span class="form-control-feedback"> </span>
+                    </div>
+                    <div id="divColonia" class="col-md-4 form-group">
+                      <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>
+                      <select id="colonias" name="colonias" class="form-control" th:field="*{direccionAsentamientoId}" required>
+                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                        <option th:each="colonia : ${colonias}" th:value="${colonia.id}" th:text="${colonia.nombre}"></option>
+                      </select>
+                      <span class="form-control-feedback"></span>
+                    </div>
+                    <div class="col-md-4 form-group">
+                      <label class="col-md-12 form-control-label">&nbsp;</label>
+                      <button type="submit" class="btn btn-success btn-rounded" th:text="#{boton.buscar}"></button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="table-responsive">
+                <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                  <thead>
+                    <tr>
+                      <th th:text="#{tabla.id}"></th>
+                      <th th:text="#{etiqueta.inmueble.nombre}"></th>
+                      <th th:text="#{tabla.accion}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="inmueble : ${inmuebles}">
+                      <tr>
+                        <td th:text="${inmueble.id}"></td>
+                        <td th:text="${inmueble.nombre}"></td>
+                        <td><a th:href="${'/inmueble-detalle/'  + inmueble.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
+                          <a th:href="${'/inmueble-editar/'  + inmueble.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a> <a
+                          th:attr="data-id=${inmueble.id}" th:attrappend="data-nombre=${inmueble.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i
+                            class="fa fa-close text-danger" aria-hidden="true"></i></a></td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2"><a th:href="@{/inmueble-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a></td>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div class="col-md-4">
+                  <div class="card card-body">
+                    <div id="modalEliminar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel"></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p></p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                            <a href="/#" class="btn btn-rounded btn-danger waves-effect"></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

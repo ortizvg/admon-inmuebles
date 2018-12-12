@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{adminicorp.page.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+	$(document).ready(function() {
+    
+	    $("#zonasFiltroInputId").on("keyup", function() {
+		    var inputValue = $(this).val().toLowerCase();
+		    $("#zonasTableId tbody tr ").filter(function() {
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+		    });
+		});
+	    
+	    $("#coloniasFiltroInputId").on("keyup", function() {
+		    var inputValue = $(this).val().toLowerCase();
+		    $("#coloniasTableId tbody tr ").filter(function() {
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+		    });
+		});
+	    
+	    $("#inmueblesFiltroInputId").on("keyup", function() {
+		    var inputValue = $(this).val().toLowerCase();
+		    $("#inmueblesTableId tbody tr ").filter(function() {
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+		    });
+		});
+    
+	});
+	
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{adminicorp.titulo}"></h3>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{zona.titulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{zona.subtitulo}"></h6>
+              
+              <div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="zonasFiltroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
+			  	</div>
+			  </div>
+              
+              <div class="table-responsive">
+                <table id="zonasTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                  <thead>
+                    <tr>
+                      <th th:text="#{zona.codigo}"></th>
+                      <th th:text="#{zona.nombre}"></th>
+                      <th th:text="#{zona.administrador}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="zona : ${zonas}">
+                      <tr>
+                        <td th:text="${zona.codigo}"></td>
+                        <td th:text="${zona.nombre}"></td>
+                        <td th:text="|${zona.adminZonaNombre} ${zona.adminZonaApellidoPaterno} ${zona.adminZonaApellidoMaterno}|"></td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      	<!-- Row -->
+      	
+      		<!-- Row -->
+       <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{colonia.titulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{colonia.subtitulo}"></h6>
+              
+               <div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="coloniasFiltroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
+			  	</div>
+			  </div>
+              
+              <div class="table-responsive">
+                <table id="coloniasTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                  <thead>
+                    <tr>
+                      <th th:text="#{tabla.id}"></th>
+                      <th th:text="#{colonia.nombre}"></th>
+                      <th th:text="#{colonia.zona}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="colonia : ${colonias}">
+                      <tr>
+                        <td th:text="${colonia.id}"></td>
+                        <td th:text="${colonia.nombre}"></td>
+                        <td th:text="|${colonia.zonaCodigo} - ${colonia.zonaNombre}|"></td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      	<!-- Row -->
+              	<!-- Row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex no-block">
+                                    <h4 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h4>
+                                </div>
+                                <h6 class="card-subtitle" th:text="#{etiqueta.inmueble.subtitulo}" ></h6>
+                                
+                                 <div class="row">
+					        		<div class="col-4">
+								  		<input class="form-control" id="inmueblesFiltroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
+								  	</div>
+								  </div>
+                                
+                                <div class="table-responsive">
+                                    <table id="inmueblesTableId" class="table stylish-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:90px;" ></th>
+                                                <th th:text="#{etiqueta.inmueble.nombre}"></th>
+                                                <th th:text="#{etiqueta.inmueble.direccion}"></th>
+                                                <th th:text="#{etiqueta.inmueble.totalsocios}"></th>
+                                                <th th:text="#{etiqueta.inmueble.saldogeneral}"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="inmueble : ${inmuebles}">
+                                                <td>
+<!--                                                 	<span class="round bg-success"><i class="ti-shopping-cart"></i></span> -->
+                                                	<img src="../images/servicios/ICONOS_SERVICIOS_01_MTTO.png" width="59px" alt=logo />
+                                                </td>
+                                                <td>
+                                                    <h6><a th:href="${'/inmueble-detalle/'  + inmueble.id}" class="link" th:text="${inmueble.nombre}"></a></h6>
+                                                </td>
+                                                <td>
+                                                    <h5 th:text="${inmueble.direccionCalle} + ' #' + ${inmueble.direccionNumeroExterior}"></h5>
+                                                </td>
+                                                <td>
+                                                    <h5 th:text="${inmueble.totalSocios}"></h5>
+                                                </td>
+                                                <td>
+                                                    <h5 >357</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+					                    <tr>
+					                      <td colspan="6">
+					                        <div class="text-right">
+					                          <ul class="pagination">
+					                          </ul>
+					                        </div>
+					                      </td>
+					                    </tr>
+					                  </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+	</div>
+</body>
+</html>

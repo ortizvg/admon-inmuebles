@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+var serverContext = [[@{/}]];
+	
+$(document).ready(function() {
+//   $("#mensajeReactivacion").hide();
+  
+  $('.dropify').dropify();
+  addControlState(document.getElementById('divUsername'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divApellidoMaterno'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divRol'),/*[[#{campo.requerido}]]*/);
+});
+
+// function reactivarUsuario(){
+// 	$("#mensajeReactivacion").hide();
+// 	var username = $("#username").val();
+// 	console.log('Username = ' + username);
+// 	var obj = { "username": username };
+	
+// 	$.post(serverContext + "api/usuarios/reactivacion",obj ,function(data, status, xhr){
+// 		if( 200 == xhr.status){
+// 			$("#mensajeReactivacion").show();
+// 			$("#mensajeReactivacionSpan").text(data);
+// 			$("#mensajeReactivacionSpan").addClass('text-success');
+// 			$("#reactivar").hide();
+// 		}
+//     }).fail(function(data, textStatus, xhr) {
+// 		$("#mensajeReactivacion").show();
+// 		$("#mensajeReactivacionSpan").text(data.responseText);
+// 		$("#mensajeReactivacionSpan").addClass('text-danger');
+//    });
+// }
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{administradores.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/usuarios}" th:text="#{administradores.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{administradores.editar.titulo}"></li>
+					</ol>
+				</div>
+<!-- 				<div id="reactivar" class="col-md-6 col-4 align-self-center"> -->
+<!--                     <button id="btnReactivar" class="btn pull-right hidden-sm-down btn-success" th:text="#{etiqueta.reactivar}"  onclick="reactivarUsuario();"><i class="mdi mdi-plus-circle"></i></button> -->
+<!--                     <div id="mensajeReactivacion" class="pull-right m-r-10">  -->
+<!--                     	<span id="mensajeReactivacionSpan"></span> -->
+<!--                     </div> -->
+<!--                 </div> -->
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							
+                               <h4 class="card-title"><span th:text="#{administradores.titulo}"></span></h4>
+                               <h6 class="card-subtitle"><span th:text="#{administradores.editar.titulo}"></span></h6>
+    							<form name="editarUsuarioForm" action="#" th:action="@{/usuarios/editar}" th:object="${usuarioDto}" method="post" role="form">
+    									<input type="hidden" class="form-control" th:field="*{id}"/>
+    									<input type="hidden" class="form-control" th:field="*{username}"/>
+    									<div id="divUsername" th:class="${#fields.hasErrors('username')}? 'form-group has-danger':'form-group'">
+                                           <div class="col-md-12 m-b-20">
+                                           		<label class="form-control-label" for="username" th:text="#{usuario.usuario}"></label>
+                                               <input type="text" class="form-control" id="username" th:field="*{username}"  th:disabled="true" required> 
+                                                <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+								              	</span>
+                                           </div>
+                                        </div>
+                                        <div id="divCorreo" th:class="${#fields.hasErrors('correo')}? 'form-group has-danger':'form-group'">
+                                           <div class="col-md-12 m-b-20">
+                                           		<label class="form-control-label" for="correo" th:text="#{usuario.correo}"></label>
+                                               <input type="text" class="form-control" id="correo" th:field="*{correo}" required maxlength="100" 
+                                               		pattern="^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" th:title="#{usuario.correo.mensaje.validacion}"> 
+                                               <span class="form-control-feedback">
+								                <span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+								              </span>
+                                           </div>
+                                        </div>
+                                        <div id="divNombre" th:class="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+                                           <div class="col-md-12 m-b-20">
+                                           		<label class="form-control-label" for="nombre" th:text="#{usuario.nombre}"></label>
+                                               <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required maxlength="100" pattern="^[\w\s]{1,100}$" th:title="#{usuario.nombre.mensaje.validacion}"> 
+                                                <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+									              </span>
+                                           </div>
+                                        </div>
+                                        <div id="divApellidoPaterno" th:class="${#fields.hasErrors('apellidoPaterno')}? 'form-group has-danger':'form-group'">
+                                           <div class="col-md-12 m-b-20">
+                                           		<label class="form-control-label" for="apellidoPaterno" th:text="#{usuario.apellido.paterno}"></label>
+                                               <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}" required maxlength="100" pattern="^[\w\s]{1,100}$" th:title="#{usuario.apellido.paterno.mensaje.validacion}"> 
+                                                <span class="form-control-feedback">
+								                <span th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></span>
+								              </span>
+                                           </div>
+                                        </div>
+                                        <div id="divApellidoMaterno" th:class="${#fields.hasErrors('apellidoMaterno')}? 'form-group has-danger':'form-group'">
+                                           <div class="col-md-12 m-b-20">
+                                           		<label class="form-control-label" for="apellidoMaterno" th:text="#{usuario.apellido.materno}"></label>
+                                               <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}" maxlength="100"  pattern="^[\w\s]{0,100}$" th:title="#{usuario.apellido.materno.mensaje.validacion}"> 
+                                               <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></span>
+								              	</span>
+                                           </div>
+                                        </div>
+										<div id="divRol" th:class="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'">
+                                           <div class="col-md-12 m-b-20">
+                                           		<label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label>
+		                                        <select  name="rolId" class="form-control" id="rolId" th:field="*{rolSeleccionado}" required >	
+													<option th:each="rol : ${rolesDto}" 
+															th:selected="${usuarioDto.rolSeleccionado}"
+															th:value="${{rol.id}}" 
+															th:text="${rol.descripcion}">
+													</option>
+		                                        </select>
+		                                        <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('rolSeleccionado')}" th:errors="*{rolSeleccionado}"></span>
+									             </span>
+		                                   </div>
+		                                 </div>
+		                                   <div class="col-md-12 m-b-20">
+			                                    <label class="custom-control custom-checkbox">
+	                                                <input id="activo" type="checkbox" class="custom-control-input" th:field="*{activo}">
+	                                                <span class="custom-control-label" th:text="#{usuario.estatus.activo}"></span>
+	                                            </label>
+                                            </div>
+                                           <div class="col-md-12 m-b-20">
+			                                    <button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.guardar}"></button>
+			                                    <a th:href="@{/usuarios}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>
+                                           </div>
+                              </form>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{contacto.crear.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{contacto.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item "><a class="text-gesco-secundario" th:href="@{/contacto/mensajes}" th:text="#{contacto.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{contacto.ver.titulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							
+                               <h4 class="card-title"><span th:text="#{contacto.ver.titulo}"></span></h4>
+                               <h6 class="card-subtitle"><span th:text="#{contacto.ver.subtitulo}"></span></h6>
+    							<form name="contactoForm" action="#"  th:object="${mensajeContactoDto}">
+									<div class="row">
+										<div class="col-lg-12">
+											<div id="divNombre" class="form-group m-t-10">
+												 <input type="text" th:readonly="true"  class="form-control" id="nombre" th:field="*{nombre}" th:placeholder="#{contacto.nombre}">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divCorreo" class="form-group m-t-10">
+												<input type="email" th:readonly="true"  class="form-control" id="correo" th:field="*{correo}"  th:placeholder="#{contacto.correo}">
+											</div>
+										</div>
+<!-- 										<div class="col-lg-12"> -->
+<!-- 											<div class="form-group m-t-10"> -->
+<!-- 												<input type="text" th:readonly="true"  class="form-control" id="inmueble" th:field="*{inmueble}"  th:placeholder="#{contacto.inmueble}"> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+										<div class="col-lg-12">
+											<div class="form-group m-t-10">
+												<input type="text" class="form-control" th:readonly="true" id="sector" th:field="*{sectorNombre}"  th:placeholder="#{contacto.sector}">
+											</div>
+										</div>
+<!-- 										<div class="col-lg-12"> -->
+<!-- 											<div class="form-group m-t-10"> -->
+<!-- 												<input type="text" class="form-control" th:readonly="true" id="zona" th:field="*{zonaNombre}"  th:placeholder="#{contacto.zona}"> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+										<div class="col-lg-12">
+											<div class="form-group m-t-10">
+												<input type="text" class="form-control" th:readonly="true" id="estado" th:field="*{estadoCorreoNombre}"  th:placeholder="#{contacto.estado}">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divTelefono" class="form-group m-t-10">
+												 <input type="text" th:readonly="true"  class="form-control" id="telefono" th:field="*{telefono}"  th:placeholder="#{contacto.telefono}">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divTelefonoAlternativo" class="form-group m-t-10">
+												 <input type="text" th:readonly="true"  class="form-control" id="telefonoAlternativo" th:field="*{telefonoAlternativo}"  th:placeholder="#{contacto.telefono.alternativo}">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divMensaje" class="form-group m-t-10">
+												<textarea class="form-control" th:readonly="true"  id="mensaje" rows="4" th:field="*{mensaje}"  th:placeholder="#{contacto.mensaje}"></textarea>
+											</div>
+										</div>
+                                         <div class="col-md-12 m-b-20">
+ 		                                   <label class="form-control-label" for="mensajeContactoEstatus" th:text="#{contacto.estatus}"></label>
+	                                        <select th:disabled="true" name="mensajeContactoEstatus" id="mensajeContactoEstatus" class="form-control" th:field="*{mensajeContactoEstatusId}" required >	
+												<option th:each="mensajeContactoEstatus : ${session.mensajesContactoEstatusDto}" 
+														th:selected="${mensajeContactoDto.mensajeContactoEstatusId}"
+														th:value="${{mensajeContactoEstatus.id}}" 
+														th:text="${mensajeContactoEstatus.nombre}">
+												</option>
+	                                        </select>
+	                                  	</div>
+										<div class="col-lg-12">
+											  <a th:href="@{/contacto/mensajes}" class="btn btn-secondary waves-effect" th:text="#{etiqueta.regresar}"></a>
+										</div>
+									</div>
+								</form>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

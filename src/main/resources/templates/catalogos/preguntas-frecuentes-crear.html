@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{preguntasfrecuentes.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+  addControlState(document.getElementById('divPregunta'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divRespuesta'),/*[[#{campo.requerido}]]*/);
+});
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{preguntafrecuentes.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/catalogos/preguntas-frecuentes}" th:text="#{preguntafrecuentes.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{preguntafrecuentes.crear.titulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<!-- ============================================================== -->
+			<!-- Start Page Content -->
+			<!-- ============================================================== -->
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title" th:text="#{preguntafrecuentes.titulo}"></h4>
+							<h6 class="card-subtitle" th:text="#{preguntafrecuentes.titulo.crear}"></h6>
+							<form name="crearPreguntaFrecuenteForm" action="#" th:action="@{/catalogos/preguntas-frecuentes-crear}" th:object="${preguntaFrecuenteDto}" method="post">
+								<div class="form-group">
+									<div id="divPregunta" th:class="${#fields.hasErrors('pregunta')}? 'form-group has-danger':'form-group'">
+										<div class="col-md-12 m-b-20">
+											<!-- <input name="pregunta" type="text" class="form-control" placeholder="Pregunta"   th:field="*{pregunta}" required="required"/>  -->
+											<label for="pregunta" class="form-control-label" th:text="#{preguntafrecuentes.pregunta}"></label>
+											<textarea class="form-control" id="pregunta" required rows="4" th:field="*{pregunta}" maxlength="500"></textarea>
+											<span class="form-control-feedback"> <span th:if="${#fields.hasErrors('pregunta')}" th:errors="pregunta"></span>
+											</span>
+										</div>
+									</div>
+									<div id="divRespuesta" th:class="${#fields.hasErrors('respuesta')}? 'form-group has-danger':'form-group'">
+										<div class="col-md-12 m-b-20">
+											<!--                                                       <input name="respuesta" type="text" class="form-control" placeholder="Respuesta"   th:field="*{respuesta}" required="required"/>  -->
+											<label for="respuesta" class="form-control-label" th:text="#{preguntafrecuentes.respuesta}"></label>
+											<textarea class="form-control" id="respuesta" required rows="4" th:field="*{respuesta}" maxlength="2000"></textarea>
+											<span class="form-control-feedback"> <span th:if="${#fields.hasErrors('respuesta')}" th:errors="respuesta"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-info waves-effect" th:text="#{boton.guardar}"></button>
+								<a th:href="@{/catalogos/preguntas-frecuentes}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ============================================================== -->
+			<!-- End PAge Content -->
+			<!-- ============================================================== -->
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{sucursal.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function() {
+    $('.modal-show').click(function(event) {
+      event.preventDefault();
+      var id = $(this).data('id')
+      var nombre = $(this).data('nombre')
+
+      var modal = $("#modalEliminar")
+      var mensaje = /*[[#{mensaje.eliminar.proveedor}]]*/
+      modal.find('.modal-title').text(/*[[#{encabezado.modal.eliminar}]]*/)
+      modal.find('.modal-body p').text(mensaje.format(nombre))
+      modal.find('.modal-footer a').attr('href', '/catalogos/sucursal-eliminar/' + id).text(/*[[#{etiqueta.modal.eliminar}]]*/)
+      modal.modal("show");
+    });
+  });
+  /*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{sucursal.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" href="javascript:void(0)" th:text="#{sucursal.sucursal}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{sucursal.subtitulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<!-- ============================================================== -->
+			<!-- Start Page Content -->
+			<!-- ============================================================== -->
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title" th:text="#{sucursal.titulo}"></h4>
+							<h6 class="card-subtitle" th:text="#{sucursal.subtitulo}"></h6>
+                                    <div class="table-responsive">
+                                        <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th th:text="#{tabla.sucursal.nombre}"></th>
+                                                    <th th:text="#{tabla.sucursal.correo}"></th>
+                                                    <th th:text="#{tabla.sucursal.telefono}"></th>
+                                                    <th th:text="#{tabla.sucursal.accion}"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            	<th:block th:each="sucursalDto : ${sucursalesDto}">
+	                                                <tr>
+	                                                    <td th:text="${sucursalDto.id}"></td>
+	                                                    <td th:text="${sucursalDto.nombre}"></td>
+	                                                    <td th:text="${sucursalDto.correo}"></td>
+	                                                    <td th:text="${sucursalDto.telefono}"></td>
+	                                                    <td>
+	                                                    	<a th:href="${'/catalogos/sucursal-detalle/'  + sucursalDto.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i></a> 
+	                                                    	<a th:href="${'/catalogos/sucursal-editar/'  + sucursalDto.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
+<!-- 	                                                    	<a th:href="${'/catalogos/sucursal-eliminar/'  + sucursalDto.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a> -->
+	                                                    	<a th:attr="data-id=${sucursalDto.id}" th:attrappend="data-nombre=${sucursalDto.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i class="fa fa-close text-danger" aria-hidden="true"></i></a>
+	                                                    </td>
+	                                                </tr>
+                                               </th:block>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                	<td colspan="2">
+                                                        <a th:href="@{/catalogos/sucursal-crear}" class="btn btn-info-gesco waves-effect" th:text="#{etiqueta.nuevo}"></a>
+                                                    </td>
+                                                    <td th:if="${#lists.size(sucursalesDto) > 10}" colspan="7">
+                                                        <div class="text-right">
+                                                            <ul class="pagination"> </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                        <div class="col-md-4">
+						                  <div class="card card-body">
+						                    <div id="modalEliminar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						                      <div class="modal-dialog">
+						                        <div class="modal-content">
+						                          <div class="modal-header">
+						                            <h4 class="modal-title" id="myModalLabel"></h4>
+						                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						                              <span aria-hidden="true">&times;</span>
+						                            </button>
+						                          </div>
+						                          <div class="modal-body">
+						                            <p></p>
+						                          </div>
+						                          <div class="modal-footer">
+						                            <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal" th:text="mensaje.modal.cerrar"></button>
+						                            <a href="/#" class="btn btn-rounded btn-danger waves-effect"></a>
+						                          </div>
+						                        </div>
+						                      </div>
+						                    </div>
+						                  </div>
+						                </div>
+                                    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ============================================================== -->
+			<!-- End PAge Content -->
+			<!-- ============================================================== -->
+		</div>
+	</div>
+</body>
+</html>

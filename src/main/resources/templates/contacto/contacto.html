@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{contacto.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+var serverContext = [[@{/}]];
+
+$(document).ready(function() {
+  $('.dropify').dropify();
+  addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divTelefono'));
+  addControlState(document.getElementById('divTelefonoAlternativo'));
+  addControlState(document.getElementById('divMensaje'),/*[[#{campo.requerido}]]*/);
+});
+
+
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+
+<div class="card">
+	<div class="card-body m-b-40">
+		<div class="text-center m-t-40">
+            <h1 class="title text-megna" th:text="#{contacto.titulo}"></h1>
+        </div>
+		<div class="row m-t-20">
+			<div class="col-12">
+				<div class="container">
+					<div class="row m-0">
+						<div class="col-lg-8">
+							<div class="card-shadow" data-aos-duration="1200">
+<!-- 								<img src="../images/contactanos/6_CONTACTO.png" alt="wrapkit" class="img-responsive"> -->
+								<img th:src="#{contacto.imagen.1}" alt="wrapkit" class="img-responsive">
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="contact-box m-l-30">
+								<form name="contactoForm" action="#" th:action="@{/contacto}" th:object="${mensajeContactoDto}" method="post">
+									<div th:if="${message}"  class="alert alert-info "> <i class="ti-user"></i>  <span th:text="${message}"></span>
+			                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+			                        </div>
+			                        <div th:if="${#fields.hasGlobalErrors()}">
+					                    <div class="alert alert-danger" th:each="err : ${#fields.globalErrors()}"> <i class="ti-na"></i>  <span th:text="${err}"></span>
+				                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				                        </div>
+					                </div>
+									<div class="row">
+										<div class="col-lg-12">
+											<div id="divNombre" class="form-group m-t-10" th:classappend="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+												 <input type="text" class="form-control" id="nombre" required th:field="*{nombre}" th:placeholder="#{contacto.nombre}" maxlength="100" pattern="^[a-zA-Z]{1,100}$" th:title="#{contacto.nombre.validacion.solotexto}"/>
+												 <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divCorreo" class="form-group m-t-10" th:classappend="${#fields.hasErrors('correo')}? 'form-group has-danger':'form-group'">
+												<input type="email" class="form-control" id="correo" required th:field="*{correo}"  th:placeholder="#{contacto.correo}" maxlength="50" 
+                                               		pattern="^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" th:title="#{usuario.correo.mensaje.validacion}">
+												<span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+								              	</span>
+											</div>
+										</div>
+										 <div class="col-md-12 m-b-20">
+	 		                                   <label class="form-control-label" for="sector" th:text="#{contacto.sector}"></label>
+		                                        <select name="sector" id=sector class="form-control" th:field="*{sectorId}" >	
+			                                        <option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
+													<option th:each="sector : ${session.sectoresDto}" 
+															th:value="${{sector.id}}" 
+															th:text="${sector.nombre}"></option>
+		                                        </select>
+		                                  </div>
+<!-- 		                                  <div class="col-md-12 m-b-20"> -->
+<!-- 	 		                                   <label class="form-control-label" for="zona" th:text="#{campo.contacto.zona}"></label> -->
+<!-- 		                                        <select name="zona" id=zona class="form-control" th:field="*{zonaCodigo}" >	 -->
+<!-- 			                                        <option selected="selected" th:value="${null}" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 													<option th:each="zona : ${session.zonasDto}"  -->
+<!-- 															th:value="${{zona.codigo}}"  -->
+<!-- 															th:text="${zona.nombre}"></option> -->
+<!-- 		                                        </select> -->
+<!-- 		                                  </div> -->
+		                                  <div class="col-md-12 m-b-20">
+	 		                                   <label class="form-control-label" for="estado" th:text="#{contacto.estado}"></label>
+		                                        <select name="estado" id=sector class="form-control" th:field="*{estadoCorreoId}" >	
+			                                        <option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
+													<option th:each="estado : ${session.estadosDto}" 
+															th:value="${{estado.id}}" 
+															th:text="${estado.nombre}"></option>
+		                                        </select>
+		                                  </div>
+
+										<div class="col-lg-12">
+											<div id="divTelefono" class="form-group m-t-10" th:classappend="${#fields.hasErrors('telefono')}? 'form-group has-danger':'form-group'">
+												 <input type="text" class="form-control" id="telefono" th:field="*{telefono}"  th:placeholder="#{contacto.telefono}" pattern="^[0-9]{1,15}$" maxlength="15" th:title="#{contacto.telefono.validacion.solonumeros}">
+												 <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divTelefonoAlternativo" class="form-group m-t-10" th:classappend="${#fields.hasErrors('telefonoAlternativo')}? 'form-group has-danger':'form-group'">
+												 <input type="text" class="form-control" id="telefonoAlternativo" th:field="*{telefonoAlternativo}"  th:placeholder="#{contacto.telefono.alternativo}" pattern="^[0-9]{1,15}$" maxlength="15" th:title="#{contacto.telefono.validacion.solonumeros}">
+												 <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('telefonoAlternativo')}" th:errors="*{telefonoAlternativo}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divMensaje" class="form-group m-t-10" th:classappend="${#fields.hasErrors('mensaje')}? 'form-group has-danger':'form-group'">
+												<textarea class="form-control" id="mensaje" required rows="4" th:field="*{mensaje}"  th:placeholder="#{contacto.mensaje}" maxlength="4000"></textarea>
+												<span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('mensaje')}" th:errors="*{mensaje}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											 <button type="submit" class="btn btn-info-gesco" th:text="#{etiqueta.enviar}"></button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row">
+         <div class="col-lg-12 col-md-4 col-sm-3 col-xs-12">
+         	<div class="card">
+           <div class="card-body">
+               <h4 class="card-title" th:text="#{contacto.oficinacentral}"></h4>
+               <iframe th:src="#{sucursales.cdmx.mapa}" width="100%" height="800" frameborder="0" style="border:0" allowfullscreen></iframe>
+           	<table class="table browser m-t-30 no-border">
+                   <tbody>
+                       <tr>
+                           <td style="width:40px"><img th:src="#{sucursales.imagen.ubicacion}" width="30" alt=logo /></td>
+                           <td th:text="#{sucursales.cdmx.direccion}"></td>
+                       </tr>
+                       <tr>
+                           <td><img th:src="#{sucursales.imagen.telefono}" width="30" alt=logo /></td>
+                           <td th:text="#{sucursales.cdmx.telefono}"></td>
+                       </tr>
+                       <tr>
+                           <td><img th:src="#{sucursales.imagen.correo}" width="30" alt=logo /></td>
+                           <td th:text="#{sucursales.cdmx.correo}"></td>
+                       </tr>
+                   </tbody>
+               </table>
+           </div>
+       </div>
+         </div>
+	</div>
+</div>
+
+
+
+	</div>
+</body>
+</html>

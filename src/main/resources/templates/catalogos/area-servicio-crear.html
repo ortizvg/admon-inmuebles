@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{areaServicio.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+	addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+});
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{areaservicio.titulo}"></h3>
+          <ol class="breadcrumb">
+			<li class="breadcrumb-item "><a class="text-gesco-secundario" th:href="@{/catalogos/areas-servicio}" th:text="#{areaservicio.titulo}"></a></li>
+			<li class="breadcrumb-item active" th:text="#{areaservicio.crear.titulo}"></li>
+		  </ol>
+        </div>
+      </div>
+      <div class="card ">
+        <div class="card-body">
+          <h3 class="card-title" th:text="#{areaservicio.titulo}"></h3>
+          <h6 class="card-subtitle" th:text="#{areaservicio.crear.titulo}"></h6>
+          <form name="crearAreaServicioForm" action="#" th:action="@{/areaServicio}" th:object="${areaServicioDto}" method="post">
+            <input type="hidden" class="form-control" th:field="*{id}" />
+            <div id="divNombre" th:class="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+              <label class="form-control-label" th:text="#{areaservicio.nombre}"></label>
+              <input name="nombre" class="form-control" th:field="*{nombre}" required pattern="^[\s\S]{1,100}$" maxlength="100" th:title="#{mensaje.nombre.validacion}" />
+              <span class="form-control-feedback">
+                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+              </span>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-info-gesco" th:text="#{boton.guardar}"></button>
+              <a th:href="@{/catalogos/areas-servicio}" class="btn btn-danger" th:text="#{boton.cancelar}"></a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

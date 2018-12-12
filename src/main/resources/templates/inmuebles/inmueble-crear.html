@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{inmueble.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	var serverContext = [[@{/}]];
+	var seleccione = /*[[#{etiqueta.seleccione}]]*/
+	var opcionSeleccione= '<option selected="selected" value="">'+seleccione+'</option>';
+    $(document).ready(function() {
+      $('.dropify').dropify();
+      addControlState(document.getElementById('divNombre'),/*[[#{mensaje.inmueble.nombre.requerido}]]*/);
+      addControlState(document.getElementById('divDiaCuotaOrdinaria'),/*[[#{mensaje.inmueble.diacuotaordinaria.requerido}]]*/);
+      addControlState(document.getElementById('divMontoCuotaOrdinaria'),/*[[#{mensaje.inmueble.montocuotaordinaria.requerido}]]*/);
+      addControlState(document.getElementById('divAdministradorInmueble'),/*[[#{mensaje.inmueble.administradorinmuble.requerido}]]*/);
+      addControlState(document.getElementById('divNombreRepresentante'),/*[[#{mensaje.inmueble.nombrerepresentante.requerido}]]*/);
+      addControlState(document.getElementById('divRazonSocial'),/*[[#{mensaje.inmueble.razonsocial.requerido}]]*/);
+      addControlState(document.getElementById('divRfc'),/*[[#{mensaje.inmueble.rfc.requerido}]]*/);
+      addControlState(document.getElementById('divTelefono'),/*[[#{mensaje.inmueble.telefono.requerido}]]*/);
+      addControlState(document.getElementById('divCorreo'),/*[[#{mensaje.inmueble.correo.requerido}]]*/);
+      addControlState(document.getElementById('divNumeroCuenta'),/*[[#{mensaje.inmueble.numerocuenta.requerido}]]*/);
+      addControlState(document.getElementById('divImagen'),/*[[#{mensaje.inmueble.imagen.requerido}]]*/);
+      addControlState(document.getElementById('divZona'),/*[[#{mensaje.inmueble.zona.requerido}]]*/);
+      addControlState(document.getElementById('divColonia'),/*[[#{mensaje.inmueble.colonia.requerido}]]*/);
+      addControlState(document.getElementById('divCalle'),/*[[#{mensaje.inmueble.calle.requerido}]]*/);
+      addControlState(document.getElementById('divNumeroExterior'),/*[[#{mensaje.inmueble.numeroexterior.requerido}]]*/);  
+
+      
+      $('#zonaCodigo').on('change', function() {
+    	  $.getJSON(serverContext + "api/colonias?zonaCodigo=" + this.value, function(data) {
+    	        var html = opcionSeleccione;
+    	        var len = data.length;
+    	        for ( var i = 0; i < len; i++) {
+    	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+    	        }
+    	        html += '</option>';
+    	        $('#colonias').html(html);
+    	  });
+    	  $.getJSON(serverContext + "api/findAdministradoresBiByZonaCodigo?zonaCodigo=" + this.value, function(data) {
+  	        var html = opcionSeleccione;
+  	        var len = data.length;
+  	        for ( var i = 0; i < len; i++) {
+  	            html += '<option value="' + data[i].id + '">' + data[i].nombre+' '+ data[i].apellidoPaterno+' '+ data[i].apellidoMaterno + '</option>';
+  	        }
+  	        html += '</option>';
+  	        $('#adminisitradoresBi').html(html);
+  	      });
+    	});
+    });
+/*]]>*/
+
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{etiqueta.inmueble.titulo2}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a class="text-gesco-secundario" th:href="@{/inmuebles}" th:text="#{etiqueta.inmueble.titulo2}"></a>
+            </li>
+            <li class="breadcrumb-item active" th:text="#{etiqueta.inmueble.crear.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <form name="crearInmuebleForm" action="#" th:action="@{/inmueble-crear}" th:object="${inmuebleDto}" method="post" enctype="multipart/form-data">
+            <div class="form-body">
+              <h3 class="box-title m-t-40" th:text="#{etiqueta.inmueble.direccion}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divZona" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{colonia.zona}"></label>
+                  <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option>
+                  </select>
+                  <span class="form-control-feedback"> </span>
+                </div>
+                <div id="divColonia" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionAsentamientoId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>
+                  <select id="colonias" name="colonias" class="form-control" th:field="*{direccionAsentamientoId}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="colonia : ${colonias}" th:value="${colonia.id}" th:text="${colonia.nombre}"></option>
+                  </select>
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('direccionAsentamientoId')}" th:errors="*{direccionAsentamientoId}"></span></span>
+                </div>
+                <div id="divCalle" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionCalle')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.calle}"></label>
+                  <input name="direccionCalle" class="form-control" th:field="*{direccionCalle}" required pattern="^[\s\S]{1,100}$" th:title="#{mensaje.inmueble.direccionCalle.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('direccionCalle')}" th:errors="*{direccionCalle}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divNumeroExterior" class="col-md-2 form-group" th:classappend="${#fields.hasErrors('direccionNumeroExterior')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numeroexterior}"></label>
+                  <input name="direccionNumeroExterior" class="form-control" th:field="*{direccionNumeroExterior}" required pattern="^[\s\S]{1,50}$"
+                    th:title="#{mensaje.inmueble.direccionNumeroExterior.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('direccionNumeroExterior')}" th:errors="*{direccionNumeroExterior}"></span>
+                  </span>
+                </div>
+                <div id="divNumeroInterior" class="col-md-2 form-group" th:classappend="${#fields.hasErrors('direccionNumeroInterior')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerointerior}"></label>
+                  <input name="direccionNumeroInterior" class="form-control" th:field="*{direccionNumeroInterior}" pattern="^[\s\S]{0,50}$" th:title="#{mensaje.inmueble.direccionNumeroInterior.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('direccionNumeroInterior')}" th:errors="*{direccionNumeroInterior}"></span>
+                  </span>
+                </div>
+                <div id="divEntreCalles" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionEntreCalles')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.entrecalles}"></label>
+                  <input name="direccionEntreCalles" class="form-control" th:field="*{direccionEntreCalles}" pattern="^[\s\S]{0,50}$" th:title="#{mensaje.inmueble.direccionEntreCalles.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('direccionEntreCalles')}" th:errors="*{direccionEntreCalles}"></span>
+                  </span>
+                </div>
+                <div id="divReferencias" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionReferencias')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.referencias}"></label>
+                  <input name="direccionReferencias" class="form-control" th:field="*{direccionReferencias}" pattern="^[\s\S]{0,100}$" th:title="#{mensaje.inmueble.direccionReferencias.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('direccionReferencias')}" th:errors="*{direccionReferencias}"></span>
+                  </span>
+                </div>
+              </div>
+              <h3 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divNombre" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('nombre')}? ' has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombre}"></label>
+                  <input name="nombre" class="form-control" th:field="*{nombre}" required pattern="^[\s\S]{1,100}$" th:title="#{mensaje.inmueble.nombre.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                  </span>
+                </div>
+                <div id="divDiaCuotaOrdinaria" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('diaCuotaOrdinaria')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.diacuotaordinaria}"></label>
+                  <input name="diaCuotaOrdinaria" class="form-control" th:field="*{diaCuotaOrdinaria}" required pattern="^([1-9]|[0-2][0-9]|[3][0-1])$"
+                    th:title="#{mensaje.inmueble.diaCuotaOrdinaria.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('diaCuotaOrdinaria')}" th:errors="*{diaCuotaOrdinaria}"></span>
+                  </span>
+                </div>
+                <div id="divMontoCuotaOrdinaria" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('montoCuotaOrdinaria')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.montocuotaordinaria}"></label>
+                  <input name="montoCuotaOrdinaria" class="form-control" th:field="*{montoCuotaOrdinaria}" required pattern="^\d{1,5}(\.\d{1,2})?$" th:title="#{mensaje.inmueble.montoCuotaOrdinaria.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('montoCuotaOrdinaria')}" th:errors="*{montoCuotaOrdinaria}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divAdministradorInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('adminBiId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.administradorinmueble}"></label>
+                  <select id="adminisitradoresBi" name="adminisitradoresBi" class="form-control" th:field="*{adminBiId}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="adminBi : ${administradoresBi}" th:value="${adminBi.id}" th:text="|${adminBi.nombre} ${adminBi.apellidoPaterno} ${adminBi.apellidoMaterno}|"></option>
+                  </select>
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('adminBiId')}" th:errors="*{adminBiId}"></span>
+                  </span>
+                </div>
+                <div id="divNombreRepresentante" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesNombreRepresentante')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label>
+                  <input name="nombreRepresentante" class="form-control" th:field="*{datosAdicionalesNombreRepresentante}" required pattern="^[\s\S]{1,200}$"
+                    th:title="#{mensaje.inmueble.nombreRepresentante.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesNombreRepresentante')}" th:errors="*{datosAdicionalesNombreRepresentante}"></span>
+                  </span>
+                </div>
+                <div id="divRazonSocial" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesRazonSocial')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.razonsocial}"></label>
+                  <input name="datosAdicionalesRazonSocial" class="form-control" th:field="*{datosAdicionalesRazonSocial}" required pattern="^[\s\S]{1,200}$"
+                    th:title="#{mensaje.inmueble.datosAdicionalesRazonSocial.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesRazonSocial')}" th:errors="*{datosAdicionalesRazonSocial}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divRfc" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesRfc')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label>
+                  <input name="datosAdicionalesRfc" class="form-control" th:field="*{datosAdicionalesRfc}" required pattern="^[\w\s]{1,13}$" th:title="#{mensaje.inmueble.datosAdicionalesRfc.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesRfc')}" th:errors="*{datosAdicionalesRfc}"></span>
+                  </span>
+                </div>
+                <div id="divTelefono" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesTelefono')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label>
+                  <input name="datosAdicionalesTelefono" class="form-control" th:field="*{datosAdicionalesTelefono}" required pattern="^[\w\s]{1,50}$"
+                    th:title="#{mensaje.inmueble.datosAdicionalesTelefono.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesTelefono')}" th:errors="*{datosAdicionalesTelefono}"></span>
+                  </span>
+                </div>
+                <div id="divCorreo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesCorreo')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label>
+                  <input name="datosAdicionalesCorreo" class="form-control" th:field="*{datosAdicionalesCorreo}" required pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+                    th:title="#{mensaje.inmueble.datosAdicionalesCorreo.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesCorreo')}" th:errors="*{datosAdicionalesCorreo}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divNumeroCuenta" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesNumeroCuenta')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerocuenta}"></label>
+                  <input name="datosAdicionalesNumeroCuenta" class="form-control" th:field="*{datosAdicionalesNumeroCuenta}" required pattern="^[\w\s]{1,50}$"
+                    th:title="#{mensaje.inmueble.datosAdicionalesNumeroCuenta.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesNumeroCuenta')}" th:errors="*{datosAdicionalesNumeroCuenta}"></span>
+                  </span>
+                </div>
+                <div id="divImagen" class="col-md-4" th:classappend="${#fields.hasErrors('imagen')}? 'form-group has-danger':'form-group'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.imagen}"></label>
+                  <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" th:title="#{mensaje.inmueble.imagen.validacion}" required>
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-info-gesco" th:text="#{etiqueta.guardar}"></button>
+                <a th:href="@{/inmuebles}" class="btn btn-danger" th:text="#{etiqueta.cancelar}"></a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

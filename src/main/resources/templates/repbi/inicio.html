@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{repbi.page.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{repbi.titulo}"></h3>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-4 col-xlg-3 col-md-5">
+                        <div class="card"> 
+                        	<img class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
+                            <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
+                                <div class="align-self-center "> 
+                                	<div th:switch="${repDto.fotoUrl != null}"> 
+                                		<span  th:case="${false}" class="round round-success" width="100">P</span>
+                                		<img th:case="${true}" th:src="${repDto.fotoUrl}" class="img-circle" width="100">
+									</div>
+                                	
+                                    <h4 class="card-title" th:text="${repDto.nombre}"></h4>
+                                    <p class="text-white" th:text="${repDto.apellidoPaterno}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"> 
+                                <small class="text-muted p-t-30 db" th:text="#{label.usuario.googleMapsDir}"></small>
+                                <div class="map-box">
+                                		<iframe th:src="${repDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                </div> <small class="text-muted p-t-30 db" th:text="#{label.usuario.redessociales}"></small>
+                                <br/>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${repDto.facebook != null && repDto.facebook != ''}" th:href="${repDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${repDto.twiter != null && repDto.twiter!= ''}" th:href="${repDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${repDto.youtube != null && repDto.youtube != ''}" th:href="${repDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-8 col-xlg-9 col-md-7">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#inmueble" role="tab" th:text="#{repbi.miinmueble}"></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#socios" role="tab" th:text="#{repbi.miinmueble.socios}"></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tickets" role="tab" th:text="#{repbi.miinmueble.tickets}"></a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                            		
+                            <div class="tab-pane active" id="inmueble" role="tabpanel">
+							        <div class="card-body">
+							          <div class="form-body">
+							            <div th:object="${inmuebleDto}">
+							              <h3 class="box-title m-t-20" th:text="#{etiqueta.inmueble.direccion}"></h3>
+							              <hr>
+							              <div class="row">
+							                <div id="divColonia" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>
+							                  <p class="form-control-static" th:text="*{direccionAsentamientoNombre}"></p>
+							                </div>
+							                <div id="divCalle" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.calle}"></label>
+							                  <p class="form-control-static" th:text="*{direccionCalle}"></p>
+							                </div>
+							                <div id="divNumeroExterior" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numeroexterior}"></label>
+							                  <p class="form-control-static" th:text="*{direccionNumeroExterior}"></p>
+							                </div>
+							
+							              </div>
+							              <div class="row">
+							                <div id="divNumeroInterior" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerointerior}"></label>
+							                  <p class="form-control-static" th:text="*{direccionNumeroInterior}"></p>
+							                </div>
+							                <div id="divEntreCalles" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.entrecalles}"></label>
+							                  <p class="form-control-static" th:text="*{direccionEntreCalles}"></p>
+							                </div>
+							                <div id="divReferencias" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.referencias}"></label>
+							                  <p class="form-control-static" th:text="*{direccionReferencias}"></p>
+							                </div>
+							              </div>
+							              <h3 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h3>
+							              <hr>
+							              <div class="row">
+							                <div id="divNombre" class="col-md-4 form-group">
+							                  <label class="control-label" th:text="#{etiqueta.inmueble.nombre}"></label>
+							                  <p class="form-control-static" th:text="*{nombre}"></p>
+							                </div>
+							                <div id="divDiaCuotaOrdinaria" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.diacuotaordinaria}"></label>
+							                  <p class="form-control-static" th:text="*{diaCuotaOrdinaria}"></p>
+							                </div>
+							                <div id="divMontoCuotaOrdinaria" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.montocuotaordinaria}"></label>
+							                  <p class="form-control-static" th:text="*{montoCuotaOrdinaria}"></p>
+							                </div>
+							              </div>
+							              <div class="row">
+							                <div id="divAdministradorInmueble" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.administradorinmueble}"></label>
+							                  <p class="form-control-static" th:text="|*{adminBiNombre} *{adminBiApellidoPaterno} *{adminBiApellidoMaterno}|"></p>
+							                </div>
+							                <div id="divNombreRepresentante" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesNombreRepresentante}"></p>
+							                </div>
+							                <div id="divRazonSocial" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.razonsocial}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesRazonSocial}"></p>
+							                </div>
+							              </div>
+							              <div class="row">
+							                <div id="divRfc" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesRfc}"></p>
+							                </div>
+							                <div id="divTelefono" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesTelefono}"></p>
+							                </div>
+							                <div id="divCorreo" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesCorreo}"></p>
+							                </div>
+							
+							              </div>
+							              <div class="row">
+							                <div id="divNumeroCuenta" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerocuenta}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesNumeroCuenta}"></p>
+							                </div>
+							                <div id="divImagen" class="col-md-4">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.imagen}"></label>
+							                  <div class="el-card-item">
+							                    <div class="el-card-avatar el-overlay-1">
+							                      <a class="image-popup-vertical-fit" th:href="*{imagenUrl}"> <img th:src="*{imagenUrl}">
+							                      </a>
+							                    </div>
+							                  </div>
+							                </div>
+							              </div>
+							
+							            </div>
+							          </div>
+							        </div>
+                                </div>
+                            		<!-- Second -->
+                            		
+                            	  <div class="tab-pane" id="socios" role="tabpanel">
+                                     <div class="card-body">
+										                     <div class="table-responsive">
+                                        <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                                            <thead>
+                                                <tr>
+                                                    <th th:text="#{tabla.id}"></th>
+                                                    <th th:text="#{usuario.usuario}"></th>
+                                                    <th th:text="#{usuario.correo}"></th>
+                                                    <th th:text="#{usuario.nombre}"></th>
+                                                    <th th:text="#{usuario.estatus}"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            	<th:block th:each="socio : ${socios}">
+	                                                <tr>
+	                                                    <td th:text="${socio.id}"></td>
+	                                                    <td th:switch="${socio.fotoUrl != null}">
+	                                                        <a th:href="${'/socio-detalle/'  + socio.id}">
+	                                                        		<span  th:case="${false}" class="round round-success" width="100">S</span>
+                                									<img th:case="${true}" th:src="${socio.fotoUrl}" class="img-circle" width="100">
+	                                                        	<span th:text="${socio.username}"></span>
+	                                                        </a>
+	                                                    </td>
+	                                                    <td th:text="${socio.correo}"></td>
+	                                                    <td th:text="${socio.nombre}"></td>
+	                                                    <td>
+		                                                    <div th:switch="${socio.activo}"> 
+															  <span th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></span>
+															  <span th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></span>
+															</div>
+														</td>
+	                                                </tr>
+                                               </th:block>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td th:if="${#lists.size(socios) > 10}" colspan="7">
+                                                        <div class="text-right">
+                                                            <ul class="pagination"> </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                
+                                <!-- Third -->
+								   <div class="tab-pane" id="tickets" role="tabpanel">
+                                     <div class="card-body">
+											  <div class="table-responsive">
+								                <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+								                  <thead>
+								                    <tr>
+								                      <th th:text="#{etiqueta.ticket.titulo}"></th>
+								                      <th th:text="#{etiqueta.ticket.areaServicio}"></th>
+								                      <th th:text="#{etiqueta.ticket.estatusTicket}"></th>
+								                      <th th:text="#{etiqueta.accion}"></th>
+								                    </tr>
+								                  </thead>
+								                  <tbody>
+								                    <th:block th:each="ticket : ${tickets}">
+								                      <tr>
+								                        <td th:text="${ticket.titulo}"></td>
+								                        <td th:text="${ticket.areaServicioNombre}"></td>
+								                        <td th:text="${ticket.estatus}"></td>
+								                        <td>
+								                          <a th:href="${'ticket-detalle/'  + ticket.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
+								                        </td>
+								                      </tr>
+								                    </th:block>
+								                  </tbody>
+								                  <tfoot>
+								                    <tr>
+								                      <td colspan="6">
+								                        <div class="text-right">
+								                          <ul class="pagination">
+								                          </ul>
+								                        </div>
+								                      </td>
+								                    </tr>
+								                  </tfoot>
+								                </table>
+								              </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+	</div>
+</body>
+</html>

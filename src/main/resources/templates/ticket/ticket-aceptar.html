@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{ticket.titulo}"></title>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	$(document).ready(function() {
+	});
+	/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+               <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{ticket.titulo.principal}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/tickets}" th:text="#{ticket.titulo.principal}"></a></li>
+            <li class="breadcrumb-item active" th:text="#{ticket.aceptar.titulo}"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div th:object="${ticketDto}">
+            <input name="id" type="hidden" th:field="*{id}" />
+            <div class="form-body">
+              <h3 class="card-title" th:text="#{ticket.aceptar.titulo}"></h3>
+              <hr>
+              <div class="row">
+                <div id="divSocio" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{ticket.socio}"></label>
+                  <p class="form-control-static" th:text="*{nombreSocio}"></p>
+                </div>
+                <div id="divDireccion" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{ticket.direccion}"></label>
+                  <p class="form-control-static" th:text="*{direccion}"></p>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divTitulo" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{ticket.nombre}"></label>
+                  <p class="form-control-static" th:text="*{titulo}"></p>
+                </div>
+                <div id="divAreaServicio" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.areaservicio}"></label>
+                  <p class="form-control-static" th:text="*{areaServicioNombre}"></p>
+                </div>
+                <div id="divEstatus" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.estatus}"></label>
+                  <p class="form-control-static" th:text="*{estatus}"></p>
+                </div>
+              </div>
+              <div class="row">
+                <div id="divDescripcion" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.descripcion}"></label>
+                  <p class="form-control-static" th:text="*{descripcion}"></p>
+                </div>
+              </div>
+              <div class="row">
+                <div th:if="*{usuarioAsignadoId}" id="divProveedor" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.proveedor}"></label>
+                  <p class="form-control-static" th:text="*{nombreProveedor}"></p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-aceptar/'  + id}" class="btn btn-success btn-rounded" th:text="#{boton.aceptar}"></a>
+                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-rechazar/' + id}" class="btn btn-danger btn-rounded" th:text="#{boton.rechazar}"></a>
+                <a th:if="*{estatus=='ACEPTADO'}" th:href="*{'/ticket-terminar/' + id}" class="btn btn-success btn-rounded" th:text="#{boton.terminar}"></a>
+                <a th:href="@{/tickets}" class="btn btn-info btn-rounded" th:text="#{boton.cerrar}"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

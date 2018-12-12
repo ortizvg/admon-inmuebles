@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{administradores.titulo}"></h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/usuarios}" th:text="#{administradores.titulo}"></a></li>
+                            <li class="breadcrumb-item active" th:text="#{administradores.vista.titulo}"></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-4 col-xlg-3 col-md-5">
+                        <div class="card"> 
+                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_SOCIO_BI'}" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
+                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_REP_BI' || usuarioDto.roles[0].nombre == 'ROLE_PROVEEDOR'}" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
+                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_ADMIN_ZONA' || usuarioDto.roles[0].nombre == 'ROLE_ADMIN_BI'}" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
+                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_ADMIN_CORP'}" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINITRADOR_CORPORATIVO.jpg}">
+                            <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
+                                <div class="align-self-center "> 
+                                	<div th:switch="${usuarioDto.fotoUrl != null}"> 
+                                		<img th:case="${false}"  th:src="@{/images/header/default-user.png}" class="img-circle" width="100">
+                                		<img th:case="${true}" th:src="${usuarioDto.fotoUrl}" class="img-circle" width="100">
+									</div>
+                                	
+                                    <h4 class="card-title" th:text="${usuarioDto.nombre}"></h4>
+                                    <p class="text-white" th:text="${usuarioDto.apellidoPaterno}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"> 
+<!--                             	<small class="text-muted" th:text="#{usuario.correo}"></small> -->
+<!--                                 <h6 th:text="${usuarioDto.correo}"></h6>  -->
+<!--                                <small class="text-muted p-t-30 db" th:text="#{usuario.telefono.movil}"></small> -->
+<!--                                 <h6 th:text="${usuarioDto.telefonoMovil}"></h6>  -->
+                                <small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps}"></small>
+                                <div class="map-box">
+                                		<iframe th:src="${usuarioDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                </div> <small class="text-muted p-t-30 db" th:text="#{usuario.redessociales}"></small>
+                                <br/>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.facebook != null && usuarioDto.facebook != ''}" th:href="${usuarioDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.twiter != null && usuarioDto.twiter!= ''}" th:href="${usuarioDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.youtube != null && usuarioDto.youtube != ''}" th:href="${usuarioDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-8 col-xlg-9 col-md-7">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#perfil" role="tab" th:text="#{administradores.vista.informacion}"></a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!--second tab-->
+                                <div class="tab-pane active" id="perfil" role="tabpanel">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.usuario}" ></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.username}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.nombre} + ' ' + ${usuarioDto.apellidoPaterno}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.correo}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.correo}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus.activo}"></strong>
+                                                <br>
+                                                 <div th:switch="${usuarioDto.activo}"> 
+                                                  <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p>
+                                                  <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p>
+												 </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row m-t-20">
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
+                                                <br>
+                                                <th:block th:each="rol : ${usuarioDto.roles}">
+                                                	 <p class="text-muted" th:text="${rol.descripcion}"></p>
+                                                </th:block>
+                                            </div>
+                                        	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoFijo}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p>
+                                            </div>
+                                        </div>
+                                        <div class="row m-t-20">
+                                        
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoAlternativo}"></p>
+                                            </div>
+<!--                                              <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.youtube}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.youtube}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.facebook}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.facebook}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.twiter}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.twiter}"></p> -->
+<!--                                             </div> -->
+      
+                                           
+                                        </div>
+                                        
+                                          <div class="row">
+	                                             <div class="col-md-12 m-b-20">
+				                                    <a th:href="@{/usuarios}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+	                                           </div>
+                                           </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+	</div>
+</body>
+</html>

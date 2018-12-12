@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{notificaciones.titulo.principal}"></title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{notificaciones.titulo.principal}"></h3>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/sociobi}" th:text="#{menu.usuario.tablero}"></a></li>
+            <li class="breadcrumb-item active" th:text="#{notificaciones.titulo.principal}"></li>
+          </ol>
+        </div>
+      </div>
+      
+                      <!-- Row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="#{notificaciones.titulo.principal}"></h4>
+                            </div>
+                            <!-- ============================================================== -->
+                            <!-- Comment widgets -->
+                            <!-- ============================================================== -->
+                            <div class="comment-widgets">
+                                <!-- Comment Row -->
+                                <div class="d-flex flex-row  " th:each="notificacion : ${session.notificaciones}" th:classappend="${notificacionSeleccionadaId == notificacion.id} ? 'comment-row active fondo-sombreado':'comment-row'">
+                                     <div class="user-img"><span class="round"><i class="mdi mdi-comment-check-outline"></i></span></div>
+                                    <div class="w-100 " th:classappend="${notificacionSeleccionadaId == notificacion.id} ? 'comment-text active':'comment-text'">
+                                        <h5 th:text="${notificacion.titulo}"></h5>
+                                        <p class="m-b-5" th:text="${notificacion.descripcion}"></p>
+                                        <div class="comment-footer">
+                                            <span class="text-muted pull-right" th:text="${notificacion.fechaModificacion}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Comment Row -->
+                            </div>
+                        </div>
+                    </div>
+                   </div>
+      
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+	
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+          <div class="row">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						
+						<div class="text-center m-t-40">
+                                <h2 class="title text-megna">¿Quienes Somos?</h2>
+                                <h6 class="subtitle text-muted">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpa</h6>
+                            </div>
+						<div class="row m-t-40 d-flex justify-content-center">
+                          	<div class="col-md-4" >
+                                      <img class="img-responsive" src="../assets/images/gallery/landscape11.jpg" alt="First slide">
+							</div>
+                               <div class="col-md-4">
+                                     <div class="text-box"> 
+                                    <h3 class="font-light">En Gesco no dedicamos a la <span class="text-megna">Administración de Bienes Inmuebles</span> somos los expertos.</h3>
+                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. </p>
+                                    <p>Quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquis would be good to have.</p>
+                                    <a class="btn btn-block btn-lg btn-primary m-t-20 " data-toggle="collapse" href="#"><span>Revisa nuestros servicios<i class="ti-arrow-right"></i></span></a>
+                               
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+	<div class="container-fluid">
+		<div class="row m-t-20">
+            <div class="col-md-4 wrap-feature3-box">
+				<div class="card card-shadow animated fadeInLeft">
+					<div class="card-body text-center">
+						<div class="p-3 display-5 text-megna"><i class="text-success-gradiant icon-people"></i></div>
+						<h3>Misión</h3>
+						<p class="m-t-20">You can relay on our amazing features list and also our customer services will be great experience.</p>
+					</div>
+				</div>
+			</div>
+			 <div class="col-md-4 wrap-feature3-box">
+				<div class="card card-shadow animated fadeInLeft">
+					<div class="card-body text-center">
+						<div class="p-3 display-5 text-megna"><i class="text-success-gradiant icon-people"></i></div>
+						<h3>Visión</h3>
+						<p class="m-t-20">You can relay on our amazing features list and also our customer services will be great experience.</p>
+					</div>
+				</div>
+			</div>
+			 <div class="col-md-4 wrap-feature3-box">
+				<div class="card card-shadow animated fadeInLeft">
+					<div class="card-body text-center">
+						<div class="p-3 display-5 text-megna"><i class="text-success-gradiant icon-people"></i></div>
+						<h3>Valores</h3>
+						<p class="m-t-20">You can relay on our amazing features list and also our customer services will be great experience.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+		
+		
+	</div>
+</body>
+</html>

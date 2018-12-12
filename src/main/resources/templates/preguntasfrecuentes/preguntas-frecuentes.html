@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{preguntasfrecuentes.titulo}"></title>
+<script th:inline="javascript">
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{preguntasfrecuentes.titulo}">></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/inicio}"th:text="#{inicio.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{preguntasfrecuentes.titulo}">></li>
+					</ol>
+				</div>
+			</div>
+			<!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title text-gesco-secundario" th:text="#{preguntasfrecuentes.titulo}"></h4>
+                                <h6 class="card-subtitle" th:text="#{preguntasfrecuentes.subtitulo}"></h6>
+                                <div id="accordion2" role="tablist" class="minimal-faq" aria-multiselectable="true">
+                                    <div class="card m-b-0" th:each="preguntaFrecuente : ${preguntasFrecuentesDto}">
+                                        <div class="card-header" role="tab" th:id="'heading' + ${preguntaFrecuente.id}">
+                                            <h5 class="mb-0">
+                                            <a data-toggle="collapse" data-parent="#accordion2" th:href="'#collapse' + ${preguntaFrecuente.id}" aria-expanded="false"
+                                            	th:attr="aria-controls='collapse' + ${preguntaFrecuente.id}">
+                                            	<span class="text-gesco" th:text="${preguntaFrecuente.pregunta}"></span>
+                                            </a>
+                                          </h5>
+                                        </div>
+                                        <div th:id="'collapse' + ${preguntaFrecuente.id}" class="collapse" role="tabpanel" th:attr="aria-labelledby='heading' + ${preguntaFrecuente.id}">
+                                            <div class="card-body">
+                                            	<span th:text="${preguntaFrecuente.respuesta}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+		</div>
+	</div>
+</body>
+</html>

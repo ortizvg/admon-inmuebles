@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Tell the browser to be responsive to screen width -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- Favicon icon -->
+<link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/logo/IMAGOTIPO.png}">
+<title>Gesco PLS</title>
+<link th:href="@{/css/style.css}" rel="stylesheet">
+<!-- Bootstrap Core CSS -->
+<link th:href="@{/assets/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<!-- Custom CSS -->
+<link th:href="@{/assets/css/style.css}" rel="stylesheet">
+<!-- You can change the theme colors from here -->
+<link th:href="@{/assets/css/colors/blue.css}" id="theme" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/assets/plugins/dropify/dist/css/dropify.min.css}">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var serverContext = [[@{/}]];
+
+$(document).ready(function() {
+	$('#mensajeValidacionUsername').hide();
+	$('#mensajeValidacionPassword').hide();
+	$('#mensajeValidacionLogin').hide();
+});
+
+function validarLogin() {
+	if ( ($("#username").val() == '' || $("#username").val() == undefined) || ($("#password").val() == '' || $("#password").val() == undefined)) {
+		if ($("#username").val() == "" || $("#username").val() == undefined) {
+	   	 	$("#divUsername").addClass("has-danger");
+	   	 	$("#username").addClass("form-control-danger");
+	   	 	$('#mensajeValidacionUsername').show();
+		}
+   	 	
+		if ($("#password").val() == "" || $("#password").val() == undefined) {
+	   	 	$("#divPassword").addClass("has-danger");
+		 	$("#password").addClass("form-control-danger");
+		 	$('#mensajeValidacionPassword').show();
+		}
+    	return false;
+	}
+
+}	
+/*]]>*/	
+</script>
+</head>
+
+<body>
+	<!-- ============================================================== -->
+	<!-- Preloader - style you can find in spinners.css -->
+	<!-- ============================================================== -->
+	<div class="preloader">
+		<svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+	</div>
+ <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <section id="wrapper">
+        <div class="login-register" th:style="'background-image:url(' + #{login.imagen.fondo} + ');'">  
+            <div class="login-box card">
+            <div class="card-body">
+                <form class="form-control-line" id="loginform" name="loginForm" th:action="@{/login}" method="post" onsubmit="return validarLogin();">
+					<a href="inicio" class="text-center db"><img th:src="#{login.imagen.logo}" alt="Home" /></a>
+					<div th:if="${param.error}" >
+	                    <div class="alert alert-danger  m-t-20"> <i class="ti-user"></i>  <span th:text="#{label.login.error.autenticacion}"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                        </div>
+	                </div>
+					<div id="divUsername" class="form-group m-t-20">
+						<div class="col-xs-12">
+							<input class="form-control" id="username" name="username" type="text" th:placeholder="#{campo.login.username}">
+							<span id="mensajeValidacionUsername" class="form-control-feedback">
+				                <span th:text="#{label.login.username.requerido}"></span>
+				             </span>
+						</div>
+					</div>
+					<div id="divPassword" class="form-group">
+						<div class="col-xs-12">
+							<input class="form-control" id="password" name="password" type="password" th:placeholder="#{campo.login.contrasenia}">
+							<span id="mensajeValidacionPassword" class="form-control-feedback">
+				                <span th:text="#{label.login.password.requerido}"></span>
+				             </span>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12">
+							<div class="checkbox checkbox-primary pull-left p-t-0">
+								<input id="checkbox-signup" type="checkbox" name="remember-me">
+								<label for="checkbox-signup" th:text="#{label.login.recordarme}"> </label>
+							</div>
+							<a href="/usuarios/recuperar-contrasenia-peticion" class="text-dark pull-right" th:text="#{label.login.olvidecontrasenia}"><i class="fa fa-lock m-r-5"></i></a>
+						</div>
+					</div>
+					<div class="form-group text-center m-t-20">
+						<div class="col-xs-12">
+							<button class="btn btn-gesco btn-lg btn-block text-uppercase waves-effect waves-light" type="submit" th:text="#{label.login.ingresar}"></button>
+						</div>
+					</div>
+					<div class="form-group m-b-0">
+						<div class="col-sm-12 text-center">
+							<p>
+								<a href="/contacto" class="text-primary m-l-5"><b th:text="#{label.login.registrarme}"></b></a>
+							</p>
+						</div>
+					</div>
+				</form>
+            </div>
+          </div>
+        </div>
+        
+    </section>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+<!-- <footer class="footer-login text-center font-weight-normal">  -->
+<footer class="footer-login footer-fixed text-center font-weight-normal footer-font-size"> 
+
+	<div class="row d-flex align-items-center">
+		<div class="col-lg-2 ">
+			<small class="text-white" th:text="#{footer.derechoautor}"></small>
+		</div>
+		<div class="col-lg-2 ">
+			<small class="text-white" th:text="#{footer.cdmx}"> </small>
+		</div>
+		<div class="col-lg-2">
+			<small class="text-white" th:text="#{footer.aguascalientes}">  </small>
+		</div>
+		<div class="col-lg-2">
+			<small class="text-white" th:text="#{footer.cancun}"> </small>
+		</div>
+		<div class="col-lg-2">
+			<small class="text-white" th:text="#{footer.queretaro}"> </small>
+		</div>
+		<div class="col-lg-2">
+			<a target="_blank" th:href="@{/api/aviso-privacidad}"><small class="text-white" th:text="#{footer.avisoprivacidad}"> </small></a>
+		</div>
+
+	</div>
+
+</footer>
+	<!-- ============================================================== -->
+	<!-- All Jquery -->
+	<!-- ============================================================== -->
+<!-- 	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script> -->
+	<script type="text/javascript" th:src="@{/assets/plugins/bootstrap/js/popper.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/plugins/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/jquery.slimscroll.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/waves.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/sidebarmenu.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/custom.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/plugins/styleswitcher/jQuery.style.switcher.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/plugins/dropify/dist/js/dropify.min.js}"></script>
+</body>
+
+</html>

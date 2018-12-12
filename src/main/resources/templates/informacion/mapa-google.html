@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{home.title}"></title>
+<script th:inline="javascript">
+	
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+		 <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0" th:text="#{mapsgoogle.titulo}"></h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)" th:text="#{mapsgoogle.nombre}"></a></li>
+                            <li class="breadcrumb-item active" th:text="#{mapsgoogle.titulo}"></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="#{mapsgoogle.titulo}"></h4>
+                                <h6 class="card-subtitle" th:text="#{mapsgoogle.subtitulo}"></h6>
+								<p>
+									<span th:text="#{mapsgoogle.tutorial.introduccion}"></span>
+								</p>
+								<p>
+									<span class="font-weight-bold">1.- </span> <span th:text="#{mapsgoogle.tutorial.paso1}"></span>
+								</p>
+								<p>
+									<span class="font-weight-bold">2.- </span> <span th:text="#{mapsgoogle.tutorial.paso2}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-4">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle1.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">3.- </span> <span th:text="#{mapsgoogle.tutorial.paso3}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-4">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle2.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">4.- </span> <span th:text="#{mapsgoogle.tutorial.paso4}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-4">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle3.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">5.- </span> <span th:text="#{mapsgoogle.tutorial.paso5}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-4">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle4.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">6.- </span> <span th:text="#{mapsgoogle.tutorial.paso6}"></span>
+								</p>
+								<p>
+									<span class="font-weight-bold">1.- </span> <span th:text="#{mapsgoogle.tutorial.paso7}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-4">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle4.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">7.- </span> <span th:text="#{mapsgoogle.tutorial.paso8}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-12">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle5.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">8.- </span> <span th:text="#{mapsgoogle.tutorial.paso9}"></span>
+								</p>
+								<div class="row m-b-20">
+									<div class="col-md-12">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle6.png" alt="Card">
+									</div>
+								</div>
+								<p>
+									<span class="font-weight-bold">9.- </span> <span th:text="#{mapsgoogle.tutorial.paso10}"></span>
+								</p>
+								<div class="row">
+									<div class="col-md-12">
+										<img class="img-responsive" src="../images/informacion/mapa-google/mapagoogle7.png" alt="Card">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                </div>
+	</div>
+</body>
+</html>

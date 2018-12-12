@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{zona.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+	addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divAdminZona'),/*[[#{campo.requerido}]]*/);
+});
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{zona.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/catalogos/zonas}" th:text="#{zona.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{zona.editar.titulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-body">
+					<h3 class="card-title" th:text="#{zona.titulo}"></h3>
+					<h6 class="card-subtitle" th:text="#{zona.subtitulo}"></h6>
+					<form name="crearZonaForm" action="#" th:action="@{/catalogos/zona-editar}" th:object="${zonaDto}" method="post">
+						<div id="divCodigo" class="form-group">
+							<label class="form-control-label" th:text="#{zona.codigo}"></label>
+							<input name="codigo" class="form-control" th:field="*{codigo}" readonly />
+						</div>
+						<div id="divNombre" th:class="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+							<label class="form-control-label" th:text="#{zona.nombre}"></label>
+							<input name="nombre" class="form-control" th:field="*{nombre}" required pattern="^[\w\s]{6,100}$" th:title="#{zona.nombre.mensaje.validacion}" />
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('nombre')}" th:errors="nombre"></span>
+							</span>
+						</div>
+						<div id="divAdminZona" th:class="${#fields.hasErrors('adminZonaId')}? 'form-group has-danger':'form-group'">
+							<label class="form-control-label" th:text="#{zona.administradorzona}"></label>
+							<select name="adminZonaId" class="form-control" th:field="*{adminZonaId}" required>
+								<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+								<option th:each="adminZona : ${session.usuariosAdminZona}" th:value="${adminZona.id}" th:text="#{${adminZona.nombre} + ' '+ ${adminZona.apellidoPaterno}+ ' '+ ${adminZona.apellidoMaterno}}"></option>
+							</select>
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('nombre')}" th:errors="nombre"></span>
+							</span>
+						</div>
+
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-info-gesco" th:text="#{boton.editar}"></button>
+							<a th:href="@{/catalogos/zonas}" class="btn btn-danger" th:text="#{boton.cancelar}"></a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{contacto.crear.title}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	var serverContext = [[@{/}]];
+
+	$(document).ready(function() {
+	  $('.dropify').dropify();
+// 	  addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+// 	  addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
+// 	  addControlState(document.getElementById('divTelefono'),/*[[#{campo.requerido}]]*/);
+	  addControlState(document.getElementById('divmensajeContactoEstatus'),/*[[#{campo.requerido}]]*/);
+	});
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{contacto.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/contacto/mensajes}" th:text="#{contacto.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{contacto.editar.titulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							
+                               <h4 class="card-title"><span th:text="#{contacto.editar.titulo}"></span></h4>
+                               <h6 class="card-subtitle"><span th:text="#{contacto.editar.subtitulo}"></span></h6>
+    							<form name="contactoForm" action="#" th:action="@{/contacto/mensaje-atender}" th:object="${mensajeContactoDto}" method="post">
+    								<input type="hidden" class="form-control" th:field="*{id}"/>
+    								<input type="hidden" class="form-control" th:field="*{sectorId}">
+    								<input type="hidden" class="form-control" th:field="*{estadoCorreoId}">
+<!--     								<input type="hidden" class="form-control" th:field="*{zonaCodigo}"> -->
+									<div th:if="${message}"  class="alert alert-info  m-t-20"> <i class="ti-user"></i>  <span th:text="${message}"></span>
+			                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+			                        </div>
+									<div class="row">
+										<div class="col-lg-12">
+											<div id="divNombre" class="form-group m-t-10" th:classappend="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+												 <input type="text" class="form-control" th:readonly="true" id="nombre" required th:field="*{nombre}" th:placeholder="#{contacto.nombre}">
+												 <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divCorreo" class="form-group m-t-10" th:classappend="${#fields.hasErrors('correo')}? 'form-group has-danger':'form-group'">
+												<input type="email" class="form-control" th:readonly="true" id="correo" required th:field="*{correo}"  th:placeholder="#{contacto.correo}">
+												<span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+								              	</span>
+											</div>
+										</div>
+<!-- 										<div class="col-lg-12"> -->
+<!-- 											<div class="form-group m-t-10"> -->
+<!-- 												<input type="text" class="form-control" th:readonly="true" id="inmueble" th:field="*{inmueble}"  th:placeholder="#{contacto.inmueble}"> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+										<div class="col-lg-12">
+											<div class="form-group m-t-10">
+												<input type="text" class="form-control" th:readonly="true" id="sector" th:field="*{sectorNombre}"  th:placeholder="#{contacto.sector}">
+											</div>
+										</div>
+<!-- 										<div class="col-lg-12"> -->
+<!-- 											<div class="form-group m-t-10"> -->
+<!-- 												<input type="text" class="form-control" th:readonly="true" id="zona" th:field="*{zonaNombre}"  th:placeholder="#{contacto.zona}"> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+										<div class="col-lg-12">
+											<div class="form-group m-t-10">
+												<input type="text" class="form-control" th:readonly="true" id="estado" th:field="*{estadoCorreoNombre}"  th:placeholder="#{contacto.estado}">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divTelefono" class="form-group m-t-10" th:classappend="${#fields.hasErrors('telefono')}? 'form-group has-danger':'form-group'">
+												 <input type="text" class="form-control" th:readonly="true" id="telefono" required th:field="*{telefono}"  th:placeholder="#{contacto.telefono}">
+												 <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divTelefonoAlternativo" class="form-group m-t-10">
+												 <input type="text" th:readonly="true"  class="form-control" id="telefonoAlternativo" th:field="*{telefonoAlternativo}"  th:placeholder="#{contacto.telefono.alternativo}">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div id="divMensaje" class="form-group m-t-10" th:classappend="${#fields.hasErrors('mensaje')}? 'form-group has-danger':'form-group'">
+												<textarea class="form-control" id="mensaje" th:readonly="true" required rows="4" th:field="*{mensaje}"  th:placeholder="#{contacto.mensaje}"></textarea>
+												<span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('mensaje')}" th:errors="*{mensaje}"></span>
+								              	</span>
+											</div>
+										</div>
+										<div id="divmensajeContactoEstatus" th:class="${#fields.hasErrors('mensajeContactoEstatusId')}? 'form-group has-danger':'form-group'">
+	                                           <div class="col-md-12 m-b-20">
+		 		                                   <label class="form-control-label" for="mensajeContactoEstatus" th:text="#{contacto.estatus}"></label>
+			                                        <select name="mensajeContactoEstatus" id="mensajeContactoEstatus" class="form-control" th:field="*{mensajeContactoEstatusId}" required >	
+<!-- 			                                         	<option selected="selected" th:value="${null}" th:text="#{etiqueta.seleccione}"></option> -->
+														<option th:each="mensajeContactoEstatus : ${session.mensajesContactoEstatusDto}" 
+																th:selected="${mensajeContactoDto.mensajeContactoEstatusId}"
+																th:value="${{mensajeContactoEstatus.id}}" 
+																th:text="${mensajeContactoEstatus.nombre}"></option>
+			                                        </select>
+			                                        <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('mensajeContactoEstatusId')}" th:errors="mensajeContactoEstatusId"></span>
+										            </span>
+			                                  </div>
+		                                  </div>
+										<div class="col-lg-12">
+											 <button type="submit" class="btn btn-info-gesco" th:text="#{boton.guardar}"></button>
+											 <a th:href="@{/contacto/mensajes}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+										</div>
+									</div>
+								</form>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{usuario.perfil}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+var serverContext = [[@{/}]];
+	
+$(document).ready(function() {
+	
+	$("#mensajeErrorCambiarContrasenia").hide();
+	$("#mensajeExitoCambiarContrasenia").hide();
+	
+  $('.dropify').dropify();
+//   addControlState(document.getElementById('divUsername'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divContraseniaAnterior'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divContraseniaNueva'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divContraseniaConfirmacion'),/*[[#{campo.requerido}]]*/);
+  
+  
+  $("#cambiarContraseniaForm").submit(function(e) {
+	    e.preventDefault();
+	    cambiarContrasenia();
+	    $("#cambiarContraseniaForm")[0].reset();
+	    return false;
+
+	  });
+  
+});
+
+function cambiarContrasenia(){
+	$("#mensajeErrorCambiarContrasenia").hide();
+	$("#mensajeExitoCambiarContrasenia").hide();
+	var contraseniaAnterior= $("#contraseniaAnterior").val();
+	var contraseniaNueva= $("#contraseniaNueva").val();
+	var contraseniaConfirmacion= $("#contraseniaConfirmacion").val();
+	
+	var obj = { "contraseniaAnterior": contraseniaAnterior, "contraseniaNueva":contraseniaNueva, "contraseniaConfirmacion": contraseniaConfirmacion };
+	
+	$.post(serverContext + "api/usuarios/cambioContrasenia",obj ,function(data, status, xhr){
+		if( 200 == xhr.status){
+			$("#mensajeExitoCambiarContrasenia").show();
+			$("#mensajeExitoCambiarContraseniaSpan").text(data);
+			
+			$("#divContraseniaAnterior").removeClass('has-success');
+			$("#divContraseniaNueva").removeClass('has-success');
+			$("#divContraseniaConfirmacion").removeClass('has-success');
+		}
+    }).fail(function(data, textStatus, xhr) {
+    	$("#mensajeErrorCambiarContrasenia").show();
+		$("#mensajeErrorCambiarContraseniaSpan").text(data.responseText);
+		$("#divContraseniaAnterior").removeClass('has-danger').removeClass('has-success');
+		$("#divContraseniaNueva").removeClass('has-danger').removeClass('has-success');
+		$("#divContraseniaConfirmacion").removeClass('has-danger').removeClass('has-success');
+   })
+}
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{usuario.perfil}"></h3>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-4 col-xlg-3 col-md-5">
+                        <div class="card"> 
+                        	<img sec:authorize="hasAnyRole('ROLE_SOCIO_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
+                        	<img sec:authorize="hasAnyRole('ROLE_REP_BI', 'ROLE_PROVEEDOR')" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
+                        	<img sec:authorize="hasAnyRole('ADMIN_ZONA', 'ADMIN_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
+                        	<img sec:authorize="hasAnyRole('ADMIN_CORP')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINITRADOR_CORPORATIVO.jpg}">
+                            <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
+                                <div class="align-self-center "> 
+                                	<div th:switch="${usuarioDto.fotoUrl != null}"> 
+<!--                                 	  	<span  th:case="${false}" class="round round-success" width="100">B</span> -->
+<!--                                 		<img th:case="${true}" th:src="${usuarioDto.fotoUrl}" class="img-circle" width="100"> -->
+                                		
+                                		<img th:case="${false}"  th:src="@{/images/header/default-user.png}" class="img-circle" width="100">
+                                		<img th:case="${true}" th:src="${usuarioDto.fotoUrl}" class="img-circle" width="100">
+									</div>
+                                	
+                                    <h4 class="card-title" th:text="${usuarioDto.nombre}"></h4>
+                                    <p class="text-white" th:text="${usuarioDto.apellidoPaterno}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"> 
+<!--                             	<small class="text-muted" th:text="#{usuario.correo}"></small> -->
+<!--                                 <h6 th:text="${usuarioDto.correo}"></h6>  -->
+<!--                                 <small class="text-muted p-t-30 db" th:text="#{usuario.telefonomovil}"></small> -->
+<!--                                 <h6 th:text="${usuarioDto.telefonoMovil}"></h6>  -->
+                                <small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps}"></small>
+	                                <div class="map-box">
+                                		<iframe th:src="${usuarioDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                </div> <small class="text-muted p-t-30 db" th:text="#{usuario.redessociales}"></small>
+                                <br/>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.facebook != null && usuarioDto.facebook != ''}" th:href="${usuarioDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.twiter != null && usuarioDto.twiter != ''}" th:href="${usuarioDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a>
+                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.youtube != null && usuarioDto.youtube != ''}" th:href="${usuarioDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-8 col-xlg-9 col-md-7">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'REP_BI', 'PROVEEDOR')">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#perfil" role="tab"  th:text="#{usuario.perfil.detalle}"></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab" th:text="#{usuario.perfil.editar}"></a> </li>
+                                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cambio-contrasenia" role="tab" th:text="#{usuario.perfil.contrasenia.cambio}"></a> </li>
+                            </ul>
+                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasRole('SOCIO_BI')">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#editar" role="tab" th:text="#{usuario.perfil.editar}"></a> </li>
+                                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cambio-contrasenia" role="tab" th:text="#{usuario.perfil.contrasenia.cambio}"></a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!--second tab-->
+                                <div class="tab-pane active" id="perfil" role="tabpanel">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.usuario}" ></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.username}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.nombre} + ' ' + ${usuarioDto.apellidoPaterno} + ' ' + ${usuarioDto.apellidoMaterno}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.correo}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.correo}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong>
+                                                <br>
+                                                 <div th:switch="${usuarioDto.activo}"> 
+                                                  <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p>
+                                                  <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p>
+												 </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row m-t-20">
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
+                                                <br>
+                                                <th:block th:each="rol : ${usuarioDto.roles}">
+                                                	 <p class="text-muted" th:text="${rol.descripcion}"></p>
+                                                </th:block>
+                                            </div>
+                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.youtube}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.youtube}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.facebook}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.facebook}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.twiter}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.twiter}"></p>
+                                            </div>
+                                        </div>
+                                        <div class="row m-t-20">
+                                        
+                                        	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoFijo}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoAlternativo}"></p>
+                                            </div>
+      
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="editar" role="tabpanel">
+                                    <div class="card-body">
+                                        <form name="editarUsuarioForm" action="#" th:action="@{/usuarios/perfil/editar}" th:object="${usuarioDto}" method="post" class="form-control-line" enctype="multipart/form-data">
+                                        	<input type="hidden" class="form-control" th:field="*{id}"/>
+                                        	<input type="hidden" class="form-control" th:field="*{username}"/>
+                                            <div id="divUsername" th:class="${#fields.hasErrors('username')}? 'form-group has-danger':'form-group'">
+                                                <label class="col-md-12" for="username" th:text="#{usuario.usuario}"></label>
+                                                <div class="col-md-12">
+                                                     <input type="text" class="form-control" id="username" th:field="*{username}" th:disabled="true">
+                                                     <span class="form-control-feedback">
+									                	<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+									              	</span> 
+                                                </div>
+                                            </div>
+                                            <div id="divCorreo" th:class="${#fields.hasErrors('correo')}? 'form-group has-danger':'form-group'">
+                                                <label for="example-email" th:text="#{usuario.correo}"  class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{correo}" required maxlength="100" 
+                                               		pattern="^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" th:title="#{usuario.correo.mensaje.validacion}"> 
+                                                    <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+										              </span>
+                                                </div>
+                                            </div>
+                                            <div id="divNombre" th:class="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
+                                                <label for="example-nombre" th:text="#{usuario.nombre}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{nombre}" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.nombre.mensaje.validacion}">  
+                                                    <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+									              </span>
+                                                </div>
+                                            </div>
+                                            <div id="divApellidoPaterno" th:class="${#fields.hasErrors('apellidoPaterno')}? 'form-group has-danger':'form-group'">
+                                                <label for="example-email" th:text="#{usuario.apellido.paterno}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{apellidoPaterno}" required maxlength="100">  
+                                                    <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></span>
+										              </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-email" th:text="#{usuario.apellido.materno}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{apellidoMaterno}" maxlength="100">  
+                                                </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <label for="example-email" th:text="#{usuario.facebook}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{facebook}" maxlength="100">  
+                                                </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <label for="example-email" th:text="#{usuario.twiter}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{twiter}" maxlength="100">  
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-email" th:text="#{usuario.youtube}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{youtube}"maxlength="100" >  
+                                                </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <label for="example-email" th:text="#{usuario.googlemaps}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{googleMapsDir}" maxlength="1000">  
+                                                     <a  target="_blank"  th:href="@{/informacion/mapa-google}"><small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps.tutorial}"> </small></a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-telefono-movil" th:text="#{usuario.telefono.movil}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{telefonoMovil}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-telefono-fijo" th:text="#{usuario.telefono.fijo}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{telefonoFijo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-telefono-oficina" th:text="#{usuario.telefono.oficina}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{telefonoOficina}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-telefono-alternativo" th:text="#{usuario.telefono.alternativo}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" th:field="*{telefonoAlternativo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
+                                                </div>
+                                            </div>
+                                            <div id="divImagen" class="col-md-4" th:classappend="${#fields.hasErrors('imagen')}? 'form-group has-danger':'form-group'">
+							                  <label class="form-control-label" th:text="#{usuario.imagen}"></label>
+							                  <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" th:title="#{mensaje.imagen.validacion}">
+							                  <span class="form-control-feedback">
+							                    <span th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></span>
+							                  </span>
+							                </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.guardar}" ></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="cambio-contrasenia" role="tabpanel">
+                                    <div class="card-body">
+                                        <form name="cambiarContraseniaForm" id="cambiarContraseniaForm" action="#"  th:object="${cambioContraseniaDto}" method="post" class="form-control-line">
+                                        <div id="mensajeErrorCambiarContrasenia" class="alert alert-danger  m-t-20"> <i class="ti-user"></i>  <span id="mensajeErrorCambiarContraseniaSpan"></span>
+					                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+					                    </div>
+					                    <div id="mensajeExitoCambiarContrasenia" class="alert alert-info  m-t-20"> <i class="ti-user"></i>  <span id="mensajeExitoCambiarContraseniaSpan"></span>
+					                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+					                    </div>
+                                            <div id="divContraseniaAnterior" th:class="${#fields.hasErrors('contraseniaAnterior')}? 'form-group has-danger':'form-group'">
+                                                <label class="col-md-12" th:text="#{usuario.contrasenia.anterior}"></label>
+                                                <div class="col-md-12">
+                                                     <input id="contraseniaAnterior" name="contraseniaAnterior" type="password" required class="form-control" th:field="*{contraseniaAnterior}" > 
+                                                     <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('contraseniaAnterior')}" th:errors="*{contraseniaAnterior}"></span>
+										              </span>
+                                                </div>
+                                            </div>
+                                            <div id="divContraseniaNueva" th:class="${#fields.hasErrors('contraseniaNueva')}? 'form-group has-danger':'form-group'">
+                                                <label for="example-email" th:text="#{usuario.contrasenia.nueva}" class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input id="contraseniaNueva" name="contraseniaNueva" type="password" class="form-control" required th:field="*{contraseniaNueva}" pattern="^[\w\s]{8,25}$" th:title="#{usuario.contrasenia.mensaje.validacion}"> 
+                                                    <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('contraseniaNueva')}" th:errors="*{contraseniaNueva}"></span>
+										              </span>
+                                                </div>
+                                            </div>
+                                            <div id="divContraseniaConfirmacion" th:class="${#fields.hasErrors('contraseniaConfirmacion')}? 'form-group has-danger':'form-group'">
+                                                <label for="example-email" th:text=#{usuario.contrasenia.confirmacion} class="col-md-12"></label>
+                                                <div class="col-md-12">
+                                                    <input id="contraseniaConfirmacion" name="contraseniaConfirmacion" type="password" required class="form-control" th:field="*{contraseniaConfirmacion}"  pattern="^[\w\s]{8,25}$" th:title="#{usuario.contrasenia.mensaje.validacion}">  
+                                                    <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('contraseniaConfirmacion')}" th:errors="*{contraseniaConfirmacion}"></span>
+										              </span>
+                                                </div>
+                                            </div>
+                          
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+<!--                                                  	<button type="button" onclick="cambiarContrasenia();" class="btn btn-info-gesco waves-effect" th:text="#{etiqueta.guardar}"></button> -->
+                                                    <button id="guardarBtn" type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.guardar}"></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+	</div>
+</body>
+</html>
