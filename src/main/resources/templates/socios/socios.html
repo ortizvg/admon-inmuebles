@@ -96,11 +96,15 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td colspan="2">
+                                                    <td colspan="1">
                                                         <a th:href="@{/socio-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
                                                     </td>
-
-                                                    <td th:if="${#lists.size(socios) > 10}" colspan="7">
+                                                    
+                                                    <td colspan="1">
+                                                        <a th:href="@{/socio-carga-masivo}" class="btn btn-info-gesco waves-effect" th:text="#{boton.masivo}"></a>
+                                                    </td>
+                                                    
+                                                    <td th:if="${#lists.size(socios) > 10}" colspan="5">
                                                         <div class="text-right">
                                                             <ul class="pagination"> </ul>
                                                         </div>
