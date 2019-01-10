@@ -2555,6 +2555,7 @@ insert into sectores (id_sector, nombre, idioma) values(10, 'Hotels', 'en');
 insert into sectores (id_sector, nombre, idioma) values(11, 'Warehouses', 'en');
 insert into sectores (id_sector, nombre, idioma) values(12, 'Immovables', 'en');
 
+
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`) values (1, 'contacto.ags@gesco-pls.com', 'contacto.corpo@gesco-pls.com','Aguascalientes');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (2, 'contacto.corpo@gesco-pls.com', null, 'Baja California');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (3, 'contacto.corpo@gesco-pls.com', null, 'Baja California Sur');
@@ -2587,3 +2588,4 @@ insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_sec
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (30, 'contacto.corpo@gesco-pls.com', null, 'Veracruz');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (31, 'contacto.corpo@gesco-pls.com', null, 'Yucatán');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (32, 'contacto.corpo@gesco-pls.com', null, 'Zacatecas');
+
