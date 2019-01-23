@@ -22,7 +22,9 @@ public class TicketDto {
 
     @NotNull
     private Long areaServicioId;
+    private Long tipoTicketId;
     private String areaServicioNombre;
+    private String tipoTicketNombre;
     private String estatus;
     private Long usuarioCreadorId;
     private String usuarioCreadorNombre;
@@ -36,6 +38,7 @@ public class TicketDto {
     private String usuarioAsignadoNombre;
     private String usuarioAsignadoApellidoPaterno;
     private String usuarioAsignadoApellidoMaterno;
+    private byte[] archivoEvidencia;
 
     public String getNombreSocio() {
         return String.format("%s %s %s", usuarioCreadorNombre, usuarioCreadorApellidoPaterno, usuarioCreadorApellidoMaterno);

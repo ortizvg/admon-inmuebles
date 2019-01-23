@@ -56,7 +56,7 @@
                   <thead>
                     <tr>
                       <th th:text="#{ticket.nombre}"></th>
-                      <th th:text="#{ticket.areaservicio}"></th>
+                      <th th:text="#{ticket.tipoticket}"></th>
                       <th th:text="#{ticket.estatus}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
@@ -65,7 +65,7 @@
                     <th:block th:each="ticket : ${tickets}">
                       <tr>
                         <td th:text="${ticket.titulo}"></td>
-                        <td th:text="${ticket.areaServicioNombre}"></td>
+                        <td th:text="${ticket.tipoTicketNombre}"></td>
                         <td th:text="${ticket.estatus}"></td>
                         <td>
                           <a th:href="${'ticket-detalle/'  + ticket.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>

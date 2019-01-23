@@ -28,17 +28,23 @@
             <hr>
             <div th:object="${ticketDto}">
               <div class="row">
-                <div id="divTitulo" class="col-md-4 form-group">
+                <!-- div id="divTitulo" class="col-md-4 form-group">
                   <label class="control-label" th:text="#{ticket.nombre}"></label>
                   <p class="form-control-static" th:text="*{titulo}"></p>
-                </div>
-                <div id="divAreaServicio" class="col-md-4 form-group">
-                  <label class="form-control-label" th:text="#{ticket.areaservicio}"></label>
-                  <p class="form-control-static" th:text="*{areaServicioNombre}"></p>
+                </div-->
+                <div id="divTipoTicket" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.tipoticket}"></label>
+                  <p class="form-control-static" th:text="*{tipoTicketNombre}"></p>
                 </div>
                 <div id="divEstatusTicket" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.estatus}"></label>
                   <p class="form-control-static" th:text="*{estatus}"></p>
+                </div>
+                <div id="divEvidencia" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{ticket.evidencia}"></label>
+                  <p class="form-control-static" >
+                  	<a th:href="@{|/ticket-download|}" th:text="*{titulo}"></a>
+                  </p>
                 </div>
               </div>
               <div class="row">

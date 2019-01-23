@@ -1,5 +1,9 @@
 package mx.com.admoninmuebles.dataloader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ import mx.com.admoninmuebles.persistence.model.Reservacion;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Ticket;
 import mx.com.admoninmuebles.persistence.model.TipoAsentamiento;
+import mx.com.admoninmuebles.persistence.model.TipoTicket;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.AreaComunRepository;
@@ -42,6 +47,7 @@ import mx.com.admoninmuebles.persistence.repository.PrivilegioRepository;
 import mx.com.admoninmuebles.persistence.repository.ReservacionRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
 import mx.com.admoninmuebles.persistence.repository.TicketRepository;
+import mx.com.admoninmuebles.persistence.repository.TipoTicketRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
@@ -88,6 +94,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private TipoTicketRepository tipoTicketRepository;
 
     @Override
     @Transactional
@@ -211,7 +220,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         AreaServicio areaServicioJardineria = createAreaServicioIfNotFound(1L, "Jardineria", usuarioProveedorJardineria);
         createAreaServicioIfNotFound(2L, "Limpieza", usuarioProveedorLimpieza);
         createAreaServicioIfNotFound(3L, "Construcción", usuarioProveedorConstruccion);
-        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", areaServicioJardineria, usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ASIGNADO);
+        
+        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
+        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
+        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
+        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
 
         alreadySetup = true;
     }
@@ -376,19 +389,56 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public final Ticket createTicketIfNotFound(final Long id, final String titulo, final String descripcion, final AreaServicio areaServicio, final Usuario usuarioCreador, final Usuario usuarioAsignado,
-            final String estatus) {
+    public final Ticket createTicketIfNotFound(final Long id, final String titulo, final String descripcion, final Usuario usuarioCreador, final Usuario usuarioAsignado,
+            final String estatus, final TipoTicket tipoTicket) {
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
-            ticket.setTitulo(titulo);
+            ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);
-            ticket.setAreaServicio(areaServicio);
+            //ticket.setAreaServicio(areaServicio);
             ticket.setUsuarioCreador(usuarioCreador);
             ticket.setUsuarioAsignado(usuarioAsignado);
+            ticket.setTipoTicket(tipoTicket);
+            ticket.setArchivoEvidencia(obtenImagenBlob());
             ticket = ticketRepository.save(ticket);
         }
         return ticket;
     }
+    
+    private String obtenNombreArchivo() {
+    	File file = new File("C:\\Users\\infoworks\\Pictures\\armandito.jpg");
+		return file.getName();
+	}
+
+	@Transactional
+    public final TipoTicket createTipoTicketIfNotFound(final Long id, final String nombre) {
+        Optional<TipoTicket> optTipoTicket = tipoTicketRepository.findById(id);
+        TipoTicket tipoTicket = optTipoTicket.orElse(new TipoTicket());
+        if (!optTipoTicket.isPresent()) {
+        	tipoTicket.setId(id);
+        	tipoTicket.setNombre(nombre);
+        	tipoTicket = tipoTicketRepository.save(tipoTicket);
+        }
+        return tipoTicket;
+    }
+    
+	private static byte[] obtenImagenBlob() {
+		
+		File file = new File("C:\\Users\\infoworks\\Pictures\\armandito.jpg");
+		byte[] blob = new byte[(int) file.length()];
+		try {
+			FileInputStream input = new FileInputStream(file);
+			input.read(blob);
+			input.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return blob;
+	}
 }

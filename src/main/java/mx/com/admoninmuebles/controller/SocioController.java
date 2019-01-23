@@ -240,7 +240,7 @@ public class SocioController {
     }
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @RequestMapping(value = "/socio-masivo-crear", method = RequestMethod.POST)
+    @PostMapping(value = "/socio-masivo-crear")
     public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model) {
     	String showPage = "redirect:/socio-carga-masivo";
     	final String CSV_MIME_TYPE = "text/csv";
