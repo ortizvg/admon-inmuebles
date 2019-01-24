@@ -15,4 +15,6 @@ public interface InmuebleRepository extends CrudRepository<Inmueble, Long> {
 	Collection<Inmueble> findByDireccionAsentamientoId(Long id);
 	
 	Collection<Inmueble> findBySociosId(Long id);
+	
+	Collection<Inmueble> findByDireccionAsentamientoZonaCodigo(String codigo);
 }

@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -43,6 +45,10 @@ public class AreaComun extends EntidadBase {
     @Column(length = 300, nullable = false)
     @NaturalId
     private String descripcion;
+    
+    @Digits(integer = 7, fraction = 2)
+    @Column(precision = 7, scale = 2)
+    private BigDecimal cuotaPorDia;
 
     @ManyToOne
     @JoinColumn(name = "id_inmueble_fk")

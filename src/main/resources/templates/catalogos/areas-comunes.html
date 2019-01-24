@@ -57,6 +57,7 @@
                     <tr>
                       <th th:text="#{areacomun.inmueble}"></th>
                       <th th:text="#{areacomun.nombre}"></th>
+                      <th th:text="#{areacomun.cuotapordia}"></th>
                       <th th:text="#{areacomun.descripcion}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
@@ -66,6 +67,7 @@
                       <tr>
                         <td th:text="${areaComun.inmuebleNombre}"></td>
                         <td th:text="${areaComun.nombre}"></td>
+                        <td th:text="${areaComun.cuotaPorDia}"></td>
                         <td th:text="${areaComun.descripcion}"></td>
                         <td><a th:href="${'/catalogos/area-comun-editar/'  + areaComun.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10"
                             aria-hidden="true"></i></a> <a th:attr="data-id=${areaComun.id}" th:attrappend="data-nombre=${areaComun.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"><i

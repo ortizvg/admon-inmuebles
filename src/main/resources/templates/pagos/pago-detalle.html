@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{pagos.detalle.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+	  
+  /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{pagos.detalle.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{pagos.detalle.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{pagos.detalle.titulo}"></h6>
+              
+              <form name="detallePagoTransferenciaForm" action="#" th:action="@{/pagos/opciones/transferencia/verificacion}" th:object="${pago}"  method="post">
+                    <input type="hidden" class="form-control" th:field="*{id}"/>
+                    
+                    
+                    <div id="divSocio" class="form-group">
+						<label class="form-control-label" th:text="#{pago.socio}"></label>
+						<input name="socio" class="form-control" th:field="*{socio}" disabled="disabled"/>
+					</div>
+                    
+                    <div id="divNumeroCuenta" class="form-group">
+						<label class="form-control-label" th:text="#{pago.numeroCuenta}"></label>
+						<input name="numeroCuenta" class="form-control" th:field="*{numeroCuenta}" disabled="disabled"/>
+					</div>
+					
+					<div id="divNumeroReferencia" class="form-group">
+						<label class="form-control-label" th:text="#{pago.referencia}"></label>
+						<input name="referencia" class="form-control" th:field="*{referencia}" disabled="disabled"/>
+					</div>
+					<div id="divMonto"  class="form-group">
+						<label class="form-control-label" th:text="#{pago.monto}"></label>
+						<input name="monto" class="form-control" th:field="*{monto}" disabled="disabled"/>
+					</div>
+					<div id="divConcepto" class="form-group">
+						<label class="form-control-label" th:text="#{pago.concepto}"></label>
+						<input name="concepto" class="form-control" th:field="*{concepto}" disabled="disabled"/>
+					</div>
+					
+					<div id="divEstatusPago" class="form-group">
+						<label class="form-control-label" th:text="#{pago.estatus}"></label>
+						<input name="estatusPagoDescripction" class="form-control" th:field="*{estatusPagoDescripction}" disabled="disabled"/>
+					</div>
+					<div id="divEstatusPago" class="form-group">
+						<label class="form-control-label" th:text="#{pago.fechaPago}"></label>
+						<input name="fechaPago" class="form-control" th:field="*{fechaPago}" disabled="disabled"/>
+					</div>
+					<div id="divTipoPagoBancario" class="form-group">
+						<label class="form-control-label" th:text="#{pago.tipoPagoBancario}"></label>
+						<input name="tipoPagoBancarioDescripction" class="form-control" th:field="*{tipoPagoBancarioDescripction}" disabled="disabled"/>
+					</div>
+					
+					<img src="data:image/png;base64, " alt="Red dot" />		
+
+					<div class="modal-footer">
+						<button sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" 
+						type="submit" class="btn btn-info-gesco"  th:text="#{boton.verificar}"
+						th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).VERIFICACION == pago.estatusPagoName)}"></button>
+						
+						<a th:href="@{/pagos}" class="btn  btn-secondary" th:text="#{boton.regresar}"></a>
+					</div>
+				</form>
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

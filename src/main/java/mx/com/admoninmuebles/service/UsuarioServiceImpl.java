@@ -20,9 +20,11 @@ import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
+import mx.com.admoninmuebles.persistence.model.Inmueble;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.model.Zona;
+import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
@@ -33,6 +35,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository userRepository;
+    
+    @Autowired
+    private InmuebleRepository inmuebleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -60,7 +65,19 @@ public class UsuarioServiceImpl implements UsuarioService {
         roles.add(rolRepository.findById(userDto.getRolSeleccionado()).get());
         usuario.setRoles(roles);
         Usuario usuarioCreado = userRepository.save(usuario);
+        
+        if( RolConst.ROLE_SOCIO_BI.equals(usuarioCreado.getRoles().stream().findFirst().get().getNombre() ) ) {
+        	usuarioCreado = crearReferenciaCuentaPagoSocios(usuarioCreado, userDto.getInmuebleId());
+        }
+        
         return modelMapper.map(usuarioCreado, UsuarioDto.class);
+    }
+    
+    private Usuario crearReferenciaCuentaPagoSocios(Usuario socio, Long idInmueble) {
+    	Inmueble inmueble = inmuebleRepository.findById(idInmueble).get();
+    	socio.setReferenciaPagoSocio(socio.getId() + "-" + inmueble.getDatosAdicionales().getNumeroCuenta());
+    	socio.setCuentaPagoSocio( inmueble.getDatosAdicionales().getNumeroCuenta() );
+    	return userRepository.save(socio);
     }
 
     @Override

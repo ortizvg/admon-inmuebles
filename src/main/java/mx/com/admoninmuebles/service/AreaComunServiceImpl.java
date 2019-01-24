@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 import mx.com.admoninmuebles.dto.AreaComunDto;
 import mx.com.admoninmuebles.persistence.model.AreaComun;
 import mx.com.admoninmuebles.persistence.repository.AreaComunRepository;
+import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 
 @Service
 public class AreaComunServiceImpl implements AreaComunService {
 
 	@Autowired
 	private AreaComunRepository areaComunRepository;
+	
+	@Autowired
+	private InmuebleRepository inmuebleRepository;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -42,6 +46,13 @@ public class AreaComunServiceImpl implements AreaComunService {
 	@Override
 	public void delete(final Long id) {
 		areaComunRepository.deleteById(id);
+	}
+
+	@Override
+	public Collection<AreaComunDto> findByInmuebleId(Long idInmueble) {
+		
+		return StreamSupport.stream(areaComunRepository.findByInmuebleId( idInmueble ).spliterator(), false)
+				.map(areaComun -> modelMapper.map(areaComun, AreaComunDto.class)).collect(Collectors.toList());
 	}
 
 }

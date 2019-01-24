@@ -1,5 +1,7 @@
 package mx.com.admoninmuebles.config;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.modelmapper.ModelMapper;
@@ -8,6 +10,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -73,6 +78,26 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public Java8TimeDialect java8TimeDialect() {
         return new Java8TimeDialect();
+    }
+    
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(byteArrayHttpMessageConverter());
+    }
+     
+    @Bean
+    public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter() {
+        ByteArrayHttpMessageConverter arrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
+        arrayHttpMessageConverter.setSupportedMediaTypes(getSupportedMediaTypes());
+        return arrayHttpMessageConverter;
+    }
+     
+    private List<MediaType> getSupportedMediaTypes() {
+        List<MediaType> list = new ArrayList<MediaType>();
+        list.add(MediaType.IMAGE_JPEG);
+        list.add(MediaType.IMAGE_PNG);
+        list.add(MediaType.APPLICATION_OCTET_STREAM);
+        return list;
     }
 
 }

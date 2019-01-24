@@ -16,6 +16,8 @@ public interface InmuebleService {
     
     Collection<InmuebleDto> findByDireccionAsentamientoId(Long id);
     
+    Collection<InmuebleDto> findByZonaCodigo(String codigo);
+    
     Collection<UsuarioDto> findSociosByInmuebleId(Long id);
     
     Collection<TicketDto> findTicketsByInmuebleId(Long id);

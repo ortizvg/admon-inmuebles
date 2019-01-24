@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -16,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -109,6 +111,14 @@ public class Usuario extends EntidadBase {
     private String identificador;
 
     private String contrasenia;
+    
+    private String referenciaPagoSocio;
+    
+    private String cuentaPagoSocio;
+    
+    @Digits(integer = 7, fraction = 2)
+    @Column(precision = 7, scale = 2)
+    private BigDecimal coutaMensualPagoSocio;
 
     @Size(max = 256)
     @Column(length = 256)
@@ -141,6 +151,9 @@ public class Usuario extends EntidadBase {
     @JoinTable(name = "usuarios_areas_servicios", joinColumns = @JoinColumn(name = "id_proveedor_fk", referencedColumnName = "id_usuario"),
                inverseJoinColumns = @JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio"))
     private Collection<AreaServicio> areasServicio = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private Collection<Pago> pagos;
 
     public void addAreaServicio(final AreaServicio areaServicio) {
         areasServicio.add(areaServicio);

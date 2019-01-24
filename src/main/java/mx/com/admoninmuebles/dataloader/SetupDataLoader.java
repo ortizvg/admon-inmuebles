@@ -25,11 +25,13 @@ import mx.com.admoninmuebles.persistence.model.DatosAdicionales;
 import mx.com.admoninmuebles.persistence.model.Direccion;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
 import mx.com.admoninmuebles.persistence.model.Municipio;
+import mx.com.admoninmuebles.persistence.model.Pago;
 import mx.com.admoninmuebles.persistence.model.Privilegio;
 import mx.com.admoninmuebles.persistence.model.Reservacion;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Ticket;
 import mx.com.admoninmuebles.persistence.model.TipoAsentamiento;
+import mx.com.admoninmuebles.persistence.model.TipoPago;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.AreaComunRepository;
@@ -38,6 +40,7 @@ import mx.com.admoninmuebles.persistence.repository.AsentamientoRepository;
 import mx.com.admoninmuebles.persistence.repository.DatosAdicionalesRepository;
 import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
 import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
+import mx.com.admoninmuebles.persistence.repository.PagoRepository;
 import mx.com.admoninmuebles.persistence.repository.PrivilegioRepository;
 import mx.com.admoninmuebles.persistence.repository.ReservacionRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
@@ -85,6 +88,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private TicketRepository ticketRepository;
+    
+    @Autowired
+    private PagoRepository pagoRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -188,6 +194,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Usuario usuarioProveedorLimpieza = createUsuarioIfNotFound("proveedor_limpieza", "Proveedor", "Limpieza", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
         Usuario usuarioProveedorConstruccion = createUsuarioIfNotFound("proveedor_construccion", "Proveedor", "Construccion", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
         Usuario usuarioSocioBi = createUsuarioIfNotFound("socio_bi", "Socio", "Bi", "Inmueble", "socio_bi", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com");
+        Usuario usuarioSocioBi2 = createUsuarioIfNotFound("socio_bi2", "Socio2", "Bi2", "Inmueble2", "socio_bi2", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com");
         createUsuarioIfNotFound("rep_bi", "Representante", "Bien", "Inmubele", "rep_bi", new ArrayList<>(Arrays.asList(repBi)), "correo@gmail.com");
         Usuario usuarioAdminBi = createUsuarioIfNotFound("admin_bi", "Administrador", "Bien", "Inmueble", "admin_bi", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com");
         Usuario usuarioAdminB2 = createUsuarioIfNotFound("admin_bi2", "Administrador2", "Bien", "Inmueble", "admin_bi2", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com");
@@ -203,6 +210,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Asentamiento asentamiento = updateAsentamientoIfFound(1L, zona);
 
         Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi);
+        Inmueble inmueble2 = createInmuebleIfNotFound(2L, "Inmueble2", asentamiento, usuarioAdminBi, usuarioSocioBi2);
 
         AreaComun areaComun = createAreaComunIfNotFound(1L, "Area comun 1", "Area para 30 personas", inmueble);
 
@@ -213,6 +221,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createAreaServicioIfNotFound(3L, "Construcción", usuarioProveedorConstruccion);
         createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", areaServicioJardineria, usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ASIGNADO);
 
+        
+//        createPagoIfNotFound(1L, "4444444", "234242sadads", BigDecimal.valueOf(24l), "Pago1", usuarioSocioBi, "asdsadsadsadasdasd", null);
+//        createPagoIfNotFound(2L, "5555555", "dasd324243324", BigDecimal.valueOf(45l), "Pago2", usuarioSocioBi, "sadsadsad24324", null);
+//        createPagoIfNotFound(3L, "6666666", "6666sdfsfs", BigDecimal.valueOf(100l), "Pago3", usuarioSocioBi2, "sdfsfs999999", null);
+        
         alreadySetup = true;
     }
 
@@ -254,6 +267,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             usuario.setCorreo(correo);
             usuario.setContrasenia(passwordEncoder.encode(contrasenia));
             usuario.setRoles(roles);
+            usuario.setReferenciaPagoSocio("123456");
+            usuario.setCuentaPagoSocio("343242453556464");
+            usuario.setCoutaMensualPagoSocio(BigDecimal.valueOf(100.29));
 
             usuario = usuarioRepository.save(usuario);
         }
@@ -321,7 +337,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             DatosAdicionales datosAdicionales = new DatosAdicionales();
             datosAdicionales.setCorreo("correo");
             datosAdicionales.setNombreRepresentante("nombreRepresentante");
-            datosAdicionales.setNumeroCuenta("numeroCuenta");
+            datosAdicionales.setNumeroCuenta("1234567");
             datosAdicionales.setRazonSocial("razonSocial");
             datosAdicionales.setRfc("rfc");
             datosAdicionales.setTelefono("telefono");
@@ -390,5 +406,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             ticket = ticketRepository.save(ticket);
         }
         return ticket;
+    }
+    
+    @Transactional
+    public final Pago createPagoIfNotFound(final Long id, final String numeroTransaccion, final String referencia, final BigDecimal monto, final String concepto, final Usuario socio,
+            final String comprobantePagoUrl, TipoPago tipoPago) {
+        Optional<Pago> optPago = pagoRepository.findById(id);
+        Pago pago = optPago.orElse(new Pago());
+        if (!optPago.isPresent()) {
+        	pago.setConcepto(concepto);;
+        	pago.setComprobantePagoUrl(comprobantePagoUrl);
+        	pago.setMonto(monto);;
+        	pago.setNumeroTransaccion(numeroTransaccion);;
+        	pago.setReferencia(referencia);
+        	pago.setTipoPago(tipoPago);
+        	pago.setUsuario(socio);
+        	pago.setVerificado(false);
+        	pago = pagoRepository.save(pago);
+        }
+        return pago;
     }
 }

@@ -22,6 +22,7 @@ $(document).ready(function() {
   addControlState(document.getElementById('divTelefonoAlternativo'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);   
+  addControlState(document.getElementById('divCuotaMensualPagoSocio')); 
 });
 
 
@@ -145,6 +146,16 @@ function cargarInmueblesPorColonia() {
 									             </span>
 	                                		</div>
                                           </div>
+                                          
+                                      <div class="row">
+						                <div id="divCuotaMensualPagoSocio" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('coutaMensualPagoSocio')}? 'has-danger'">
+						                  <label class="form-control-label" th:text="#{usuario.coutaMensualPagoSocio}"></label>
+						                  <input name="coutaMensualPagoSocio" class="form-control" th:field="*{coutaMensualPagoSocio}" pattern="^\d+(\.\d{1,4})?$" th:title="#{usuario.cuota.mensual.mensaje.validacion}"/>
+						                  <span class="form-control-feedback">
+						                    <span th:if="${#fields.hasErrors('coutaMensualPagoSocio')}" th:errors="*{coutaMensualPagoSocio}"></span>
+						                  </span>
+						                </div>
+						              </div>
                                           
                                           <div class="row">
                                           	<div class="col-md-12 m-b-20">

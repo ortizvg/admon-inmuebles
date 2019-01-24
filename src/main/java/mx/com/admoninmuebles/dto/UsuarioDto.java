@@ -1,8 +1,10 @@
 package mx.com.admoninmuebles.dto;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.persistence.Column;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -77,6 +79,13 @@ public class UsuarioDto {
     private String identificador;
 
     private String contrasenia;
+    
+    private String referenciaPagoSocio;
+    
+    private String cuentaPagoSocio;
+    
+    @Digits(integer = 7, fraction = 2)
+    private BigDecimal coutaMensualPagoSocio;
     
     private String datosDomicilio;
     

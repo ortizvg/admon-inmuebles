@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{pagos.listado.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function() {
+	  
+    $("#filtroInputId").on("keyup", function() {
+	    var inputValue = $(this).val().toLowerCase();
+	    $("#pagosTableId tbody tr ").filter(function() {
+	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+	    });
+	});
+    
+  });
+  
+  
+  $(window).on('load', function() {
+		// Pagination
+		// -----------------------------------------------------------------
+		$('#demo-foo-pagination').footable();
+		$('#demo-show-entries').change(function (e) {
+			e.preventDefault();
+			var pageSize = $(this).val();
+			$('#demo-foo-pagination').data('page-size', pageSize);
+			$('#demo-foo-pagination').trigger('footable_initialized');
+		});
+
+		
+		// Add & Remove Row
+		var addrow = $('#pagosTableId');
+		addrow.footable().on('click', '.delete-row-btn', function() {
+
+			//get the footable object
+			var footable = addrow.data('footable');
+
+			//get the row we are wanting to delete
+			var row = $(this).parents('tr:first');
+
+			//delete the row
+			footable.removeRow(row);
+		});
+	    var addrow = $('#demo-foo-addrow2');
+		addrow.footable().on('click', '.delete-row-btn', function() {
+
+			//get the footable object
+			var footable = addrow.data('footable');
+
+			//get the row we are wanting to delete
+			var row = $(this).parents('tr:first');
+
+			//delete the row
+			footable.removeRow(row);
+		});
+	});
+  
+  		var serverContext = [[@{/}]];
+		var seleccione = /*[[#{etiqueta.seleccione}]]*/
+		var opcionSeleccione= '<option selected="selected" value="">'+seleccione+'</option>';
+	    $(document).ready(function() {
+	        $('#zonaCodigo').on('change', function() {
+	            $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + this.value, function(data) {
+	                var html = opcionSeleccione;
+	                var len = data.length;
+	                for (var i = 0; i < len; i++) {
+	                    html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	                }
+	                html += '</option>';
+	                $('#inmuebles').html(html);
+	            });
+	        });
+	    });
+
+  
+  
+  /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{pagos.listado.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{pagos.listado.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{pagos.listado.titulo}"></h6>
+              
+<!--               <div class="row"> -->
+<!--               	<div class="col-md-12"> -->
+<!-- 			  		<form name="buscarPagosForm" action="#" th:action="@{/pagos/busqueda}" th:object="${pagosBusqueda}" method="get"> -->
+<!-- 		                <div class="form-body"> -->
+<!-- 		                  <div class="row"> -->
+<!-- 		                    <div sec:authorize="hasRole('ADMIN_ZONA')" id="divZona" class="col-md-3 form-group"> -->
+<!-- 		                      <label class="form-control-label" th:text="#{colonia.zona}"></label> -->
+<!-- 		                      <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required> -->
+<!-- 		                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 		                        <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option> -->
+<!-- 		                      </select> -->
+<!-- 		                      <span class="form-control-feedback"> </span> -->
+<!-- 		                    </div> -->
+<!-- 		                    <div sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" id="divInmueble" class="col-md-3 form-group"> -->
+<!-- 		                      <label class="form-control-label" th:text="#{etiqueta.inmueble}"></label> -->
+<!-- 		                      <select id="inmuebles" name="inmuebles" class="form-control" th:field="*{inmuebleId}" required> -->
+<!-- 		                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 		                        <option th:each="inmueble : ${inmuebles}" th:value="${inmueble.id}" th:text="${inmueble.nombre}"></option> -->
+<!-- 		                      </select> -->
+<!-- 		                      <span class="form-control-feedback"></span> -->
+<!-- 		                    </div> -->
+<!-- 		                    <div sec:authorize="hasRole('SOCIO_BI')" id="divSocio" class="col-md-3 form-group"> -->
+<!-- 		                      <label class="form-control-label" th:text="#{etiqueta.socio}"></label> -->
+<!-- 		                      <select id="socios" name="socios" class="form-control" th:field="*{socioId}" required> -->
+<!-- 		                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 		                        <option th:each="socio : ${socios}" th:value="${socios.id}" th:text="${socio.nombre}"></option> -->
+<!-- 		                      </select> -->
+<!-- 		                      <span class="form-control-feedback"></span> -->
+<!-- 		                    </div> -->
+<!-- 		                    <div class="col-md-3 form-group"> -->
+<!-- 		                      <label class="col-md-12 form-control-label">&nbsp;</label> -->
+<!-- 		                      <button type="submit" class="btn btn-success btn-rounded" th:text="#{boton.buscar}"></button> -->
+<!-- 		                    </div> -->
+<!-- 		                  </div> -->
+<!-- 		                </div> -->
+<!-- 		              </form> -->
+<!-- 			  	</div> -->
+<!--               </div> -->
+              
+              <div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
+			  	</div>
+			 </div>
+			 
+								 
+              <div class="table-responsive">
+                <table id="pagosTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                  <thead>
+                    <tr>
+                      <th th:text="#{tabla.id}"></th>
+                      <th th:text="#{pago.monto}"></th>
+                      <th th:text="#{pago.tipopago}"></th>
+                      <th th:text="#{pago.concepto}"></th>
+                      <th th:text="#{pago.estatus}"></th>
+                      <th th:text="#{tabla.accion}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="pago : ${pagos}">
+                      <tr>
+                        <td th:text="${pago.id}"></td>
+                        <td th:text="${pago.monto}"></td>
+                        <td th:text="${pago.tipoPagoDescripction}"></td>
+                        <td th:text="${pago.concepto}"></td>
+                        <td>
+	                        <div th:switch="${pago.estatusPagoName}"> 
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).PAGADO}" class="text-success" th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO}" class="text-warning"  th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).VERIFICACION}" class="text-muted"  th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
+							</div>
+                        </td> 
+                        <td>
+                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
+                          <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i></a>
+                        </td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
+

@@ -43,7 +43,7 @@
         mensaje =/*[[#{reserva.areacomun.mensaje.reservarPerido.areaComun}]]*/;
       }
       
-      var modal = $('#modalEliminar');
+      var modal = $('#modalCrearEvento');
       modal.find('.modal-title').text(/*[[#{reserva.areacomun.encabezado.modal.reservar}]]*/)
       modal.find('.modal-body p').text(mensaje.format(start.format('DD-MM-YYYY'), end.format('DD-MM-YYYY')))
       $('input[name="start"]').val(start.format('YYYY-MM-DD'));
@@ -52,10 +52,19 @@
     }
     
     $.onSelectValidation = function(selectInfo) {
+    	console.log(selectInfo);
     }
     
     $.onEventClick = function(calEvent) {
-      alert('Id: '+ calEvent.id + ' Event: ' + calEvent.title);
+//       alert('Id: '+ calEvent.id + ' Event: ' + calEvent.title);
+      
+      var modal = $('#modalEliminarEvento');
+      modal.find('.modal-title').text(/*[[#{reserva.areacomun.encabezado.modal.reservar}]]*/)
+      modal.find('.modal-body p').text(calEvent.title)
+	  $('input[name="title"]').val(calEvent.title);
+      $('input[name="id"]').val(calEvent.id);
+      modal.modal("show");
+      
     }
   });
   /*]]>*/
@@ -64,7 +73,7 @@
 <body>
   <div layout:fragment="content">
     <div class="container-fluid">
-      <form th:action="@{/buscarReservaciones}" th:object="${reservacionDto}" method="post">
+      <form th:action="@{/reserva-area-comun/busqueda}" th:object="${reservacionDto}" method="post">
         <div class="row">
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
@@ -87,7 +96,7 @@
           </div>
         </div>
       </form>
-      <div id="modalEliminar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="modalCrearEvento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -96,7 +105,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form th:action="@{/reservarAreaComun}" method="post">
+            <form th:action="@{/reserva-area-comun/crear}" method="post">
               <div class="modal-body">
                 <input type="hidden" name="start">
                 <input type="hidden" name="end">
@@ -114,6 +123,31 @@
           </div>
         </div>
       </div>
+      
+      <div id="modalEliminarEvento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel"></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form th:action="@{/reserva-area-comun/eliminar}" method="post">
+              <div class="modal-body">
+                <input type="hidden" name="id">
+                <input type="hidden" name="title">
+                <p></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                <button type="submit" class="btn btn-rounded btn-danger waves-effect waves-light" th:text="#{boton.eliminar}"></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 </body>

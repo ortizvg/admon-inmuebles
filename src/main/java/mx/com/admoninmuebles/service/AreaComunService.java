@@ -9,6 +9,8 @@ public interface AreaComunService {
 	AreaComun save(AreaComunDto areaComunDto);
 
 	Collection<AreaComunDto> findAll();
+	
+	Collection<AreaComunDto> findByInmuebleId(Long idInmueble);
 
 	AreaComunDto findById(Long id);
 

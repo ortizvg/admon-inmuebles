@@ -138,4 +138,9 @@ public class InmuebleServiceImpl implements InmuebleService {
 		inmuebleRepository.save(inmueble);
 	}
 
+	@Override
+	public Collection<InmuebleDto> findByZonaCodigo(String codigo) {
+		return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoZonaCodigo(codigo).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+	}
+
 }
