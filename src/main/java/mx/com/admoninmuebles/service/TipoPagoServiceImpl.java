@@ -46,4 +46,11 @@ public class TipoPagoServiceImpl implements TipoPagoService {
 		
 	}
 
+	@Override
+	public Collection<TipoPagoDto> findAllByLang(String lang) {
+		return StreamSupport.stream(tipoPagoRepository.findAllByLang(lang).spliterator(), false)
+				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
+				.collect(Collectors.toList());
+	}
+
 }

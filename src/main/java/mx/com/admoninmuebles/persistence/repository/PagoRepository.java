@@ -13,6 +13,8 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
 	
 	Collection<Pago> findByUsuarioId(Long id);
 	
+	Collection<Pago> findByEstatusPagoId(Long idEstatusPago);
+	
 	Collection<Pago> findByTipoPagoIdAndEstatusPagoId(Long idTipopago, Long idEstatusPago);
 	
     @Query(value = "SELECT p.* FROM gescopls.inmuebles_socios ist\n" + 
@@ -21,14 +23,14 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
 			nativeQuery = true)
 	Collection<Pago> findByInmuebleId(Long id);
     
-    @Query(value = "select r.* from  gescopls.reservaciones r \r\n" + 
-    		"inner join  gescopls.usuarios s on r.id_socio_fk = s.id_usuario\r\n" + 
+    @Query(value = "select p.* from  gescopls.pagos p\r\n" + 
+    		"inner join  gescopls.usuarios s on p.id_usuario = s.id_usuario\r\n" + 
     		"where s.id_usuario in (SELECT ims.socios_id_usuario FROM gescopls.zonas z\r\n" + 
     		"inner join gescopls.asentamientos a on z.codigo = a.id_zona_fk\r\n" + 
     		"inner join gescopls.direcciones d on a.id_asentamiento = d.id_asentamiento_fk\r\n" + 
     		"inner join gescopls.inmuebles i on d.id_direccion = i.id_direccion_fk \r\n" + 
     		"inner join gescopls.inmuebles_socios ims on i.id_inmueble = ims.Inmueble_id_inmueble\r\n" + 
-    		"where z.codigo = ?1) ;", 
+    		"where z.codigo = ?1)", 
 			nativeQuery = true)
 	Collection<Pago> findBycodigoZona(String codigoZona);
 

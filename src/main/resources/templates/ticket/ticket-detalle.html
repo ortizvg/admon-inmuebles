@@ -43,7 +43,7 @@
                 <div id="divEvidencia" class="col-md-4 form-group">
                   <label class="control-label" th:text="#{ticket.evidencia}"></label>
                   <p class="form-control-static" >
-                  	<a th:href="@{|/ticket-download|}" th:text="*{titulo}"></a>
+                  	<a th:href="@{|/ticket-download/${id}|}" th:text="*{titulo}"></a>
                   </p>
                 </div>
               </div>

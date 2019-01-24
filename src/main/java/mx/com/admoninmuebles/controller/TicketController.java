@@ -194,9 +194,9 @@ public class TicketController {
 	}
 	
 	
-	@GetMapping(value="/ticket-download")
-	public ResponseEntity<ByteArrayResource> downloadFile() {
-	    TicketDto ticketDto = ticketService.findById(1L);
+	@GetMapping(value="/ticket-download/{id}")
+	public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable Long id) {
+	    TicketDto ticketDto = ticketService.findById(id);
 	    String strMediaType = servletContext.getMimeType(ticketDto.getTitulo());
 	    MediaType mediaType = MediaType.parseMediaType(strMediaType);
 	    ByteArrayResource resource = new ByteArrayResource(ticketDto.getArchivoEvidencia());

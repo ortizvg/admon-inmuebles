@@ -3,6 +3,7 @@ package mx.com.admoninmuebles.service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.PagoPaypalDto;
 import mx.com.admoninmuebles.dto.PagoTarjetaDto;
+import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Archivo;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
@@ -55,6 +57,9 @@ public class PagoServiceImpl implements PagoService {
     
     @Autowired
     private ArchivoRepository archivoRepository;
+    
+    @Autowired
+    private InmuebleService inmuebleService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -62,19 +67,19 @@ public class PagoServiceImpl implements PagoService {
     @Override
     public PagoDto pagarTranferenciaBancaria(final PagoDto pagoDto) {
     	
+    	Archivo comprobantePagoCreado = null;
     	if(  pagoDto.getComprobantePagoMf() != null ) {
     		try {
-    			pagoDto.setComprobantePago(pagoDto.getComprobantePagoMf().getBytes());
-    			pagoDto.setComprobantePagoUrl(pagoDto.getComprobantePagoMf().getOriginalFilename());
+//    			pagoDto.setComprobantePago(pagoDto.getComprobantePagoMf().getBytes());
+//    			pagoDto.setComprobantePagoUrl(pagoDto.getComprobantePagoMf().getOriginalFilename());
     			
     			Archivo archivo = new Archivo();
     			archivo.setId(UUID.randomUUID().toString());
     			archivo.setBytes(pagoDto.getComprobantePagoMf().getBytes());
     			archivo.setNombre(pagoDto.getComprobantePagoMf().getOriginalFilename());
     			archivo.setTipoContenido(pagoDto.getComprobantePagoMf().getContentType());
-    			Archivo archivoCreado = archivoRepository.save(archivo);
+    			comprobantePagoCreado = archivoRepository.save(archivo);
     			
-    			logger.info( archivoCreado.getId().toString() );
     		} catch (IOException e) {
     			throw new BusinessException("pago.error.carga.comprobante");
     		}
@@ -87,6 +92,7 @@ public class PagoServiceImpl implements PagoService {
     	 pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.VERIFICACION, "es") );
     	 pago.setVerificado(false);
     	 pago.setFechaPago(LocalDate.now());
+    	 pago.setComprobantePago(comprobantePagoCreado);
     	
     	 Pago pagoCreado =  pagoRepository.save( pago );
     	 
@@ -176,10 +182,12 @@ public class PagoServiceImpl implements PagoService {
 	@Override
 	public void generarPagosMensuales() {
 		Collection<Usuario> sociosActivos = usuarioRepository.findByRolesNombreAndActivo(RolConst.ROLE_SOCIO_BI, true);
+		TipoPago tipoPago = tipoPagoRepository.findByNameAndLang( TipoPago.CUOTA, "es" );
+		EstatusPago estatusPagoCercano = estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
 		sociosActivos.forEach( socio -> {
 			Pago pago = new Pago();
-			pago.setTipoPago( tipoPagoRepository.findByNameAndLang( TipoPago.RENTA, "es" ) );
-			pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es") );
+			pago.setTipoPago( tipoPago );
+			pago.setEstatusPago( estatusPagoCercano );
 			pago.setReferencia(socio.getReferenciaPagoSocio());
 			pago.setNumeroCuenta(socio.getCuentaPagoSocio());
 			pago.setMonto(socio.getCoutaMensualPagoSocio());
@@ -195,15 +203,75 @@ public class PagoServiceImpl implements PagoService {
 	@Override
 	public void actualizarEstatusPagosMensuales() {
 		
-		TipoPago tipoPagoOrdinario = tipoPagoRepository.findByNameAndLang( TipoPago.RENTA, "es" );
+//		TipoPago tipoPagoOrdinario = tipoPagoRepository.findByNameAndLang( TipoPago.RENTA, "es" );
 		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
+		EstatusPago estatusPagoAtrasado= estatusPagoRepository.findByNameAndLang( EstatusPago.ATRASADO, "es");
 		
-		Collection<Pago> pagosCercanos = pagoRepository.findByTipoPagoIdAndEstatusPagoId( tipoPagoOrdinario.getId(), estatusPagoCercano.getId() );
+//		Collection<Pago> pagosCercanos = pagoRepository.findByTipoPagoIdAndEstatusPagoId( tipoPagoOrdinario.getId(), estatusPagoCercano.getId() );
+		Collection<Pago> pagosCercanos = pagoRepository.findByEstatusPagoId( estatusPagoCercano.getId() );
 		pagosCercanos.forEach( pago -> {
-			pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.ATRASADO, "es") );
+			
+			if( pago.getFechaCreacion().after( new Date() ) ) {
+				pago.setEstatusPago( estatusPagoAtrasado );
+				pagoRepository.save(pago);
+			}
+		});
+		
+	}
+
+	@Override
+	public void generarPagos(PagoDto pagoDto) {
+		
+		if( pagoDto.getUsuarioId() != null ) {
+			generarPagosPorSocio( pagoDto );
+		} else if ( pagoDto.getInmuebleId() != null ) {
+			generarPagosPorInmueble( pagoDto );
+		} else {
+			 throw new BusinessException("pago.error.generacion.campos.obligatorios");
+		}
+		
+	}
+	
+	private void generarPagosPorInmueble(PagoDto pagoDto) {
+		
+		Collection<UsuarioDto> sociosActivos = inmuebleService.findSociosActivosByInmuebleId( pagoDto.getInmuebleId() );
+		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
+		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
+		sociosActivos.forEach( socio -> {
+			Pago pago = new Pago();
+			pago.setTipoPago( tipoPago );
+			pago.setEstatusPago(estatusPagoCercano );
+			pago.setReferencia(socio.getReferenciaPagoSocio());
+			pago.setNumeroCuenta(socio.getCuentaPagoSocio());
+			pago.setMonto(pagoDto.getMonto());
+			pago.setConcepto(pagoDto.getConcepto());
+			pago.setVerificado(false);
+//			Usuario usuario = new Usuario();
+//			socio.setId();
+			pago.setUsuario( usuarioRepository.findById(socio.getId()).get() );
+			
 			pagoRepository.save(pago);
 			
 		});
+		
+	}
+	
+	private void generarPagosPorSocio(PagoDto pagoDto) {
+		Usuario socio = usuarioRepository.findById( pagoDto.getUsuarioId() ).get();
+		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
+		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
+		
+		Pago pago = new Pago();
+		pago.setTipoPago( tipoPago );
+		pago.setEstatusPago(estatusPagoCercano );
+		pago.setReferencia(socio.getReferenciaPagoSocio());
+		pago.setNumeroCuenta(socio.getCuentaPagoSocio());
+		pago.setMonto(pagoDto.getMonto());
+		pago.setConcepto(pagoDto.getConcepto());
+		pago.setVerificado(false);
+		pago.setUsuario( socio );
+		
+		pagoRepository.save(pago);
 	}
 
 

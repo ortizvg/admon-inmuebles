@@ -39,7 +39,6 @@ public class PagoDto {
 	@Size(min = 0, max = 100)
 	private String comprobantePagoUrl;
 
-	@NotNull
 	private Boolean verificado;
 	
     @JsonFormat(pattern = "dd-MM-yyyy")
@@ -61,8 +60,13 @@ public class PagoDto {
 	private String usuarioApellidoPaterno;
 	private String usuarioApellidoMaterno;
 	
-	private byte[] comprobantePago;
+//	private byte[] comprobantePago;
     private MultipartFile comprobantePagoMf;
+    
+    private Long inmuebleId;
+    
+    private String comprobantePagoId;
+    private String comprobantePagoNombre;
 	
 	public String getSocio() {
 		return this.usuarioNombre + " " + this.usuarioApellidoPaterno + " " + this.usuarioApellidoMaterno;

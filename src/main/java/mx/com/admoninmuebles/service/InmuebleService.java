@@ -20,6 +20,8 @@ public interface InmuebleService {
     
     Collection<UsuarioDto> findSociosByInmuebleId(Long id);
     
+    Collection<UsuarioDto> findSociosActivosByInmuebleId(Long id);
+    
     Collection<TicketDto> findTicketsByInmuebleId(Long id);
 
     InmuebleDto findById(Long id);

@@ -3,7 +3,7 @@ package mx.com.admoninmuebles.dto;
 import lombok.Data;
 
 @Data
-public class PagosBusquedaDto {
+public class PagoBusquedaDto {
 	
 	private String zonaCodigo;
 	private Long inmuebleId;

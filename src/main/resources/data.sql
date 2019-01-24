@@ -2589,10 +2589,10 @@ insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_sec
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (31, 'contacto.corpo@gesco-pls.com', null, 'Yucatán');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (32, 'contacto.corpo@gesco-pls.com', null, 'Zacatecas');
 
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (1, 'RENTA', 'Pago por renta', 'es');
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (1, 'CUOTA', 'Cuota Mensual', 'es');
 insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (2, 'RESERVA', 'Pago por reserva de área común', 'es');
 insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (3, 'OTRO', 'Otro pago', 'es');
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (4, 'RENTA', 'Rent payment', 'en');
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (4, 'CUOTA', 'Maintenance fee', 'en');
 insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (5, 'RESERVA', 'Reserve payment', 'en');
 insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (6, 'OTRO', 'Other payments', 'en');
 

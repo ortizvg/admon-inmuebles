@@ -35,9 +35,9 @@ $(document).ready(function() {
                     <input type="hidden" class="form-control" th:field="*{tipoPagoId}"/>
                     <input type="hidden" class="form-control" th:field="*{verificado}"/>
                     <input type="hidden" class="form-control" th:field="*{usuarioId}"/>
-                    <input type="hidden" class="form-control" th:field="*{numeroCuenta}"/>
-                    <input type="hidden" class="form-control" th:field="*{referencia}"/>
-                    <input type="hidden" class="form-control" th:field="*{monto}"/>
+<!--                     <input type="hidden" class="form-control" th:field="*{numeroCuenta}"/> -->
+<!--                     <input type="hidden" class="form-control" th:field="*{referencia}"/> -->
+<!--                     <input type="hidden" class="form-control" th:field="*{monto}"/> -->
                     
                     <div id="divNumeroCuenta" class="form-group">
 						<label class="form-control-label" th:text="#{pago.numeroCuenta}"></label>
@@ -50,7 +50,7 @@ $(document).ready(function() {
 					</div>
 					<div id="divMonto" th:class="${#fields.hasErrors('monto')}? 'form-group has-danger':'form-group'">
 						<label class="form-control-label" th:text="#{pago.monto}"></label>
-						<input name="monto" class="form-control" th:field="*{monto}" required pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" 
+						<input name="monto" class="form-control" th:field="*{monto}" th:readonly="${true}" pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" 
 							/>
 						<span class="form-control-feedback">
 							<span th:if="${#fields.hasErrors('monto')}" th:errors="*{monto}"></span>
@@ -63,6 +63,13 @@ $(document).ready(function() {
 							<span th:if="${#fields.hasErrors('concepto')}" th:errors="*{concepto}"></span>
 						</span>
 					</div>
+					
+<!-- 					<div id="divImagen" class="col-md-4" th:classappend="${#fields.hasErrors('imagen')}? 'form-group has-danger':'form-group'"> -->
+<!-- 	                  <label class="form-control-label" th:text="#{etiqueta.inmueble.imagen}"></label> -->
+<!-- 	                  <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" th:title="#{mensaje.inmueble.imagen.validacion}" required> -->
+<!-- 	                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></span> -->
+<!-- 	                  </span> -->
+<!-- 	                </div> -->
 					
 					<div id="divComprobantePago" class="col-md-4" th:classappend="${#fields.hasErrors('comprobantePagoMf')}? 'form-group has-danger':'form-group'">
 	                  <label class="form-control-label" th:text="#{etiqueta.pago.comprobante}"></label>

@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.controller;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -18,15 +19,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.InmuebleDto;
+import mx.com.admoninmuebles.dto.PagoBusquedaDto;
 import mx.com.admoninmuebles.dto.PagoDto;
-import mx.com.admoninmuebles.dto.PagosBusquedaDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.PagoService;
+import mx.com.admoninmuebles.service.TipoPagoService;
 import mx.com.admoninmuebles.service.ZonaService;
 
 @Controller
@@ -43,7 +46,10 @@ public class PagoController {
     @Autowired
     private InmuebleService inmuebleService;
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'REP_BI')")
+    @Autowired
+    private TipoPagoService tipoPagoService;
+    
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')")
     @GetMapping(value = "/pagos")
     public String showPagos(Model model, final HttpServletRequest request) {
     	
@@ -70,46 +76,62 @@ public class PagoController {
         return "pagos/pagos";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'REP_BI')")
-    @GetMapping(value = "/pagos/busqueda")
-    public String showPagosBusqueda(final PagosBusquedaDto pagosBusquedaDto, final Model model, final HttpServletRequest request) {
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @GetMapping(value = "/pagos/generacion")
+    public String showPagosGeneracion(final Model model, final HttpServletRequest request,  final HttpSession session, final Locale locale) {
     	
     	 Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
     	 
-    	if ( request.isUserInRole( RolConst.ROLE_SOCIO_BI ) ) {
-			 model.addAttribute("pagos", pagoService.buscarPorUsuario( usuarioLogueadoId ));
-        } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
+        if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
         	 ZonaDto zona = zonaService.findByAdminZonaId( usuarioLogueadoId ).stream().findFirst().get();
-        	 model.addAttribute("inmuebles", inmuebleService.findByZonaCodigo( zona.getCodigo() )  );
-        	 
-        	 if(pagosBusquedaDto.getInmuebleId() != null) {
-        		 model.addAttribute("pagos", pagoService.buscarPorInmueble( pagosBusquedaDto.getInmuebleId() ) );
-        	 } else {
-        		 model.addAttribute("pagos", pagoService.buscarPorCodigoZona( zona.getCodigo() ) );
-        	 }
+        	 session.setAttribute("inmuebles", inmuebleService.findByZonaCodigo( zona.getCodigo() )  );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
         	InmuebleDto inmueble = inmuebleService.findByAdminBiId( usuarioLogueadoId ).stream().findFirst().get();
-        	model.addAttribute("socios", inmuebleService.findSociosByInmuebleId( inmueble.getId() ) );
-        	
-        	if( pagosBusquedaDto.getSocioId() != null ) {
-        		model.addAttribute("pagos", pagoService.buscarPorUsuario( pagosBusquedaDto.getSocioId() ) );
-        	} else {
-        		model.addAttribute("pagos", pagoService.buscarPorInmueble( inmueble.getId() ) );
-        	}
+        	session.setAttribute("socios", inmuebleService.findSociosActivosByInmuebleId( inmueble.getId() ) );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
-        	model.addAttribute("zonas", zonaService.findAll() );
+        	session.setAttribute("zonas", zonaService.findAll() );
+        } 
+    	
+        session.setAttribute("tiposPago", tipoPagoService.findAllByLang( LocaleConst.LOCALE_ES ) );
+        model.addAttribute("pago", new PagoDto() );
+    	
+        return "pagos/pago-generacion";
+    }
+    
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')")
+    @GetMapping(value = "/pagos/busqueda")
+    public String showPagosBusqueda(final PagoBusquedaDto pagoBusquedaDto, final Model model, final HttpServletRequest request) {
+    	
+    	 Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+    	 Collection<PagoDto> pagos = Collections.emptyList() ;
+    	if ( request.isUserInRole( RolConst.ROLE_SOCIO_BI ) ) {
+    		pagos =  pagoService.buscarPorUsuario( usuarioLogueadoId );
+        } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
+        	 
+        	 if(pagoBusquedaDto.getInmuebleId() != null) {
+        		 pagos =  pagoService.buscarPorInmueble( pagoBusquedaDto.getInmuebleId() ) ;
+        	 } else {
+        		 pagos =  pagoService.buscarPorCodigoZona( pagoBusquedaDto.getZonaCodigo() ) ;
+        	 }
+        } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
         	
-        	if( pagosBusquedaDto.getInmuebleId() != null ) {
-        		model.addAttribute("pagos", pagoService.buscarPorInmueble( pagosBusquedaDto.getInmuebleId() ) );
-        	} else if( pagosBusquedaDto.getInmuebleId() == null && pagosBusquedaDto.getZonaCodigo() != null) {
-        		model.addAttribute("pagos", pagoService.buscarPorCodigoZona( pagosBusquedaDto.getZonaCodigo() ) );
-        	} else {
-        		model.addAttribute("pagos", pagoService.buscarTodo() );
-        	}
+        	if( pagoBusquedaDto.getSocioId() != null ) {
+        		pagos =  pagoService.buscarPorUsuario( pagoBusquedaDto.getSocioId() ) ;
+        	} else if( pagoBusquedaDto.getInmuebleId() != null ) {
+        		pagos = pagoService.buscarPorInmueble( pagoBusquedaDto.getInmuebleId() ) ;
+        	} 
         	
-        } else {
-        	model.addAttribute("pagos", Collections.emptyList() );
-        }
+        } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
+        	
+        	if( pagoBusquedaDto.getInmuebleId() != null ) {
+        		pagos = pagoService.buscarPorInmueble( pagoBusquedaDto.getInmuebleId() ) ;
+        	} else if( pagoBusquedaDto.getInmuebleId() == null && pagoBusquedaDto.getZonaCodigo() != null) {
+        		pagos = pagoService.buscarPorCodigoZona( pagoBusquedaDto.getZonaCodigo() ) ;
+        	} 
+        	
+        } 
+    	
+        model.addAttribute("pagos", pagos );
     	
         return "pagos/pagos";
     }
@@ -207,6 +229,26 @@ public class PagoController {
     	}
     	
     	pagoService.verificar( pagoDto.getId() );
+    	return "redirect:/pagos";
+    }
+    
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PostMapping(value = "/pagos/generacion")
+    public String pagosGeneracion(final HttpServletRequest request, final Locale locale, final Model model, @Valid final PagoDto pagoDto, final BindingResult bindingResult) {
+    	
+    	 
+     	if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
+     		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+     		InmuebleDto inmueble = inmuebleService.findByAdminBiId( usuarioLogueadoId ).stream().findFirst().get();
+     		pagoDto.setInmuebleId(inmueble.getId());
+     	}
+    	
+    	 if (bindingResult.hasErrors()) {
+             return "pagos/pago-generacion";
+         }
+    	
+    	pagoService.generarPagos(pagoDto);
+    	
     	return "redirect:/pagos";
     }
 

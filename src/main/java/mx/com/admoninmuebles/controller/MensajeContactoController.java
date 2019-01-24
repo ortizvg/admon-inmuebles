@@ -61,7 +61,6 @@ public class MensajeContactoController {
 
     @PostMapping(value = "/contacto")
     public String contactoMensajeCrear(final HttpSession session, final Locale locale, final Model model, @Valid final MensajeContactoDto mensajeContactoDto, final BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    	System.out.println("DATA " + mensajeContactoDto.toString());
     	if (bindingResult.hasErrors()) {
     		session.setAttribute("sectoresDto", sectorService.findByIdioma(locale.getLanguage()));
         	session.setAttribute("zonasDto", zonaService.findAll());

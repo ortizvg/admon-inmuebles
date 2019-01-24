@@ -11,6 +11,7 @@ public interface PagoService {
 	
 	void generarPagosMensuales();
 	void actualizarEstatusPagosMensuales();
+	void generarPagos(PagoDto pagoDto);
 	boolean existePago(Long idPago);
 	PagoDto pagarTranferenciaBancaria(final PagoDto pagoDto);
 	PagoDto pagarPaypal(final PagoPaypalDto pagoPaypalDto);

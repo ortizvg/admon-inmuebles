@@ -60,13 +60,13 @@ public class Pago extends EntidadBase {
     @Column(length = 255)
     private String concepto;
 
-    @Size(min = 0, max = 100)
-    @Column(length = 100, nullable=true)
-    private String comprobantePagoUrl;
+//    @Size(min = 0, max = 100)
+//    @Column(length = 100, nullable=true)
+//    private String comprobantePagoUrl;
     
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] comprobantePago;
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+//    private byte[] comprobantePago;
 
     @NotNull
     private Boolean verificado;
@@ -89,5 +89,9 @@ public class Pago extends EntidadBase {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuario;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_archivo", referencedColumnName = "id_archivo", nullable = true)
+    private Archivo comprobantePago;
     
 }

@@ -64,7 +64,12 @@
 						<input name="tipoPagoBancarioDescripction" class="form-control" th:field="*{tipoPagoBancarioDescripction}" disabled="disabled"/>
 					</div>
 					
-					<img src="data:image/png;base64, " alt="Red dot" />		
+					<div id="divComprobantePago" class="form-group">
+	                  <label class="control-label" th:text="#{pago.comprobante}"></label>
+	                  <p class="form-control-static" >
+	                  	<a th:href="@{|/api/archivos/${pago.comprobantePagoId}|}" th:text="*{comprobantePagoNombre}"></a>
+	                  </p>
+	                </div>
 
 					<div class="modal-footer">
 						<button sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" 

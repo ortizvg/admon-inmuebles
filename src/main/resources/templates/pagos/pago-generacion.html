@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{pagos.generacion.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+var serverContext = [[@{/}]];
+	
+$(document).ready(function() {
+	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divTipoPago'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divMonto'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divConcepto'),/*[[#{campo.requerido}]]*/);
+});
+
+
+function cargarInmueblesPorZona() {
+	var zonaCodigo = $("#zona").val();
+    $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + zonaCodigo, function(data) {
+    	var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#inmueble').html(html);
+    });
+}
+
+
+
+function cargarSociosPorInmueble() {
+	var inmuebleId = $("#inmueble").val();
+    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/socios", function(data) {
+        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#socio').html(html);
+    });
+}
+
+
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{pagos.generacion.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{pagos.generacion.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{pagos.generacion.titulo}"></h6>
+              
+              <div class="alert alert-info" sec:authorize="hasRole('ADMIN_BI')">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Información</h3> 
+                 <p>
+                 	Como administrador tienes la opción de generar pagos para un bien inmueble o para un usuario del bien inmueble.
+                 </p>
+             </div>
+             <div class="alert alert-info" sec:authorize="hasRole('ADMIN_ZONA')">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Información</h3> 
+                 <p>
+                 	Como administrador tienes la opción de generar pagos para un bien inmueble de tu zona o para un usuario de un bien inmueble.
+                 </p>
+             </div>
+             <div class="alert alert-info" sec:authorize="hasRole('ADMIN_CORP')">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Información</h3> 
+                 <p>
+                 	Como administrador tienes la opción de generar pagos para un bien inmueble de cualquier zona o para un usuario de un bien inmueble.
+                 </p>
+             </div>
+              
+              <form name="pagoGeneracionForm" action="#" th:action="@{/pagos/generacion}" th:object="${pago}" method="post">
+              
+                  <div id="divZona" class="form-group"  sec:authorize="hasRole('ADMIN_CORP')">
+                       <label class="form-control-label" for="rolId" th:text="#{zona.nombre}"></label>
+                        <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
+                        	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+							<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
+                        </select>
+                   </div>
+                   <div id="divInmueble" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" >
+                       <label class="form-control-label" for="colonia" th:text="#{inmueble.nombre}"></label>
+                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" onchange="cargarSociosPorInmueble();">
+                       		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+							<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+                       </select>
+                   </div>
+                   <div id="divSocio" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')">
+                       <label class="form-control-label" for="inmueble" th:text="#{usuario.socio.nombre}"></label>
+	                   <select name="socio" id="socio" class="form-control" th:field="*{usuarioId}" >	
+	                    	<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
+							<option th:each="socio : ${session.socios}" th:value="${{socio.id}}" th:text="|${socio.nombre}  ${socio.apellidoPaterno} ${socio.apellidoMaterno}|"></option>
+	                   </select>
+                    </div>
+		            
+		            <div id="divTipoPago" th:class="${#fields.hasErrors('tipoPagoId')}? 'form-group has-danger':'form-group'" >
+		              <label class="form-control-label" th:text="#{pago.tipopago}"></label>
+		              <select name="tipoPagoId" id="tipoPagoId" class="form-control" th:field="*{tipoPagoId}" required>
+		                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+		                <option th:each="tipoPago : ${session.tiposPago}" th:value="${{tipoPago.id}}" th:text="${tipoPago.descripction}"></option>
+		              </select>
+		              <span class="form-control-feedback">
+		                <span th:if="${#fields.hasErrors('tipoPagoId')}" th:errors="*{tipoPagoId}"></span>
+		              </span>
+		            </div>
+					
+					<div id="divMonto" th:class="${#fields.hasErrors('monto')}? 'form-group has-danger':'form-group'">
+						<label class="form-control-label" th:text="#{pago.monto}"></label>
+						<input name="monto" class="form-control" th:field="*{monto}" required pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" 
+							/>
+						<span class="form-control-feedback">
+							<span th:if="${#fields.hasErrors('monto')}" th:errors="*{monto}"></span>
+						</span>
+					</div>
+					<div id="divConcepto" th:class="${#fields.hasErrors('concepto')}? 'form-group has-danger':'form-group'">
+						<label class="form-control-label" th:text="#{pago.concepto}"></label>
+						<input name="concepto" class="form-control" th:field="*{concepto}" required maxlength="255" th:title="#{pago.concepto.mensaje.validacion}" />
+						<span class="form-control-feedback">
+							<span th:if="${#fields.hasErrors('concepto')}" th:errors="*{concepto}"></span>
+						</span>
+					</div>
+					
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-info-gesco"  th:text="#{boton.generar}"></button>
+						<a th:href="@{/pagos}" class="btn  btn-secondary" th:text="#{boton.cancelar}"></a>
+					</div>
+				</form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

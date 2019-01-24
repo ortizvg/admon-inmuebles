@@ -108,6 +108,17 @@ public class InmuebleServiceImpl implements InmuebleService {
 				 
 		return StreamSupport.stream(socios.spliterator(), false).map(socio -> modelMapper.map(socio, UsuarioDto.class)).collect(Collectors.toList());
 	}
+	
+	@Override
+	public Collection<UsuarioDto> findSociosActivosByInmuebleId(Long id) {
+		Inmueble inmueble = inmuebleRepository.findById(id).get();
+		
+		Collection<Usuario> socios =  inmueble.getSocios().stream()
+				 .filter(socio -> ( RolConst.ROLE_SOCIO_BI.equals(socio.getRoles().stream().findFirst().get().getNombre() ) && socio.isActivo() ) )
+				 .collect(Collectors.toList());
+				 
+		return StreamSupport.stream(socios.spliterator(), false).map(socio -> modelMapper.map(socio, UsuarioDto.class)).collect(Collectors.toList());
+	}
 
 	@Override
 	public Collection<TicketDto> findTicketsByInmuebleId(Long id) {

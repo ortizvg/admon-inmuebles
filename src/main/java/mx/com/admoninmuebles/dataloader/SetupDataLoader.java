@@ -429,10 +429,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<Pago> optPago = pagoRepository.findById(id);
         Pago pago = optPago.orElse(new Pago());
         if (!optPago.isPresent()) {
-        	pago.setConcepto(concepto);;
-        	pago.setComprobantePagoUrl(comprobantePagoUrl);
-        	pago.setMonto(monto);;
-        	pago.setNumeroTransaccion(numeroTransaccion);;
+        	pago.setConcepto(concepto);
+        	pago.setMonto(monto);
+        	pago.setNumeroTransaccion(numeroTransaccion);
         	pago.setReferencia(referencia);
         	pago.setTipoPago(tipoPago);
         	pago.setUsuario(socio);

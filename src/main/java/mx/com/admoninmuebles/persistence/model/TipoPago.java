@@ -19,7 +19,7 @@ public class TipoPago extends EntidadBase {
     private static final long serialVersionUID = 1L;
     
     @Transient
-    public static final String RENTA = "RENTA";
+    public static final String CUOTA = "CUOTA";
     
     @Transient
     public static final String RESERVA = "RESERVA";

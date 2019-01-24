@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.admoninmuebles.dto.InmuebleDto;
+import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.service.InmuebleService;
 
 @RestController
@@ -32,6 +34,17 @@ public class InmuebleResource {
         		inmuebles = inmuebleService.findByDireccionAsentamientoId(coloniaId);
         	}
             return new ResponseEntity<>(inmuebles, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+
+    }
+    
+    @GetMapping("/inmuebles/{id}/socios")
+    public ResponseEntity<Collection<UsuarioDto>> buscarSociosPorInmueble( @PathVariable Long id ) {
+        try {
+        	Collection<UsuarioDto> socios =  inmuebleService.findSociosByInmuebleId( id );
+            return new ResponseEntity<>(socios, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
