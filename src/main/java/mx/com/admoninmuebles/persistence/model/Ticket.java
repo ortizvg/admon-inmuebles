@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import java.sql.Blob;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -46,9 +47,9 @@ public class Ticket extends EntidadBase {
     @NotNull
     private String estatus;
 
-    @ManyToOne
-    @JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio", nullable = false)
-    private AreaServicio areaServicio;
+    //@ManyToOne
+    //@JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio", nullable = false)
+    //private AreaServicio areaServicio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_creador_fk", nullable = false)
@@ -61,6 +62,13 @@ public class Ticket extends EntidadBase {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ticket")
     private Collection<CambioTicket> cambios = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_ticket_fk", referencedColumnName = "id_tipo_ticket", nullable = false)
+    private TipoTicket tipoTicket;
+    
+    @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
+    private byte[] archivoEvidencia;
+    
     public void addCambioTicket(final CambioTicket cambioTicket) {
         cambios.add(cambioTicket);
         cambioTicket.setTicket(this);

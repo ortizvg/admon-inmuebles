@@ -40,13 +40,15 @@
                 </div>
               </div>
               <div class="row">
-                <div id="divTitulo" class="col-md-4 form-group">
-                  <label class="control-label" th:text="#{ticket.nombre}"></label>
-                  <p class="form-control-static" th:text="*{titulo}"></p>
+                <div id="divEvidencia" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{ticket.evidencia}"></label>
+                  <p class="form-control-static" >
+                  	<a th:href="@{|/ticket-download|}" th:text="*{titulo}"></a>
+                  </p>
                 </div>
-                <div id="divAreaServicio" class="col-md-4 form-group">
-                  <label class="form-control-label" th:text="#{ticket.areaservicio}"></label>
-                  <p class="form-control-static" th:text="*{areaServicioNombre}"></p>
+                <div id="divTipoTicket" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.tipoticket}"></label>
+                  <p class="form-control-static" th:text="*{tipoTicketNombre}"></p>
                 </div>
                 <div id="divEstatus" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.estatus}"></label>
@@ -68,7 +70,6 @@
               <div class="modal-footer">
                 <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-aceptar/'  + id}" class="btn btn-success btn-rounded" th:text="#{boton.aceptar}"></a>
                 <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-rechazar/' + id}" class="btn btn-danger btn-rounded" th:text="#{boton.rechazar}"></a>
-                <a th:if="*{estatus=='ACEPTADO'}" th:href="*{'/ticket-terminar/' + id}" class="btn btn-success btn-rounded" th:text="#{boton.terminar}"></a>
                 <a th:href="@{/tickets}" class="btn btn-info btn-rounded" th:text="#{boton.cerrar}"></a>
               </div>
             </div>

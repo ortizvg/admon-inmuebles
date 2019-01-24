@@ -2555,6 +2555,7 @@ insert into sectores (id_sector, nombre, idioma) values(10, 'Hotels', 'en');
 insert into sectores (id_sector, nombre, idioma) values(11, 'Warehouses', 'en');
 insert into sectores (id_sector, nombre, idioma) values(12, 'Immovables', 'en');
 
+
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`) values (1, 'contacto.ags@gesco-pls.com', 'contacto.corpo@gesco-pls.com','Aguascalientes');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (2, 'contacto.corpo@gesco-pls.com', null, 'Baja California');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (3, 'contacto.corpo@gesco-pls.com', null, 'Baja California Sur');
@@ -2610,3 +2611,4 @@ insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (5,
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (6, 'CERCANO', 'Near', 'en');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (7, 'VERIFICACION', 'Verifying', 'en');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (8, 'ATRASADO', 'Overdue', 'en');
+

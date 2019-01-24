@@ -1,7 +1,10 @@
 package mx.com.admoninmuebles.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -24,20 +27,26 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.dto.ColoniaDto;
+import mx.com.admoninmuebles.dto.CargaSocioDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.listener.event.OnRegistroCompletoEvent;
 import mx.com.admoninmuebles.security.SecurityUtils;
-import mx.com.admoninmuebles.service.SocioService;
+import mx.com.admoninmuebles.service.CargaSocioService;
 import mx.com.admoninmuebles.service.ColoniaService;
 import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.NotificacionService;
 import mx.com.admoninmuebles.service.RolService;
+import mx.com.admoninmuebles.service.SocioService;
 import mx.com.admoninmuebles.service.UsuarioService;
 import mx.com.admoninmuebles.service.ZonaService;
 
@@ -72,6 +81,9 @@ public class SocioController {
 	
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    
+    @Autowired
+    private CargaSocioService cargaSocioService;
     
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
     @GetMapping(value = "/sociobi")
@@ -225,6 +237,58 @@ public class SocioController {
     
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
+    
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PostMapping(value = "/socio-masivo-crear")
+    public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model) {
+    	String showPage = "redirect:/socio-carga-masivo";
+    	final String CSV_MIME_TYPE = "text/csv";
+    	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
+        if (file.isEmpty()) {
+        	redirect.addFlashAttribute("messageEmpty","");
+            return showPage;
+        }
+        
+        BufferedReader br = null;
+        InputStream input = null;
+        CargaSocioDto cargaSocio = null;
+        try {
+        	
+        	String fileType = file.getContentType();
+        	if(!(CSV_MIME_TYPE.contains(fileType) || CSV_MS_MIME_TYPE.contains(fileType))) {
+        		redirect.addFlashAttribute("messageType","");
+        		return showPage;
+        	}
+        	input  = file.getInputStream();
+        	br = new BufferedReader(new InputStreamReader(input));
+        	cargaSocio = cargaSocioService.validaCSVSocios(br);
+        	if(cargaSocio!=null && cargaSocio.getListaErrores() !=null && !cargaSocio.getListaErrores().isEmpty()) {
+        		model.addAttribute("errores", cargaSocio.getListaErrores());
+        		return showPage.replace("redirect:", "socios");
+        	}
+	        return "redirect:/socios";
+        }catch(IOException ie){
+        	logger.error("Hubo un prolema al leer el archivo "+ie.getMessage());
+        	return showPage;
+        }catch(BusinessException e) {
+        	return showPage;
+   	 	}
+    }
+    
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @GetMapping(value = "/socio-carga-masivo")
+    public String cargarSocioMasivo(final HttpServletRequest request, final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
+    
+        try
+        {}
+        catch(BusinessException e) {
+               bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
+               return "redirect:/socios";
+               } 
+        
+        return "socios/socio-carga-masivo";
+        
     }
 
 }

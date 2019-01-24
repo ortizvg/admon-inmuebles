@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+<meta charset="UTF-8">
+<title th:text="#{socio.carga_masivo}"></title>
+</head>
+<body>
+
+
+
+
+	<div layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario"
+						th:text="#{socios.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a class="text-gesco-secundario"
+							th:href="@{/socios}" th:text="#{socios.titulo}"></a></li>
+						<li class="breadcrumb-item active"
+							th:text="#{socios.crear.masivo}"></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+
+							<h4 class="card-title">
+								<span th:text="#{socios.crear.masivo.titulo}"></span>
+							</h4>
+							<h6 class="card-subtitle">
+								<span th:text="#{socios.crear.masivo.subtitulo}"></span>
+							</h6>
+
+							<form name="crearSocioMasivoForm" action="#" enctype="multipart/form-data"
+								th:action="@{/socio-masivo-crear}" th:object="${usuarioDto}"
+								method="post" role="form">
+
+								<div class="row">
+									<div class="col-md-12 m-b-20">
+										<input type="file" name="file" id="file" /> 
+										<button type="submit" class="btn btn-info-gesco waves-effect m-r-10" th:text="#{boton.guardar}"></button>
+										<a th:href="@{/socios}" class="btn btn-secondary waves-effect"
+											th:text="#{boton.cancelar}"></a>
+									</div>
+								</div>
+								
+								<br>
+                                            
+      							<div th:if="${message}">
+    								<span class="form-control-feedback" th:text="#{socios.crear.masivo.error.tamanio}"></span>
+								</div>  
+      							<div th:if="${messageType}">
+    								<span class="form-control-feedback" th:text="#{socios.crear.masivo.error.tipo}"></span>
+								</div> 
+      							<div th:if="${messageEmpty}">
+    								<span class="form-control-feedback" th:text="#{socios.crear.masivo.error.vacio}"></span>
+								</div> 								                                             
+                                  <!-- div th:unless=${lists.isEmpty(errores)}-->
+                                  <div>
+                                  	<table  class="table table-striped">
+           			     	      		<tr th:each="errores : ${errores}">
+               								<td th:text="${errores.message}"></td>
+							           </tr>
+       								</table>
+                                  </div>       
+
+							</form>
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+</html>
