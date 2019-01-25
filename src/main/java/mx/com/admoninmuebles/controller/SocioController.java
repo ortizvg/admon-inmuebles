@@ -10,10 +10,16 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.detect.DefaultDetector;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +33,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -84,6 +88,9 @@ public class SocioController {
     
     @Autowired
     private CargaSocioService cargaSocioService;
+    
+    @Autowired
+    private ServletContext servletContext;
     
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
     @GetMapping(value = "/sociobi")
@@ -245,6 +252,7 @@ public class SocioController {
     	String showPage = "redirect:/socio-carga-masivo";
     	final String CSV_MIME_TYPE = "text/csv";
     	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
+    	final String CSV_EXTENSION = "csv";
         if (file.isEmpty()) {
         	redirect.addFlashAttribute("messageEmpty","");
             return showPage;
@@ -255,8 +263,25 @@ public class SocioController {
         CargaSocioDto cargaSocio = null;
         try {
         	
-        	String fileType = file.getContentType();
-        	if(!(CSV_MIME_TYPE.contains(fileType) || CSV_MS_MIME_TYPE.contains(fileType))) {
+//            Detector detector = new DefaultDetector();
+//            Metadata metadata = new Metadata();
+//         
+//    		MediaType mediaType = detector.detect(file.getInputStream(), metadata);
+//    		
+//    		logger.info("CONTENT TYPE: " + mediaType.toString());
+        	
+//        	 String strMediaType = servletContext.getMimeType(file.getOriginalFilename());
+//        	 logger.info("CONTENT TYPE: " + strMediaType);
+//        	 
+//        	String fileType = file.getContentType();
+//        	logger.info("CONTENT TYPE: " + fileType);
+//        	if(!(CSV_MIME_TYPE.contains(fileType) || CSV_MS_MIME_TYPE.contains(fileType))) {
+//        		redirect.addFlashAttribute("messageType","");
+//        		return showPage;
+//        	}
+        	
+        	 String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        	if( !( CSV_EXTENSION.equalsIgnoreCase( extension ) ) ) {
         		redirect.addFlashAttribute("messageType","");
         		return showPage;
         	}

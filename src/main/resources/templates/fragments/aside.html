@@ -15,7 +15,7 @@
         <li sec:authorize="!isAuthenticated()"><a href="/inicio#sucursales" aria-expanded="false"><i class="mdi mdi-map-marker"></i> <span class="hide-menu" th:text="#{menu.sucursales}"></span></a></li>
         <li sec:authorize="!isAuthenticated()"><a href="/contacto" aria-expanded="false"><i class="mdi mdi-contact-mail"></i> <span class="hide-menu" th:text="#{menu.contactanos}"></span></a></li>
 <!--         <li sec:authorize="!isAuthenticated()"><a href="/preguntas-frecuentes" aria-expanded="false"><i class="mdi mdi-comment-account"></i> <span class="hide-menu" th:text="#{menu.preguntasfrecuentes}"></span></a></li> -->
-        <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li>
+<!--         <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li> -->
         <li sec:authorize="!isAuthenticated()"><a href="/login" aria-expanded="false"><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.ingresosocios}"></span></a></li>
         <li sec:authorize="hasRole('PROVEEDOR')"><a href="/proveedor" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('SOCIO_BI')"><a href="/sociobi" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
