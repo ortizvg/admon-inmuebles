@@ -109,22 +109,6 @@ public class SocioController {
         return "sociobi/inicio";
     }
     
-    @PreAuthorize("hasAnyRole('REP_BI')")
-    @GetMapping(value = "/repbi")
-    public String inicioRepBi(final Model model) {
-    	Long socioBiLogueadoId = SecurityUtils.getCurrentUserId().get();
-    	UsuarioDto usuarioDto = usuarioService.findById(socioBiLogueadoId);
-    	logger.info("REP NI::::: " + usuarioDto == null ? "NADA" : usuarioDto.toString());
-    	
-//    	InmuebleDto inmuebleDto = inmuebleService.findById(usuarioDto.getInmuebleId());
-    	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(socioBiLogueadoId).stream().findFirst().get();
-    	
-    	model.addAttribute("repDto", usuarioDto);
-        model.addAttribute("inmuebleDto", inmuebleDto);
-        model.addAttribute("socios", inmuebleService.findSociosByInmuebleId(inmuebleDto.getId()));
-        model.addAttribute("tickets", inmuebleService.findTicketsByInmuebleId(inmuebleDto.getId()));
-        return "repbi/inicio";
-    }
 
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
 	@GetMapping(value = "/socios")
@@ -185,7 +169,7 @@ public class SocioController {
    	 	}
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'REP_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/socio-detalle/{id}")
     public String buscarsocioPorId(final @PathVariable long id, final Model model) {
     	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();

@@ -130,7 +130,7 @@ public class TicketController {
 		String vista;
 		TicketDto ticketDto = ticketService.findById(id);
 		model.addAttribute("ticketDto", ticketDto);
-		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI) || request.isUserInRole(RolConst.ROLE_REP_BI)) {
+		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			vista = "ticket/ticket-detalle";
 		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR)) {
 			vista = "ticket/ticket-aceptar";

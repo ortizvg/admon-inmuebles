@@ -29,7 +29,6 @@ public final class PrivilegioConst {
     public static final String GESTIONAR_SERVICIOS = "GESTIONAR_SERVICIOS";
     public static final String GESTIONAR_PREGUNTAS = "GESTIONAR_PREGUNTAS";
     public static final String GESTIONAR_SOCIO_BI = "GESTIONAR_SOCIO_BI";
-    public static final String GESTIONAR_REP_BI = "GESTIONAR_REP_BI";
     public static final String GESTIONAR_ADMIN_BI = "GESTIONAR_ADMIN_BI";
     public static final String GESTIONAR_ADMIN_ZONA = "GESTIONAR_ADMIN_ZONA";
     public static final String GESTIONAR_PROVEEDOR = "GESTIONAR_PROVEEDOR";

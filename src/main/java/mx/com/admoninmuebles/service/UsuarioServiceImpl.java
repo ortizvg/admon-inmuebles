@@ -134,7 +134,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuario.setDatosDomicilio(userDto.getDatosDomicilio());
         }
 
-        if (roles.stream().anyMatch(rol -> RolConst.ROLE_REP_BI.equals(rol.getNombre()) || RolConst.ROLE_SOCIO_BI.equals(rol.getNombre()))) {
+        if (roles.stream().anyMatch(rol -> RolConst.ROLE_SOCIO_BI.equals(rol.getNombre()))) {
 
             if (userDto.getInmuebleId() != null) {
                 // usuario.setInmueble(inmuebleRepository.findById(userDto.getInmuebleId()).get());

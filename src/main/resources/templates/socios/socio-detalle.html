@@ -42,7 +42,6 @@
                     <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card"> 
                         	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_SOCIO_BI'}" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
-                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_REP_BI'}" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
                             <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
                                 <div class="align-self-center "> 
                                 	<div th:switch="${usuarioDto.fotoUrl != null}"> 
@@ -170,8 +169,7 @@
                                         
                                         <div class="row">
 	                                             <div class="col-md-12 m-b-20">
-	                                             	<a sec:authorize="hasRole('REP_BI')" th:href="@{/repbi}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
-				                                    <a sec:authorize="!hasRole('REP_BI')" th:href="@{/socios}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+				                                    <a sec:authorize="hasRole('SOCIO_BI')" th:href="@{/socios}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
 	                                           </div>
                                         </div>
                                     </div>

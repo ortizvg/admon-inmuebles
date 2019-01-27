@@ -91,7 +91,6 @@ function cambiarContrasenia(){
                     <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card"> 
                         	<img sec:authorize="hasAnyRole('ROLE_SOCIO_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
-                        	<img sec:authorize="hasAnyRole('ROLE_REP_BI', 'ROLE_PROVEEDOR')" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
                         	<img sec:authorize="hasAnyRole('ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
                         	<img sec:authorize="hasAnyRole('ADMIN_CORP')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINITRADOR_CORPORATIVO.jpg}">
                             <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
@@ -131,7 +130,7 @@ function cambiarContrasenia(){
                     <div class="col-lg-8 col-xlg-9 col-md-7">
                         <div class="card">
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'REP_BI', 'PROVEEDOR')">
+                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'PROVEEDOR')">
                                 <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#perfil" role="tab"  th:text="#{usuario.perfil.detalle}"></a> </li>
                                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab" th:text="#{usuario.perfil.editar}"></a> </li>
                                  <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cambio-contrasenia" role="tab" th:text="#{usuario.perfil.contrasenia.cambio}"></a> </li>

@@ -56,7 +56,6 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isAdminCorp = false;
         boolean isAdminZona = false;
         boolean isAdminBi = false;
-        boolean isRepBi = false;
         boolean isSocioBi = false;
         boolean isProveedor = false;
         boolean isContador = false;
@@ -73,9 +72,6 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
             }
             else if (RolConst.ROLE_ADMIN_BI.equals(grantedAuthority.getAuthority())) {
             	isAdminBi = true;
-                break;
-            }else if (RolConst.ROLE_REP_BI.equals(grantedAuthority.getAuthority())) {
-            	isRepBi = true;
                 break;
             }else if (RolConst.ROLE_SOCIO_BI.equals(grantedAuthority.getAuthority())) {
             	isSocioBi = true;
@@ -95,8 +91,6 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
             return "/adminzona";
         } else if (isAdminBi) {
             return "/adminbi";
-        }else if (isRepBi) {
-        	return "/repbi";
         }else if (isSocioBi) {
             return "/sociobi";
         }else if (isProveedor) {

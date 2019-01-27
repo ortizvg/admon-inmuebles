@@ -60,7 +60,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**").permitAll()
             .antMatchers("/proveedores/inicio").hasRole("PROVEEDOR")
             .antMatchers("/sociobi/inicio").hasRole("SOCIO_BI")
-            .antMatchers("/repbi/inicio").hasRole("REP_BI")
                 .antMatchers("/invalidSession*").anonymous()
                 .antMatchers("/catalogos/**").authenticated()
                 .anyRequest().authenticated()

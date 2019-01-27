@@ -35,7 +35,7 @@ public class ReservacionController {
 	@Autowired
 	private InmuebleService inmuebleService;
 
-	@PreAuthorize("hasAnyRole('SOCIO_BI', 'REP_BI','ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+	@PreAuthorize("hasAnyRole('SOCIO_BI','ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/reservar-area-comun")
     public String init(final Model model, final HttpSession session, final ReservacionDto reservacionDto, final Locale locale,  final HttpServletRequest request) {
 
@@ -55,7 +55,7 @@ public class ReservacionController {
         return "/reservaciones/reservar-area-comun";
     }
 
-    @PreAuthorize("hasAnyRole('SOCIO_BI', 'REP_BI','ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('SOCIO_BI','ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/reserva-area-comun/busqueda")
     public String buscarReservaciones(final Model model, final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
@@ -69,7 +69,7 @@ public class ReservacionController {
         return "/reservaciones/reservar-area-comun";
     }
 
-    @PreAuthorize("hasAnyRole('SOCIO_BI', 'REP_BI')")
+    @PreAuthorize("hasAnyRole('SOCIO_BI')")
     @PostMapping(value = "/reserva-area-comun/crear")
     public String reservarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
     	session.setAttribute("locale", locale.getLanguage());
@@ -79,7 +79,7 @@ public class ReservacionController {
         return "redirect:/reservar-area-comun";
     }
     
-    @PreAuthorize("hasAnyRole('SOCIO_BI', 'REP_BI')")
+    @PreAuthorize("hasAnyRole('SOCIO_BI')")
     @PostMapping(value = "/reserva-area-comun/eliminar")
     public String eliminarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
         reservacioService.delete(reservacionDto.getId());

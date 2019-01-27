@@ -134,7 +134,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Privilegio gestionarServicios = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_SERVICIOS);
         Privilegio gestionarPreguntas = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_PREGUNTAS);
         Privilegio gestionarSocioBi = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_SOCIO_BI);
-        Privilegio gestionarRepBi = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_REP_BI);
         Privilegio gestionarAdminBi = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_ADMIN_BI);
         Privilegio gestionarAdminZona = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_ADMIN_ZONA);
         Privilegio gestionarProveedor = createPrivilegioIfNotFound(PrivilegioConst.GESTIONAR_PROVEEDOR);
@@ -158,16 +157,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosSocioBi.add(cancelarTicket);
         Rol socioBi = createRolIfNotFound(RolConst.ROLE_SOCIO_BI, "Socio", privilegiosSocioBi);
 
-        List<Privilegio> privilegiosRepBi = new ArrayList<>();
-        privilegiosRepBi.add(historialPagoInmuble);
-        privilegiosRepBi.add(estadoFinancieroInmueble);
-        privilegiosRepBi.add(listaSocios);
-        privilegiosRepBi.add(reporteMorosos);
-        privilegiosSocioBi.addAll(privilegiosRepBi);
-        Rol repBi = createRolIfNotFound(RolConst.ROLE_REP_BI, "Representante de bien inmueble",  privilegiosSocioBi);
 
         List<Privilegio> privilegiosAdminBi = new ArrayList<>();
-        privilegiosAdminBi.addAll(privilegiosRepBi);
         privilegiosAdminBi.add(asignarTicket);
         privilegiosAdminBi.add(verTicket);
         privilegiosAdminBi.add(cerrarTicket);
@@ -180,7 +171,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosAdminBi.add(gestionarServicios);
         privilegiosAdminBi.add(gestionarPreguntas);
         privilegiosAdminBi.add(gestionarSocioBi);
-        privilegiosAdminBi.add(gestionarRepBi);
         privilegiosAdminBi.add(gestionarAdminBi);
         privilegiosAdminBi.add(gestionarProveedor);
         privilegiosAdminBi.add(estadoFinancieroColonia);
@@ -211,7 +201,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Usuario usuarioProveedorConstruccion = createUsuarioIfNotFound("proveedor_construccion", "Proveedor", "Construccion", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
         Usuario usuarioSocioBi = createUsuarioIfNotFound("socio_bi", "Socio", "Bi", "Inmueble", "socio_bi", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com");
         Usuario usuarioSocioBi2 = createUsuarioIfNotFound("socio_bi2", "Socio2", "Bi2", "Inmueble2", "socio_bi2", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com");
-        createUsuarioIfNotFound("rep_bi", "Representante", "Bien", "Inmubele", "rep_bi", new ArrayList<>(Arrays.asList(repBi)), "correo@gmail.com");
         Usuario usuarioAdminBi = createUsuarioIfNotFound("admin_bi", "Administrador", "Bien", "Inmueble", "admin_bi", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com");
         Usuario usuarioAdminB2 = createUsuarioIfNotFound("admin_bi2", "Administrador2", "Bien", "Inmueble", "admin_bi2", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com");
         Usuario usuarioAdminZona = createUsuarioIfNotFound("admin_zona", "Administrador", "Zona", "", "admin_zona", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com");
