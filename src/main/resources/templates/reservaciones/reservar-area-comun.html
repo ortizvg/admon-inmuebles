@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
   xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{ticket.titulo}"></title>
+<title th:text="#{reserva.areacomun.nombre}"></title>
 <script th:inline="javascript">
   /*<![CDATA[*/
   $(document).ready(function() {
@@ -78,7 +78,7 @@
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
             <select class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
-              <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+              <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option>
             </select>
             <span class="form-control-feedback">
@@ -116,8 +116,8 @@
                 <p></p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
-                <button type="submit" class="btn btn-rounded btn-success waves-effect waves-light" th:text="#{boton.crear.evento}"></button>
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                <button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.crear.evento}"></button>
               </div>
             </form>
           </div>
@@ -140,8 +140,8 @@
                 <p></p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
-                <button type="submit" class="btn btn-rounded btn-danger waves-effect waves-light" th:text="#{boton.eliminar}"></button>
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                <button type="submit" class="btn btn-danger waves-effect" th:text="#{boton.eliminar}"></button>
               </div>
             </form>
           </div>
