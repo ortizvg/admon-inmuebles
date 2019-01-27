@@ -198,6 +198,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosAdminCorp.add(gestionarAdminCorp);
         privilegiosAdminCorp.add(reportes);
         Rol adminCorp = createRolIfNotFound(RolConst.ROLE_ADMIN_CORP, "Administrador corporativo", privilegiosAdminCorp);
+        
+        List<Privilegio> privilegiosContador = new ArrayList<>();
+        privilegiosAdminCorp.add(notificarPago);
+        privilegiosAdminCorp.add(historialPagos);
+        privilegiosAdminCorp.add(historialPagoInmuble);
+        privilegiosAdminCorp.add(verificarPago);
+        Rol contador = createRolIfNotFound(RolConst.ROLE_CONTADOR, "Contador", privilegiosContador);
 
         Usuario usuarioProveedorJardineria = createUsuarioIfNotFound("proveedor_jardineria", "Proveedor", "Jardineria", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
         Usuario usuarioProveedorLimpieza = createUsuarioIfNotFound("proveedor_limpieza", "Proveedor", "Limpieza", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
@@ -210,6 +217,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Usuario usuarioAdminZona = createUsuarioIfNotFound("admin_zona", "Administrador", "Zona", "", "admin_zona", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com");
         Usuario usuarioAdminZona2 = createUsuarioIfNotFound("admin_zona2", "Administrador2", "Zona", "", "admin_zona2", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com");
         createUsuarioIfNotFound("admin_corp", "Administrador", "Corporativo", "", "admin_corp", new ArrayList<>(Arrays.asList(adminCorp)), "correo@gmail.com");
+        Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com");
 
         Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi);
         createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null);
@@ -218,8 +226,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createZonaIfNotFound("zona5", "Cancún", usuarioAdminZona2, null);
         Asentamiento asentamiento = updateAsentamientoIfFound(1L, zona);
 
-        Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi);
-        Inmueble inmueble2 = createInmuebleIfNotFound(2L, "Inmueble2", asentamiento, usuarioAdminBi, usuarioSocioBi2);
+        Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi,  contadorBI);
+        Inmueble inmueble2 = createInmuebleIfNotFound(2L, "Inmueble2", asentamiento, usuarioAdminBi, usuarioSocioBi2,  contadorBI);
 
         AreaComun areaComun = createAreaComunIfNotFound(1L, "Area comun 1", "Area para 30 personas", inmueble);
 
@@ -328,7 +336,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public final Inmueble createInmuebleIfNotFound(final Long id, final String nombre, final Asentamiento asentamiento, final Usuario adminBi, final Usuario socio) {
+    public final Inmueble createInmuebleIfNotFound(final Long id, final String nombre, final Asentamiento asentamiento, final Usuario adminBi, final Usuario socio, final Usuario contador) {
         Optional<Inmueble> optInmueble = inmuebleRepository.findById(id);
         Inmueble inmueble = optInmueble.orElse(new Inmueble());
         if (!optInmueble.isPresent()) {
@@ -337,6 +345,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             inmueble.setMontoCuotaOrdinaria(new BigDecimal("11.11"));
             inmueble.setAdminBi(adminBi);
             inmueble.setImagenUrl("/files/inmueble.jpg");
+            inmueble.setContador(contador);
 
             Direccion direccion = new Direccion();
             direccion.setAsentamiento(asentamiento);

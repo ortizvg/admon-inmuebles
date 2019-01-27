@@ -43,7 +43,7 @@
                         <div class="card"> 
                         	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_SOCIO_BI'}" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
                         	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_REP_BI' || usuarioDto.roles[0].nombre == 'ROLE_PROVEEDOR'}" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
-                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_ADMIN_ZONA' || usuarioDto.roles[0].nombre == 'ROLE_ADMIN_BI'}" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
+                        	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_ADMIN_ZONA' || usuarioDto.roles[0].nombre == 'ROLE_ADMIN_BI' || usuarioDto.roles[0].nombre == 'ROLE_CONTADOR'}" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
                         	<img th:if="${usuarioDto.roles[0].nombre == 'ROLE_ADMIN_CORP'}" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINITRADOR_CORPORATIVO.jpg}">
                             <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
                                 <div class="align-self-center "> 

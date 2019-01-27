@@ -13,5 +13,6 @@ public final class RolConst {
 	public static final String ROLE_ADMIN_BI = "ROLE_ADMIN_BI";
 	public static final String ROLE_ADMIN_ZONA = "ROLE_ADMIN_ZONA";
 	public static final String ROLE_ADMIN_CORP = "ROLE_ADMIN_CORP";
+	public static final String ROLE_CONTADOR = "ROLE_CONTADOR";
 
 }

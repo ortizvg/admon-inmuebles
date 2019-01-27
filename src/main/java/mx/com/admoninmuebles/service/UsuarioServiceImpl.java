@@ -291,7 +291,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Collection<UsuarioDto> findAllAdministradores() {
         List<Rol> roles = StreamSupport.stream(rolRepository.findAll().spliterator(), false)
-                .filter(rol -> (RolConst.ROLE_ADMIN_BI.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_ZONA.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_CORP.equals(rol.getNombre())))
+                .filter(rol -> (RolConst.ROLE_CONTADOR.equals(rol.getNombre()) ) || (RolConst.ROLE_ADMIN_BI.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_ZONA.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_CORP.equals(rol.getNombre())))
                 .collect(Collectors.toList());
 
         return StreamSupport.stream(userRepository.findByRolesIn(roles).spliterator(), false).map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());

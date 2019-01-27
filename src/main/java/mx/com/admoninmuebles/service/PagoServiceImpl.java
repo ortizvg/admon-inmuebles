@@ -177,6 +177,13 @@ public class PagoServiceImpl implements PagoService {
 				.collect(Collectors.toList());
 		
 	}
+	
+	@Override
+	public Collection<PagoDto> buscarPorContador(Long idContador) {
+		return StreamSupport.stream(pagoRepository.findByContadorId( idContador ).spliterator(), false)
+				.map(pago -> modelMapper.map(pago, PagoDto.class))
+				.collect(Collectors.toList());
+	}
 
 	@Scheduled(cron = "${pagos.ordinario.cron.expresion}")
 	@Override

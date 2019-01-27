@@ -61,6 +61,10 @@ public class Inmueble extends EntidadBase {
     @ManyToOne
     @JoinColumn(name = "id_admin_bi_fk", nullable = false)
     public Usuario adminBi;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_contador_fk", nullable = false)
+    public Usuario contador;
 
     @OneToOne
     @JoinColumn(name = "id_direccion_fk", nullable = false)

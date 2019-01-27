@@ -33,5 +33,13 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
     		"where z.codigo = ?1)", 
 			nativeQuery = true)
 	Collection<Pago> findBycodigoZona(String codigoZona);
+    
+    @Query(value = "select p.* from gescopls.usuarios u \r\n" + 
+    		"inner join gescopls.inmuebles i on u.id_usuario = i.id_contador_fk \r\n" + 
+    		"inner join gescopls.inmuebles_socios ist on i.id_inmueble = ist.Inmueble_id_inmueble \r\n" + 
+    		"join gescopls.pagos p on ist.socios_id_usuario = p.id_usuario \r\n" + 
+    		"where u.id_usuario = ?1 order by p.id_pago",
+			nativeQuery = true)
+	Collection<Pago> findByContadorId(Long id);
 
 }

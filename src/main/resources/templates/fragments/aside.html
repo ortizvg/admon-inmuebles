@@ -26,7 +26,7 @@
         <li sec:authorize="isAuthenticated()"><a class="has-arrow" href="#" aria-expanded="true"><i class="mdi mdi-table"></i> <span class="hide-menu" th:text="#{menu.administracion}"></span></a>
           <ul aria-expanded="true" class="collapse in">
             <li sec:authorize="hasAuthority('VER_TICKET')"><a th:href="@{/tickets}" aria-expanded="false"><i class="mdi mdi-tag-multiple"></i> <span class="hide-menu" th:text="#{menu.tickets}"></span></a></li>
-             <li><a th:href="@{/reservar-area-comun}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.reserva}"></span></a></li>
+            <li sec:authorize="!hasRole('CONTADOR')"><a th:href="@{/reservar-area-comun}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.reserva}"></span></a></li>
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a  th:href="@{/inmuebles}" aria-expanded="false"><i class="mdi mdi-domain"></i> <span class="hide-menu" th:text="#{menu.bieninmueble}"></span></a></li>
 <!--             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/proveedores}" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i> <span class="hide-menu" th:text="#{menu.proveedores}"></span></a></li> -->
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a  th:href="@{/contacto/mensajes}" aria-expanded="false"><i class="mdi mdi-contact-mail"></i> <span class="hide-menu" th:text="#{menu.contacto.mensajes}"></span></a></li>
@@ -48,7 +48,7 @@
               	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/proveedores}" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i> <span class="hide-menu" th:text="#{menu.proveedores}"></span></a></li>
               </ul>
              </li>
-           
+           <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'CONTADOR')"><a href="/pagos" aria-expanded="false"><i class="mdi mdi-cash-usd"></i> <span class="hide-menu" th:text="#{menu.pagos}"></span></a></li>
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-clipboard"></i> <span class="hide-menu"
                   th:text="#{menu.catalogos}"></span></a>
               <ul aria-expanded="false" class="collapse">
@@ -66,7 +66,6 @@
 <!--                 <li><a href="/catalogos/tipo-pago-bancario" th:text="#{menu.tipopagobancario}"></a></li> -->
 <!--                 <li><a href="/catalogos/tipo-ticket" th:text="#{menu.tiposticket}"></a></li> -->
               </ul></li>
-              <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'REP_BI')"><a href="/pagos" aria-expanded="false"><i class="mdi mdi-cash-usd"></i> <span class="hide-menu" th:text="#{menu.pagos}"></span></a></li>
           </ul></li>
       </ul>
     </nav>

@@ -59,6 +59,7 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isRepBi = false;
         boolean isSocioBi = false;
         boolean isProveedor = false;
+        boolean isContador = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
         	
@@ -82,6 +83,9 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
             }else if (RolConst.ROLE_PROVEEDOR.equals(grantedAuthority.getAuthority())) {
             	isProveedor = true;
                 break;
+            }else if (RolConst.ROLE_CONTADOR.equals(grantedAuthority.getAuthority())) {
+            	isContador = true;
+                break;
             }
         }
 
@@ -97,6 +101,8 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
             return "/sociobi";
         }else if (isProveedor) {
             return "/proveedor";
+        }else if (isContador) {
+            return "/contador";
         }
         else {
             throw new IllegalStateException();

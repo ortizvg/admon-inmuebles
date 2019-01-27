@@ -92,7 +92,7 @@ function cambiarContrasenia(){
                         <div class="card"> 
                         	<img sec:authorize="hasAnyRole('ROLE_SOCIO_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
                         	<img sec:authorize="hasAnyRole('ROLE_REP_BI', 'ROLE_PROVEEDOR')" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
-                        	<img sec:authorize="hasAnyRole('ADMIN_ZONA', 'ADMIN_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
+                        	<img sec:authorize="hasAnyRole('ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
                         	<img sec:authorize="hasAnyRole('ADMIN_CORP')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINITRADOR_CORPORATIVO.jpg}">
                             <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
                                 <div class="align-self-center "> 

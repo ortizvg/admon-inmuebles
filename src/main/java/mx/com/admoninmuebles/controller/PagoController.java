@@ -49,7 +49,7 @@ public class PagoController {
     @Autowired
     private TipoPagoService tipoPagoService;
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
     @GetMapping(value = "/pagos")
     public String showPagos(Model model, final HttpServletRequest request) {
     	
@@ -68,6 +68,8 @@ public class PagoController {
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
         	model.addAttribute("zonas", zonaService.findAll() );
         	model.addAttribute("pagos", pagoService.buscarTodo() );
+        } else if ( request.isUserInRole( RolConst.ROLE_CONTADOR ) ) {
+        	model.addAttribute("pagos", pagoService.buscarPorContador(usuarioLogueadoId) );
         } else {
         	model.addAttribute("pagos", Collections.emptyList() );
         }
@@ -76,7 +78,7 @@ public class PagoController {
         return "pagos/pagos";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'CONTADOR', 'ADMIN_BI')")
     @GetMapping(value = "/pagos/generacion")
     public String showPagosGeneracion(final Model model, final HttpServletRequest request,  final HttpSession session, final Locale locale) {
     	
@@ -98,7 +100,7 @@ public class PagoController {
         return "pagos/pago-generacion";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
     @GetMapping(value = "/pagos/busqueda")
     public String showPagosBusqueda(final PagoBusquedaDto pagoBusquedaDto, final Model model, final HttpServletRequest request) {
     	
@@ -179,7 +181,7 @@ public class PagoController {
     	return "pagos/pago-transferencia";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'REP_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'CONTADOR')")
     @GetMapping(value = "/pagos/{id}/detalle")
     public String showFormPagosDetalle(final @PathVariable long id, Model model) {
     	
@@ -220,7 +222,7 @@ public class PagoController {
     	return "redirect:/pagos";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
     @PostMapping(value = "/pagos/opciones/transferencia/verificacion")
     public String pagarTransferenciaVerificacion(final HttpServletRequest request, final Locale locale, final Model model, @Valid final PagoDto pagoDto, final BindingResult bindingResult) {
     	
@@ -232,7 +234,7 @@ public class PagoController {
     	return "redirect:/pagos";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
     @PostMapping(value = "/pagos/generacion")
     public String pagosGeneracion(final HttpServletRequest request, final Locale locale, final Model model, @Valid final PagoDto pagoDto, final BindingResult bindingResult) {
     	
