@@ -22,13 +22,6 @@
       modal.modal("show");
     });
     
-    $("#filtroInputId").on("keyup", function() {
-	    var inputValue = $(this).val().toLowerCase();
-	    $("#notificacionesTableId tbody tr ").filter(function() {
-	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
-	    });
-	});
-    
   });
   /*]]>*/
 </script>
@@ -55,10 +48,13 @@
 					        		<div class="col-4">
 								  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 								  	</div>
+								  	<div class="col-1 ml-auto">
+					                     <a sec:authorize="hasRole('ADMIN_BI')" th:href="@{/catalogos/notificacion-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
+								  	</div>
 								 </div>
                                 
                                 <div class="table-responsive">
-                                    <table id="notificacionesTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                                    <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
                                         <thead>
                                             <tr>
                                                 <th th:text="#{tabla.id}"></th>
@@ -86,16 +82,12 @@
                                              </th:block>
                                            
                                         </tbody>
-                                        <tfoot>
+                                        <tfoot th:if="${#lists.size(notificaciones) > 20}">
                                             <tr>
-                                                <td colspan="2">
-                                                    <a sec:authorize="hasRole('ADMIN_BI')" th:href="@{/catalogos/notificacion-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
-                                                </td>
-                                                <td>
-                                                <td th:if="${#lists.size(notificaciones) > 10}" colspan="7">
-                                                        <div class="text-right">
-                                                            <ul class="pagination"> </ul>
-                                                        </div>
+                                                <td colspan="7">
+                                                       <div class="text-right">
+                                                           <ul class="pagination"> </ul>
+                                                       </div>
                                                 </td>
                                             </tr>
                                         </tfoot>

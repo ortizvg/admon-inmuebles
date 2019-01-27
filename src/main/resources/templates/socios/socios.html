@@ -19,13 +19,6 @@
       modal.modal("show");
     });
     
-    $("#filtroInputId").on("keyup", function() {
-	    var inputValue = $(this).val().toLowerCase();
-	    $("#sociosTableId tbody tr ").filter(function() {
-	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
-	    });
-	});
-    
   });
   /*]]>*/
 </script>
@@ -48,14 +41,18 @@
 							<h4 class="card-title" th:text="#{socios.titulo}"></h4>
 							<h6 class="card-subtitle" th:text="#{socios.subtitulo}"></h6>
 							
-								    <div class="row">
-						        		<div class="col-4">
+								    <div class="d-flex row">
+						        		<div class="mr-auto col-md-4">
 									  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
+									  	</div>
+									  	<div>
+						                      <a th:href="@{/socio-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
+						                      <a th:href="@{/socio-carga-masivo}" class="btn btn-info-gesco waves-effect" th:text="#{boton.masivo}"></a>
 									  	</div>
 									</div>
 									
                                     <div class="table-responsive">
-                                        <table id="sociosTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                                        <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
                                             <thead>
                                                 <tr>
                                                     <th th:text="#{tabla.id}"></th>
@@ -94,17 +91,9 @@
 	                                                </tr>
                                                </th:block>
                                             </tbody>
-                                            <tfoot>
+                                            <tfoot th:if="${#lists.size(socios) > 20}">
                                                 <tr>
-                                                    <td colspan="1">
-                                                        <a th:href="@{/socio-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
-                                                    </td>
-                                                    
-                                                    <td colspan="1">
-                                                        <a th:href="@{/socio-carga-masivo}" class="btn btn-info-gesco waves-effect" th:text="#{boton.masivo}"></a>
-                                                    </td>
-                                                    
-                                                    <td th:if="${#lists.size(socios) > 10}" colspan="5">
+                                                    <td colspan="6">
                                                         <div class="text-right">
                                                             <ul class="pagination"> </ul>
                                                         </div>

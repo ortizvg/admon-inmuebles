@@ -48,6 +48,7 @@ public class InmuebleController {
     public String init(final InmuebleDto inmuebleDto, final Model model, final HttpServletRequest request) {
         Optional<Long> optUsuarioId = SecurityUtils.getCurrentUserId();
         Collection<ZonaDto> zonas = Collections.emptyList();
+        model.addAttribute("inmuebles", Collections.emptyList());
         if (optUsuarioId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
                 zonas = zonaService.findAll();
@@ -79,6 +80,11 @@ public class InmuebleController {
             }
 
         }
+        
+        if( inmuebleDto == null ) {
+        	model.addAttribute("inmuebleDto", new InmuebleDto());
+        }
+        
 
         return "inmuebles/inmuebles";
     }

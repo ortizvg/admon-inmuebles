@@ -38,7 +38,7 @@
 <!--               </ul> -->
 <!--             </li> -->
 <!--             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a th:href="@{/usuarios}" href="#" aria-expanded="false" ><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.usuarios}"></span></a></li> -->
-           	
+           	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'CONTADOR')"><a href="/pagos" aria-expanded="false"><i class="mdi mdi-cash-usd"></i> <span class="hide-menu" th:text="#{menu.pagos}"></span></a></li>
            	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-account"></i> <span class="hide-menu"
                   th:text="#{menu.usuarios}"></span></a>
               <ul aria-expanded="false" class="collapse">
@@ -47,7 +47,6 @@
               	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/proveedores}" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i> <span class="hide-menu" th:text="#{menu.proveedores}"></span></a></li>
               </ul>
              </li>
-           <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'CONTADOR')"><a href="/pagos" aria-expanded="false"><i class="mdi mdi-cash-usd"></i> <span class="hide-menu" th:text="#{menu.pagos}"></span></a></li>
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-clipboard"></i> <span class="hide-menu"
                   th:text="#{menu.catalogos}"></span></a>
               <ul aria-expanded="false" class="collapse">
