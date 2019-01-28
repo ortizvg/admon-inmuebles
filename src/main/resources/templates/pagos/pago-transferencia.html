@@ -39,15 +39,15 @@ $(document).ready(function() {
 <!--                     <input type="hidden" class="form-control" th:field="*{referencia}"/> -->
 <!--                     <input type="hidden" class="form-control" th:field="*{monto}"/> -->
                     
-                    <div id="divNumeroCuenta" class="form-group">
-						<label class="form-control-label" th:text="#{pago.numeroCuenta}"></label>
-						<input name="numeroCuenta" class="form-control" th:field="*{numeroCuenta}"  th:readonly="${true}"/>
-					</div>
+<!--                     <div id="divNumeroCuenta" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pago.numeroCuenta}"></label> -->
+<!-- 						<input name="numeroCuenta" class="form-control" th:field="*{numeroCuenta}"  th:readonly="${true}"/> -->
+<!-- 					</div> -->
 					
-					<div id="divNumeroReferencia" class="form-group">
-						<label class="form-control-label" th:text="#{pago.referencia}"></label>
-						<input name="referencia" class="form-control" th:field="*{referencia}" th:readonly="${true}"/>
-					</div>
+<!-- 					<div id="divNumeroReferencia" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pago.referencia}"></label> -->
+<!-- 						<input name="referencia" class="form-control" th:field="*{referencia}" th:readonly="${true}"/> -->
+<!-- 					</div> -->
 					<div id="divMonto" th:class="${#fields.hasErrors('monto')}? 'form-group has-danger':'form-group'">
 						<label class="form-control-label" th:text="#{pago.monto}"></label>
 						<input name="monto" class="form-control" th:field="*{monto}" th:readonly="${true}" pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" 
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	                </div>
 
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-info-gesco"  th:text="#{boton.pagar}"></button>
+						<button type="submit" class="btn btn-info-gesco"  th:text="#{boton.enviar}"></button>
 						<a th:href="@{/pagos}" class="btn  btn-secondary" th:text="#{boton.cancelar}"></a>
 					</div>
 				</form>

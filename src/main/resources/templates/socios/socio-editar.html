@@ -17,10 +17,10 @@ $(document).ready(function() {
   addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoOficina'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoAlternativo'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoOficina'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoAlternativo'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);   
   addControlState(document.getElementById('divCuotaMensualPagoSocio')); 
 });
@@ -166,31 +166,31 @@ function cargarInmueblesPorColonia() {
                                             </div>
                                           </div>
 								              
-							              <h3 class="box-title m-t-40" th:text="#{socio.telefonos}"></h3>
-							              <hr>
-								           <div class="row">
-                                             <div id="divTelefonoOficina" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoOficina')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="telefonoOficina" th:text="#{usuario.telefono.oficina}"></label>
-                                                <input type="text" th:field="*{telefonoOficina}" class="form-control" id="telefonoOficina" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('telefonoOficina')}" th:errors="*{telefonoOficina}"></span>
-									              </span>
-                                            </div>
-                                             <div id="divTelefonoMovil" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoMovil')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="telefonoMovil" th:text="#{usuario.telefono.movil}"></label>
-                                                <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></span>
-									              </span>
-                                            </div>
-                                            <div id="divTelefonoAlternativo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoAlternativo')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="telefonoAlternativo" th:text="#{usuario.telefono.alternativo}"></label>
-                                                <input type="text" th:field="*{telefonoAlternativo}" class="form-control" id="telefonoAlternativo" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('telefonoAlternativo')}" th:errors="*{telefonoAlternativo}"></span>
-									              </span>
-                                            </div>
-                                          </div>
+<!-- 							              <h3 class="box-title m-t-40" th:text="#{socio.telefonos}"></h3> -->
+<!-- 							              <hr> -->
+<!-- 								           <div class="row"> -->
+<!--                                              <div id="divTelefonoOficina" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoOficina')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="telefonoOficina" th:text="#{usuario.telefono.oficina}"></label> -->
+<!--                                                 <input type="text" th:field="*{telefonoOficina}" class="form-control" id="telefonoOficina" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('telefonoOficina')}" th:errors="*{telefonoOficina}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
+<!--                                              <div id="divTelefonoMovil" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoMovil')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="telefonoMovil" th:text="#{usuario.telefono.movil}"></label> -->
+<!--                                                 <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
+<!--                                             <div id="divTelefonoAlternativo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoAlternativo')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="telefonoAlternativo" th:text="#{usuario.telefono.alternativo}"></label> -->
+<!--                                                 <input type="text" th:field="*{telefonoAlternativo}" class="form-control" id="telefonoAlternativo" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('telefonoAlternativo')}" th:errors="*{telefonoAlternativo}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
+<!--                                           </div> -->
                                           
                                           <h3 class="box-title m-t-20" th:text="#{usuario.inmueble}"></h3>
 							              <hr>

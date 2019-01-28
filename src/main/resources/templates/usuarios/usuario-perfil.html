@@ -130,7 +130,7 @@ function cambiarContrasenia(){
                     <div class="col-lg-8 col-xlg-9 col-md-7">
                         <div class="card">
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'PROVEEDOR')">
+                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'PROVEEDOR', 'CONTADOR')">
                                 <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#perfil" role="tab"  th:text="#{usuario.perfil.detalle}"></a> </li>
                                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab" th:text="#{usuario.perfil.editar}"></a> </li>
                                  <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cambio-contrasenia" role="tab" th:text="#{usuario.perfil.contrasenia.cambio}"></a> </li>

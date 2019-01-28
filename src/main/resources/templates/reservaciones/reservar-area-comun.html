@@ -73,6 +73,25 @@
 <body>
   <div layout:fragment="content">
     <div class="container-fluid">
+    
+         <div class="row ">
+          <div class="col-md-12">
+<!--             <div class="card"> -->
+<!--               <div class="card-body"> -->
+                <blockquote class="bg-white bd-callout bd-callout-info" >
+                	<h4 th:text="#{reserva.areacomun.aviso.titulo}"></h4>
+                    <p th:text="#{reserva.areacomun.aviso.mensaje.1}">
+                    </p>
+                    <p th:text="#{reserva.areacomun.aviso.mensaje.2}">
+                    </p>
+                    <p th:text="#{reserva.areacomun.aviso.mensaje.3}">
+                    </p>
+                </blockquote>
+<!--               </div> -->
+<!--             </div> -->
+          </div>
+        </div>
+    
       <form th:action="@{/reserva-area-comun/busqueda}" th:object="${reservacionDto}" method="post">
         <div class="row">
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">

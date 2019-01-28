@@ -88,51 +88,54 @@
                                                 <br>
                                                 <p class="text-muted" th:text="${socioDto.correo}"></p>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong>
-                                                <br>
-                                                 <div th:switch="${socioDto.activo}"> 
-                                                  <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p>
-                                                  <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p>
-												 </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="row m-t-20">
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
-                                                <br>
-                                                <th:block th:each="rol : ${socioDto.roles}">
-                                                	 <p class="text-muted" th:text="${rol.descripcion}"></p>
-                                                </th:block>
-                                            </div>
-                                        	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${socioDto.telefonoMovil}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${socioDto.telefonoFijo}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${socioDto.telefonoOficina}"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row m-t-20">
-                                        
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${socioDto.telefonoAlternativo}"></p>
-                                            </div>
-                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.inmueble}"></strong>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.inmueble}"></strong>
                                                 <br>
                                                 <p class="text-muted" th:text="${inmuebleDto.nombre}">></p>
-<!--                                                 <a th:href="${'/inmueble-detalle/'  + inmuebleDto.id}" th:text="${inmuebleDto.nombre}"></a> -->
                                             </div>
-                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.datosdomicilio}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${socioDto.datosDomicilio}"></p>
-                                            </div>
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                  <div th:switch="${socioDto.activo}">  -->
+<!--                                                   <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p> -->
+<!--                                                   <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p> -->
+<!-- 												 </div> -->
+<!--                                             </div> -->
+
                                         </div>
+<!--                                         <div class="row m-t-20"> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <th:block th:each="rol : ${socioDto.roles}"> -->
+<!--                                                 	 <p class="text-muted" th:text="${rol.descripcion}"></p> -->
+<!--                                                 </th:block> -->
+<!--                                             </div> -->
+<!--                                         	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${socioDto.telefonoMovil}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${socioDto.telefonoFijo}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${socioDto.telefonoOficina}"></p> -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+<!--                                         <div class="row m-t-20"> -->
+                                        
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${socioDto.telefonoAlternativo}"></p> -->
+<!--                                             </div> -->
+<!--                                              <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.inmueble}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${inmuebleDto.nombre}">></p> -->
+<!--                                             </div> -->
+<!--                                              <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.datosdomicilio}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${socioDto.datosDomicilio}"></p> -->
+<!--                                             </div> -->
+<!--                                         </div> -->
 
                                     </div>
                                 </div>
@@ -189,32 +192,36 @@
 							                </div>
 							              </div>
 							              <div class="row">
+							              	<div id="divCorreo" class="col-md-4 form-group">
+							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label>
+							                  <p class="form-control-static" th:text="*{datosAdicionalesCorreo}"></p>
+							                </div>
 							                <div id="divAdministradorInmueble" class="col-md-4 form-group">
 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.administradorinmueble}"></label>
 							                  <p class="form-control-static" th:text="|*{adminBiNombre} *{adminBiApellidoPaterno} *{adminBiApellidoMaterno}|"></p>
 							                </div>
-							                <div id="divNombreRepresentante" class="col-md-4 form-group">
-							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label>
-							                  <p class="form-control-static" th:text="*{datosAdicionalesNombreRepresentante}"></p>
-							                </div>
+<!-- 							                <div id="divNombreRepresentante" class="col-md-4 form-group"> -->
+<!-- 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label> -->
+<!-- 							                  <p class="form-control-static" th:text="*{datosAdicionalesNombreRepresentante}"></p> -->
+<!-- 							                </div> -->
 							                <div id="divRazonSocial" class="col-md-4 form-group">
 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.razonsocial}"></label>
 							                  <p class="form-control-static" th:text="*{datosAdicionalesRazonSocial}"></p>
 							                </div>
 							              </div>
 							              <div class="row">
-							                <div id="divRfc" class="col-md-4 form-group">
-							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label>
-							                  <p class="form-control-static" th:text="*{datosAdicionalesRfc}"></p>
-							                </div>
-							                <div id="divTelefono" class="col-md-4 form-group">
-							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label>
-							                  <p class="form-control-static" th:text="*{datosAdicionalesTelefono}"></p>
-							                </div>
-							                <div id="divCorreo" class="col-md-4 form-group">
-							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label>
-							                  <p class="form-control-static" th:text="*{datosAdicionalesCorreo}"></p>
-							                </div>
+<!-- 							                <div id="divRfc" class="col-md-4 form-group"> -->
+<!-- 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label> -->
+<!-- 							                  <p class="form-control-static" th:text="*{datosAdicionalesRfc}"></p> -->
+<!-- 							                </div> -->
+<!-- 							                <div id="divTelefono" class="col-md-4 form-group"> -->
+<!-- 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label> -->
+<!-- 							                  <p class="form-control-static" th:text="*{datosAdicionalesTelefono}"></p> -->
+<!-- 							                </div> -->
+<!-- 							                <div id="divCorreo" class="col-md-4 form-group"> -->
+<!-- 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label> -->
+<!-- 							                  <p class="form-control-static" th:text="*{datosAdicionalesCorreo}"></p> -->
+<!-- 							                </div> -->
 							
 							              </div>
 							              <div class="row">
