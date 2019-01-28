@@ -16,10 +16,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.tika.detect.DefaultDetector;
-import org.apache.tika.detect.Detector;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
