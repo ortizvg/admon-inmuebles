@@ -27,7 +27,7 @@ $(document).ready(function() {
           <div class="card">
             <div class="card-body">
               <h4 class="card-title" th:text="#{pagos.trasferencia.subtitulo}"></h4>
-              <h6 class="card-subtitle" th:text="#{pagos.trasferencia.titulo}"></h6>
+<!--               <h6 class="card-subtitle" th:text="#{pagos.trasferencia.titulo}"></h6> -->
               
               <form name="pagoTransferenciaForm" action="#" th:action="@{/pagos/opciones/transferencia}" th:object="${pago}" method="post" enctype="multipart/form-data">
                     <input type="hidden" class="form-control" th:field="*{id}"/>
@@ -72,7 +72,7 @@ $(document).ready(function() {
 <!-- 	                </div> -->
 					
 					<div id="divComprobantePago" class="col-md-4" th:classappend="${#fields.hasErrors('comprobantePagoMf')}? 'form-group has-danger':'form-group'">
-	                  <label class="form-control-label" th:text="#{etiqueta.pago.comprobante}"></label>
+	                  <label class="form-control-label" th:text="#{pago.comprobante}"></label>
 	                  <input name="comprobantePagoMf" type="file" class="form-control dropify" th:field="*{comprobantePagoMf}" th:title="#{mensaje.pago.comprobante.validacion}" required accept="image/*">
 	                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('comprobantePagoMf')}" th:errors="*{comprobantePagoMf}"></span>
 	                  </span>

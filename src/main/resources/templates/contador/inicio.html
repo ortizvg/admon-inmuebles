@@ -90,7 +90,7 @@ $(window).on('load', function() {
 				                      <th th:text="#{pago.tipopago}"></th>
 				                      <th th:text="#{pago.concepto}"></th>
 				                      <th th:text="#{pago.estatus}"></th>
-				                      <th th:text="#{tabla.accion}"></th>
+<!-- 				                      <th th:text="#{tabla.accion}"></th> -->
 				                    </tr>
 				                  </thead>
 				                  <tbody>
@@ -108,10 +108,10 @@ $(window).on('load', function() {
 											  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
 											</div>
 				                        </td> 
-				                        <td>
-				                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
-				                          <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i></a>
-				                        </td>
+<!-- 				                        <td> -->
+<!-- 				                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a> -->
+<!-- 				                          <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i></a> -->
+<!-- 				                        </td> -->
 				                      </tr>
 				                    </th:block>
 				                  </tbody>

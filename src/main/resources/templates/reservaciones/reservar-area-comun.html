@@ -8,6 +8,8 @@
   /*<![CDATA[*/
   $(document).ready(function() {
 	  console.log(/*[[${session.locale}]]*/);
+	var enableCalendar = $('#areaComunId').val() !== null && $('#areaComunId').val() !== '' && $('#areaComunId').val() !== 'undefined';
+	console.log(enableCalendar);
     $('#calendar').fullCalendar({
     	locale: /*[[${session.locale}]]*/,
         defaultView: 'month',
@@ -21,7 +23,7 @@
           right:  'next',
         },
         events : [[${reservaciones}]],
-        selectable : true,
+        selectable : enableCalendar,
         selectHelper : true,
         selectOverlap : false,
         selectAllow: function(start, end) {
@@ -96,7 +98,7 @@
         <div class="row">
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
-            <select class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
+            <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
               <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option>
             </select>

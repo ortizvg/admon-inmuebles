@@ -155,7 +155,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosSocioBi.add(verTicket);
         privilegiosSocioBi.add(abrirTicket);
         privilegiosSocioBi.add(cancelarTicket);
-        Rol socioBi = createRolIfNotFound(RolConst.ROLE_SOCIO_BI, "Socio", privilegiosSocioBi);
+        Rol socioBi = createRolIfNotFound(RolConst.ROLE_SOCIO_BI, "Condómino", privilegiosSocioBi);
 
 
         List<Privilegio> privilegiosAdminBi = new ArrayList<>();
@@ -179,7 +179,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         List<Privilegio> privilegiosAdminZona = new ArrayList<>();
         privilegiosAdminZona.addAll(privilegiosAdminBi);
         privilegiosAdminZona.add(estadoFinancieroZona);
-        Rol adminZona = createRolIfNotFound(RolConst.ROLE_ADMIN_ZONA, "Administrador de zona", privilegiosAdminZona);
+        Rol adminZona = createRolIfNotFound(RolConst.ROLE_ADMIN_ZONA, "Director de área", privilegiosAdminZona);
 
         List<Privilegio> privilegiosAdminCorp = new ArrayList<>();
         privilegiosAdminCorp.addAll(privilegiosAdminZona);
@@ -187,7 +187,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosAdminCorp.add(gestionarAdminZona);
         privilegiosAdminCorp.add(gestionarAdminCorp);
         privilegiosAdminCorp.add(reportes);
-        Rol adminCorp = createRolIfNotFound(RolConst.ROLE_ADMIN_CORP, "Administrador corporativo", privilegiosAdminCorp);
+        Rol adminCorp = createRolIfNotFound(RolConst.ROLE_ADMIN_CORP, "Director corporativo", privilegiosAdminCorp);
         
         List<Privilegio> privilegiosContador = new ArrayList<>();
         privilegiosAdminCorp.add(notificarPago);

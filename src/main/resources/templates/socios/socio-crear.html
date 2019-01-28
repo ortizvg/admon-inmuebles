@@ -117,13 +117,13 @@ function cargarInmueblesPorColonia() {
 	                                            <label class="form-control-label" for="apellidoMaterno" th:text="#{usuario.apellido.materno}"></label>
 	                                            <input type="text" th:field="*{apellidoMaterno}" class="form-control" id="apellidoMaterno" maxlength="100">
                                             </div>
-                                             <div id="divGoogleMapsDir" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('googleMapsDir')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="googleMapsDir" th:text="#{usuario.googlemaps}"></label>
-                                                <input type="text" th:field="*{googleMapsDir}" class="form-control" id="googleMapsDir" maxlength="1000">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('googleMapsDir')}" th:errors="*{googleMapsDir}"></span>
-									              </span>
-                                            </div>
+<!--                                              <div id="divGoogleMapsDir" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('googleMapsDir')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="googleMapsDir" th:text="#{usuario.googlemaps}"></label> -->
+<!--                                                 <input type="text" th:field="*{googleMapsDir}" class="form-control" id="googleMapsDir" maxlength="1000"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('googleMapsDir')}" th:errors="*{googleMapsDir}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
                                          </div>
                                          
                                       <div class="row">
