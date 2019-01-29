@@ -10,8 +10,10 @@ import mx.com.admoninmuebles.dto.PagoTransferenciaBancariaDto;
 public interface PagoService {
 	
 	void generarPagosMensuales();
+	PagoDto generarPagosPorSocio(PagoDto pagoDto);
 	void actualizarEstatusPagosMensuales();
 	void generarPagos(PagoDto pagoDto);
+	void eliminarPorId(Long idPago);
 	boolean existePago(Long idPago);
 	PagoDto pagarTranferenciaBancaria(final PagoDto pagoDto);
 	PagoDto pagarPaypal(final PagoPaypalDto pagoPaypalDto);

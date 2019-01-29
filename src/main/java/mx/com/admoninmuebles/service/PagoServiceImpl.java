@@ -258,12 +258,12 @@ public class PagoServiceImpl implements PagoService {
 			pago.setUsuario( usuarioRepository.findById(socio.getId()).get() );
 			
 			pagoRepository.save(pago);
-			
 		});
 		
 	}
 	
-	private void generarPagosPorSocio(PagoDto pagoDto) {
+	@Override
+	public PagoDto generarPagosPorSocio(PagoDto pagoDto) {
 		Usuario socio = usuarioRepository.findById( pagoDto.getUsuarioId() ).get();
 		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
 		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
@@ -278,7 +278,12 @@ public class PagoServiceImpl implements PagoService {
 		pago.setVerificado(false);
 		pago.setUsuario( socio );
 		
-		pagoRepository.save(pago);
+		return modelMapper.map( pagoRepository.save(pago) , PagoDto.class );
+	}
+
+	@Override
+	public void eliminarPorId(Long idPago) {
+		pagoRepository.deleteById(idPago);
 	}
 
 

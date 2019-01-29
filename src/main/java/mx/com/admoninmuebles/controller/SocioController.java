@@ -47,6 +47,7 @@ import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.NotificacionService;
 import mx.com.admoninmuebles.service.RolService;
 import mx.com.admoninmuebles.service.SocioService;
+import mx.com.admoninmuebles.service.TipoSocioService;
 import mx.com.admoninmuebles.service.UsuarioService;
 import mx.com.admoninmuebles.service.ZonaService;
 
@@ -84,6 +85,9 @@ public class SocioController {
     
     @Autowired
     private CargaSocioService cargaSocioService;
+    
+    @Autowired
+    private TipoSocioService tipoSocioService;
     
     @Autowired
     private ServletContext servletContext;
@@ -129,8 +133,9 @@ public class SocioController {
 	
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/socio-crear")
-    public String crearSocioInit(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request, final HttpSession session) {
-		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes());
+    public String crearSocioInit(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
+		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes()); 
+		session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
         if (optId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
@@ -176,7 +181,7 @@ public class SocioController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/socio-editar/{id}")
-    public String editarSocio(final @PathVariable long id, final Model model, final HttpServletRequest request, final HttpSession session) {
+    public String editarSocio(final @PathVariable long id, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
     	UsuarioDto usuarioDto = usuarioService.findById(id);
     	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
     	usuarioDto.setInmuebleId(inmuebleDto.getId());
@@ -186,7 +191,7 @@ public class SocioController {
     	usuarioDto.setRolSeleccionado( rolesUsuario.get(0) );
         model.addAttribute("usuarioDto", usuarioDto);
         session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes());
-        
+        session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
         Optional<Long> optId = SecurityUtils.getCurrentUserId();
         if (optId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP) || request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {

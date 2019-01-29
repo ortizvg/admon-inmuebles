@@ -60,7 +60,17 @@ public class Usuario extends EntidadBase {
     @Size(max = 100)
     @Column(length = 100)
     private String correo;
+    
+    @Email
+    @Size(max = 100)
+    @Column(length = 100)
+    private String correoAlternativo1;
 
+    @Email
+    @Size(max = 100)
+    @Column(length = 100)
+    private String correoAlternativo2;
+    
     @Size(max = 15)
     @Column(length = 15)
     private String telefonoFijo;
@@ -108,12 +118,6 @@ public class Usuario extends EntidadBase {
 
     private boolean activo = true;
 
-    private String identificador;
-
-    private String contrasenia;
-    
-    private String referenciaPagoSocio;
-    
     private String cuentaPagoSocio;
     
     @Digits(integer = 7, fraction = 2)
@@ -123,6 +127,12 @@ public class Usuario extends EntidadBase {
     @Size(max = 256)
     @Column(length = 256)
     private String datosDomicilio;
+    
+    private String identificador;
+
+    private String contrasenia;
+    
+    private String referenciaPagoSocio;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Collection<Rol> roles;
@@ -134,6 +144,10 @@ public class Usuario extends EntidadBase {
     @OneToOne
     @JoinColumn(name = "id_direccion_fk", nullable = true)
     private Direccion direccion;
+    
+    @OneToOne
+    @JoinColumn(name = "id_tipo_socio_fk", nullable = true)
+    private TipoSocio tipoSocio;
 
     @OneToOne(cascade = CascadeType.MERGE, mappedBy = "usuario")
     private RecuperacionContraseniaToken recuperacionContraseniaToken;

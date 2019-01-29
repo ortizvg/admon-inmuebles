@@ -11,12 +11,15 @@ import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.constant.RolConst;
+import mx.com.admoninmuebles.controller.SocioController;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
@@ -26,12 +29,15 @@ import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
+import mx.com.admoninmuebles.persistence.repository.TipoSocioRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 import mx.com.admoninmuebles.security.SecurityUtils;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+	
+	Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
     @Autowired
     private UsuarioRepository userRepository;
@@ -47,6 +53,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private ZonaRepository zonaRepository;
+    
+    @Autowired
+    private TipoSocioRepository tipoSocioRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -99,6 +108,18 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         if (userDto.getCorreo() != null && !userDto.getCorreo().isEmpty()) {
             usuario.setCorreo(userDto.getCorreo());
+        }
+        if (userDto.getCorreoAlternativo1() != null && !userDto.getCorreoAlternativo1().isEmpty()) {
+            usuario.setCorreoAlternativo1(userDto.getCorreoAlternativo1());
+        }
+        
+        logger.info("userDto.getCorreoAlternativo2(): " + userDto.getCorreoAlternativo2());
+        if (userDto.getCorreoAlternativo2() != null && !userDto.getCorreoAlternativo2().isEmpty()) {
+            usuario.setCorreoAlternativo2(userDto.getCorreoAlternativo2());
+        }
+        logger.info("userDto.getTipoSocioId(): " + userDto.getTipoSocioId());
+        if (userDto.getTipoSocioId() != null) {
+            usuario.setTipoSocio(tipoSocioRepository.findById(userDto.getTipoSocioId()).get());
         }
         if (userDto.getNombre() != null && !userDto.getNombre().isEmpty()) {
             usuario.setNombre(userDto.getNombre());

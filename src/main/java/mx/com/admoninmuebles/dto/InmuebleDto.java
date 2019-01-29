@@ -33,6 +33,10 @@ public class InmuebleDto {
     @NotNull
     private MultipartFile imagen;
     private String imagenUrl;
+    private Long contadorId;
+    private String contadorNombre;
+    private String contadorApellidoPaterno;
+    private String contadorApellidoMaterno;
     private Long adminBiId;
     private String adminBiNombre;
     private String adminBiApellidoPaterno;

@@ -83,58 +83,71 @@
                                 <div class="tab-pane active" id="perfil" role="tabpanel">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.usuario}" ></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.usuario}" ></strong>
                                                 <br>
                                                 <p class="text-muted" th:text="${usuarioDto.username}"></p>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong>
+                                             <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.inmueble}"></strong>
                                                 <br>
-                                                <p class="text-muted" th:text="${usuarioDto.nombre} + ' ' + ${usuarioDto.apellidoPaterno} + ' ' + ${usuarioDto.apellidoMaterno}"></p>
+                                                <a th:href="${'/inmueble-detalle/'  + inmuebleDto.id}" th:text="${inmuebleDto.nombre}"></a>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.correo}"></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.correo}"></strong>
                                                 <br>
                                                 <p class="text-muted" th:text="${usuarioDto.correo}"></p>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong>
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                  <div th:switch="${usuarioDto.activo}">  -->
+<!--                                                   <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p> -->
+<!--                                                   <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p> -->
+<!-- 												 </div> -->
+<!--                                             </div> -->
+
+                                        </div>
+                                        <div class="row m-t-20">
+                                        	 <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.nombre} + ' ' + ${usuarioDto.apellidoPaterno} + ' ' + ${usuarioDto.apellidoMaterno}"></p>
+                                            </div>
+                                             <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.tipoSocioDescripction}"></p>
+                                            </div>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong>
                                                 <br>
                                                  <div th:switch="${usuarioDto.activo}"> 
                                                   <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p>
                                                   <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p>
 												 </div>
                                             </div>
-
-                                        </div>
-                                        <div class="row m-t-20">
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
-                                                <br>
-                                                <th:block th:each="rol : ${usuarioDto.roles}">
-                                                	 <p class="text-muted" th:text="${rol.descripcion}"></p>
-                                                </th:block>
-                                            </div>
-                                        	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoFijo}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p>
-                                            </div>
+<!--                                         	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoFijo}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p> -->
+<!--                                             </div> -->
                                         </div>
                                         <div class="row m-t-20">
                                         
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.correo.alternativo.1}"></strong>
                                                 <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoAlternativo}"></p>
+                                                <p class="text-muted" th:text="${usuarioDto.correoAlternativo1}"></p>
                                             </div>
-                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.inmueble}"></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.correo.alternativo.2}"></strong>
                                                 <br>
-                                                <a th:href="${'/inmueble-detalle/'  + inmuebleDto.id}" th:text="${inmuebleDto.nombre}"></a>
+                                                <p class="text-muted" th:text="${usuarioDto.correoAlternativo2}"></p>
                                             </div>
-                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.datosdomicilio}"></strong>
+<!--                                              <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.inmueble}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <a th:href="${'/inmueble-detalle/'  + inmuebleDto.id}" th:text="${inmuebleDto.nombre}"></a> -->
+<!--                                             </div> -->
+                                             <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.datosdomicilio}"></strong>
                                                 <br>
                                                 <p class="text-muted" th:text="${usuarioDto.datosDomicilio}"></p>
                                             </div>

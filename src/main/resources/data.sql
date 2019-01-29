@@ -2612,3 +2612,8 @@ insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (6,
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (7, 'VERIFICACION', 'Verifying', 'en');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (8, 'ATRASADO', 'Overdue', 'en');
 
+insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (1, 'CONDOMINO', 'Condómino (propietario)', 'es');
+insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (2, 'RESIDENTE', 'Residente (Arrendatario)', 'es');
+insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (3, 'CONDOMINO', 'Condominium (owner)', 'en');
+insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (4, 'RESIDENTE', 'Resident (Tenant)', 'en');
+

@@ -89,25 +89,28 @@
                 </div>
               </div>
               <div class="row">
-                <div id="divRfc" class="col-md-4 form-group">
-                  <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label>
-                  <p class="form-control-static" th:text="*{datosAdicionalesRfc}"></p>
-                </div>
-                <div id="divTelefono" class="col-md-4 form-group">
-                  <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label>
-                  <p class="form-control-static" th:text="*{datosAdicionalesTelefono}"></p>
-                </div>
+<!--                 <div id="divRfc" class="col-md-4 form-group"> -->
+<!--                   <label class="form-control-label" th:text="#{etiqueta.inmueble.rfc}"></label> -->
+<!--                   <p class="form-control-static" th:text="*{datosAdicionalesRfc}"></p> -->
+<!--                 </div> -->
+<!--                 <div id="divTelefono" class="col-md-4 form-group"> -->
+<!--                   <label class="form-control-label" th:text="#{etiqueta.inmueble.telefono}"></label> -->
+<!--                   <p class="form-control-static" th:text="*{datosAdicionalesTelefono}"></p> -->
+<!--                 </div> -->
                 <div id="divCorreo" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.correo}"></label>
                   <p class="form-control-static" th:text="*{datosAdicionalesCorreo}"></p>
                 </div>
-
-              </div>
-              <div class="row">
                 <div id="divNumeroCuenta" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.numerocuenta}"></label>
                   <p class="form-control-static" th:text="*{datosAdicionalesNumeroCuenta}"></p>
                 </div>
+                <div id="divContadorInmueble" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.contador}"></label>
+                  <p class="form-control-static" th:text="|*{contadorNombre} *{contadorApellidoPaterno} *{contadorApellidoMaterno}|"></p>
+                </div>
+              </div>
+              <div class="row">
                 <div id="divImagen" class="col-md-4">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.imagen}"></label>
                   <div class="el-card-item">

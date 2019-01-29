@@ -11,10 +11,6 @@ import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-
 import lombok.Data;
 
 @Data
@@ -40,6 +36,14 @@ public class UsuarioDto {
     @Email
     @Size(max = 100)
     private String correo;
+    
+//    @Email
+    @Size(max = 100)
+    private String correoAlternativo1;
+
+    @Email
+    @Size(max = 100)
+    private String correoAlternativo2;
 
     @Size(max = 15)
     private String telefonoFijo;
@@ -100,6 +104,14 @@ public class UsuarioDto {
     private String inmuebleNombre;
     private Long inmuebleDireccionAsentamientoId;
     private String inmuebleDireccionAsentamientoZonaCodigo;
+    
+    private Long tipoPagoId;
+    private String tipoPagoName;
+    private String tipoPagoDescription;
+    
+    private Long tipoSocioId;
+    private String tipoSocioName;
+    private String tipoSocioDescripction;
     
 
     public String getNombreCompleto() {
