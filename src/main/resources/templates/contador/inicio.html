@@ -5,7 +5,7 @@
 	layout:decorate="~{layout/layout.html}"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{adminbi.page.titulo}"></title>
+<title th:text="#{contador.page.titulo}"></title>
 <script th:inline="javascript">
 /*<![CDATA[*/
 	
@@ -62,7 +62,7 @@ $(window).on('load', function() {
                 <!-- ============================================================== -->
                 <div class="row page-titles">
                     <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{adminbi.titulo}"></h3>
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{contador.titulo}"></h3>
                     </div>
                 </div>
                 <!-- ============================================================== -->
@@ -77,9 +77,9 @@ $(window).on('load', function() {
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex no-block">
-                                    <h4 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h4>
+                                    <h4 class="card-title" th:text="#{pagos.listado.subtitulo}"></h4>
                                 </div>
-                                <h6 class="card-subtitle" th:text="#{etiqueta.inmueble.subtitulo}" ></h6>
+                                <h6 class="card-subtitle" th:text="#{pagos.listado.titulo}" ></h6>
                                 
                                 <div class="table-responsive">
 				                <table id="pagosTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
