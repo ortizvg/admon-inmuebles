@@ -2,6 +2,8 @@ package mx.com.admoninmuebles.persistence.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -29,6 +31,7 @@ public class TipoPago extends EntidadBase {
 
     @Id
     @Column(name = "id_tipo_pago")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull

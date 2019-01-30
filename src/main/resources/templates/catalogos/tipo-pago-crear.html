@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{tipopago.editar.titulo}"></title>
+<title th:text="#{tipopago.crear.titulo}"></title>
 <script th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
@@ -18,19 +18,18 @@ $(document).ready(function() {
 		<div class="container-fluid">
 			<div class="row page-titles">
 				<div class="col-md-6 col-8 align-self-center">
-					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{tipopago.editar.titulo}"></h3>
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{tipopago.crear.titulo}"></h3>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item "><a class="text-gesco-secundario" th:href="@{/catalogos/tipos-pago}" th:text="#{tipopago.titulo}"></a></li>
-						<li class="breadcrumb-item active" th:text="#{tipopago.editar.titulo}"></li>
+						<li class="breadcrumb-item active" th:text="#{tipopago.crear.titulo}"></li>
 					</ol>
 				</div>
 			</div>
 			<div class="card ">
 				<div class="card-body">
-					<h3 class="card-title" th:text="#{tipopago.editar.titulo}"></h3>
-					<h6 class="card-subtitle" th:text="#{tipopago.editar.subtitulo}"></h6>
-					<form name="crearZonaForm" action="#" th:action="@{/catalogos/tipos-pago/editar}" th:object="${tipoPagoDto}" method="post">
-						<input type="hidden" class="form-control" th:field="*{id}"/>
+					<h3 class="card-title" th:text="#{tipopago.crear.titulo}"></h3>
+					<h6 class="card-subtitle" th:text="#{tipopago.crear.subtitulo}"></h6>
+					<form name="crearZonaForm" action="#" th:action="@{/catalogos/tipos-pago/crear}" th:object="${tipoPagoDto}" method="post">
 						<div id="divNombre" th:class="${#fields.hasErrors('name')}? 'form-group has-danger':'form-group'">
 							<label class="form-control-label" th:text="#{tipopago.nombre}"></label>
 							<input name="nameId" class="form-control" th:field="*{name}" required maxlength="20" />
@@ -48,7 +47,7 @@ $(document).ready(function() {
 						<div id="divLang" th:class="${#fields.hasErrors('lang')}? 'form-group has-danger':'form-group'">
 							<label class="form-control-label" th:text="#{tipopago.lenguaje}"></label>
 							<select name="lang'" class="form-control" th:field="*{lang}" required>
-								<option th:value="${null}" th:text="#{combo.seleccionar}"></option>
+								<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
 								<option th:value="${'en'}" th:text="#{'English'}"></option>
 								<option th:value="${'es'}" th:text="#{'Español'}"></option>
 							</select>

@@ -6,6 +6,9 @@ import mx.com.admoninmuebles.dto.ReservacionDto;
 import mx.com.admoninmuebles.persistence.model.Reservacion;
 
 public interface ReservacionService {
+	
+	void validateReservation(ReservacionDto reservacionDto);
+	
     Reservacion save(ReservacionDto reservacionDto);
 
     Collection<ReservacionDto> findAll();
@@ -19,4 +22,6 @@ public interface ReservacionService {
     ReservacionDto findById(Long id);
 
     void delete(Long id);
+    
+    void deleteNoPaidReservations() ;
 }

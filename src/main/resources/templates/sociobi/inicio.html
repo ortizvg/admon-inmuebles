@@ -49,18 +49,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body"> 
-                               <small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps}"></small>
-                                <div class="map-box">
-                                		<iframe th:src="${socioDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
-                                </div> <small class="text-muted p-t-30 db" th:text="#{usuario.redessociales}"></small>
-                                <br/>
-                                <a target="_blank" rel="noopener noreferrer" th:if="${socioDto.facebook != null && socioDto.facebook != ''}" th:href="${socioDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a>
-                                <a target="_blank" rel="noopener noreferrer" th:if="${socioDto.twiter != null && socioDto.twiter!= ''}" th:href="${socioDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a>
-                                <a target="_blank" rel="noopener noreferrer" th:if="${socioDto.youtube != null && socioDto.youtube != ''}" th:href="${socioDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a>
-                            </div>
-                        </div>
+<!--                         <div class="card"> -->
+<!--                             <div class="card-body">  -->
+<!--                                <small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps}"></small> -->
+<!--                                 <div class="map-box"> -->
+<!--                                 		<iframe th:src="${socioDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe> -->
+<!--                                 </div> <small class="text-muted p-t-30 db" th:text="#{usuario.redessociales}"></small> -->
+<!--                                 <br/> -->
+<!--                                 <a target="_blank" rel="noopener noreferrer" th:if="${socioDto.facebook != null && socioDto.facebook != ''}" th:href="${socioDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a> -->
+<!--                                 <a target="_blank" rel="noopener noreferrer" th:if="${socioDto.twiter != null && socioDto.twiter!= ''}" th:href="${socioDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a> -->
+<!--                                 <a target="_blank" rel="noopener noreferrer" th:if="${socioDto.youtube != null && socioDto.youtube != ''}" th:href="${socioDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a> -->
+<!--                             </div> -->
+<!--                         </div> -->
                     </div>
                     <!-- Column -->
                     <!-- Column -->
@@ -104,7 +104,7 @@
                                             </div>
                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
                                                 <br>
-                                                <p class="text-muted" th:text="${socioDto.tipoSocioDescription}"></p>
+                                                <p class="text-muted" th:text="${socioDto.tipoSocioDescripction}"></p>
                                             </div>
 <!--                                             <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong> -->
 <!--                                                 <br> -->

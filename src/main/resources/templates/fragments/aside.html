@@ -67,7 +67,7 @@
 <!--                 <li><a href="/catalogos/sucursales" th:text="#{menu.sucursales}"></a></li> -->
                 <li><a href="/catalogos/notificaciones" th:text="#{menu.notificaciones}"></a></li>
                 <li sec:authorize="hasRole('ADMIN_CORP')"><a href="/catalogos/preguntas-frecuentes" th:text="#{menu.preguntasfrecuentes}"></a></li>
-<!--                 <li><a href="/catalogos/tipo-pago" th:text="#{menu.tipospago}"></a></li> -->
+                <li sec:authorize="hasRole('ADMIN_CORP')"><a href="/catalogos/tipos-pago" th:text="#{menu.tipopago}"></a></li>
 <!--                 <li><a href="/catalogos/tipo-pago-bancario" th:text="#{menu.tipopagobancario}"></a></li> -->
 <!--                 <li><a href="/catalogos/tipo-ticket" th:text="#{menu.tiposticket}"></a></li> -->
               </ul></li>
