@@ -18,7 +18,7 @@
 <!--         <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li> -->
         <li sec:authorize="!isAuthenticated()"><a href="/login" aria-expanded="false"><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.ingresosocios}"></span></a></li>
         <li sec:authorize="hasRole('PROVEEDOR')"><a href="/proveedor" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
-        <li sec:authorize="hasRole('SOCIO_BI')"><a href="/sociobi" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
+        <li sec:authorize="hasRole('SOCIO_BI')"><a href="/condomino" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('ADMIN_BI')"><a href="/adminbi" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('ADMIN_ZONA')"><a href="/adminzona" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('ADMIN_CORP')"><a href="/admincorp" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
@@ -29,8 +29,8 @@
               <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-clipboard"></i> <span class="hide-menu"
                   th:text="#{menu.reservaciones}"></span></a>
               <ul aria-expanded="false" class="collapse">
-                 <li sec:authorize="!hasRole('CONTADOR')"><a th:href="@{/reservar-area-comun}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.reserva}"></span></a></li>
-                 <li sec:authorize="hasAnyRole('SOCIO_BI', 'ADMIN_BI')"><a th:href="@{/mis-reservaciones}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.mis.reservaciones}"></span></a></li>
+                 <li sec:authorize="!hasRole('CONTADOR')"><a th:href="@{/reservaciones/reservar-area}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.reserva}"></span></a></li>
+                 <li sec:authorize="hasAnyRole('SOCIO_BI', 'ADMIN_BI')"><a th:href="@{/reservaciones/mis-reservaciones}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.mis.reservaciones}"></span></a></li>
               </ul></li>
            
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/inmuebles}" aria-expanded="false"><i class="mdi mdi-domain"></i> <span class="hide-menu" th:text="#{menu.bieninmueble}"></span></a></li>
@@ -50,7 +50,7 @@
                   th:text="#{menu.usuarios}"></span></a>
               <ul aria-expanded="false" class="collapse">
                 <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a th:href="@{/usuarios}" href="#" aria-expanded="false" ><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.administradores}"></span></a></li>
-             	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a  th:href="@{/socios}" aria-expanded="false"><i class="mdi mdi-account-check"></i> <span class="hide-menu" th:text="#{menu.socios}"></span></a></li>
+             	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a  th:href="@{/condominos}" aria-expanded="false"><i class="mdi mdi-account-check"></i> <span class="hide-menu" th:text="#{menu.socios}"></span></a></li>
               	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/proveedores}" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i> <span class="hide-menu" th:text="#{menu.proveedores}"></span></a></li>
               </ul>
              </li>

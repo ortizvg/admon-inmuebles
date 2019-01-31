@@ -29,7 +29,7 @@
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
 			  	</div>
 			  	<div class="col-2 ml-auto">
-			  		<a sec:authorize="hasAnyRole('ADMIN_BI', 'SOCIO_BI')" th:href="@{/reservar-area-comun}" class="btn btn-block btn-info-gesco" th:text="#{boton.reservar}"></a>
+			  		<a sec:authorize="hasAnyRole('ADMIN_BI', 'SOCIO_BI')" th:href="@{/reservaciones/reservar-area}" class="btn btn-block btn-info-gesco" th:text="#{boton.reservar}"></a>
 			  	</div>
 			 </div>
 			 

@@ -2604,11 +2604,11 @@ insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, la
 insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (6, 'TARJETA', 'Credit card payment', 'en');
 
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (1, 'PAGADO', 'Pagado', 'es');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (2, 'CERCANO', 'Cercano', 'es');
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (2, 'CERCANO', 'Pendiente de pago', 'es');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (3, 'VERIFICACION', 'Verificando', 'es');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (4, 'ATRASADO', 'Atrasado', 'es');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (5, 'PAGADO', 'Paid', 'en');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (6, 'CERCANO', 'Near', 'en');
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (6, 'CERCANO', 'Outstanding', 'en');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (7, 'VERIFICACION', 'Verifying', 'en');
 insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (8, 'ATRASADO', 'Overdue', 'en');
 

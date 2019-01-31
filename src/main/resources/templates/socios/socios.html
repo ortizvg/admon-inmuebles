@@ -15,7 +15,7 @@
       var mensaje = /*[[#{usuario.modal.mensaje.eliminar}]]*/
       modal.find('.modal-title').text(/*[[#{modal.eliminar.encabezado}]]*/)
       modal.find('.modal-body p').text(mensaje.format(nombre))
-      modal.find('.modal-footer a').attr('href', '/socio-eliminar/' + id).text(/*[[#{boton.eliminar}]]*/)
+      modal.find('.modal-footer a').attr('href', '/condomino-eliminar/' + id).text(/*[[#{boton.eliminar}]]*/)
       modal.modal("show");
     });
     
@@ -46,8 +46,8 @@
 									  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 									  	</div>
 									  	<div>
-						                      <a th:href="@{/socio-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
-						                      <a th:href="@{/socio-carga-masivo}" class="btn btn-info-gesco waves-effect" th:text="#{boton.masivo}"></a>
+						                      <a th:href="@{/condomino-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
+						                      <a th:href="@{/condomino-carga-masivo}" class="btn btn-info-gesco waves-effect" th:text="#{boton.masivo}"></a>
 									  	</div>
 									</div>
 									
@@ -83,8 +83,8 @@
 															</div>
 														</td>
 	                                                    <td>
-	                                                    	<a th:href="${'/socio-detalle/'  + socio.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i></a> 
-	                                                    	<a th:href="${'/socio-editar/'  + socio.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
+	                                                    	<a th:href="${'/condomino-detalle/'  + socio.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i></a> 
+	                                                    	<a th:href="${'/condomino-editar/'  + socio.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
 <!-- 	                                                    	<a th:href="${'/socio-eliminar/'  + socio.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a> -->
 	                                                   		<a th:attr="data-id=${socio.id}" th:attrappend="data-nombre=${socio.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i class="fa fa-close text-danger" aria-hidden="true"></i></a>
 	                                                    </td>

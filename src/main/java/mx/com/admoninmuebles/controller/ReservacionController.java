@@ -61,7 +61,7 @@ public class ReservacionController {
     private MessageSource messages;
 
 	@PreAuthorize("hasAnyRole('SOCIO_BI','ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/reservar-area-comun")
+    @GetMapping(value = "/reservaciones/reservar-area")
     public String init(final Model model, final HttpSession session, final ReservacionDto reservacionDto, final Locale locale,  final HttpServletRequest request) {
 
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
@@ -81,7 +81,7 @@ public class ReservacionController {
     }
 	
 	@PreAuthorize("hasAnyRole('SOCIO_BI', 'ADMIN_BI')")
-    @GetMapping(value = "/mis-reservaciones")
+    @GetMapping(value = "/reservaciones/mis-reservaciones")
     public String misReservaciones(final Model model, final HttpSession session, final ReservacionDto reservacionDto, final Locale locale,  final HttpServletRequest request) {
 
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
@@ -94,7 +94,7 @@ public class ReservacionController {
     }
 
     @PreAuthorize("hasAnyRole('SOCIO_BI','ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/reserva-area-comun/busqueda")
+    @PostMapping(value = "/reservaciones/reservar-area/busqueda")
     public String buscarReservaciones(final Model model, final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
         session.setAttribute("locale", locale.getLanguage());
@@ -108,7 +108,7 @@ public class ReservacionController {
     }
 
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
-    @PostMapping(value = "/reserva-area-comun/crear")
+    @PostMapping(value = "/reservaciones/reserva-area/crear")
     public String reservarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale, RedirectAttributes redirect) {
     	session.setAttribute("locale", locale.getLanguage());
     	Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
@@ -120,7 +120,7 @@ public class ReservacionController {
     		reservacioService.validateReservation(reservacionDto);
     	} catch (BusinessException e) {
     		redirect.addFlashAttribute("message", messages.getMessage(e.getMessage(), null, locale));
-            return "redirect:/reservar-area-comun";
+            return "redirect:/reservaciones/reservar-area";
     	}
     	
 		AreaComunDto areaComunDto = areaComunService.findById((Long) session.getAttribute("areaComunId"));
@@ -137,16 +137,17 @@ public class ReservacionController {
         
         
         reservacioService.save(reservacionDto);
-        return "redirect:/reservar-area-comun";
+        redirect.addFlashAttribute("showAlert", "");
+        return "redirect:/reservaciones/reservar-area";
     }
     
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
-    @PostMapping(value = "/reserva-area-comun/eliminar")
+    @PostMapping(value = "/reservaciones/reserva-area/eliminar")
     public String eliminarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
     	ReservacionDto reservacion = reservacioService.findById(reservacionDto.getId());
     	pagoService. eliminarPorId(reservacion.getPagoId());
         reservacioService.delete(reservacionDto.getId());
-        return "redirect:/reservar-area-comun";
+        return "redirect:/reservaciones/reservar-area";
     }
 
 }

@@ -92,7 +92,7 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         } else if (isAdminBi) {
             return "/adminbi";
         }else if (isSocioBi) {
-            return "/sociobi";
+            return "/condomino";
         }else if (isProveedor) {
             return "/proveedor";
         }else if (isContador) {

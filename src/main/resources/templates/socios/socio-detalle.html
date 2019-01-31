@@ -25,7 +25,7 @@
                     <div class="col-md-6 col-8 align-self-center">
                         <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{socios.titulo}"></h3>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/socios}" th:text="#{socios.titulo}"></a></li>
+                            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/condominos}" th:text="#{socios.titulo}"></a></li>
                             <li class="breadcrumb-item active" th:text="#{socios.vista.titulo}"></li>
                         </ol>
                     </div>
@@ -182,7 +182,7 @@
                                         
                                         <div class="row">
 	                                             <div class="col-md-12 m-b-20">
-				                                    <a sec:authorize="hasRole('SOCIO_BI')" th:href="@{/socios}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+				                                    <a sec:authorize="hasRole('SOCIO_BI')" th:href="@{/condominos}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
 	                                           </div>
                                         </div>
                                     </div>

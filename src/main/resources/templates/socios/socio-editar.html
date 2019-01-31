@@ -66,7 +66,7 @@ function cargarInmueblesPorColonia() {
 				<div class="col-md-6 col-8 align-self-center">
 					<h3 class="text-themecolor m-b-0 m-t-0" th:text="#{socios.titulo}"></h3>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/socios}" th:text="#{socios.titulo}"></a></li>
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/condominos}" th:text="#{socios.titulo}"></a></li>
 						<li class="breadcrumb-item active" th:text="#{socios.editar.titulo}"></li>
 					</ol>
 				</div>
@@ -80,7 +80,7 @@ function cargarInmueblesPorColonia() {
                                <h6 class="card-subtitle"><span th:text="#{socios.editar.subtitulo}"></span></h6>
     							
                               
-                              <form  name="crearSocioForm" action="#" th:action="@{/socio-editar}" th:object="${usuarioDto}" method="post"  role="form">
+                              <form  name="crearSocioForm" action="#" th:action="@{/condomino-editar}" th:object="${usuarioDto}" method="post"  role="form">
                               			<input type="hidden" class="form-control" th:field="*{id}"/>
                               			<input type="hidden" class="form-control" th:field="*{username}"/>
                                         <div class="row">
@@ -267,7 +267,7 @@ function cargarInmueblesPorColonia() {
                                              <div class="row">
 	                                             <div class="col-md-12 m-b-20">
 				                                    <button type="submit" class="btn btn-info-gesco waves-effect m-r-10" th:text="#{boton.guardar}"></button>
-				                                    <a th:href="@{/socios}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>
+				                                    <a th:href="@{/condominos}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>
 	                                           </div>
                                            </div>
                                     </form>

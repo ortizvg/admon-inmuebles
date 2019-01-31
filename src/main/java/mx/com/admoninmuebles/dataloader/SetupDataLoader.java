@@ -36,6 +36,7 @@ import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Ticket;
 import mx.com.admoninmuebles.persistence.model.TipoAsentamiento;
 import mx.com.admoninmuebles.persistence.model.TipoPago;
+import mx.com.admoninmuebles.persistence.model.TipoSocio;
 import mx.com.admoninmuebles.persistence.model.TipoTicket;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.model.Zona;
@@ -50,6 +51,7 @@ import mx.com.admoninmuebles.persistence.repository.PrivilegioRepository;
 import mx.com.admoninmuebles.persistence.repository.ReservacionRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
 import mx.com.admoninmuebles.persistence.repository.TicketRepository;
+import mx.com.admoninmuebles.persistence.repository.TipoSocioRepository;
 import mx.com.admoninmuebles.persistence.repository.TipoTicketRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
@@ -103,6 +105,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     
     @Autowired
     private TipoTicketRepository tipoTicketRepository;
+    
+    @Autowired
+    private TipoSocioRepository tipoSocioRepository;
 
     @Override
     @Transactional
@@ -195,18 +200,23 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosAdminCorp.add(historialPagoInmuble);
         privilegiosAdminCorp.add(verificarPago);
         Rol contador = createRolIfNotFound(RolConst.ROLE_CONTADOR, "Contador", privilegiosContador);
+        
+        TipoSocio condominoEs = createTipoSocioIfNotFound(1l, "CONDOMINO", "Condómino (propietario)", "es");
+        createTipoSocioIfNotFound(2l, "RESIDENTE", "Residente (Arrendatario)", "es");
+        createTipoSocioIfNotFound(3l, "CONDOMINO", "Condominium (owner)", "en");
+        createTipoSocioIfNotFound(4l, "RESIDENTE", "Resident (Tenant)", "en");
 
-        Usuario usuarioProveedorJardineria = createUsuarioIfNotFound("proveedor_jardineria", "Proveedor", "Jardineria", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
-        Usuario usuarioProveedorLimpieza = createUsuarioIfNotFound("proveedor_limpieza", "Proveedor", "Limpieza", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
-        Usuario usuarioProveedorConstruccion = createUsuarioIfNotFound("proveedor_construccion", "Proveedor", "Construccion", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com");
-        Usuario usuarioSocioBi = createUsuarioIfNotFound("socio_bi", "Socio", "Bi", "Inmueble", "socio_bi", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com");
-        Usuario usuarioSocioBi2 = createUsuarioIfNotFound("socio_bi2", "Socio2", "Bi2", "Inmueble2", "socio_bi2", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com");
-        Usuario usuarioAdminBi = createUsuarioIfNotFound("admin_bi", "Administrador", "Bien", "Inmueble", "admin_bi", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com");
-        Usuario usuarioAdminB2 = createUsuarioIfNotFound("admin_bi2", "Administrador2", "Bien", "Inmueble", "admin_bi2", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com");
-        Usuario usuarioAdminZona = createUsuarioIfNotFound("admin_zona", "Administrador", "Zona", "", "admin_zona", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com");
-        Usuario usuarioAdminZona2 = createUsuarioIfNotFound("admin_zona2", "Administrador2", "Zona", "", "admin_zona2", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com");
-        createUsuarioIfNotFound("admin_corp", "Administrador", "Corporativo", "", "admin_corp", new ArrayList<>(Arrays.asList(adminCorp)), "correo@gmail.com");
-        Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com");
+        Usuario usuarioProveedorJardineria = createUsuarioIfNotFound("proveedor_jardineria", "Proveedor", "Jardineria", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
+        Usuario usuarioProveedorLimpieza = createUsuarioIfNotFound("proveedor_limpieza", "Proveedor", "Limpieza", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
+        Usuario usuarioProveedorConstruccion = createUsuarioIfNotFound("proveedor_construccion", "Proveedor", "Construccion", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
+        Usuario usuarioSocioBi = createUsuarioIfNotFound("socio_bi", "Socio", "Bi", "Inmueble", "socio_bi", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com", condominoEs);
+        Usuario usuarioSocioBi2 = createUsuarioIfNotFound("socio_bi2", "Socio2", "Bi2", "Inmueble2", "socio_bi2", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com", condominoEs);
+        Usuario usuarioAdminBi = createUsuarioIfNotFound("admin_bi", "Administrador", "Bien", "Inmueble", "admin_bi", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com", null);
+        Usuario usuarioAdminB2 = createUsuarioIfNotFound("admin_bi2", "Administrador2", "Bien", "Inmueble", "admin_bi2", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com", null);
+        Usuario usuarioAdminZona = createUsuarioIfNotFound("admin_zona", "Administrador", "Zona", "", "admin_zona", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
+        Usuario usuarioAdminZona2 = createUsuarioIfNotFound("admin_zona2", "Administrador2", "Zona", "", "admin_zona2", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
+        createUsuarioIfNotFound("admin_corp", "Administrador", "Corporativo", "", "admin_corp", new ArrayList<>(Arrays.asList(adminCorp)), "correo@gmail.com", null);
+        Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com", null);
 
         Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi);
         createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null);
@@ -266,7 +276,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     public final Usuario createUsuarioIfNotFound(final String username, final String firstNombre, final String apellidoPatarno, final String apellidoMaterno, final String contrasenia,
-            final Collection<Rol> roles, final String correo) {
+            final Collection<Rol> roles, final String correo, TipoSocio tipoSocio) {
         Optional<Usuario> optUsuario = usuarioRepository.findByUsername(username);
         Usuario usuario = optUsuario.orElse(new Usuario());
         if (!optUsuario.isPresent()) {
@@ -280,6 +290,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             usuario.setReferenciaPagoSocio("123456");
             usuario.setCuentaPagoSocio("343242453556464");
             usuario.setCoutaMensualPagoSocio(BigDecimal.valueOf(100.29));
+            usuario.setTipoSocio(tipoSocio);
 
             usuario = usuarioRepository.save(usuario);
         }
@@ -454,6 +465,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         	tipoTicket = tipoTicketRepository.save(tipoTicket);
         }
         return tipoTicket;
+    }
+	
+	@Transactional
+    public final TipoSocio createTipoSocioIfNotFound(final Long id, final String nombre, final String descripcion, final String lang) {
+        Optional<TipoSocio> optTipoSocio = tipoSocioRepository.findById(id);
+        TipoSocio tipoSocio = optTipoSocio.orElse(new TipoSocio());
+        if (!optTipoSocio.isPresent()) {
+        	tipoSocio.setId(id);
+        	tipoSocio.setName(nombre);
+        	tipoSocio.setDescripction(descripcion);
+        	tipoSocio.setLang(lang);
+        	tipoSocio = tipoSocioRepository.save(tipoSocio);
+        }
+        return tipoSocio;
     }
     
 	private static byte[] obtenImagenBlob() {

@@ -21,7 +21,7 @@
 						th:text="#{socios.titulo}"></h3>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a class="text-gesco-secundario"
-							th:href="@{/socios}" th:text="#{socios.titulo}"></a></li>
+							th:href="@{/condominos}" th:text="#{socios.titulo}"></a></li>
 						<li class="breadcrumb-item active"
 							th:text="#{socios.crear.masivo}"></li>
 					</ol>
@@ -40,14 +40,14 @@
 							</h6>
 
 							<form name="crearSocioMasivoForm" action="#" enctype="multipart/form-data"
-								th:action="@{/socio-masivo-crear}" th:object="${usuarioDto}"
+								th:action="@{/condomino-carga-masivo}" th:object="${usuarioDto}"
 								method="post" role="form">
 
 								<div class="row">
 									<div class="col-md-12 m-b-20">
 										<input type="file" name="file" id="file" accept="text/csv"/> 
 										<button type="submit" class="btn btn-info-gesco waves-effect m-r-10" th:text="#{boton.guardar}"></button>
-										<a th:href="@{/socios}" class="btn btn-secondary waves-effect"
+										<a th:href="@{/condominos}" class="btn btn-secondary waves-effect"
 											th:text="#{boton.cancelar}"></a>
 									</div>
 								</div>

@@ -93,7 +93,7 @@ public class SocioController {
     private ServletContext servletContext;
     
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
-    @GetMapping(value = "/sociobi")
+    @GetMapping(value = "/condomino")
     public String inicioSocioBi(final Model model, final HttpSession session) {
     	Long socioBiLogueadoId = SecurityUtils.getCurrentUserId().get();
     	UsuarioDto usuarioDto = usuarioService.findById(socioBiLogueadoId);
@@ -111,7 +111,7 @@ public class SocioController {
     
 
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-	@GetMapping(value = "/socios")
+	@GetMapping(value = "/condominos")
 	public String init(final Model model, final HttpServletRequest request) {
 		model.addAttribute("socios", socioService.getSocios());
 		
@@ -132,7 +132,7 @@ public class SocioController {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-crear")
+    @GetMapping(value = "/condomino-crear")
     public String crearSocioInit(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
 		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes()); 
 		session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
@@ -152,7 +152,7 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/socio-crear")
+    @PostMapping(value = "/condomino-crear")
     public String crearSocio(final HttpServletRequest request, final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
     	logger.info(usuarioDto.toString());
         if (bindingResult.hasErrors()) {
@@ -171,7 +171,7 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-detalle/{id}")
+    @GetMapping(value = "/condomino-detalle/{id}")
     public String buscarsocioPorId(final @PathVariable long id, final Model model) {
     	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
     	model.addAttribute("inmuebleDto", inmuebleDto);
@@ -180,7 +180,7 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-editar/{id}")
+    @GetMapping(value = "/condomino-editar/{id}")
     public String editarSocio(final @PathVariable long id, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
     	UsuarioDto usuarioDto = usuarioService.findById(id);
     	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
@@ -209,7 +209,7 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/socio-editar")
+    @PostMapping(value = "/condomino-editar")
     public String editarSocio(final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "socios/socio-editar";
@@ -221,7 +221,7 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-eliminar/{id}")
+    @GetMapping(value = "/condomino-eliminar/{id}")
     public String eliminarSocio(final @PathVariable Long id) {
     	usuarioService.deleteById(id);
         return "redirect:/socios";
@@ -232,7 +232,7 @@ public class SocioController {
     }
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/socio-masivo-crear")
+    @PostMapping(value = "/condomino-masivo-crear")
     public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model) {
     	String showPage = "redirect:/socio-carga-masivo";
     	final String CSV_MIME_TYPE = "text/csv";
@@ -287,7 +287,7 @@ public class SocioController {
     }
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-carga-masivo")
+    @GetMapping(value = "/condomino-carga-masivo")
     public String cargarSocioMasivo(final HttpServletRequest request, final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
     
         try
