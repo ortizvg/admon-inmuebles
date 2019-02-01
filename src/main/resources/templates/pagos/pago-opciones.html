@@ -22,18 +22,18 @@
 	        <div class="col-12">
 	          <div class="card">
 	            <div class="card-body">
-	              <h4 class="card-title" th:text="#{pagos.detalle.subtitulo}"></h4>
-	              <h6 class="card-subtitle" th:text="#{pagos.detalle.titulo}"></h6>
+	              <h4 class="card-title" th:text="#{pagos.opciones.titulo.secundario}"></h4>
+<!-- 	              <h6 class="card-subtitle" th:text="#{pagos.detalle.titulo}"></h6> -->
 	              	
 	              	<div class="row">
 	              		<div class="col-md-4">
 							<img th:src="@{/images/pagos/opciones/pagos.png}" alt="user" class="img-responsive" width="100">
 						</div>
 						<div class="col-md-8 text-left">
-							<h3>En GESCO puedes elejir entre 3 opciones de pago diferentes</h3>
-							<p>Transferencia o depósito bancario</p>
-							<p>Pago con tarjeta de crédito o débito (Opción estara habilitada muy pronto)</p>
-							<p>Pago con Paypal (Opción estara habilitada muy pronto)</p>
+							<h3 th:text="#{pagos.opciones.descripcion.titulo}"></h3>
+							<p th:text="#{pagos.opciones.descripcion.trasnferencia}"></p>
+							<p th:text="#{pagos.opciones.descripcion.tarjeta}"></p>
+							<p th:text="#{pagos.opciones.descripcion.paypal}"></p>
 						</div>
 	              	</div>
 	            </div>
@@ -48,14 +48,14 @@
                     	
                         <a th:href="${'/pagos/' + idPago + '/opciones/transferencia'}" class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Transferencia o depósito bancario</h4>
+                                <h4 class="card-title" th:text="#{pagos.opciones.transferencia}"></h4>
                                 
                                 <div class="row">
 									<div class="col-md-12 text-center">
 										<img th:src="@{/images/pagos/opciones/pagos.png}" alt="user" class="img-circle" width="100">
 									</div>
 									 <div class="col-md-12">
-	                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i> Realizar Pago</h2>
+	                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i> <span th:text="#{pagos.opciones.pagar}"></span></h2>
 	                                </div>
 								</div>
                                 <div class="progress">
@@ -69,14 +69,14 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">tarjeta de crédito/débito proximamente</h4>
+                                <h4 class="card-title" th:text="#{pagos.opciones.tarjeta}"></h4>
                                 
                                 <div class="row">
 									<div class="col-md-12 text-center">
 										<img th:src="@{/images/pagos/opciones/pagos.png}" alt="user" class="img-circle" width="100">
 									</div>
 									 <div class="col-md-12">
-	                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i> Realizar Pago</h2>
+	                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i> <span th:text="#{pagos.opciones.pagar}"></span></h2>
 	                                </div>
 								</div>
                                 
@@ -91,14 +91,14 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">PayPal proximamente</h4>
+                                <h4 class="card-title" th:text="#{pagos.opciones.paypal}"></h4>
                                 
                                 <div class="row">
 									<div class="col-md-12 text-center">
 										<img th:src="@{/images/pagos/opciones/pagos.png}" alt="user" class="img-circle" width="100">
 									</div>
 									 <div class="col-md-12">
-	                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-purple"></i> Realizar Pago</h2>
+	                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-purple"></i> <span th:text="#{pagos.opciones.pagar}"></span></h2>
 	                                </div>
 								</div>
 								
