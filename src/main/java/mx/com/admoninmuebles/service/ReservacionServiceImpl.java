@@ -100,7 +100,7 @@ public class ReservacionServiceImpl implements ReservacionService {
 			LocalDate reservationDatePlus48Hours = reservacion.getFechaCreacion().toInstant()
 			.atZone(ZoneId.systemDefault())
 			.toLocalDate()
-			.plus(48, ChronoUnit.HOURS);
+			.plus(72, ChronoUnit.HOURS);
 			
 			if(now.isBefore(reservationDatePlus48Hours) ) {
 				pagoRepository.deleteById(reservacion.getId());
