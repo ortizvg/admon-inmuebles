@@ -77,57 +77,68 @@ $(window).on('load', function() {
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex no-block">
-                                    <h4 class="card-title" th:text="#{pagos.listado.subtitulo}"></h4>
+                                    <h4 class="card-title" >Reportes</h4>
                                 </div>
-                                <h6 class="card-subtitle" th:text="#{pagos.listado.titulo}" ></h6>
-                                
-                                <div class="table-responsive">
-				                <table id="pagosTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
-				                  <thead>
-				                    <tr>
-				                      <th th:text="#{tabla.id}"></th>
-				                      <th th:text="#{pago.monto}"></th>
-				                      <th th:text="#{pago.tipopago}"></th>
-				                      <th th:text="#{pago.concepto}"></th>
-				                      <th th:text="#{pago.estatus}"></th>
-<!-- 				                      <th th:text="#{tabla.accion}"></th> -->
-				                    </tr>
-				                  </thead>
-				                  <tbody>
-				                    <th:block th:each="pago : ${pagos}">
-				                      <tr>
-				                        <td th:text="${pago.id}"></td>
-				                        <td th:text="${pago.monto}"></td>
-				                        <td th:text="${pago.tipoPagoDescripction}"></td>
-				                        <td th:text="${pago.concepto}"></td>
-				                        <td>
-					                        <div th:switch="${pago.estatusPagoName}"> 
-											  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).PAGADO}" class="text-success" th:text="${pago.estatusPagoDescripction}"></span>
-											  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO}" class="text-warning"  th:text="${pago.estatusPagoDescripction}"></span>
-											  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).VERIFICACION}" class="text-muted"  th:text="${pago.estatusPagoDescripction}"></span>
-											  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
-											</div>
-				                        </td> 
-<!-- 				                        <td> -->
-<!-- 				                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a> -->
-<!-- 				                          <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i></a> -->
-<!-- 				                        </td> -->
-				                      </tr>
-				                    </th:block>
-				                  </tbody>
-				                  <tfoot>
-				                    <tr>
-				                      <td colspan="6">
-				                        <div class="text-right">
-				                          <ul class="pagination">
-				                          </ul>
-				                        </div>
-				                      </td>
-				                    </tr>
-				                  </tfoot>
-				                </table>
-				              </div>
-                               
+                                <h6 class="card-subtitle"  >Modúlo para reportes de inmuebles</h6>
+                                	
+<!--                                 	 <div class="card"> -->
+<!-- 			                            <div class="card-body"> -->
+<!-- 			                                <h4 class="card-title">Customtab vertical Tab</h4> -->
+<!-- 			                                <h6 class="card-subtitle">Use default tab with class <code>vtabs, tabs-vertical & customvtab</code></h6> -->
+			                                <!-- Nav tabs -->
+			                                <div class="vtabs customvtab">
+			                                    <ul class="nav nav-tabs tabs-vertical" style="width:auto" role="tablist">
+			                                        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#r1" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reportes del mes</span> </a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r2" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reportes historicos</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r3" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reglamentos</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r4" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class=ti-folder></i> <span class="hidden-xs-down">Comunicados</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r5" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Resumen de acuedos asambleas</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r6" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Coutas por departamento</span></a> </li>
+			                                    </ul>
+			                                    <!-- Tab panes -->
+			                                    <div class="tab-content">
+			                                        <div class="tab-pane active" id="r1" role="tabpanel">
+			                                            <div class="p-20">
+			                                                <h3>Reportes del mes</h3>
+			                                                <p>Espacio para obtener los reportes mensuales</p>
+			                                            </div>
+			                                        </div>
+			                                        <div class="tab-pane" id="r2" role="tabpanel">
+			                                        	<div class="p-20">
+			                                                <h3>Reportes historicos</h3>
+			                                                <p>Espacio para obtener el historico de reportes</p>
+			                                            </div>
+			                                        </div>
+			                                        <div class="tab-pane" id="r3" role="tabpanel">
+			                                        	<div class="p-20">
+			                                                <h3>Reglamentos</h3>
+			                                                <p>Espacio para obtener reglamentos</p>
+			                                            </div>
+			                                        </div>
+			                                         <div class="tab-pane" id="r4" role="tabpanel">
+			                                        	<div class="p-20">
+			                                                <h3>Comunicados</h3>
+			                                                <p>Espacio para revisión de documentos de comunicados</p>
+			                                            </div>
+			                                        </div>
+			                                         <div class="tab-pane" id="r5" role="tabpanel">
+			                                        	<div class="p-20">
+			                                                <h3>Resumen de acuedos asambleas</h3>
+			                                                <p>Espacio para obtener el resumen de acuedos asambleas</p>
+			                                            </div>
+			                                        </div>
+			                                         <div class="tab-pane" id="r6" role="tabpanel">
+			                                        	<div class="p-20">
+			                                                <h3>Coutas por departamento</h3>
+			                                                <p>Espacio para obtener las coutas por departamento</p>
+			                                            </div>
+			                                        </div>
+			                                    </div>
+			                                </div>
+<!-- 			                            </div> -->
+<!-- 			                        </div> -->
+			                    </div>
+                                                               
                             </div>
                         </div>
                     </div>

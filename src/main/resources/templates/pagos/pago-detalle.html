@@ -46,9 +46,11 @@
 						<label class="form-control-label" th:text="#{pagos.condomino.referencia}"></label>
 						<input name="referencia" class="form-control" th:field="*{referencia}" disabled="disabled"/>
 					</div>
-					<div id="divMonto"  class="form-group">
-						<label class="form-control-label" th:text="#{pago.monto}"></label>
-						<input name="monto" class="form-control" th:field="*{monto}" disabled="disabled"/>
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1">$</span>
+						</div>
+						<input name="monto" class="form-control" th:field="*{monto}" disabled="disabled" aria-describedby="basic-addon1"/>
 					</div>
 					<div id="divConcepto" class="form-group">
 						<label class="form-control-label" th:text="#{pago.concepto}"></label>

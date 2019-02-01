@@ -9,7 +9,7 @@
 var serverContext = [[@{/}]];
 	
 $(document).ready(function() {
-	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
+// 	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divTipoPago'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divMonto'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divConcepto'),/*[[#{campo.requerido}]]*/);
@@ -122,8 +122,14 @@ function cargarSociosPorInmueble() {
 					
 					<div id="divMonto" th:class="${#fields.hasErrors('monto')}? 'form-group has-danger':'form-group'">
 						<label class="form-control-label" th:text="#{pago.monto}"></label>
-						<input name="monto" class="form-control" th:field="*{monto}" required pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" 
-							/>
+<!-- 						<input name="monto" class="form-control" th:field="*{monto}" required pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" /> -->
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon1">$</span>
+							</div>
+							<input name="monto" class="form-control" th:field="*{monto}" required pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" aria-describedby="basic-addon1"/>
+<!-- 							<input name="monto" class="form-control" th:field="*{monto}" th:readonly="${true}" pattern="^\d+(\.\d{1,4})?$" th:title="#{pago.monto.mensaje.validacion}" aria-describedby="basic-addon1"/> -->
+						</div>
 						<span class="form-control-feedback">
 							<span th:if="${#fields.hasErrors('monto')}" th:errors="*{monto}"></span>
 						</span>
