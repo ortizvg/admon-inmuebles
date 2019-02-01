@@ -163,7 +163,7 @@ public class SocioController {
 	        UsuarioDto socioNuevo = (UsuarioDto) usuarioService.crearCuenta(usuarioDto);
 	        inmuebleService.addSocio2Inmueble(socioNuevo, usuarioDto.getInmuebleId());
 	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(socioNuevo, request.getLocale(), getAppUrl(request)));
-	        return "redirect:/socios";
+	        return "redirect:/condominos";
         }catch(BusinessException e) {
    		 bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
    		 return "socios/socio-crear";
@@ -217,14 +217,14 @@ public class SocioController {
 
         UsuarioDto socio = usuarioService.editarCuenta(usuarioDto);
 //        inmuebleService.addSocio2Inmueble(socio, usuarioDto.getInmuebleId());
-        return "redirect:/socios";
+        return "redirect:/condominos";
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/condomino-eliminar/{id}")
     public String eliminarSocio(final @PathVariable Long id) {
     	usuarioService.deleteById(id);
-        return "redirect:/socios";
+        return "redirect:/condominos";
     }
     
     private String getAppUrl(HttpServletRequest request) {
@@ -234,7 +234,7 @@ public class SocioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/condomino-masivo-crear")
     public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model) {
-    	String showPage = "redirect:/socio-carga-masivo";
+    	String showPage = "redirect:/condomino-carga-masivo";
     	final String CSV_MIME_TYPE = "text/csv";
     	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
     	final String CSV_EXTENSION = "csv";
@@ -277,7 +277,7 @@ public class SocioController {
         		model.addAttribute("errores", cargaSocio.getListaErrores());
         		return showPage.replace("redirect:", "socios");
         	}
-	        return "redirect:/socios";
+	        return "redirect:/condominos";
         }catch(IOException ie){
         	logger.error("Hubo un prolema al leer el archivo "+ie.getMessage());
         	return showPage;
