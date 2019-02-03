@@ -37,7 +37,9 @@ public class ActivacionUsuarioToken extends EntidadBase{
     
     private boolean utilizado;
   
-    @OneToOne(cascade = CascadeType.MERGE) @MapsId
+//    @OneToOne(cascade = CascadeType.MERGE) @MapsId
+    @OneToOne
+    @JoinColumn(name = "id_usuario_fk", nullable = false)
     private Usuario usuario;
   
     private Date expiryDate;

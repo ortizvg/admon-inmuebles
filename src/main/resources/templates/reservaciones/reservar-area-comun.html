@@ -70,6 +70,39 @@
       
     }
   });
+  
+  
+  
+  
+  function cargarInmueblesPorZona() {
+		var zonaCodigo = $("#zona").val();
+	    $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + zonaCodigo, function(data) {
+	    	var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+	        var len = data.length;
+	        for ( var i = 0; i < len; i++) {
+	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	        }
+	        html += '</option>';
+	        $('#inmueble').html(html);
+	    });
+	}
+
+
+
+	function cargarAreasComunesPorInmueble() {
+		var inmuebleId = $("#inmueble").val();
+	    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/areas-comunes", function(data) {
+	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+	        var len = data.length;
+	        for ( var i = 0; i < len; i++) {
+	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	        }
+	        html += '</option>';
+	        $('#areaComunId').html(html);
+	    });
+	}
+	
+	
   /*]]>*/
 </script>
 </head>
@@ -93,6 +126,20 @@
     
       <form th:action="@{/reservaciones/reservar-area/busqueda}" th:object="${reservacionDto}" method="post">
         <div class="row">
+            <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
+                <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label>
+                 <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
+                 	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+					<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
+                 </select>
+            </div>
+            <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" >
+                <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
+                <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
+               		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+                </select>
+            </div>
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
             <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
@@ -105,10 +152,6 @@
           </div>
         </div>
         
-<!--         <div th:if="${message}"> -->
-<!-- 			<span class="form-control-feedback" th:text="${message}"></span> -->
-<!-- 		</div> -->
-		
 		<div class="alert alert-danger" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
         </div>

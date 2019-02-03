@@ -85,13 +85,13 @@ public class PagoController {
     	 Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
     	 
         if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
-        	 ZonaDto zona = zonaService.findByAdminZonaId( usuarioLogueadoId ).stream().findFirst().get();
-        	 session.setAttribute("inmuebles", inmuebleService.findByZonaCodigo( zona.getCodigo() )  );
+        	 session.setAttribute("zonas", zonaService.findByAdminZonaId( usuarioLogueadoId ));
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
-        	InmuebleDto inmueble = inmuebleService.findByAdminBiId( usuarioLogueadoId ).stream().findFirst().get();
-        	session.setAttribute("socios", inmuebleService.findSociosActivosByInmuebleId( inmueble.getId() ) );
+        	session.setAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId )  );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
         	session.setAttribute("zonas", zonaService.findAll() );
+        } else if ( request.isUserInRole( RolConst.ROLE_CONTADOR ) ) {
+        	session.setAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId )  );
         } 
     	
         session.setAttribute("tiposPago", tipoPagoService.findAllByLang( LocaleConst.LOCALE_ES ) );
@@ -237,13 +237,6 @@ public class PagoController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
     @PostMapping(value = "/pagos/generacion")
     public String pagosGeneracion(final HttpServletRequest request, final Locale locale, final Model model, @Valid final PagoDto pagoDto, final BindingResult bindingResult) {
-    	
-    	 
-     	if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
-     		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
-     		InmuebleDto inmueble = inmuebleService.findByAdminBiId( usuarioLogueadoId ).stream().findFirst().get();
-     		pagoDto.setInmuebleId(inmueble.getId());
-     	}
     	
     	 if (bindingResult.hasErrors()) {
              return "pagos/pago-generacion";

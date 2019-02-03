@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,9 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private CorreoUsuarioService correoUsuarioService;
 
 	/**
 	 * Lee archivo para carga de usuarios en 
@@ -66,7 +70,8 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 		} catch (Exception e) {
 		} 
 		if(socio.getListaErrores() == null || socio.getListaErrores().isEmpty()) {
-			guardaSocioMasivo(socio.getListaSocios());
+			List<UsuarioDto> listaSociosCreados = guardaSocioMasivo(socio.getListaSocios());
+			socio.setListaSocios(listaSociosCreados);
 		}
 		return socio;
 	}
@@ -89,18 +94,17 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 		try {
 			socio.setUsername(arrayStr[SociosConst.USER_NAME]);
 			socio = validaUserName(socio);
+			socio.setCorreo(arrayStr[SociosConst.CORREO]);
 			socio.setNombre(arrayStr[SociosConst.NOMBRE]);
 			socio.setApellidoPaterno(arrayStr[SociosConst.APELLIDO_PATERNO]);
 			socio.setApellidoMaterno(arrayStr[SociosConst.APELLIDO_MATERNO]);
-			socio.setCorreo(arrayStr[SociosConst.CORREO]);
-			socio.setGoogleMapsDir(arrayStr[SociosConst.MAPA_DIRECCION]);
-			socio.setDatosDomicilio(arrayStr[SociosConst.DATOS_DOMICILIO]);
-			socio.setTelefonoOficina(arrayStr[SociosConst.TELEFONO_OFICINA]);
-			socio.setTelefonoMovil(arrayStr[SociosConst.TELEFONO_MOVIL]);
-			socio.setTelefonoAlternativo(arrayStr[SociosConst.TELEFONO_ALTERNATIVO]);
-			socio.setInmuebleId(Long.valueOf(arrayStr[SociosConst.INMUEBLE_ID]));
-			socio.setRolSeleccionado(Long.valueOf(arrayStr[SociosConst.ROL_ID]));
 			socio.setCoutaMensualPagoSocio(new BigDecimal(arrayStr[SociosConst.CUOTA_MENSUAL_PAGO_SOCIO]));
+			socio.setCorreoAlternativo1(arrayStr[SociosConst.CORREO_ALTERNATIVO_1]);
+			socio.setCorreoAlternativo2(arrayStr[SociosConst.CORREO_ALTERNATIVO_2]);
+			socio.setRolSeleccionado(Long.valueOf(arrayStr[SociosConst.ROL_ID]));
+			socio.setTipoSocioId( Long.valueOf(arrayStr[SociosConst.TIPO_SOCIO]) );
+			socio.setDatosDomicilio(arrayStr[SociosConst.DATOS_DOMICILIO]);
+			socio.setInmuebleId(Long.valueOf(arrayStr[SociosConst.INMUEBLE_ID]));
 			if(cargaSocio.getListaSocios() == null || cargaSocio.getListaSocios().isEmpty()) {
 				listaSocios = new ArrayList<UsuarioDto>();
 				listaSocios.add(socio);
@@ -154,7 +158,8 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	 * respectivos roles
 	 * @param listaSocios
 	 */
-	private void guardaSocioMasivo(List<UsuarioDto> listaSocios) {
+	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
+		List<UsuarioDto> listaSociosCreados = new ArrayList<>();
 		for (UsuarioDto usuarioDto : listaSocios) {
 	        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
 
@@ -163,7 +168,11 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	        usuario.setRoles(roles);
 	        Usuario usuarioCreado = usuarioRepository.save(usuario);
 	        guardaInmuebleActualizaUsuario(usuarioCreado, usuarioDto.getInmuebleId());
+	        UsuarioDto usuarioCreadoDto =  modelMapper.map(usuarioCreado, UsuarioDto.class);
+	        listaSociosCreados.add( usuarioCreadoDto );
 		}
+		
+		return listaSociosCreados;
 	}
 
 	/**
@@ -181,6 +190,14 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 		inmueble.addSocio(usuarioRepository.save(usuarioCreado));
 		inmuebleRepository.save(inmueble);
 		
+	}
+	
+	@Async
+	@Override
+	public void enviarCorreoMasivo(List<UsuarioDto> listaSocios, final String urlContext) {
+		for (UsuarioDto usuarioDto : listaSocios) {
+			correoUsuarioService.enviarActivacion(usuarioDto, urlContext);
+		}
 	}
 
 }

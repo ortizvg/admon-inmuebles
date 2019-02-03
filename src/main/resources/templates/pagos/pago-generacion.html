@@ -10,6 +10,7 @@ var serverContext = [[@{/}]];
 	
 $(document).ready(function() {
 // 	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
+addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divTipoPago'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divMonto'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divConcepto'),/*[[#{campo.requerido}]]*/);
@@ -87,21 +88,24 @@ function cargarSociosPorInmueble() {
               
               <form name="pagoGeneracionForm" action="#" th:action="@{/pagos/generacion}" th:object="${pago}" method="post">
               
-                  <div id="divZona" class="form-group"  sec:authorize="hasRole('ADMIN_CORP')">
+                  <div id="divZona" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
                        <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label>
                         <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
                         	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 							<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
                         </select>
                    </div>
-                   <div id="divInmueble" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" >
+                   <div id="divInmueble" th:class="${#fields.hasErrors('inmuebleId')}? 'form-group has-danger':'form-group'" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" >
                        <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
-                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" onchange="cargarSociosPorInmueble();">
+                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
                        		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 							<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
                        </select>
+                        <span class="form-control-feedback">
+		                	<span th:if="${#fields.hasErrors('inmuebleId')}" th:errors="*{inmuebleId}"></span>
+		              	</span>
                    </div>
-                   <div id="divSocio" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')">
+                   <div id="divSocio" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')">
                        <label class="form-control-label" for="inmueble" th:text="#{pago.generacion.socio}"></label>
 	                   <select name="socio" id="socio" class="form-control" th:field="*{usuarioId}" >	
 	                    	<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>

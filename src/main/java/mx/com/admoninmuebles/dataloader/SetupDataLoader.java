@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -391,7 +391,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Reservacion reservacion = optReservacion.orElse(new Reservacion());
         if (!optReservacion.isPresent()) {
             reservacion.setTitle(title);
-            reservacion.setStart(LocalDate.now());
+            reservacion.setStart(LocalDateTime.now());
             reservacion.setAreaComun(areaComun);
             reservacion.setSocio(usuarioSocioBi);
             reservacion = reservacionRepository.save(reservacion);

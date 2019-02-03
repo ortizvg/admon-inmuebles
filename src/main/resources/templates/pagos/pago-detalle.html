@@ -25,57 +25,120 @@
         <div class="col-12">
           <div class="card">
             <div class="card-body">
+            	
               <h4 class="card-title" th:text="#{pagos.detalle.subtitulo}"></h4>
               <h6 class="card-subtitle" th:text="#{pagos.detalle.subtitulo.descripcion}"></h6>
               
               <form name="detallePagoTransferenciaForm" action="#" th:action="@{/pagos/opciones/transferencia/verificacion}" th:object="${pago}"  method="post">
                     <input type="hidden" class="form-control" th:field="*{id}"/>
                     
+               <div class="row">
+                <div id="divCondomino" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pagos.condomino.nombre}"></label>
+                  <p class="form-control-static" th:text="*{socio}"></p>
+                </div>
+                <div id="divMonto" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.monto}"></label>
+                  <p class="form-control-static" th:text="*{monto}"></p>
+                </div>
+                <div id="divEstausPago" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.estatus}"></label>
+<!--                   <p class="form-control-static" th:text="*{estatusPagoDescripction}"></p> -->
+                  <div th:switch="${pago.estatusPagoName}"> 
+					  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).PAGADO}" class="text-success" th:text="${pago.estatusPagoDescripction}"></span>
+					  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO}" class="text-warning"  th:text="${pago.estatusPagoDescripction}"></span>
+					  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).VERIFICACION}" class="text-muted"  th:text="${pago.estatusPagoDescripction}"></span>
+					  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
+					</div>
+                </div>
+                
+              </div>
+              
+               <div class="row">
+                <div id="divNumeroCuenta" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{pagos.condomino.cuenta.numero}"></label>
+                  <p class="form-control-static" th:text="*{numeroCuenta}"></p>
+                </div>
+                <div id="divReferencia" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pagos.condomino.referencia}"></label>
+                  <p class="form-control-static" th:text="*{referencia}"></p>
+                </div>
+                <div id="divFechaCreacion" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{pago.fecha.creacion}"></label>
+                  <p class="form-control-static" th:text="*{fechaCreacion}"></p>
+                </div>
+              </div>
+              
+               <div class="row">
+               <div id="divConcepto" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.concepto}"></label>
+                  <p class="form-control-static" th:text="*{concepto}"></p>
+                </div>
+                <div id="divTipoPagoBancario" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.tipopago}"></label>
+                  <p class="form-control-static" th:text="*{tipoPagoBancarioDescripction}"></p>
+                </div>
+                <div id="divFechaPago" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.fecha.pago}"></label>
+                  <p class="form-control-static" th:text="*{fechaPago}"></p>
+                </div>
+              </div>
+              
+               <div class="row">
+                <div id="divComprobantePago" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{pago.comprobante}"></label>
+                  <p class="form-control-static" >
+                  	<a th:href="@{|/api/archivos/${pago.comprobantePagoId}|}" th:text="*{comprobantePagoNombre}"></a>
+                  </p>
+                </div>
+                
+              </div>
                     
-                    <div id="divSocio" class="form-group">
-						<label class="form-control-label" th:text="#{pagos.condomino.nombre}"></label>
-						<input name="socio" class="form-control" th:field="*{socio}" disabled="disabled"/>
-					</div>
                     
-                    <div id="divNumeroCuenta" class="form-group">
-						<label class="form-control-label" th:text="#{pagos.condomino.cuenta.numero}"></label>
-						<input name="numeroCuenta" class="form-control" th:field="*{numeroCuenta}" disabled="disabled"/>
-					</div>
+<!--                     <div id="divSocio" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pagos.condomino.nombre}"></label> -->
+<!-- 						<input name="socio" class="form-control" th:field="*{socio}" disabled="disabled"/> -->
+<!-- 					</div> -->
+                    
+<!--                     <div id="divNumeroCuenta" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pagos.condomino.cuenta.numero}"></label> -->
+<!-- 						<input name="numeroCuenta" class="form-control" th:field="*{numeroCuenta}" disabled="disabled"/> -->
+<!-- 					</div> -->
 					
-					<div id="divNumeroReferencia" class="form-group">
-						<label class="form-control-label" th:text="#{pagos.condomino.referencia}"></label>
-						<input name="referencia" class="form-control" th:field="*{referencia}" disabled="disabled"/>
-					</div>
-					<div class="input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="basic-addon1">$</span>
-						</div>
-						<input name="monto" class="form-control" th:field="*{monto}" disabled="disabled" aria-describedby="basic-addon1"/>
-					</div>
-					<div id="divConcepto" class="form-group">
-						<label class="form-control-label" th:text="#{pago.concepto}"></label>
-						<input name="concepto" class="form-control" th:field="*{concepto}" disabled="disabled"/>
-					</div>
+<!-- 					<div id="divNumeroReferencia" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pagos.condomino.referencia}"></label> -->
+<!-- 						<input name="referencia" class="form-control" th:field="*{referencia}" disabled="disabled"/> -->
+<!-- 					</div> -->
+<!-- 					<div class="input-group"> -->
+<!-- 						<div class="input-group-prepend"> -->
+<!-- 							<span class="input-group-text" id="basic-addon1">$</span> -->
+<!-- 						</div> -->
+<!-- 						<input name="monto" class="form-control" th:field="*{monto}" disabled="disabled" aria-describedby="basic-addon1"/> -->
+<!-- 					</div> -->
+<!-- 					<div id="divConcepto" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pago.concepto}"></label> -->
+<!-- 						<input name="concepto" class="form-control" th:field="*{concepto}" disabled="disabled"/> -->
+<!-- 					</div> -->
 					
-					<div id="divEstatusPago" class="form-group">
-						<label class="form-control-label" th:text="#{pago.estatus}"></label>
-						<input name="estatusPagoDescripction" class="form-control" th:field="*{estatusPagoDescripction}" disabled="disabled"/>
-					</div>
-					<div id="divEstatusPago" class="form-group">
-						<label class="form-control-label" th:text="#{pago.fecha.pago}"></label>
-						<input name="fechaPago" class="form-control" th:field="*{fechaPago}" disabled="disabled"/>
-					</div>
-					<div id="divTipoPagoBancario" class="form-group">
-						<label class="form-control-label" th:text="#{pago.tipopago}"></label>
-						<input name="tipoPagoBancarioDescripction" class="form-control" th:field="*{tipoPagoBancarioDescripction}" disabled="disabled"/>
-					</div>
+<!-- 					<div id="divEstatusPago" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pago.estatus}"></label> -->
+<!-- 						<input name="estatusPagoDescripction" class="form-control" th:field="*{estatusPagoDescripction}" disabled="disabled"/> -->
+<!-- 					</div> -->
+<!-- 					<div id="divEstatusPago" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pago.fecha.pago}"></label> -->
+<!-- 						<input name="fechaPago" class="form-control" th:field="*{fechaPago}" disabled="disabled"/> -->
+<!-- 					</div> -->
+<!-- 					<div id="divTipoPagoBancario" class="form-group"> -->
+<!-- 						<label class="form-control-label" th:text="#{pago.tipopago}"></label> -->
+<!-- 						<input name="tipoPagoBancarioDescripction" class="form-control" th:field="*{tipoPagoBancarioDescripction}" disabled="disabled"/> -->
+<!-- 					</div> -->
 					
-					<div id="divComprobantePago" class="form-group">
-	                  <label class="control-label" th:text="#{pago.comprobante}"></label>
-	                  <p class="form-control-static" >
-	                  	<a th:href="@{|/api/archivos/${pago.comprobantePagoId}|}" th:text="*{comprobantePagoNombre}"></a>
-	                  </p>
-	                </div>
+<!-- 					<div id="divComprobantePago" class="form-group"> -->
+<!-- 	                  <label class="control-label" th:text="#{pago.comprobante}"></label> -->
+<!-- 	                  <p class="form-control-static" > -->
+<!-- 	                  	<a th:href="@{|/api/archivos/${pago.comprobantePagoId}|}" th:text="*{comprobantePagoNombre}"></a> -->
+<!-- 	                  </p> -->
+<!-- 	                </div> -->
 
 					<div class="modal-footer">
 						<button sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI','CONTADOR')" 
@@ -86,7 +149,7 @@
 					</div>
 				</form>
               
-              
+              	
             </div>
           </div>
         </div>

@@ -139,6 +139,11 @@ public class InmuebleServiceImpl implements InmuebleService {
     public Collection<InmuebleDto> findBySociosId(final Long id) {
     	 return StreamSupport.stream(inmuebleRepository.findBySociosId(id).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
     }
+    
+    @Override
+    public InmuebleDto findBySocioId(final Long id) {
+    	 return  modelMapper.map( inmuebleRepository.findBySocioId( id ), InmuebleDto.class );
+    }
 
     @Transactional
 	@Override
@@ -152,6 +157,13 @@ public class InmuebleServiceImpl implements InmuebleService {
 	@Override
 	public Collection<InmuebleDto> findByZonaCodigo(String codigo) {
 		return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoZonaCodigo(codigo).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<InmuebleDto> findByContadorId(Long id) {
+		return StreamSupport.stream(inmuebleRepository.findByContadorId(id).spliterator(), false)
+				.map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+				.collect(Collectors.toList());
 	}
 
 }

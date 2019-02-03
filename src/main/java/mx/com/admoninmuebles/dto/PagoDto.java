@@ -2,9 +2,9 @@ package mx.com.admoninmuebles.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,6 +44,11 @@ public class PagoDto {
     @JsonFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate fechaPago;
+    
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(iso = ISO.DATE)
+    private Date fechaCreacion;
+    
 
 	private Long tipoPagoBancarioId;
 	private String tipoPagoBancarioDescripction;

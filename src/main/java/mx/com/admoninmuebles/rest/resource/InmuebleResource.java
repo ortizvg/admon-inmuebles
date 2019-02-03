@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import mx.com.admoninmuebles.dto.AreaComunDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.service.InmuebleService;
@@ -45,6 +46,16 @@ public class InmuebleResource {
         try {
         	Collection<UsuarioDto> socios =  inmuebleService.findSociosByInmuebleId( id );
             return new ResponseEntity<>(socios, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+    }
+    
+    @GetMapping("/inmuebles/{id}/areas-comunes")
+    public ResponseEntity<Collection<AreaComunDto>> buscarAreasComunesPorInmueble( @PathVariable Long id ) {
+        try {
+        	InmuebleDto inmueble =  inmuebleService.findById( id );
+            return new ResponseEntity<>(inmueble.getAreasComunes(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }

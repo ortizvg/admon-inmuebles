@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -88,9 +87,6 @@ public class SocioController {
     
     @Autowired
     private TipoSocioService tipoSocioService;
-    
-    @Autowired
-    private ServletContext servletContext;
     
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
     @GetMapping(value = "/condomino")
@@ -215,7 +211,7 @@ public class SocioController {
             return "socios/socio-editar";
         }
 
-        UsuarioDto socio = usuarioService.editarCuenta(usuarioDto);
+        usuarioService.editarCuenta(usuarioDto);
 //        inmuebleService.addSocio2Inmueble(socio, usuarioDto.getInmuebleId());
         return "redirect:/condominos";
     }
@@ -233,10 +229,10 @@ public class SocioController {
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/condomino-masivo-crear")
-    public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model) {
+    public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model, final HttpServletRequest request) {
     	String showPage = "redirect:/condomino-carga-masivo";
-    	final String CSV_MIME_TYPE = "text/csv";
-    	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
+//    	final String CSV_MIME_TYPE = "text/csv";
+//    	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
     	final String CSV_EXTENSION = "csv";
         if (file.isEmpty()) {
         	redirect.addFlashAttribute("messageEmpty","");
@@ -275,8 +271,11 @@ public class SocioController {
         	cargaSocio = cargaSocioService.validaCSVSocios(br);
         	if(cargaSocio!=null && cargaSocio.getListaErrores() !=null && !cargaSocio.getListaErrores().isEmpty()) {
         		model.addAttribute("errores", cargaSocio.getListaErrores());
-        		return showPage.replace("redirect:", "socios");
+//        		return showPage.replace("redirect:", "socios");
+        		 return "socios/socio-carga-masivo";
         	}
+        	
+        	cargaSocioService.enviarCorreoMasivo(cargaSocio.getListaSocios(), getAppUrl(request));
 	        return "redirect:/condominos";
         }catch(IOException ie){
         	logger.error("Hubo un prolema al leer el archivo "+ie.getMessage());
@@ -294,7 +293,7 @@ public class SocioController {
         {}
         catch(BusinessException e) {
                bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
-               return "redirect:/socios";
+               return "redirect:/condominos";
                } 
         
         return "socios/socio-carga-masivo";
