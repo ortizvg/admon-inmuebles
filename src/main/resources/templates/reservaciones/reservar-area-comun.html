@@ -6,6 +6,11 @@
 <title th:text="#{reserva.areacomun.nombre}"></title>
 <script th:inline="javascript">
   /*<![CDATA[*/
+	  
+  var serverContext = [[@{/}]];
+  
+  var reservaciones = [[${reservaciones}]];
+	  
   $(document).ready(function() {
 	  console.log(/*[[${session.locale}]]*/);
 	var enableCalendar = $('#areaComunId').val() !== null && $('#areaComunId').val() !== '' && $('#areaComunId').val() !== 'undefined';
@@ -22,7 +27,7 @@
           center : 'title',
           right:  'next',
         },
-        events : [[${reservaciones}]],
+        events : reservaciones,
         selectable : enableCalendar,
         selectHelper : true,
         selectOverlap : false,
@@ -91,7 +96,10 @@
 
 	function cargarAreasComunesPorInmueble() {
 		var inmuebleId = $("#inmueble").val();
+		console.log('InmuebleID: ' + inmuebleId);
 	    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/areas-comunes", function(data) {
+	    	
+	    	
 	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
 	        var len = data.length;
 	        for ( var i = 0; i < len; i++) {
@@ -99,9 +107,31 @@
 	        }
 	        html += '</option>';
 	        $('#areaComunId').html(html);
+
 	    });
 	}
 	
+	function cargarReservacionesPorAreaComun() {
+		var areaComunId = $("#areaComunId").val();
+		console.log('areaComunId: ' + areaComunId);
+	    $.getJSON(serverContext + "api/reservaciones?areaComunId=" + areaComunId , function(data) {
+// 	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+// 	        var len = data.length;
+// 	        for ( var i = 0; i < len; i++) {
+// 	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+// 	        }
+// 	        html += '</option>';
+// 	        $('#areaComunId').html(html);
+			
+			console.log( $('#calendar'));
+			console.log( $('#calendar')[0].events);
+			console.log( $('#calendar')[0].isContentEditable );
+			console.log(data);
+	        
+	        reservaciones = data;
+	        $('#calendar')[0].isContentEditable  = true;
+	    });
+	}
 	
   /*]]>*/
 </script>
@@ -135,14 +165,15 @@
             </div>
             <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" >
                 <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
-                <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
+                <select  name="inmueble" id="inmueble" class="form-control"  onchange="cargarAreasComunesPorInmueble()">
                		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
                 </select>
             </div>
+            
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
-            <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
+            <select id="areaComunId" class="form-control" onchange="cargarReservacionesPorAreaComun()">
               <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option>
             </select>
@@ -150,6 +181,17 @@
               <span th:if="${#fields.hasErrors('areaComunId')}" th:errors="*{areaComunId}"></span>
             </span>
           </div>
+            
+<!--           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'"> -->
+<!--             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label> -->
+<!--             <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()"> -->
+<!--               <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!--               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option> -->
+<!--             </select> -->
+<!--             <span class="form-control-feedback"> -->
+<!--               <span th:if="${#fields.hasErrors('areaComunId')}" th:errors="*{areaComunId}"></span> -->
+<!--             </span> -->
+<!--           </div> -->
         </div>
         
 		<div class="alert alert-danger" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>
