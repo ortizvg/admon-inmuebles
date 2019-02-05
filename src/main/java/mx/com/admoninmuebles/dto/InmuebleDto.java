@@ -58,5 +58,6 @@ public class InmuebleDto {
     @JsonIgnore
     private Integer totalSocios;
     private Collection<AreaComunDto> areasComunes;
+    private Collection<UsuarioDto> socios;
 
 }

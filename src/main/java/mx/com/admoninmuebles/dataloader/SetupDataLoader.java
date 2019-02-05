@@ -419,6 +419,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
+            ticket.setFechaCreacion(LocalDate.now());
             ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);
