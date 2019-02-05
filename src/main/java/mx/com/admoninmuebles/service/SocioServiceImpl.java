@@ -38,12 +38,7 @@ public class SocioServiceImpl implements SocioService{
 		Optional<Rol> rolSocioBiOpt = rolRepository.findByNombre(RolConst.ROLE_SOCIO_BI);
 		Collection<Usuario> sociosBi = rolSocioBiOpt.get().getUsuarios();
 		
-		Optional<Rol> rolRepBiOpt = rolRepository.findByNombre(RolConst.ROLE_REP_BI);
-		Collection<Usuario> representantesBi = rolRepBiOpt.get().getUsuarios();
-		
-		Stream<Usuario> socios = Stream.of(sociosBi, representantesBi).flatMap(Collection::stream);
-		
-		return socios
+		return sociosBi.stream()
 				 .map(socio -> modelMapper.map(socio, SocioDto.class))
 				 .collect(Collectors.toList());
 	}

@@ -14,9 +14,15 @@ public interface InmuebleService {
     
     Collection<InmuebleDto> findByAdminBiId(Long id);
     
+    Collection<InmuebleDto> findByContadorId(Long id);
+    
     Collection<InmuebleDto> findByDireccionAsentamientoId(Long id);
     
+    Collection<InmuebleDto> findByZonaCodigo(String codigo);
+    
     Collection<UsuarioDto> findSociosByInmuebleId(Long id);
+    
+    Collection<UsuarioDto> findSociosActivosByInmuebleId(Long id);
     
     Collection<TicketDto> findTicketsByInmuebleId(Long id);
 
@@ -29,4 +35,6 @@ public interface InmuebleService {
     Collection<InmuebleDto> findBySociosId(final Long id);
     
     void addSocio2Inmueble(final UsuarioDto usuarioDto, final Long inmuebleId);
+    
+    InmuebleDto findBySocioId(final Long id);
 }

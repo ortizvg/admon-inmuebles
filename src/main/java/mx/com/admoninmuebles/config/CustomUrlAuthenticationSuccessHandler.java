@@ -56,9 +56,9 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isAdminCorp = false;
         boolean isAdminZona = false;
         boolean isAdminBi = false;
-        boolean isRepBi = false;
         boolean isSocioBi = false;
         boolean isProveedor = false;
+        boolean isContador = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
         	
@@ -73,14 +73,14 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
             else if (RolConst.ROLE_ADMIN_BI.equals(grantedAuthority.getAuthority())) {
             	isAdminBi = true;
                 break;
-            }else if (RolConst.ROLE_REP_BI.equals(grantedAuthority.getAuthority())) {
-            	isRepBi = true;
-                break;
             }else if (RolConst.ROLE_SOCIO_BI.equals(grantedAuthority.getAuthority())) {
             	isSocioBi = true;
                 break;
             }else if (RolConst.ROLE_PROVEEDOR.equals(grantedAuthority.getAuthority())) {
             	isProveedor = true;
+                break;
+            }else if (RolConst.ROLE_CONTADOR.equals(grantedAuthority.getAuthority())) {
+            	isContador = true;
                 break;
             }
         }
@@ -91,12 +91,12 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
             return "/adminzona";
         } else if (isAdminBi) {
             return "/adminbi";
-        }else if (isRepBi) {
-        	return "/repbi";
         }else if (isSocioBi) {
-            return "/sociobi";
+            return "/condomino";
         }else if (isProveedor) {
             return "/proveedor";
+        }else if (isContador) {
+            return "/contador";
         }
         else {
             throw new IllegalStateException();

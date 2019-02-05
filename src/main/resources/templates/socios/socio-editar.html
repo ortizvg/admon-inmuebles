@@ -15,13 +15,17 @@ $(document).ready(function() {
   $('.dropify').dropify();
   addControlState(document.getElementById('divUsername'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divCorreo'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divCorreoAlternativo1'));
+  addControlState(document.getElementById('divCorreoAlternativo2'));
   addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoOficina'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoAlternativo'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoOficina'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoAlternativo'),/*[[#{campo.requerido}]]*/);
+//   addControlState(document.getElementById('divTelefonoMovil'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);   
+  addControlState(document.getElementById('divCuotaMensualPagoSocio'), /*[[#{campo.requerido}]]*/); 
+  addControlState(document.getElementById('divTipoSocio'), /*[[#{campo.requerido}]]*/); 
 });
 
 
@@ -62,7 +66,7 @@ function cargarInmueblesPorColonia() {
 				<div class="col-md-6 col-8 align-self-center">
 					<h3 class="text-themecolor m-b-0 m-t-0" th:text="#{socios.titulo}"></h3>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/socios}" th:text="#{socios.titulo}"></a></li>
+						<li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/condominos}" th:text="#{socios.titulo}"></a></li>
 						<li class="breadcrumb-item active" th:text="#{socios.editar.titulo}"></li>
 					</ol>
 				</div>
@@ -76,7 +80,7 @@ function cargarInmueblesPorColonia() {
                                <h6 class="card-subtitle"><span th:text="#{socios.editar.subtitulo}"></span></h6>
     							
                               
-                              <form  name="crearSocioForm" action="#" th:action="@{/socio-editar}" th:object="${usuarioDto}" method="post"  role="form">
+                              <form  name="crearSocioForm" action="#" th:action="@{/condomino-editar}" th:object="${usuarioDto}" method="post"  role="form">
                               			<input type="hidden" class="form-control" th:field="*{id}"/>
                               			<input type="hidden" class="form-control" th:field="*{username}"/>
                                         <div class="row">
@@ -115,14 +119,62 @@ function cargarInmueblesPorColonia() {
 	                                            <label class="form-control-label" for="apellidoMaterno" th:text="#{usuario.apellido.materno}"></label>
 	                                            <input type="text" th:field="*{apellidoMaterno}" class="form-control" id="apellidoMaterno" maxlength="100">
                                             </div>
-                                             <div id="divGoogleMapsDir" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('googleMapsDir')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="googleMapsDir" th:text="#{usuario.googlemaps}"></label>
-                                                <input type="text" th:field="*{googleMapsDir}" class="form-control" id="googleMapsDir" maxlength="1000">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('googleMapsDir')}" th:errors="*{googleMapsDir}"></span>
-									              </span>
-                                            </div>
+                                         <div id="divCuotaMensualPagoSocio" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('coutaMensualPagoSocio')}? 'has-danger'">
+						                  <label class="form-control-label" th:text="#{usuario.coutamensualpagosocio}"></label>
+						                  <input name="coutaMensualPagoSocio" class="form-control" th:field="*{coutaMensualPagoSocio}" required pattern="^\d+(\.\d{1,4})?$" th:title="#{usuario.cuota.mensual.mensaje.validacion}"/>
+						                  <span class="form-control-feedback">
+						                    <span th:if="${#fields.hasErrors('coutaMensualPagoSocio')}" th:errors="*{coutaMensualPagoSocio}"></span>
+						                  </span>
+						                </div>
+<!--                                              <div id="divGoogleMapsDir" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('googleMapsDir')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="googleMapsDir" th:text="#{usuario.googlemaps}"></label> -->
+<!--                                                 <input type="text" th:field="*{googleMapsDir}" class="form-control" id="googleMapsDir" maxlength="1000"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('googleMapsDir')}" th:errors="*{googleMapsDir}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
                                          </div>
+                                         
+                                         <div class="row">
+	                                       	<div id="divCorreoAlternativo1" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('correoAlternativo1')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="correoAlternativo1" th:text="#{usuario.correo.alternativo.1}"></label>
+                                                <input type="text" th:field="*{correoAlternativo1}" class="form-control" id="correo" maxlength="100" 
+                                               		pattern="^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" th:title="#{usuario.correo.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('correoAlternativo1')}" th:errors="*{correoAlternativo1}"></span>
+								             	 </span>
+                                            </div>
+											<div id="divCorreoAlternativo2" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('correoAlternativo2')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="correo" th:text="#{usuario.correo.alternativo.2}"></label>
+                                                <input type="text" th:field="*{correoAlternativo2}" class="form-control" id="correoAlternativo2" maxlength="100" 
+                                               		pattern="^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$" th:title="#{usuario.correo.mensaje.validacion}">
+                                                <span class="form-control-feedback">
+								                	<span th:if="${#fields.hasErrors('correoAlternativo2')}" th:errors="*{correoAlternativo2}"></span>
+								             	 </span>
+                                            </div>
+                                       </div>
+                                       
+                                       <div class="row">
+                                         	<div id="divRol" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'">
+												 <label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label>
+		                                        <select  name="rolId" class="form-control" th:field="*{rolSeleccionado}" required >	
+													<option th:each="rol : ${session.rolesDto}" th:value="${{rol.id}}" th:text="${rol.descripcion}"></option>
+		                                        </select>
+		                                        <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('rolSeleccionado')}" th:errors="*{rolSeleccionado}"></span>
+									             </span>
+	                                		</div>
+	                                		<div id="divTipoSocio" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('tipoSocioId')}? 'form-group has-danger':'form-group'">
+                                                <label class="form-control-label" for="tipoSocio" th:text="#{usuario.tiposocio}"></label>
+			                                        <select name="tipoSocio" id="tipoSocio" class="form-control" th:field="*{tipoSocioId}" required >	
+			                                         	<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
+														<option th:each="tipoSocio : ${session.tiposSocios}" th:value="${{tipoSocio.id}}" th:text="${tipoSocio.descripction}"></option>
+			                                        </select>
+			                                        <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('tipoSocioId')}" th:errors="tipoSocioId"></span>
+										             </span>
+                                            </div>
+                                          </div>
                                          
                                       <div class="row">
 						                <div id="divDatosDomicilio" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('datosDomicilio')}? 'has-danger'">
@@ -134,17 +186,7 @@ function cargarInmueblesPorColonia() {
 						                </div>
 						              </div>
                                           
-                                         <div class="row">
-                                         	<div id="divRol" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'">
-												 <label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label>
-		                                        <select  name="rolId" class="form-control" th:field="*{rolSeleccionado}" required >	
-													<option th:each="rol : ${session.rolesDto}" th:value="${{rol.id}}" th:text="${rol.descripcion}"></option>
-		                                        </select>
-		                                        <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('rolSeleccionado')}" th:errors="*{rolSeleccionado}"></span>
-									             </span>
-	                                		</div>
-                                          </div>
+                                         
                                           
                                           <div class="row">
                                           	<div class="col-md-12 m-b-20">
@@ -155,31 +197,31 @@ function cargarInmueblesPorColonia() {
                                             </div>
                                           </div>
 								              
-							              <h3 class="box-title m-t-40" th:text="#{socio.telefonos}"></h3>
-							              <hr>
-								           <div class="row">
-                                             <div id="divTelefonoOficina" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoOficina')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="telefonoOficina" th:text="#{usuario.telefono.oficina}"></label>
-                                                <input type="text" th:field="*{telefonoOficina}" class="form-control" id="telefonoOficina" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('telefonoOficina')}" th:errors="*{telefonoOficina}"></span>
-									              </span>
-                                            </div>
-                                             <div id="divTelefonoMovil" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoMovil')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="telefonoMovil" th:text="#{usuario.telefono.movil}"></label>
-                                                <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></span>
-									              </span>
-                                            </div>
-                                            <div id="divTelefonoAlternativo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoAlternativo')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="telefonoAlternativo" th:text="#{usuario.telefono.alternativo}"></label>
-                                                <input type="text" th:field="*{telefonoAlternativo}" class="form-control" id="telefonoAlternativo" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}">
-                                                <span class="form-control-feedback">
-									                <span th:if="${#fields.hasErrors('telefonoAlternativo')}" th:errors="*{telefonoAlternativo}"></span>
-									              </span>
-                                            </div>
-                                          </div>
+<!-- 							              <h3 class="box-title m-t-40" th:text="#{socio.telefonos}"></h3> -->
+<!-- 							              <hr> -->
+<!-- 								           <div class="row"> -->
+<!--                                              <div id="divTelefonoOficina" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoOficina')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="telefonoOficina" th:text="#{usuario.telefono.oficina}"></label> -->
+<!--                                                 <input type="text" th:field="*{telefonoOficina}" class="form-control" id="telefonoOficina" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('telefonoOficina')}" th:errors="*{telefonoOficina}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
+<!--                                              <div id="divTelefonoMovil" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoMovil')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="telefonoMovil" th:text="#{usuario.telefono.movil}"></label> -->
+<!--                                                 <input type="text" th:field="*{telefonoMovil}" class="form-control" id="telefonoMovil" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('telefonoMovil')}" th:errors="*{telefonoMovil}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
+<!--                                             <div id="divTelefonoAlternativo" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('telefonoAlternativo')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="telefonoAlternativo" th:text="#{usuario.telefono.alternativo}"></label> -->
+<!--                                                 <input type="text" th:field="*{telefonoAlternativo}" class="form-control" id="telefonoAlternativo" pattern="^[0-9]{1,15}$" th:title="#{usuario.telefono.mensaje.validacion}"> -->
+<!--                                                 <span class="form-control-feedback"> -->
+<!-- 									                <span th:if="${#fields.hasErrors('telefonoAlternativo')}" th:errors="*{telefonoAlternativo}"></span> -->
+<!-- 									              </span> -->
+<!--                                             </div> -->
+<!--                                           </div> -->
                                           
                                           <h3 class="box-title m-t-20" th:text="#{usuario.inmueble}"></h3>
 							              <hr>
@@ -225,7 +267,7 @@ function cargarInmueblesPorColonia() {
                                              <div class="row">
 	                                             <div class="col-md-12 m-b-20">
 				                                    <button type="submit" class="btn btn-info-gesco waves-effect m-r-10" th:text="#{boton.guardar}"></button>
-				                                    <a th:href="@{/socios}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>
+				                                    <a th:href="@{/condominos}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>
 	                                           </div>
                                            </div>
                                     </form>

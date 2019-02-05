@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{pagos.listado.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  		var serverContext = [[@{/}]];
+		var seleccione = /*[[#{etiqueta.seleccione}]]*/
+		var opcionSeleccione= '<option selected="selected" value="">'+seleccione+'</option>';
+	    $(document).ready(function() {
+	        $('#zonaCodigo').on('change', function() {
+	            $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + this.value, function(data) {
+	                var html = opcionSeleccione;
+	                var len = data.length;
+	                for (var i = 0; i < len; i++) {
+	                    html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	                }
+	                html += '</option>';
+	                $('#inmuebles').html(html);
+	            });
+	        });
+	    });
+
+  
+  
+  /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{pagos.listado.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{pagos.listado.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{pagos.listado.titulo}"></h6>
+              
+<!--               <div class="row"> -->
+<!--               	<div class="col-md-12"> -->
+<!-- 			  		<form name="buscarPagosForm" action="#" th:action="@{/pagos/busqueda}" th:object="${pagosBusqueda}" method="get"> -->
+<!-- 		                <div class="form-body"> -->
+<!-- 		                  <div class="row"> -->
+<!-- 		                    <div sec:authorize="hasRole('ADMIN_ZONA')" id="divZona" class="col-md-3 form-group"> -->
+<!-- 		                      <label class="form-control-label" th:text="#{colonia.zona}"></label> -->
+<!-- 		                      <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required> -->
+<!-- 		                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 		                        <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option> -->
+<!-- 		                      </select> -->
+<!-- 		                      <span class="form-control-feedback"> </span> -->
+<!-- 		                    </div> -->
+<!-- 		                    <div sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" id="divInmueble" class="col-md-3 form-group"> -->
+<!-- 		                      <label class="form-control-label" th:text="#{etiqueta.inmueble}"></label> -->
+<!-- 		                      <select id="inmuebles" name="inmuebles" class="form-control" th:field="*{inmuebleId}" required> -->
+<!-- 		                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 		                        <option th:each="inmueble : ${inmuebles}" th:value="${inmueble.id}" th:text="${inmueble.nombre}"></option> -->
+<!-- 		                      </select> -->
+<!-- 		                      <span class="form-control-feedback"></span> -->
+<!-- 		                    </div> -->
+<!-- 		                    <div sec:authorize="hasRole('SOCIO_BI')" id="divSocio" class="col-md-3 form-group"> -->
+<!-- 		                      <label class="form-control-label" th:text="#{etiqueta.socio}"></label> -->
+<!-- 		                      <select id="socios" name="socios" class="form-control" th:field="*{socioId}" required> -->
+<!-- 		                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
+<!-- 		                        <option th:each="socio : ${socios}" th:value="${socios.id}" th:text="${socio.nombre}"></option> -->
+<!-- 		                      </select> -->
+<!-- 		                      <span class="form-control-feedback"></span> -->
+<!-- 		                    </div> -->
+<!-- 		                    <div class="col-md-3 form-group"> -->
+<!-- 		                      <label class="col-md-12 form-control-label">&nbsp;</label> -->
+<!-- 		                      <button type="submit" class="btn btn-success btn-rounded" th:text="#{boton.buscar}"></button> -->
+<!-- 		                    </div> -->
+<!-- 		                  </div> -->
+<!-- 		                </div> -->
+<!-- 		              </form> -->
+<!-- 			  	</div> -->
+<!--               </div> -->
+              
+              <div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
+			  	</div>
+			  	<div class="col-2 ml-auto">
+			  		<a sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" th:href="@{/pagos/generacion}" class="btn btn-block btn-info-gesco" th:text="#{boton.pago.generar}"></a>
+			  	</div>
+			 </div>
+			 
+								 
+              <div class="table-responsive">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                  <thead>
+                    <tr>
+                      <th th:text="#{tabla.id}"></th>
+                      <th th:text="#{pago.monto}"></th>
+                      <th th:text="#{pago.tipopago}"></th>
+                      <th th:text="#{pago.concepto}"></th>
+                      <th th:text="#{pago.estatus}"></th>
+                      <th th:text="#{tabla.accion}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="pago : ${pagos}">
+                      <tr>
+                        <td th:text="${pago.id}"></td>
+                        <td th:text="|$${pago.monto}|"></td>
+                        <td th:text="${pago.tipoPagoDescripction}"></td>
+                        <td th:text="${pago.concepto}"></td>
+                        <td>
+	                        <div th:switch="${pago.estatusPagoName}"> 
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).PAGADO}" class="text-success" th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO}" class="text-warning"  th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).VERIFICACION}" class="text-muted"  th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
+							</div>
+                        </td> 
+                        <td>
+                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-outline-success btn-xs"> <i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i><span>Ver</span></a>
+                          <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-outline-success btn-xs"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i><span>Pagar</span></a>
+<!--                           <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i></a> -->
+                        </td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot th:if="${#lists.size(pagos) > 20}">
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
+

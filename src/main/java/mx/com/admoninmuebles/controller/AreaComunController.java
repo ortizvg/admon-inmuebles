@@ -49,7 +49,8 @@ public class AreaComunController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/catalogos/area-comun-editar/{id}")
-    public String findById(final @PathVariable long id, final Model model) {
+    public String findById(final @PathVariable long id, final Model model, final HttpSession session) {
+    	session.setAttribute("inmuebles", inmuebleService.findAll());
         model.addAttribute("areaComunDto", areaComunService.findById(id));
         return "/catalogos/area-comun-crear";
     }

@@ -68,9 +68,9 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-aceptar/'  + id}" class="btn btn-success btn-rounded" th:text="#{boton.aceptar}"></a>
-                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-rechazar/' + id}" class="btn btn-danger btn-rounded" th:text="#{boton.rechazar}"></a>
-                <a th:href="@{/tickets}" class="btn btn-info btn-rounded" th:text="#{boton.cerrar}"></a>
+                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-aceptar/'  + id}" class="btn btn-success" th:text="#{boton.aceptar}"></a>
+                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-rechazar/' + id}" class="btn btn-danger" th:text="#{boton.rechazar}"></a>
+                <a th:href="@{/tickets}" class="btn btn-secondary" th:text="#{boton.cerrar}"></a>
               </div>
             </div>
           </div>

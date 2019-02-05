@@ -16,7 +16,7 @@ public class CorreoController {
 	
 	 @Autowired
 	 private CorreoService correoService;
-	
+	 
 	 @GetMapping("/sendMail")
 	 public String sendMail() {
 	       Context datosPlantilla = new Context();

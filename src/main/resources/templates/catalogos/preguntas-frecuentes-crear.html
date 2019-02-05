@@ -31,7 +31,7 @@ $(document).ready(function() {
 					<div class="card">
 						<div class="card-body">
 							<h4 class="card-title" th:text="#{preguntafrecuentes.titulo}"></h4>
-							<h6 class="card-subtitle" th:text="#{preguntafrecuentes.titulo.crear}"></h6>
+							<h6 class="card-subtitle" th:text="#{preguntafrecuentes.crear.titulo}"></h6>
 							<form name="crearPreguntaFrecuenteForm" action="#" th:action="@{/catalogos/preguntas-frecuentes-crear}" th:object="${preguntaFrecuenteDto}" method="post">
 								<div class="form-group">
 									<div id="divPregunta" th:class="${#fields.hasErrors('pregunta')}? 'form-group has-danger':'form-group'">
@@ -53,7 +53,7 @@ $(document).ready(function() {
 										</div>
 									</div>
 								</div>
-								<button type="submit" class="btn btn-info waves-effect" th:text="#{boton.guardar}"></button>
+								<button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.guardar}"></button>
 								<a th:href="@{/catalogos/preguntas-frecuentes}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
 
 							</form>

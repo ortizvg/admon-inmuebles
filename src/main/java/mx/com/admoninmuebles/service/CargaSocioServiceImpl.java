@@ -1,16 +1,19 @@
 package mx.com.admoninmuebles.service;
 
 import java.io.BufferedReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.constant.SimbolosConst;
@@ -42,6 +45,12 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	
 	@Autowired
 	private InmuebleRepository inmuebleRepository;
+	
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private CorreoUsuarioService correoUsuarioService;
 
 	/**
 	 * Lee archivo para carga de usuarios en 
@@ -61,7 +70,8 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 		} catch (Exception e) {
 		} 
 		if(socio.getListaErrores() == null || socio.getListaErrores().isEmpty()) {
-			guardaSocioMasivo(socio.getListaSocios());
+			List<UsuarioDto> listaSociosCreados = guardaSocioMasivo(socio.getListaSocios());
+			socio.setListaSocios(listaSociosCreados);
 		}
 		return socio;
 	}
@@ -80,21 +90,21 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 		UsuarioDto socio = new UsuarioDto();
 		List<UsuarioDto> listaSocios = null;
 		List<ErrorDto> listaErrores = null;
-		String mensajeError = "Error en la línea: ";
+		String mensajeError = "Error en la línea ";
 		try {
 			socio.setUsername(arrayStr[SociosConst.USER_NAME]);
 			socio = validaUserName(socio);
+			socio.setCorreo(arrayStr[SociosConst.CORREO]);
 			socio.setNombre(arrayStr[SociosConst.NOMBRE]);
 			socio.setApellidoPaterno(arrayStr[SociosConst.APELLIDO_PATERNO]);
 			socio.setApellidoMaterno(arrayStr[SociosConst.APELLIDO_MATERNO]);
-			socio.setCorreo(arrayStr[SociosConst.CORREO]);
-			socio.setGoogleMapsDir(arrayStr[SociosConst.MAPA_DIRECCION]);
-			socio.setDatosDomicilio(arrayStr[SociosConst.DATOS_DOMICILIO]);
-			socio.setTelefonoOficina(arrayStr[SociosConst.TELEFONO_OFICINA]);
-			socio.setTelefonoMovil(arrayStr[SociosConst.TELEFONO_MOVIL]);
-			socio.setTelefonoAlternativo(arrayStr[SociosConst.TELEFONO_ALTERNATIVO]);
-			socio.setInmuebleId(Long.valueOf(arrayStr[SociosConst.INMUEBLE_ID]));
+			socio.setCoutaMensualPagoSocio(new BigDecimal(arrayStr[SociosConst.CUOTA_MENSUAL_PAGO_SOCIO]));
+			socio.setCorreoAlternativo1(arrayStr[SociosConst.CORREO_ALTERNATIVO_1]);
+			socio.setCorreoAlternativo2(arrayStr[SociosConst.CORREO_ALTERNATIVO_2]);
 			socio.setRolSeleccionado(Long.valueOf(arrayStr[SociosConst.ROL_ID]));
+			socio.setTipoSocioId( Long.valueOf(arrayStr[SociosConst.TIPO_SOCIO]) );
+			socio.setDatosDomicilio(arrayStr[SociosConst.DATOS_DOMICILIO]);
+			socio.setInmuebleId(Long.valueOf(arrayStr[SociosConst.INMUEBLE_ID]));
 			if(cargaSocio.getListaSocios() == null || cargaSocio.getListaSocios().isEmpty()) {
 				listaSocios = new ArrayList<UsuarioDto>();
 				listaSocios.add(socio);
@@ -128,7 +138,8 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 
 	/**
 	 * Valida si el nombre de usuario existe,
-	 * si no existe le asigna una contrasenia
+	 * si no existe le asigna como contrasenia
+	 * el mismo nombre de usuario
 	 * @param socio
 	 * @return
 	 */
@@ -137,8 +148,7 @@ public class CargaSocioServiceImpl implements CargaSocioService {
         if (usuarioOptional.isPresent()) {
             throw new BusinessException("El usuario ya existe");
         }
-        String contrasenia = RandomStringUtils.randomAlphanumeric(8);
-        socio.setContrasenia(contrasenia);
+        socio.setContrasenia(passwordEncoder.encode(socio.getUsername()));
         return socio;
 		
 	}
@@ -148,7 +158,8 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	 * respectivos roles
 	 * @param listaSocios
 	 */
-	private void guardaSocioMasivo(List<UsuarioDto> listaSocios) {
+	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
+		List<UsuarioDto> listaSociosCreados = new ArrayList<>();
 		for (UsuarioDto usuarioDto : listaSocios) {
 	        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
 
@@ -156,23 +167,37 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	        roles.add(rolRepository.findById(usuarioDto.getRolSeleccionado()).get());
 	        usuario.setRoles(roles);
 	        Usuario usuarioCreado = usuarioRepository.save(usuario);
-	        UsuarioDto usuarioDtoCreado = modelMapper.map(usuarioCreado, UsuarioDto.class);
-	        guardaInmueble(usuarioDtoCreado, usuarioDto.getInmuebleId());
+	        guardaInmuebleActualizaUsuario(usuarioCreado, usuarioDto.getInmuebleId());
+	        UsuarioDto usuarioCreadoDto =  modelMapper.map(usuarioCreado, UsuarioDto.class);
+	        listaSociosCreados.add( usuarioCreadoDto );
 		}
+		
+		return listaSociosCreados;
 	}
 
 	/**
-	 * Guarda el inmueble asociado al 
-	 * usuario creado
-	 * @param usuarioDtoCreado
+	 * Se recupera el inmueble, se actualiza
+	 * el usuario con la referencia de pagos
+	 * y se actualiza el inmueble agregando 
+	 * el usuario creado
+	 * @param usuarioCreado
 	 * @param inmuebleId
 	 */
-	private void guardaInmueble(UsuarioDto usuarioDtoCreado, Long inmuebleId) {
+	private void guardaInmuebleActualizaUsuario(Usuario usuarioCreado, Long inmuebleId) {
 		Inmueble inmueble = inmuebleRepository.findById(inmuebleId).get();
-		Usuario socio = usuarioRepository.findById(usuarioDtoCreado.getId()).get();
-		inmueble.addSocio(socio);
+		usuarioCreado.setReferenciaPagoSocio(usuarioCreado.getId() + "-" + inmueble.getDatosAdicionales().getNumeroCuenta());
+		usuarioCreado.setCuentaPagoSocio( inmueble.getDatosAdicionales().getNumeroCuenta() );
+		inmueble.addSocio(usuarioRepository.save(usuarioCreado));
 		inmuebleRepository.save(inmueble);
 		
+	}
+	
+	@Async
+	@Override
+	public void enviarCorreoMasivo(List<UsuarioDto> listaSocios, final String urlContext) {
+		for (UsuarioDto usuarioDto : listaSocios) {
+			correoUsuarioService.enviarActivacion(usuarioDto, urlContext);
+		}
 	}
 
 }

@@ -13,6 +13,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,12 +29,22 @@ public abstract class EntidadBase implements Serializable {
 
     @LastModifiedBy
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Id_modificado_por_fk")
+    @JoinColumn(name = "id_modificado_por_fk")
     private Usuario modificadoPor;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_modificacion")
     private Date fechaModificacion;
-
+    
+    @CreatedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_creado_por_fk", updatable = false )
+    private Usuario creadoPor;
+    
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_creacion", updatable = false)
+    private Date fechaCreacion;
+    
 }

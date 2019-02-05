@@ -3,11 +3,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
   xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{ticket.titulo}"></title>
+<title th:text="#{reserva.areacomun.nombre}"></title>
 <script th:inline="javascript">
   /*<![CDATA[*/
   $(document).ready(function() {
 	  console.log(/*[[${session.locale}]]*/);
+	var enableCalendar = $('#areaComunId').val() !== null && $('#areaComunId').val() !== '' && $('#areaComunId').val() !== 'undefined';
+	console.log(enableCalendar);
     $('#calendar').fullCalendar({
     	locale: /*[[${session.locale}]]*/,
         defaultView: 'month',
@@ -21,7 +23,7 @@
           right:  'next',
         },
         events : [[${reservaciones}]],
-        selectable : true,
+        selectable : enableCalendar,
         selectHelper : true,
         selectOverlap : false,
         selectAllow: function(start, end) {
@@ -36,6 +38,7 @@
     });
 
     $.onSelect = function(start, end) {
+      console.log('Dio click');
       var mensaje;
       if (end.diff(start, 'days') == 1) {
         mensaje =/*[[#{reserva.areacomun.mensaje.reservarUnDia.areaComun}]]*/;
@@ -43,7 +46,7 @@
         mensaje =/*[[#{reserva.areacomun.mensaje.reservarPerido.areaComun}]]*/;
       }
       
-      var modal = $('#modalEliminar');
+      var modal = $('#modalCrearEvento');
       modal.find('.modal-title').text(/*[[#{reserva.areacomun.encabezado.modal.reservar}]]*/)
       modal.find('.modal-body p').text(mensaje.format(start.format('DD-MM-YYYY'), end.format('DD-MM-YYYY')))
       $('input[name="start"]').val(start.format('YYYY-MM-DD'));
@@ -52,24 +55,95 @@
     }
     
     $.onSelectValidation = function(selectInfo) {
+    	console.log(selectInfo);
     }
     
     $.onEventClick = function(calEvent) {
-      alert('Id: '+ calEvent.id + ' Event: ' + calEvent.title);
+//       alert('Id: '+ calEvent.id + ' Event: ' + calEvent.title);
+      
+      var modal = $('#modalEliminarEvento');
+      modal.find('.modal-title').text(/*[[#{reserva.areacomun.encabezado.modal.reservar}]]*/)
+      modal.find('.modal-body p').text(calEvent.title)
+	  $('input[name="title"]').val(calEvent.title);
+      $('input[name="id"]').val(calEvent.id);
+      modal.modal("show");
+      
     }
   });
+  
+  
+  
+  
+  function cargarInmueblesPorZona() {
+		var zonaCodigo = $("#zona").val();
+	    $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + zonaCodigo, function(data) {
+	    	var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+	        var len = data.length;
+	        for ( var i = 0; i < len; i++) {
+	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	        }
+	        html += '</option>';
+	        $('#inmueble').html(html);
+	    });
+	}
+
+
+
+	function cargarAreasComunesPorInmueble() {
+		var inmuebleId = $("#inmueble").val();
+	    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/areas-comunes", function(data) {
+	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+	        var len = data.length;
+	        for ( var i = 0; i < len; i++) {
+	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	        }
+	        html += '</option>';
+	        $('#areaComunId').html(html);
+	    });
+	}
+	
+	
   /*]]>*/
 </script>
 </head>
 <body>
   <div layout:fragment="content">
     <div class="container-fluid">
-      <form th:action="@{/buscarReservaciones}" th:object="${reservacionDto}" method="post">
+    
+         <div class="row" th:if="${showAlert}">
+          <div class="col-md-12">
+                <blockquote class="bg-white bd-callout bd-callout-info" >
+                	<h4 th:text="#{reserva.areacomun.aviso.titulo}"></h4>
+                    <p th:text="#{reserva.areacomun.aviso.mensaje.1}">
+                    </p>
+                    <p th:text="#{reserva.areacomun.aviso.mensaje.2}">
+                    </p>
+                    <p th:text="#{reserva.areacomun.aviso.mensaje.3}">
+                    </p>
+                </blockquote>
+          </div>
+        </div>
+    
+      <form th:action="@{/reservaciones/reservar-area/busqueda}" th:object="${reservacionDto}" method="post">
         <div class="row">
+            <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
+                <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label>
+                 <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
+                 	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+					<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
+                 </select>
+            </div>
+            <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" >
+                <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
+                <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
+               		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+                </select>
+            </div>
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
-            <select class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
-              <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+            <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
+              <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option>
             </select>
             <span class="form-control-feedback">
@@ -77,6 +151,11 @@
             </span>
           </div>
         </div>
+        
+		<div class="alert alert-danger" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+        </div>
+        
         <div class="row justify-content-center align-items-center">
           <div class="col-md-12">
             <div class="card">
@@ -87,7 +166,7 @@
           </div>
         </div>
       </form>
-      <div id="modalEliminar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="modalCrearEvento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -96,7 +175,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form th:action="@{/reservarAreaComun}" method="post">
+            <form th:action="@{/reservaciones/reserva-area/crear}" method="post">
               <div class="modal-body">
                 <input type="hidden" name="start">
                 <input type="hidden" name="end">
@@ -107,13 +186,38 @@
                 <p></p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
-                <button type="submit" class="btn btn-rounded btn-success waves-effect waves-light" th:text="#{boton.crear.evento}"></button>
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                <button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.crear.evento}"></button>
               </div>
             </form>
           </div>
         </div>
       </div>
+      
+      <div id="modalEliminarEvento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel"></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form th:action="@{/reservaciones/reserva-area/eliminar}" method="post">
+              <div class="modal-body">
+                <input type="hidden" name="id">
+                <input type="hidden" name="title">
+                <p></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                <button type="submit" class="btn btn-danger waves-effect" th:text="#{boton.eliminar}"></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 </body>

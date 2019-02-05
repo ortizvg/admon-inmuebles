@@ -19,13 +19,6 @@
       modal.modal("show");
     });
     
-    $("#filtroInputId").on("keyup", function() {
-	    var inputValue = $(this).val().toLowerCase();
-	    $("#areasComunesTableId tbody tr ").filter(function() {
-	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
-	    });
-	});
-    
   });
   /*]]>*/
 </script>
@@ -49,14 +42,18 @@
         		<div class="col-4">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 			  	</div>
+			  	<div class="col-1 ml-auto">
+                      <a th:href="@{/catalogos/area-comun-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.crear}"></a>
+			  	</div>
 			 </div>
 			 
               <div class="table-responsive">
-                <table id="areasComunesTableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
                   <thead>
                     <tr>
                       <th th:text="#{areacomun.inmueble}"></th>
                       <th th:text="#{areacomun.nombre}"></th>
+                      <th th:text="#{areacomun.cuotapordia}"></th>
                       <th th:text="#{areacomun.descripcion}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
@@ -66,6 +63,7 @@
                       <tr>
                         <td th:text="${areaComun.inmuebleNombre}"></td>
                         <td th:text="${areaComun.nombre}"></td>
+                        <td th:text="${areaComun.cuotaPorDia}"></td>
                         <td th:text="${areaComun.descripcion}"></td>
                         <td><a th:href="${'/catalogos/area-comun-editar/'  + areaComun.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10"
                             aria-hidden="true"></i></a> <a th:attr="data-id=${areaComun.id}" th:attrappend="data-nombre=${areaComun.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"><i
@@ -73,11 +71,8 @@
                       </tr>
                     </th:block>
                   </tbody>
-                  <tfoot>
+                  <tfoot th:if="${#lists.size(areasComunes) > 20}">
                     <tr>
-                     <td colspan="2">
-                           <a th:href="@{/catalogos/area-comun-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.crear}"></a>
-                      </td>
                       <td colspan="6">
                         <div class="text-right">
                           <ul class="pagination">
@@ -102,8 +97,8 @@
                             <p></p>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-rounded btn-info waves-effect" data-dismiss="modal"  th:text="#{boton.cerrar}"></button>
-                            <a href="/#" class="btn btn-rounded btn-danger waves-effect"></a>
+                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal"  th:text="#{boton.cerrar}"></button>
+                            <a href="/#" class="btn btn-danger waves-effect"></a>
                           </div>
                         </div>
                       </div>

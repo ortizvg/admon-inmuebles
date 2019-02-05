@@ -84,7 +84,7 @@ public class TicketController {
 		}
 		return tickets;
 	}
-
+ 
 	@PreAuthorize("hasAuthority('ABRIR_TICKET')")
 	@GetMapping(value = "/ticket-crear")
 	public String ticketCrear(final TicketDto ticketDto, final HttpSession session) {
@@ -117,7 +117,7 @@ public class TicketController {
 				redirect.addFlashAttribute("messageType","");
 				return showPageFail;
 			}
-			ticketDto.setFechaCreacion(LocalDate.now());
+      ticketDto.setFechaCreacion(LocalDate.now());
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
 			ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
 			ticketDto.setTitulo(file.getOriginalFilename());
@@ -144,7 +144,7 @@ public class TicketController {
 		String vista;
 		TicketDto ticketDto = ticketService.findById(id);
 		model.addAttribute("ticketDto", ticketDto);
-		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI) || request.isUserInRole(RolConst.ROLE_REP_BI)) {
+		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			vista = "ticket/ticket-detalle";
 		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR)) {
 			vista = "ticket/ticket-aceptar";
@@ -208,9 +208,9 @@ public class TicketController {
 	}
 	
 	
-	@GetMapping(value="/ticket-download")
-	public ResponseEntity<ByteArrayResource> downloadFile() {
-	    TicketDto ticketDto = ticketService.findById(1L);
+	@GetMapping(value="/ticket-download/{id}")
+	public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable Long id) {
+	    TicketDto ticketDto = ticketService.findById(id);
 	    String strMediaType = servletContext.getMimeType(ticketDto.getTitulo());
 	    MediaType mediaType = MediaType.parseMediaType(strMediaType);
 	    ByteArrayResource resource = new ByteArrayResource(ticketDto.getArchivoEvidencia());

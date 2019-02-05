@@ -24,6 +24,7 @@ import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.ColoniaService;
+import mx.com.admoninmuebles.service.ContadorService;
 import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.UsuarioService;
 import mx.com.admoninmuebles.service.ZonaService;
@@ -39,6 +40,8 @@ public class InmuebleController {
     private ColoniaService coloniaService;
     @Autowired
     private ZonaService zonaService;
+    @Autowired
+    private ContadorService contadorService;
 
     @Autowired
     private InmuebleService inmuebleService;
@@ -48,6 +51,7 @@ public class InmuebleController {
     public String init(final InmuebleDto inmuebleDto, final Model model, final HttpServletRequest request) {
         Optional<Long> optUsuarioId = SecurityUtils.getCurrentUserId();
         Collection<ZonaDto> zonas = Collections.emptyList();
+        model.addAttribute("inmuebles", Collections.emptyList());
         if (optUsuarioId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
                 zonas = zonaService.findAll();
@@ -79,6 +83,11 @@ public class InmuebleController {
             }
 
         }
+        
+//        if( inmuebleDto == null ) {
+//        	model.addAttribute("inmuebleDto", new InmuebleDto());
+//        }
+//        
 
         return "inmuebles/inmuebles";
     }
@@ -109,6 +118,7 @@ public class InmuebleController {
             }
             model.addAttribute("administradoresBi", usuarioService.findAdministradoresBiByZonaCodigo(zonaCodigo));
         }
+        model.addAttribute("contadores", contadorService.buscarTodos());
         model.addAttribute("zonas", zonas);
 
         return "inmuebles/inmueble-crear";
@@ -155,6 +165,7 @@ public class InmuebleController {
         model.addAttribute("colonias", colonias);
         model.addAttribute("administradoresBi", usuarioService.findAdministradoresBiByZonaCodigo(zonaCodigo));
         model.addAttribute("zonas", zonas);
+        model.addAttribute("contadores", contadorService.buscarTodos());
         return "inmuebles/inmueble-editar";
     }
 

@@ -51,7 +51,7 @@ public class RolServiceImpl implements RolService {
 	@Override
 	public Collection<RolDto> getRolesSociosRepresentantes() {
 		 return StreamSupport.stream(rolRepository.findAll().spliterator(), false)
-				 .filter(rol -> ( RolConst.ROLE_SOCIO_BI.equals(rol.getNombre()) || RolConst.ROLE_REP_BI.equals(rol.getNombre()) )) 
+				 .filter(rol -> ( RolConst.ROLE_SOCIO_BI.equals(rol.getNombre())  )) 
 				 .map(rol -> modelMapper.map(rol, RolDto.class))
 				 .collect(Collectors.toList());
 	}
@@ -59,7 +59,7 @@ public class RolServiceImpl implements RolService {
 	@Override
 	public Collection<RolDto> getRolesAdministradores() {
 		 return StreamSupport.stream(rolRepository.findAll().spliterator(), false)
-				 .filter(rol -> ( RolConst.ROLE_ADMIN_BI.equals( rol.getNombre() ) || RolConst.ROLE_ADMIN_ZONA.equals( rol.getNombre() ) || RolConst.ROLE_ADMIN_CORP.equals( rol.getNombre() ) ) ) 
+				 .filter(rol -> RolConst.ROLE_CONTADOR.equals( rol.getNombre()) || ( RolConst.ROLE_ADMIN_BI.equals( rol.getNombre() ) || RolConst.ROLE_ADMIN_ZONA.equals( rol.getNombre() ) || RolConst.ROLE_ADMIN_CORP.equals( rol.getNombre() ) ) ) 
 				 .map(rol -> modelMapper.map(rol, RolDto.class))
 				 .collect(Collectors.toList());
 	}

@@ -76,8 +76,8 @@
               </div>
               <div class="modal-footer">
                 <button type="submit" th:unless="*{usuarioAsignadoId}" class="btn btn-info-gesco" th:text="#{boton.asignar}"></button>
-                <a th:if="*{estatus=='ACEPTADO'}" th:href="*{'/ticket-terminar/' + id}" class="btn btn-success btn-rounded" th:text="#{boton.terminar}"></a>
-                <a th:href="@{/tickets}" class="btn btn-danger" th:text="#{boton.cerrar}"></a>
+                <a th:if="*{estatus=='ACEPTADO'}" th:href="*{'/ticket-terminar/' + id}" class="btn btn-success" th:text="#{boton.terminar}"></a>
+                <a th:href="@{/tickets}" class="btn btn-secondary" th:text="#{boton.cerrar}"></a>
               </div>
             </div>
           </form>

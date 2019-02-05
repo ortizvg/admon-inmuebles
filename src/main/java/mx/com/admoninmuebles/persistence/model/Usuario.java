@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -16,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -58,7 +60,17 @@ public class Usuario extends EntidadBase {
     @Size(max = 100)
     @Column(length = 100)
     private String correo;
+    
+    @Email
+    @Size(max = 100)
+    @Column(length = 100)
+    private String correoAlternativo1;
 
+    @Email
+    @Size(max = 100)
+    @Column(length = 100)
+    private String correoAlternativo2;
+    
     @Size(max = 15)
     @Column(length = 15)
     private String telefonoFijo;
@@ -106,13 +118,21 @@ public class Usuario extends EntidadBase {
 
     private boolean activo = true;
 
-    private String identificador;
-
-    private String contrasenia;
+    private String cuentaPagoSocio;
+    
+    @Digits(integer = 7, fraction = 2)
+    @Column(precision = 7, scale = 2)
+    private BigDecimal coutaMensualPagoSocio;
 
     @Size(max = 256)
     @Column(length = 256)
     private String datosDomicilio;
+    
+    private String identificador;
+
+    private String contrasenia;
+    
+    private String referenciaPagoSocio;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Collection<Rol> roles;
@@ -124,6 +144,10 @@ public class Usuario extends EntidadBase {
     @OneToOne
     @JoinColumn(name = "id_direccion_fk", nullable = true)
     private Direccion direccion;
+    
+    @OneToOne
+    @JoinColumn(name = "id_tipo_socio_fk", nullable = true)
+    private TipoSocio tipoSocio;
 
     @OneToOne(cascade = CascadeType.MERGE, mappedBy = "usuario")
     private RecuperacionContraseniaToken recuperacionContraseniaToken;
@@ -141,6 +165,9 @@ public class Usuario extends EntidadBase {
     @JoinTable(name = "usuarios_areas_servicios", joinColumns = @JoinColumn(name = "id_proveedor_fk", referencedColumnName = "id_usuario"),
                inverseJoinColumns = @JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio"))
     private Collection<AreaServicio> areasServicio = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private Collection<Pago> pagos;
 
     public void addAreaServicio(final AreaServicio areaServicio) {
         areasServicio.add(areaServicio);

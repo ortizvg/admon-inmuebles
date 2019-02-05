@@ -1,127 +1,118 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout.html}"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{home.title}"></title>
+<title th:text="#{tipopago.titulo}"></title>
 <script th:inline="javascript">
-	
+  /*<![CDATA[*/
+  $(document).ready(function() {
+    $('.modal-show').click(function(event) {
+      event.preventDefault();
+      var id = $(this).data('id')
+      var userId = $('#userId').val()
+      var nombre = $(this).data('nombre')
+
+      var modal = $("#modalEliminar")
+      var mensaje = /*[[#{tipopago.modal.mensaje.eliminar}]]*/
+      modal.find('.modal-title').text(/*[[#{modal.eliminar.encabezado}]]*/)
+      modal.find('.modal-body p').text(mensaje.format(nombre))
+      modal.find('.modal-footer a').attr('href', '/catalogos/tipos-pago/' + id + '/eliminar?user=' + userId).text(/*[[#{boton.eliminar}]]*/)
+      modal.modal("show");
+    });
+    
+  });
+  /*]]>*/
 </script>
 </head>
 <body>
-	<div layout:fragment="content">
-	<div class="container-fluid">
-		 <div class="row page-titles">
-                    <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0">Tipo Pago</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Catalogos</a></li>
-                            <li class="breadcrumb-item active">Tipo Pago</li>
-                        </ol>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Tipo Pago</h4>
-                                <h6 class="card-subtitle">Catálogo de Tipo Pago</h6>
-                                <div class="table-responsive">
-                                    <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="10">
-                                        <thead>
-                                            <tr>
-                                                <th>ID #</th>
-                                                <th>nombre</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        	<th:block th:each="tipoPago : ${tiposPago}">
-	                                            <tr>
-	                                                <td th:text="${tipoPago.idTipoPago}"></td>
-	                                                <td th:text="${tipoPago.nombre}"></td>
-	             
-	                                                <td>
-<!-- 	                                                    <button type="button" class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="modal" data-target=".bs-example-modal-sm" data-original-title="Eliminar"><i class="fa fa-close text-danger" aria-hidden="true"></i></button> -->
-	                                                	<a th:href="${'/catalogos/tipo-pago-editar/'  + tipoPago.idTipoPago}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
-	                                                	<a th:href="${'/catalogos/tipo-pago-eliminar/'  + tipoPago.idTipoPago}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a>
-	                                                </td>
-	                                            </tr>
-                                             </th:block>
-                                           
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <button type="button" class="btn btn-info-gesco waves-effect" data-toggle="modal" data-target="#add-contact">Nuevo Tipo de Pago</button>
-                                                </td>
-                                                
-                                                <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-				                                    <div class="modal-dialog modal-sm">
-				                                        <div class="modal-content">
-				                                            <div class="modal-header">
-				                                                <h4 class="modal-title" id="mySmallModalLabel">¿Eliminar Tipo de Pago?</h4>
-				                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				                                            </div>
-				                                            <div class="modal-footer">
-				                                                <button type="button" class="btn btn-danger waves-effect waves-light">Si</button>
-				                                            </div>
-				                                        </div>
-				                                        <!-- /.modal-content -->
-				                                    </div>
-				                                    <!-- /.modal-dialog -->
-				                                </div>
-                                                
-                                                <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="myModalLabel">Crear nuevo Tipo de Pago</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                            </div>
-                                                            <form name="crearTipoPagoForm" action="#" th:action="@{/catalogos/tipo-pago}" th:object="${tipoPagoDto}" method="post">
-	                                                            <div class="modal-body">
-	                                                                <from class="form-horizontal form-material">
-	                                                                    <div class="form-group">
-	                                                                        <div class="col-md-12 m-b-20">
-	                                                                            <input name="nombre" type="text" class="form-control" placeholder="Nombre"   th:field="*{nombre}" required="required"/> 
-	                                                                        </div>
-	                                                                    </div>
-	                                                                </from>
-	                                                            </div>
-	                                                            <div class="modal-footer">
-	                                                                <button type="submit" class="btn btn-info waves-effect" >Guardar</button>
-	                                                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancelar</button>
-	                                                            </div>
-                                                            </form>
-                                                        </div>
-                                                        <!-- /.modal-content -->
-                                                    </div>
-                                                    <!-- /.modal-dialog -->
-                                                </div>
-                                                <td colspan="6">
-                                                    <div class="text-right">
-                                                        <ul class="pagination"> </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{tipopago.titulo}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{tipopago.titulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{tipopago.subtitulo}"></h6>
+
+			<div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
+			  	</div>
+			  	<div class="col-1 ml-auto">
+                     <a th:href="@{/catalogos/tipos-pago/crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.crear}"></a>
+			  	</div>
+			 </div>
+			 <input type="hidden" id="userId" th:value="${#authentication.principal.usuario.id}"/>
+			 
+              <div class="table-responsive">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                  <thead>
+                    <tr>
+                      <th th:text="#{tabla.id}"></th>
+                      <th th:text="#{tipopago.nombre}"></th>
+                      <th th:text="#{tipopago.descripcion}"></th>
+                      <th th:text="#{tipopago.lenguaje}"></th>
+                      <th th:text="#{tabla.accion}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="tipoPago : ${tiposPago}">
+                      <tr>
+                        <td th:text="${tipoPago.id}"></td>
+                        <td th:text="${tipoPago.name}"></td>
+                        <td th:text="${tipoPago.descripction}"></td>
+                        <td th:text="${tipoPago.lang}"></td>
+                        <td>
+                          <a th:href="${'/catalogos/tipos-pago/'  + tipoPago.id + '/editar'}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
+                          <a th:attr="data-id=''+${tipoPago.id}+'', data-nombre=''+${tipoPago.name}+''" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"><i class="fa fa-close text-danger"
+                            aria-hidden="true"></i></a></td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot th:if="${#lists.size(tiposPago) > 20}">
+                    <tr>
+                      <td colspan="4">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
                         </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div class="col-md-4">
+                  <div class="card card-body">
+                    <div id="modalEliminar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel"></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p></p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
+                            <a href="/#" class="btn btn-danger waves-effect"></a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                </div>
-	</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
-

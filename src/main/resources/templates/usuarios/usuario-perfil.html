@@ -91,8 +91,7 @@ function cambiarContrasenia(){
                     <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card"> 
                         	<img sec:authorize="hasAnyRole('ROLE_SOCIO_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_SOCIO.jpg}">
-                        	<img sec:authorize="hasAnyRole('ROLE_REP_BI', 'ROLE_PROVEEDOR')" class="card-img" th:src="@{/images/usuarios/FONDO_REPRESENTANTE.jpg}">
-                        	<img sec:authorize="hasAnyRole('ADMIN_ZONA', 'ADMIN_BI')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
+                        	<img sec:authorize="hasAnyRole('ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINISTRADOR_ZONA_BI.jpg}">
                         	<img sec:authorize="hasAnyRole('ADMIN_CORP')" class="card-img" th:src="@{/images/usuarios/FONDO_ADMINITRADOR_CORPORATIVO.jpg}">
                             <div class="card-img-overlay card-inverse  social-profile d-flex justify-content-center">
                                 <div class="align-self-center "> 
@@ -109,29 +108,29 @@ function cambiarContrasenia(){
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body"> 
-<!--                             	<small class="text-muted" th:text="#{usuario.correo}"></small> -->
-<!--                                 <h6 th:text="${usuarioDto.correo}"></h6>  -->
-<!--                                 <small class="text-muted p-t-30 db" th:text="#{usuario.telefonomovil}"></small> -->
-<!--                                 <h6 th:text="${usuarioDto.telefonoMovil}"></h6>  -->
-                                <small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps}"></small>
-	                                <div class="map-box">
-                                		<iframe th:src="${usuarioDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
-                                </div> <small class="text-muted p-t-30 db" th:text="#{usuario.redessociales}"></small>
-                                <br/>
-                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.facebook != null && usuarioDto.facebook != ''}" th:href="${usuarioDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a>
-                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.twiter != null && usuarioDto.twiter != ''}" th:href="${usuarioDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a>
-                                <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.youtube != null && usuarioDto.youtube != ''}" th:href="${usuarioDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a>
-                            </div>
-                        </div>
+<!--                         <div class="card"> -->
+<!--                             <div class="card-body">  -->
+<!-- <!--                             	<small class="text-muted" th:text="#{usuario.correo}"></small> --> 
+<!-- <!--                                 <h6 th:text="${usuarioDto.correo}"></h6>  --> 
+<!-- <!--                                 <small class="text-muted p-t-30 db" th:text="#{usuario.telefonomovil}"></small> --> 
+<!-- <!--                                 <h6 th:text="${usuarioDto.telefonoMovil}"></h6>  --> 
+<!--                                 <small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps}"></small> -->
+<!-- 	                                <div class="map-box"> -->
+<!--                                 		<iframe th:src="${usuarioDto.googleMapsDir}" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe> -->
+<!--                                 </div> <small class="text-muted p-t-30 db" th:text="#{usuario.redessociales}"></small> -->
+<!--                                 <br/> -->
+<!--                                 <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.facebook != null && usuarioDto.facebook != ''}" th:href="${usuarioDto.facebook}" class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></a> -->
+<!--                                 <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.twiter != null && usuarioDto.twiter != ''}" th:href="${usuarioDto.twiter}" class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></a> -->
+<!--                                 <a target="_blank" rel="noopener noreferrer" th:if="${usuarioDto.youtube != null && usuarioDto.youtube != ''}" th:href="${usuarioDto.youtube}" class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></a> -->
+<!--                             </div> -->
+<!--                         </div> -->
                     </div>
                     <!-- Column -->
                     <!-- Column -->
                     <div class="col-lg-8 col-xlg-9 col-md-7">
                         <div class="card">
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'REP_BI', 'PROVEEDOR')">
+                            <ul class="nav nav-tabs profile-tab" role="tablist" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'PROVEEDOR', 'CONTADOR')">
                                 <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#perfil" role="tab"  th:text="#{usuario.perfil.detalle}"></a> </li>
                                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#editar" role="tab" th:text="#{usuario.perfil.editar}"></a> </li>
                                  <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#cambio-contrasenia" role="tab" th:text="#{usuario.perfil.contrasenia.cambio}"></a> </li>
@@ -146,65 +145,66 @@ function cambiarContrasenia(){
                                 <div class="tab-pane active" id="perfil" role="tabpanel">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.usuario}" ></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.usuario}" ></strong>
                                                 <br>
                                                 <p class="text-muted" th:text="${usuarioDto.username}"></p>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.nombre} + ' ' + ${usuarioDto.apellidoPaterno} + ' ' + ${usuarioDto.apellidoMaterno}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.correo}"></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.correo}"></strong>
                                                 <br>
                                                 <p class="text-muted" th:text="${usuarioDto.correo}"></p>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.nombre}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.nombre} + ' ' + ${usuarioDto.apellidoPaterno} + ' ' + ${usuarioDto.apellidoMaterno}"></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="row m-t-20">
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
+                                                <br>
+                                                <th:block th:each="rol : ${usuarioDto.roles}" sec:authorize="!hasRole('ROLE_SOCIO_BI')">
+                                                	 <p class="text-muted" th:text="${rol.descripcion}"></p>
+                                                </th:block>
+                                                <p sec:authorize="hasRole('ROLE_SOCIO_BI')" class="text-muted" th:text="${usuarioDto.tipoSocioDescription}"></p>
+                                            </div>
+                                        	 <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p>
+                                            </div>
+                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
+                                                <br>
+                                                <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p>
+                                            </div>
+<!--                                              <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.youtube}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.youtube}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.facebook}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.facebook}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.twiter}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.twiter}"></p> -->
+<!--                                             </div> -->
+                                        </div>
+                                        <div class="row m-t-20">
+                                        <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.estatus}"></strong>
                                                 <br>
                                                  <div th:switch="${usuarioDto.activo}"> 
                                                   <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p>
                                                   <p th:case="${false}" class="text-muted" th:text="#{usuario.estatus.inactivo}"></p>
 												 </div>
                                             </div>
-
-                                        </div>
-                                        <div class="row m-t-20">
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.rol}"></strong>
-                                                <br>
-                                                <th:block th:each="rol : ${usuarioDto.roles}">
-                                                	 <p class="text-muted" th:text="${rol.descripcion}"></p>
-                                                </th:block>
-                                            </div>
-                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.youtube}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.youtube}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.facebook}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.facebook}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.twiter}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.twiter}"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row m-t-20">
                                         
-                                        	 <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoFijo}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoAlternativo}"></p>
-                                            </div>
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.fijo}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoFijo}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.alternativo}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoAlternativo}"></p> -->
+<!--                                             </div> -->
       
                                            
                                         </div>
@@ -258,55 +258,55 @@ function cambiarContrasenia(){
                                                     <input type="text" class="form-control" th:field="*{apellidoMaterno}" maxlength="100">  
                                                 </div>
                                             </div>
-                                             <div class="form-group">
-                                                <label for="example-email" th:text="#{usuario.facebook}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{facebook}" maxlength="100">  
-                                                </div>
-                                            </div>
-                                             <div class="form-group">
-                                                <label for="example-email" th:text="#{usuario.twiter}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{twiter}" maxlength="100">  
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="example-email" th:text="#{usuario.youtube}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{youtube}"maxlength="100" >  
-                                                </div>
-                                            </div>
-                                             <div class="form-group">
-                                                <label for="example-email" th:text="#{usuario.googlemaps}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{googleMapsDir}" maxlength="1000">  
-                                                     <a  target="_blank"  th:href="@{/informacion/mapa-google}"><small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps.tutorial}"> </small></a>
-                                                </div>
-                                            </div>
+<!--                                              <div class="form-group"> -->
+<!--                                                 <label for="example-email" th:text="#{usuario.facebook}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{facebook}" maxlength="100">   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
+<!--                                              <div class="form-group"> -->
+<!--                                                 <label for="example-email" th:text="#{usuario.twiter}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{twiter}" maxlength="100">   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
+<!--                                             <div class="form-group"> -->
+<!--                                                 <label for="example-email" th:text="#{usuario.youtube}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{youtube}"maxlength="100" >   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
+<!--                                              <div class="form-group"> -->
+<!--                                                 <label for="example-email" th:text="#{usuario.googlemaps}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{googleMapsDir}" maxlength="1000">   -->
+<!--                                                      <a  target="_blank"  th:href="@{/informacion/mapa-google}"><small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps.tutorial}"> </small></a> -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
                                             <div class="form-group">
                                                 <label for="example-telefono-movil" th:text="#{usuario.telefono.movil}" class="col-md-12"></label>
                                                 <div class="col-md-12">
                                                     <input type="text" class="form-control" th:field="*{telefonoMovil}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="example-telefono-fijo" th:text="#{usuario.telefono.fijo}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{telefonoFijo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
-                                                </div>
-                                            </div>
+<!--                                             <div class="form-group"> -->
+<!--                                                 <label for="example-telefono-fijo" th:text="#{usuario.telefono.fijo}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{telefonoFijo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
                                             <div class="form-group">
                                                 <label for="example-telefono-oficina" th:text="#{usuario.telefono.oficina}" class="col-md-12"></label>
                                                 <div class="col-md-12">
                                                     <input type="text" class="form-control" th:field="*{telefonoOficina}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="example-telefono-alternativo" th:text="#{usuario.telefono.alternativo}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{telefonoAlternativo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
-                                                </div>
-                                            </div>
+<!--                                             <div class="form-group"> -->
+<!--                                                 <label for="example-telefono-alternativo" th:text="#{usuario.telefono.alternativo}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{telefonoAlternativo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
                                             <div id="divImagen" class="col-md-4" th:classappend="${#fields.hasErrors('imagen')}? 'form-group has-danger':'form-group'">
 							                  <label class="form-control-label" th:text="#{usuario.imagen}"></label>
 							                  <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" th:title="#{mensaje.imagen.validacion}">

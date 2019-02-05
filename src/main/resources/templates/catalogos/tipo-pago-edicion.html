@@ -1,60 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout.html}"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{home.title}"></title>
+<title th:text="#{tipopago.editar.titulo}"></title>
 <script th:inline="javascript">
-	
+/*<![CDATA[*/
+$(document).ready(function() {
+	addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divDescripcion'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divLang'),/*[[#{campo.requerido}]]*/);
+});
+/*]]>*/
 </script>
 </head>
 <body>
 	<div layout:fragment="content">
-	<div class="container-fluid">
-		 <div class="row page-titles">
-                  <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0">Tipo Pago</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Catalogos</a></li>
-                            <li class="breadcrumb-item active">Tipo Pago</li>
-                        </ol>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Tipo Pago</h4>
-                                <h6 class="card-subtitle">Catálogo de Tipo Pago</h6>
-     							<form name="editarTipoPagoForm" action="#" th:action="@{/catalogos/tipo-pago}" th:object="${tipoPagoDto}" method="post">
-	                  					<input type="hidden" class="form-control" th:field="*{idTipoPago}"/>
-	                                    <from class="form-horizontal form-material">
-	                                        <div class="form-group">
- 												   <div class="form-group">
-                                                       <div class="col-md-12 m-b-20">
-                                                           <input name="nombre" type="text" class="form-control" placeholder="Nombre"   th:field="*{nombre}" required="required"/> 
-                                                       </div>
-                                                   </div>
-	                                        </div>
-	                                    </from>
-	                           
-	                      
-	                                    <button type="submit" class="btn btn-info waves-effect" >Guardar</button>
-	                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Regresar</button>
-	                       
-                               </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                </div>
+		<div class="container-fluid">
+			<div class="row page-titles">
+				<div class="col-md-6 col-8 align-self-center">
+					<h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{tipopago.editar.titulo}"></h3>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item "><a class="text-gesco-secundario" th:href="@{/catalogos/tipos-pago}" th:text="#{tipopago.titulo}"></a></li>
+						<li class="breadcrumb-item active" th:text="#{tipopago.editar.titulo}"></li>
+					</ol>
+				</div>
+			</div>
+			<div class="card ">
+				<div class="card-body">
+					<h3 class="card-title" th:text="#{tipopago.editar.titulo}"></h3>
+					<h6 class="card-subtitle" th:text="#{tipopago.editar.subtitulo}"></h6>
+					<form name="crearZonaForm" action="#" th:action="@{/catalogos/tipos-pago/editar}" th:object="${tipoPagoDto}" method="post">
+						<input type="hidden" class="form-control" th:field="*{id}"/>
+						<div id="divNombre" th:class="${#fields.hasErrors('name')}? 'form-group has-danger':'form-group'">
+							<label class="form-control-label" th:text="#{tipopago.nombre}"></label>
+							<input name="nameId" class="form-control" th:field="*{name}" required maxlength="20" />
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+							</span>
+						</div>
+						<div id="divDescripcion" th:class="${#fields.hasErrors('descripction')}? 'form-group has-danger':'form-group'">
+							<label class="form-control-label" th:text="#{tipopago.descripcion}"></label>
+							<input name="descripction" class="form-control" th:field="*{descripction}" required maxlength="100" />
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('descripction')}" th:errors="*{descripction}"></span>
+							</span>
+						</div>
+						<div id="divLang" th:class="${#fields.hasErrors('lang')}? 'form-group has-danger':'form-group'">
+							<label class="form-control-label" th:text="#{tipopago.lenguaje}"></label>
+							<select name="lang'" class="form-control" th:field="*{lang}" required>
+								<option th:value="${null}" th:text="#{combo.seleccionar}"></option>
+								<option th:value="${'en'}" th:text="#{'English'}"></option>
+								<option th:value="${'es'}" th:text="#{'Español'}"></option>
+							</select>
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('lang')}" th:errors="*{lang}"></span>
+							</span>
+						</div>
+
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-info-gesco"  th:text="#{boton.guardar}"></button>
+							<a th:href="@{/catalogos/tipos-pago}" class="btn btn-secondary " th:text="#{boton.cancelar}"></a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

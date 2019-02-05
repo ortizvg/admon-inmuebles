@@ -7,5 +7,7 @@ import mx.com.admoninmuebles.persistence.model.TipoPagoBancario;
 
 @Repository
 public interface TipoPagoBancarioRepository extends CrudRepository<TipoPagoBancario, Long>  {
-
+	
+	TipoPagoBancario findByNameAndLang(final String name, final String lang);
+	
 }

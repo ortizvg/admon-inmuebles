@@ -1,17 +1,15 @@
 package mx.com.admoninmuebles.dto;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.persistence.Column;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import lombok.Data;
 
@@ -38,6 +36,14 @@ public class UsuarioDto {
     @Email
     @Size(max = 100)
     private String correo;
+    
+//    @Email
+    @Size(max = 100)
+    private String correoAlternativo1;
+
+    @Email
+    @Size(max = 100)
+    private String correoAlternativo2;
 
     @Size(max = 15)
     private String telefonoFijo;
@@ -78,6 +84,13 @@ public class UsuarioDto {
 
     private String contrasenia;
     
+    private String referenciaPagoSocio;
+    
+    private String cuentaPagoSocio;
+    
+    @Digits(integer = 7, fraction = 2)
+    private BigDecimal coutaMensualPagoSocio;
+    
     private String datosDomicilio;
     
     private MultipartFile imagen;
@@ -91,6 +104,14 @@ public class UsuarioDto {
     private String inmuebleNombre;
     private Long inmuebleDireccionAsentamientoId;
     private String inmuebleDireccionAsentamientoZonaCodigo;
+    
+    private Long tipoPagoId;
+    private String tipoPagoName;
+    private String tipoPagoDescription;
+    
+    private Long tipoSocioId;
+    private String tipoSocioName;
+    private String tipoSocioDescripction;
     
 
     public String getNombreCompleto() {

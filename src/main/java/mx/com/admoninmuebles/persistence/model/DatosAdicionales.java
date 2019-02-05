@@ -33,7 +33,6 @@ public class DatosAdicionales extends EntidadBase {
     @Column(length = 200, nullable = true)
     private String razonSocial;
 
-    @NotNull
     @Size(max = 13)
     @Column(length = 13, nullable = true)
     private String rfc;

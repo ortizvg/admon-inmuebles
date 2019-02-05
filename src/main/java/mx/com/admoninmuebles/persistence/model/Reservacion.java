@@ -1,6 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,9 +34,9 @@ public class Reservacion extends EntidadBase {
     @Column(length = 50, nullable = false)
     private String title;
 
-    private LocalDate start;
+    private LocalDateTime start;
 
-    private LocalDate end;
+    private LocalDateTime end;
 
     @ManyToOne
     @JoinColumn(name = "id_area_comun_fk")
@@ -44,5 +45,9 @@ public class Reservacion extends EntidadBase {
     @ManyToOne
     @JoinColumn(name = "id_socio_fk")
     private Usuario socio;
+    
+    @OneToOne
+    @JoinColumn(name = "id_pago_fk")
+    private Pago pago;
 
 }

@@ -112,6 +112,17 @@ public class InmuebleServiceImpl implements InmuebleService {
 				 
 		return StreamSupport.stream(socios.spliterator(), false).map(socio -> modelMapper.map(socio, UsuarioDto.class)).collect(Collectors.toList());
 	}
+	
+	@Override
+	public Collection<UsuarioDto> findSociosActivosByInmuebleId(Long id) {
+		Inmueble inmueble = inmuebleRepository.findById(id).get();
+		
+		Collection<Usuario> socios =  inmueble.getSocios().stream()
+				 .filter(socio -> ( RolConst.ROLE_SOCIO_BI.equals(socio.getRoles().stream().findFirst().get().getNombre() ) && socio.isActivo() ) )
+				 .collect(Collectors.toList());
+				 
+		return StreamSupport.stream(socios.spliterator(), false).map(socio -> modelMapper.map(socio, UsuarioDto.class)).collect(Collectors.toList());
+	}
 
 	@Override
 	public Collection<TicketDto> findTicketsByInmuebleId(Long id) {
@@ -132,6 +143,11 @@ public class InmuebleServiceImpl implements InmuebleService {
     public Collection<InmuebleDto> findBySociosId(final Long id) {
     	 return StreamSupport.stream(inmuebleRepository.findBySociosId(id).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
     }
+    
+    @Override
+    public InmuebleDto findBySocioId(final Long id) {
+    	 return  modelMapper.map( inmuebleRepository.findBySocioId( id ), InmuebleDto.class );
+    }
 
     @Transactional
 	@Override
@@ -140,6 +156,18 @@ public class InmuebleServiceImpl implements InmuebleService {
 		Usuario socio = usuarioRepository.findById(usuarioDto.getId()).get();
 		inmueble.addSocio(socio);
 		inmuebleRepository.save(inmueble);
+	}
+
+	@Override
+	public Collection<InmuebleDto> findByZonaCodigo(String codigo) {
+		return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoZonaCodigo(codigo).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<InmuebleDto> findByContadorId(Long id) {
+		return StreamSupport.stream(inmuebleRepository.findByContadorId(id).spliterator(), false)
+				.map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+				.collect(Collectors.toList());
 	}
 
 }

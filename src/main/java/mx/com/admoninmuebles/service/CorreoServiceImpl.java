@@ -2,12 +2,15 @@ package mx.com.admoninmuebles.service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 
 import mx.com.admoninmuebles.dto.CorreoDto;
@@ -21,12 +24,12 @@ public class CorreoServiceImpl implements CorreoService{
 	
 	@Autowired
 	private TemplateEngine templateEngine;
- 
+	
 	@Override
 	public void enviarCorreo(CorreoDto correoDto) {
 		MimeMessage message = sender.createMimeMessage();
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
-	
+	    
 	    try {
 	    	String plantilla = templateEngine.process(correoDto.getPlantilla(), correoDto.getDatosPlantilla());
 	    	helper.setFrom(correoDto.getDe());

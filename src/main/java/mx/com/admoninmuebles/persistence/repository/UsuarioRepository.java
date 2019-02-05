@@ -23,6 +23,8 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     Optional<Usuario> findByCorreo(String correo);
 
     Collection<Usuario> findByRolesNombre(String nombre);
+    
+    Collection<Usuario> findByRolesNombreAndActivo(String nombre, boolean activo);
 
     Collection<Usuario> findByRolesNombreAndAreasServicioId(String nombre, Long id);
     

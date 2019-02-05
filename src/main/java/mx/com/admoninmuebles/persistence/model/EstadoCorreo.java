@@ -1,7 +1,5 @@
 package mx.com.admoninmuebles.persistence.model;
 
-import java.util.Collection;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,11 +29,11 @@ public class EstadoCorreo {
     private String nombre;
     
     @Size(min = 0, max = 100)
-    @Column(length = 100)
+    @Column(name = "correo_principal", length = 100)
     private String correoPrincipal;
     
     @Size(min = 0, max = 100)
-    @Column(length = 100)
+    @Column(name = "correo_secundario", length = 100)
     private String correoSecundario;
 
 }

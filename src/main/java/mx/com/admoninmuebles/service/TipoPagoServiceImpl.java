@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.dto.TipoPagoDto;
+import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.TipoPago;
 import mx.com.admoninmuebles.persistence.repository.TipoPagoRepository;
 
@@ -42,8 +43,19 @@ public class TipoPagoServiceImpl implements TipoPagoService {
 
 	@Override
 	public void deleteById(Long idTipoPago) {
+		Optional<TipoPago> tipoPago = tipoPagoRepository.findById(idTipoPago);
+		if( !tipoPago.isPresent() ) {
+			throw new BusinessException();
+		}
 		tipoPagoRepository.deleteById(idTipoPago);
 		
+	}
+
+	@Override
+	public Collection<TipoPagoDto> findAllByLang(String lang) {
+		return StreamSupport.stream(tipoPagoRepository.findAllByLang(lang).spliterator(), false)
+				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
+				.collect(Collectors.toList());
 	}
 
 }

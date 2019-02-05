@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -47,6 +46,7 @@ import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.NotificacionService;
 import mx.com.admoninmuebles.service.RolService;
 import mx.com.admoninmuebles.service.SocioService;
+import mx.com.admoninmuebles.service.TipoSocioService;
 import mx.com.admoninmuebles.service.UsuarioService;
 import mx.com.admoninmuebles.service.ZonaService;
 
@@ -85,8 +85,11 @@ public class SocioController {
     @Autowired
     private CargaSocioService cargaSocioService;
     
+    @Autowired
+    private TipoSocioService tipoSocioService;
+    
     @PreAuthorize("hasAnyRole('SOCIO_BI')")
-    @GetMapping(value = "/sociobi")
+    @GetMapping(value = "/condomino")
     public String inicioSocioBi(final Model model, final HttpSession session) {
     	Long socioBiLogueadoId = SecurityUtils.getCurrentUserId().get();
     	UsuarioDto usuarioDto = usuarioService.findById(socioBiLogueadoId);
@@ -102,25 +105,9 @@ public class SocioController {
         return "sociobi/inicio";
     }
     
-    @PreAuthorize("hasAnyRole('REP_BI')")
-    @GetMapping(value = "/repbi")
-    public String inicioRepBi(final Model model) {
-    	Long socioBiLogueadoId = SecurityUtils.getCurrentUserId().get();
-    	UsuarioDto usuarioDto = usuarioService.findById(socioBiLogueadoId);
-    	logger.info("REP NI::::: " + usuarioDto == null ? "NADA" : usuarioDto.toString());
-    	
-//    	InmuebleDto inmuebleDto = inmuebleService.findById(usuarioDto.getInmuebleId());
-    	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(socioBiLogueadoId).stream().findFirst().get();
-    	
-    	model.addAttribute("repDto", usuarioDto);
-        model.addAttribute("inmuebleDto", inmuebleDto);
-        model.addAttribute("socios", inmuebleService.findSociosByInmuebleId(inmuebleDto.getId()));
-        model.addAttribute("tickets", inmuebleService.findTicketsByInmuebleId(inmuebleDto.getId()));
-        return "repbi/inicio";
-    }
 
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-	@GetMapping(value = "/socios")
+	@GetMapping(value = "/condominos")
 	public String init(final Model model, final HttpServletRequest request) {
 		model.addAttribute("socios", socioService.getSocios());
 		
@@ -141,9 +128,10 @@ public class SocioController {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-crear")
-    public String crearSocioInit(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request, final HttpSession session) {
-		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes());
+    @GetMapping(value = "/condomino-crear")
+    public String crearSocioInit(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
+		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes()); 
+		session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
         if (optId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
@@ -160,7 +148,7 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/socio-crear")
+    @PostMapping(value = "/condomino-crear")
     public String crearSocio(final HttpServletRequest request, final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
     	logger.info(usuarioDto.toString());
         if (bindingResult.hasErrors()) {
@@ -171,15 +159,15 @@ public class SocioController {
 	        UsuarioDto socioNuevo = (UsuarioDto) usuarioService.crearCuenta(usuarioDto);
 	        inmuebleService.addSocio2Inmueble(socioNuevo, usuarioDto.getInmuebleId());
 	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(socioNuevo, request.getLocale(), getAppUrl(request)));
-	        return "redirect:/socios";
+	        return "redirect:/condominos";
         }catch(BusinessException e) {
    		 bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
    		 return "socios/socio-crear";
    	 	}
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'REP_BI')")
-    @GetMapping(value = "/socio-detalle/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @GetMapping(value = "/condomino-detalle/{id}")
     public String buscarsocioPorId(final @PathVariable long id, final Model model) {
     	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
     	model.addAttribute("inmuebleDto", inmuebleDto);
@@ -188,8 +176,8 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-editar/{id}")
-    public String editarSocio(final @PathVariable long id, final Model model, final HttpServletRequest request, final HttpSession session) {
+    @GetMapping(value = "/condomino-editar/{id}")
+    public String editarSocio(final @PathVariable long id, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
     	UsuarioDto usuarioDto = usuarioService.findById(id);
     	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
     	usuarioDto.setInmuebleId(inmuebleDto.getId());
@@ -199,7 +187,7 @@ public class SocioController {
     	usuarioDto.setRolSeleccionado( rolesUsuario.get(0) );
         model.addAttribute("usuarioDto", usuarioDto);
         session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes());
-        
+        session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
         Optional<Long> optId = SecurityUtils.getCurrentUserId();
         if (optId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP) || request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
@@ -217,22 +205,22 @@ public class SocioController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/socio-editar")
+    @PostMapping(value = "/condomino-editar")
     public String editarSocio(final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "socios/socio-editar";
         }
 
-        UsuarioDto socio = usuarioService.editarCuenta(usuarioDto);
+        usuarioService.editarCuenta(usuarioDto);
 //        inmuebleService.addSocio2Inmueble(socio, usuarioDto.getInmuebleId());
-        return "redirect:/socios";
+        return "redirect:/condominos";
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-eliminar/{id}")
+    @GetMapping(value = "/condomino-eliminar/{id}")
     public String eliminarSocio(final @PathVariable Long id) {
     	usuarioService.deleteById(id);
-        return "redirect:/socios";
+        return "redirect:/condominos";
     }
     
     private String getAppUrl(HttpServletRequest request) {
@@ -240,11 +228,12 @@ public class SocioController {
     }
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @PostMapping(value = "/socio-masivo-crear")
-    public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model) {
-    	String showPage = "redirect:/socio-carga-masivo";
-    	final String CSV_MIME_TYPE = "text/csv";
-    	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
+    @PostMapping(value = "/condomino-masivo-crear")
+    public String crearSocioMasivo(@RequestParam("file") MultipartFile file, RedirectAttributes redirect, Model model, final HttpServletRequest request) {
+    	String showPage = "redirect:/condomino-carga-masivo";
+//    	final String CSV_MIME_TYPE = "text/csv";
+//    	final String CSV_MS_MIME_TYPE = "application/vnd.ms-excel";
+    	final String CSV_EXTENSION = "csv";
         if (file.isEmpty()) {
         	redirect.addFlashAttribute("messageEmpty","");
             return showPage;
@@ -255,8 +244,25 @@ public class SocioController {
         CargaSocioDto cargaSocio = null;
         try {
         	
-        	String fileType = file.getContentType();
-        	if(!(CSV_MIME_TYPE.contains(fileType) || CSV_MS_MIME_TYPE.contains(fileType))) {
+//            Detector detector = new DefaultDetector();
+//            Metadata metadata = new Metadata();
+//         
+//    		MediaType mediaType = detector.detect(file.getInputStream(), metadata);
+//    		
+//    		logger.info("CONTENT TYPE: " + mediaType.toString());
+        	
+//        	 String strMediaType = servletContext.getMimeType(file.getOriginalFilename());
+//        	 logger.info("CONTENT TYPE: " + strMediaType);
+//        	 
+//        	String fileType = file.getContentType();
+//        	logger.info("CONTENT TYPE: " + fileType);
+//        	if(!(CSV_MIME_TYPE.contains(fileType) || CSV_MS_MIME_TYPE.contains(fileType))) {
+//        		redirect.addFlashAttribute("messageType","");
+//        		return showPage;
+//        	}
+        	
+        	 String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        	if( !( CSV_EXTENSION.equalsIgnoreCase( extension ) ) ) {
         		redirect.addFlashAttribute("messageType","");
         		return showPage;
         	}
@@ -265,9 +271,12 @@ public class SocioController {
         	cargaSocio = cargaSocioService.validaCSVSocios(br);
         	if(cargaSocio!=null && cargaSocio.getListaErrores() !=null && !cargaSocio.getListaErrores().isEmpty()) {
         		model.addAttribute("errores", cargaSocio.getListaErrores());
-        		return showPage.replace("redirect:", "socios");
+//        		return showPage.replace("redirect:", "socios");
+        		 return "socios/socio-carga-masivo";
         	}
-	        return "redirect:/socios";
+        	
+        	cargaSocioService.enviarCorreoMasivo(cargaSocio.getListaSocios(), getAppUrl(request));
+	        return "redirect:/condominos";
         }catch(IOException ie){
         	logger.error("Hubo un prolema al leer el archivo "+ie.getMessage());
         	return showPage;
@@ -277,14 +286,14 @@ public class SocioController {
     }
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
-    @GetMapping(value = "/socio-carga-masivo")
+    @GetMapping(value = "/condomino-carga-masivo")
     public String cargarSocioMasivo(final HttpServletRequest request, final Locale locale, final Model model, @Valid final UsuarioDto usuarioDto, final BindingResult bindingResult) {
     
         try
         {}
         catch(BusinessException e) {
                bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
-               return "redirect:/socios";
+               return "redirect:/condominos";
                } 
         
         return "socios/socio-carga-masivo";
