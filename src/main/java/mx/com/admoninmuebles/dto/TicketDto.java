@@ -1,8 +1,15 @@
 package mx.com.admoninmuebles.dto;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -39,6 +46,12 @@ public class TicketDto {
     private String usuarioAsignadoApellidoPaterno;
     private String usuarioAsignadoApellidoMaterno;
     private byte[] archivoEvidencia;
+    
+    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = ISO.DATE)
+    private LocalDate fechaCreacion;
+    private boolean retraso;
 
     public String getNombreSocio() {
         return String.format("%s %s %s", usuarioCreadorNombre, usuarioCreadorApellidoPaterno, usuarioCreadorApellidoMaterno);

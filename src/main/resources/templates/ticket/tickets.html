@@ -58,6 +58,7 @@
                       <th th:text="#{ticket.nombre}"></th>
                       <th th:text="#{ticket.tipoticket}"></th>
                       <th th:text="#{ticket.estatus}"></th>
+                      <th th:text="#{ticket.fechacreacion}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
                   </thead>
@@ -66,7 +67,21 @@
                       <tr>
                         <td th:text="${ticket.titulo}"></td>
                         <td th:text="${ticket.tipoTicketNombre}"></td>
-                        <td th:text="${ticket.estatus}"></td>
+                        <!-- td th:text="${ticket.estatus}"></td-->
+                        <td>
+                        	<div th:if="${ticket.retraso} and ${ticket.estatus} != 'ATENDIDO'">
+                        	<span class="text-danger" th:text="${ticket.estatus}"></span>
+                        	</div>
+		                	<div th:unless="${ticket.retraso}" th:switch="${ticket.estatus}"> 
+								<span th:case="'ATENDIDO'" class="text-success" th:text="${ticket.estatus}"></span>
+								<span th:case="'ASIGNADO'" class="text-warning" th:text="${ticket.estatus}"></span>
+								<span th:case="'ABIERTO'" class="text-warning" th:text="${ticket.estatus}"></span>
+								<span th:case="'ACEPTADO'" class="text-warning" th:text="${ticket.estatus}"></span>
+								<span th:case="'RECHAZADO'" class="text-danger" th:text="${ticket.estatus}"></span>
+								<span th:case="'CANCELADO'" class="text-danger" th:text="${ticket.estatus}"></span>
+							</div>
+						</td>
+                        <td th:text="${ticket.fechaCreacion}"></td>
                         <td>
                           <a th:href="${'ticket-detalle/'  + ticket.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
                         </td>

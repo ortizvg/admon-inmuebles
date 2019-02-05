@@ -45,6 +45,10 @@ public class InmuebleServiceImpl implements InmuebleService {
         Inmueble inmueble = modelMapper.map(inmuebleDto, Inmueble.class);
         inmueble.setDireccion(direccionRepository.save(inmueble.getDireccion()));
         inmueble.setDatosAdicionales(datosAdicionalesRepository.save(inmueble.getDatosAdicionales()));
+        Optional<Inmueble> inmuebleTmp = inmuebleRepository.findById(inmueble.getId());
+        if(inmuebleTmp.isPresent()) {
+        	inmueble.setSocios(inmuebleTmp.get().getSocios());
+        }
         return inmuebleRepository.save(inmueble);
     }
 

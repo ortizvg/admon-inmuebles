@@ -1,6 +1,9 @@
 package mx.com.admoninmuebles.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -62,16 +65,26 @@ public class TicketController {
 	@GetMapping(value = "/tickets")
 	public String init(final TicketDto ticketDto, final Model model, final HttpServletRequest request) {
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
+		String nombreTicketsSesion = "tickets";
 		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
-			model.addAttribute("tickets", ticketService.findByUsuarioCreadorId(optId.get()));
+			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByUsuarioCreadorId(optId.get())));
 		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR)) {
-			model.addAttribute("tickets", ticketService.findByUsuarioAsignadoId(optId.get()));
+			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByUsuarioAsignadoId(optId.get())));
 		} else {
-			model.addAttribute("tickets", ticketService.findAll());
+			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findAll()));
 		}
 		return "ticket/tickets";
 	}
  
+	private Collection<TicketDto> revisaRetraso(Collection<TicketDto> tickets) {
+		for (TicketDto ticketDto : tickets) {
+			if(!EstatusTicketConst.ATENDIDO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(ticketDto.getFechaCreacion(), LocalDate.now()) > 5) {
+				ticketDto.setRetraso(true);
+			}
+		}
+		return tickets;
+	}
+
 	@PreAuthorize("hasAuthority('ABRIR_TICKET')")
 	@GetMapping(value = "/ticket-crear")
 	public String ticketCrear(final TicketDto ticketDto, final HttpSession session) {
@@ -104,6 +117,7 @@ public class TicketController {
 				redirect.addFlashAttribute("messageType","");
 				return showPageFail;
 			}
+			ticketDto.setFechaCreacion(LocalDate.now());
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
 			ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
 			ticketDto.setTitulo(file.getOriginalFilename());

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -394,10 +395,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
+        	ticket.setFechaCreacion(LocalDate.now());
             ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);
-            //ticket.setAreaServicio(areaServicio);
             ticket.setUsuarioCreador(usuarioCreador);
             ticket.setUsuarioAsignado(usuarioAsignado);
             ticket.setTipoTicket(tipoTicket);
