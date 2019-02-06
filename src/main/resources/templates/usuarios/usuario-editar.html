@@ -21,7 +21,19 @@ $(document).ready(function() {
   addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divApellidoMaterno'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divRol'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divZona'),/*[[#{campo.requerido}]]*/);
+  
+  showAndHideZona();
 });
+
+function showAndHideZona() {
+	var rol = $('#rolId').val();
+	if(rol == 32) {
+		$('#divZona').show();
+	} else {
+		$('#divZona').hide();
+	}
+}
 
 // function reactivarUsuario(){
 // 	$("#mensajeReactivacion").hide();
@@ -134,6 +146,21 @@ $(document).ready(function() {
 									             </span>
 		                                   </div>
 		                                 </div>
+		                                 <div id="divZona"  th:class="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
+	                                		   <div class="col-md-12 m-b-20">
+									              <label class="form-control-label" th:text="#{colonia.zona}"></label>
+									              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}" required >
+									                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+									                <option th:each="zona : ${session.zonasDto}" 
+									                		th:selected="${usuarioDto.zonaSeleccionado}"
+									                		th:value="${zona.codigo}" 
+									                		th:text="|${zona.codigo} -${zona.nombre}|"></option>
+									              </select>
+									              <span class="form-control-feedback">
+									                <span th:if="${#fields.hasErrors('zonaSeleccionado')}" th:errors="*{zonaSeleccionado}"></span>
+									              </span>
+							              	</div>
+							            </div>
 		                                   <div class="col-md-12 m-b-20">
 			                                    <label class="custom-control custom-checkbox">
 	                                                <input id="activo" type="checkbox" class="custom-control-input" th:field="*{activo}">

@@ -16,7 +16,21 @@ $(document).ready(function() {
   addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divApellidoMaterno'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divRol'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divZona'),/*[[#{campo.requerido}]]*/);
+  
+  $('#divZona').hide();
+  
 });
+
+function showAndHideZona() {
+	var rol = $('#rolId').val();
+	if(rol == 32) {
+		$('#divZona').show();
+	} else {
+		$('#divZona').hide();
+	}
+}
+
 /*]]>*/
 </script>
 </head>
@@ -93,7 +107,7 @@ $(document).ready(function() {
 		                                	 <div id="divRol" th:class="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'">
 	                                           <div class="col-md-12 m-b-20">
 		 		                                    <label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label>
-			                                        <select  name="rolId" id="rolId" class="form-control" th:field="*{rolSeleccionado}" required >	
+			                                        <select  name="rolId" id="rolId" class="form-control" th:field="*{rolSeleccionado}" required onchange="showAndHideZona()">	
 			                                        	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 														<option th:each="rol : ${session.rolesDto}" th:value="${{rol.id}}" th:text="${rol.descripcion}"></option>
 			                                        </select>
@@ -102,6 +116,19 @@ $(document).ready(function() {
 										             </span>
 			                                   </div>
 		                                	</div>
+		                                	
+		                                	<div id="divZona"  th:class="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
+		                                		   <div class="col-md-12 m-b-20">
+										              <label class="form-control-label" th:text="#{colonia.zona}"></label>
+										              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}" required >
+										                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+										                <option th:each="zona : ${session.zonasDto}" th:value="${zona.codigo}" th:text="|${zona.codigo} -${zona.nombre}|"></option>
+										              </select>
+										              <span class="form-control-feedback">
+										                <span th:if="${#fields.hasErrors('zonaSeleccionado')}" th:errors="*{zonaSeleccionado}"></span>
+										              </span>
+								              	</div>
+								            </div>
                                            <div class="col-md-12 m-b-20">
 			                                    <button type="submit" class="btn btn-info-gesco waves-effect" th:text="#{boton.guardar}"></button>
 			                                    <a th:href="@{/usuarios}" class="btn btn-secondary waves-effect" th:text="#{boton.cancelar}"></a>

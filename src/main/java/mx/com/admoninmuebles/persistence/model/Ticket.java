@@ -70,8 +70,8 @@ public class Ticket extends EntidadBase {
     private byte[] archivoEvidencia;
     
     @NotNull
-    @Column(name = "fecha_creacion", nullable = false)
-    private LocalDate fechaCreacion;
+    @Column(name = "fecha_creacion_ticket", nullable = false)
+    private LocalDate fechaCreacionTicket;
     
     public void addCambioTicket(final CambioTicket cambioTicket) {
         cambios.add(cambioTicket);

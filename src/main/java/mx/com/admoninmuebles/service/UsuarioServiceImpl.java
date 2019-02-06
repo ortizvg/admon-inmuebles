@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.modelmapper.ModelMapper;
@@ -17,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.controller.SocioController;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
@@ -60,6 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public UsuarioDto crearCuenta(final UsuarioDto userDto) {
         Optional<Usuario> usuarioOptional = userRepository.findByUsername(userDto.getUsername());
@@ -77,6 +79,15 @@ public class UsuarioServiceImpl implements UsuarioService {
         
         if( RolConst.ROLE_SOCIO_BI.equals(usuarioCreado.getRoles().stream().findFirst().get().getNombre() ) ) {
         	usuarioCreado = crearReferenciaCuentaPagoSocios(usuarioCreado, userDto.getInmuebleId());
+        }
+        
+        if( RolConst.ROLE_ADMIN_BI.equals(usuarioCreado.getRoles().stream().findFirst().get().getNombre() ) ) {
+        	Optional<Zona> zonaOpt = zonaRepository.findById(userDto.getZonaSeleccionado());
+        	if( zonaOpt.isPresent() ) {
+        		Zona zona = zonaOpt.get();
+        		zona.addAdminBi(usuarioCreado);
+        		zonaRepository.save(zona);
+        	}
         }
         
         return modelMapper.map(usuarioCreado, UsuarioDto.class);
@@ -164,6 +175,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         Usuario usuarioActualizado = userRepository.save(usuario);
+        
+        if( RolConst.ROLE_ADMIN_BI.equals(usuarioActualizado.getRoles().stream().findFirst().get().getNombre() ) ) {
+        	Optional<Zona> zonaOpt = zonaRepository.findById(userDto.getZonaSeleccionado());
+        	if( zonaOpt.isPresent() && !zonaOpt.get().getCodigo().equals(userDto.getZonaSeleccionado()) ) {
+        		Zona zona = zonaOpt.get();
+        		zona.addAdminBi(usuarioActualizado);
+        		zonaRepository.save(zona);
+        		
+        	}
+        }
+        
         return modelMapper.map(usuarioActualizado, UsuarioDto.class);
     }
 

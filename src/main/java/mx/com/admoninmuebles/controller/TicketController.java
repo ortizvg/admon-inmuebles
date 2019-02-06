@@ -1,6 +1,5 @@
 package mx.com.admoninmuebles.controller;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -78,7 +77,7 @@ public class TicketController {
  
 	private Collection<TicketDto> revisaRetraso(Collection<TicketDto> tickets) {
 		for (TicketDto ticketDto : tickets) {
-			if(!EstatusTicketConst.ATENDIDO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(ticketDto.getFechaCreacion(), LocalDate.now()) > 5) {
+			if(!EstatusTicketConst.ATENDIDO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(ticketDto.getFechaCreacionTicket(), LocalDate.now()) > 5) {
 				ticketDto.setRetraso(true);
 			}
 		}
@@ -117,7 +116,7 @@ public class TicketController {
 				redirect.addFlashAttribute("messageType","");
 				return showPageFail;
 			}
-      ticketDto.setFechaCreacion(LocalDate.now());
+			ticketDto.setFechaCreacionTicket(LocalDate.now());
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
 			ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
 			ticketDto.setTitulo(file.getOriginalFilename());

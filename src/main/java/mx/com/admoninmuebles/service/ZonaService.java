@@ -20,4 +20,6 @@ public interface ZonaService {
 	void deleteById(String codigo);
 
 	boolean exist(String codigo);
+	
+//	ZonaDto findByAdministradorBiId(final Long id);
 }

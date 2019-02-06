@@ -13,5 +13,7 @@ public interface ZonaRepository extends CrudRepository<Zona, String> {
 	Collection<Zona> findByAdminZonaId(Long id);
 	
 	Collection<Zona> findByAdministradoresBiId(Long id);
+	
+//	Zona findByAdministradorBiId(Long id);
 
 }

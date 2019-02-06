@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -419,7 +420,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
-            ticket.setFechaCreacion(LocalDate.now());
+            ticket.setFechaCreacionTicket(LocalDate.now());
             ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);

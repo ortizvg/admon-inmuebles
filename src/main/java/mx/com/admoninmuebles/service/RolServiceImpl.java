@@ -64,4 +64,10 @@ public class RolServiceImpl implements RolService {
 				 .collect(Collectors.toList());
 	}
 
+	@Override
+	public RolDto findById(Long id) {
+		Optional<Rol> rolOpt = rolRepository.findById(id);
+		return modelMapper.map(rolOpt.get(), RolDto.class);
+	}
+
 }
