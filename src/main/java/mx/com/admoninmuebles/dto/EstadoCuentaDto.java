@@ -2,6 +2,8 @@ package mx.com.admoninmuebles.dto;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -13,7 +15,7 @@ public class EstadoCuentaDto {
 
 	private String descripcion;
 
-	private Long archivoId;
+	private String archivoId;
 	private String archivoNombre;
 	private String archivoTipoContenido;
 	private byte[] archivoBytes;
@@ -23,6 +25,10 @@ public class EstadoCuentaDto {
 	private String socioNombre;
 	private String socioApellidoPaterno;
 	private String socioApellidoMaterno;
+	
+	private Long inmuebleId;
+	
+	private MultipartFile archivoMP;
 	
 	public String getSocio() {
 		return this.socioNombre + " " + this.socioApellidoPaterno + " " + this.socioApellidoMaterno;

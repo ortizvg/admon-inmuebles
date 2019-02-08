@@ -1,9 +1,13 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,6 +26,7 @@ public class Reglamento extends EntidadBase {
 
 	@Id
 	@Column(name = "id_reglamento")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@NotNull
@@ -29,12 +34,12 @@ public class Reglamento extends EntidadBase {
 	@Column(length = 255, unique = true, nullable = false)
 	private String descripcion;
 
-	@OneToOne
+	@OneToOne( cascade = CascadeType.REMOVE )
 	@JoinColumn(name = "id_archivo_fk", nullable = false)
 	private Archivo archivo;
 
-	@OneToOne
-	@JoinColumn(name = "id_inmueble_fk", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_inmueble_fk")
 	private Inmueble inmueble;
 
 }

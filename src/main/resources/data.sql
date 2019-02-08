@@ -2617,3 +2617,39 @@ insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (2, 'R
 insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (3, 'CONDOMINO', 'Condominium (owner)', 'en');
 insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (4, 'RESIDENTE', 'Resident (Tenant)', 'en');
 
+insert into meses (id_mes, descripcion, lang) values (1, 'Enero', 'es');
+insert into meses (id_mes, descripcion, lang) values (2, 'Febrero', 'es');
+insert into meses (id_mes, descripcion, lang) values (3, 'Marzo', 'es');
+insert into meses (id_mes, descripcion, lang) values (4, 'Abril', 'es');
+insert into meses (id_mes, descripcion, lang) values (5, 'Mayo', 'es');
+insert into meses (id_mes, descripcion, lang) values (6, 'Junio', 'es');
+insert into meses (id_mes, descripcion, lang) values (7, 'Julio', 'es');
+insert into meses (id_mes, descripcion, lang) values (8, 'Agosto', 'es');
+insert into meses (id_mes, descripcion, lang) values (9, 'Septiembre', 'es');
+insert into meses (id_mes, descripcion, lang) values (10, 'Octubre', 'es');
+insert into meses (id_mes, descripcion, lang) values (11, 'Noviembre', 'es');
+insert into meses (id_mes, descripcion, lang) values (12, 'Diciembre', 'es');
+insert into meses (id_mes, descripcion, lang) values (13, 'January', 'en');
+insert into meses (id_mes, descripcion, lang) values (14, 'February', 'en');
+insert into meses (id_mes, descripcion, lang) values (15, 'March', 'en');
+insert into meses (id_mes, descripcion, lang) values (16, 'April', 'en');
+insert into meses (id_mes, descripcion, lang) values (17, 'May', 'en');
+insert into meses (id_mes, descripcion, lang) values (18, 'June', 'en');
+insert into meses (id_mes, descripcion, lang) values (19, 'July', 'en');
+insert into meses (id_mes, descripcion, lang) values (20, 'August', 'en');
+insert into meses (id_mes, descripcion, lang) values (21, 'September', 'en');
+insert into meses (id_mes, descripcion, lang) values (22, 'October', 'en');
+insert into meses (id_mes, descripcion, lang) values (23, 'November', 'en');
+insert into meses (id_mes, descripcion, lang) values (24, 'December', 'en');
+
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (1, 'Estados financieros', 'es');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (2, 'Balance general', 'es');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (3, 'Estado de resultados', 'es');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (4, 'Egresos e ingresos', 'es');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (5, 'Morosos', 'es');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (6, 'Financial statements', 'en');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (7, 'Balance sheet', 'en');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (8, 'Statement of income', 'en');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (9, 'Expenses and income', 'en');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (10, 'Defaulters', 'en');
+

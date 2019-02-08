@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,8 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.dto.EstadoCuentaDto;
 import mx.com.admoninmuebles.dto.ReporteMensualDto;
-import mx.com.admoninmuebles.dto.TipoReporteMensualDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Archivo;
 import mx.com.admoninmuebles.persistence.model.ReporteMensual;
@@ -37,12 +38,20 @@ public class ReporteMensualServiceImpl implements ReporteMensualService {
 	public ReporteMensualDto guardar(ReporteMensualDto reporteMensualDto) {
 		
 		Archivo archivoReporteCreado = null;
-		Archivo archivo = new Archivo();
-		archivo.setId(UUID.randomUUID().toString());
-		archivo.setBytes(reporteMensualDto.getArchivoBytes());
-		archivo.setNombre(reporteMensualDto.getArchivoNombre());
-		archivo.setTipoContenido(reporteMensualDto.getArchivoTipoContenido());
-		archivoReporteCreado = archivoRepository.save(archivo);
+    	if(  reporteMensualDto.getReporteArchivo() != null ) {
+    		try {
+    			
+    			Archivo archivo = new Archivo();
+    			archivo.setId(UUID.randomUUID().toString());
+    			archivo.setBytes(reporteMensualDto.getReporteArchivo().getBytes());
+    			archivo.setNombre(reporteMensualDto.getReporteArchivo().getOriginalFilename());
+    			archivo.setTipoContenido(reporteMensualDto.getReporteArchivo().getContentType());
+    			archivoReporteCreado = archivoRepository.save(archivo);
+    			
+    		} catch (IOException e) {
+    			throw new BusinessException("pago.error.carga.comprobante");
+    		}
+    	}
 		
 		ReporteMensual reporteMensual = modelMapper.map(reporteMensualDto, ReporteMensual.class);
 		reporteMensual.setArchivo(archivoReporteCreado);
@@ -67,7 +76,6 @@ public class ReporteMensualServiceImpl implements ReporteMensualService {
 			throw new BusinessException("consulta.noresultados");
 		}
 		
-		archivoRepository.deleteById(reporteMensualOpt.get().getArchivo().getId());
 		reporteMensualRepository.deleteById(reporteMensualOpt.get().getId());
 		
 	}
@@ -86,6 +94,21 @@ public class ReporteMensualServiceImpl implements ReporteMensualService {
 	@Override
 	public Collection<ReporteMensualDto> buscarPorInmuebleId(Long idInmueble) {
 		return StreamSupport.stream(reporteMensualRepository.findByInmuebleId( idInmueble ).spliterator(), false)
+				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<ReporteMensualDto> buscarPorContadorId(Long idContador) {
+		return StreamSupport.stream(reporteMensualRepository.findByContadorId( idContador ).spliterator(), false)
+				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<ReporteMensualDto> buscarReciente5PorSocioId(Long idInmueble) {
+		
+		return StreamSupport.stream(reporteMensualRepository.findFirst5ByInmuebleIdOrderByIdDesc( idInmueble ).spliterator(), false)
 				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
 				.collect(Collectors.toList());
 	}

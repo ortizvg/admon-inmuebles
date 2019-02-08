@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.dto.MesDto;
 import mx.com.admoninmuebles.dto.TipoReporteMensualDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.TipoReporteMensual;
@@ -26,6 +27,13 @@ public class TipoReporteMensualServiceImpl implements TipoReporteMensualService{
 	@Override
 	public Collection<TipoReporteMensualDto> buscarTodos() {
 		return StreamSupport.stream(tipoReporteMensualRepository.findAll().spliterator(), false)
+				.map(tipoReporteMensual -> modelMapper.map(tipoReporteMensual, TipoReporteMensualDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<TipoReporteMensualDto> buscarPorLang(String lang) {
+		return StreamSupport.stream(tipoReporteMensualRepository.findByLang( lang ).spliterator(), false)
 				.map(tipoReporteMensual -> modelMapper.map(tipoReporteMensual, TipoReporteMensualDto.class))
 				.collect(Collectors.toList());
 	}

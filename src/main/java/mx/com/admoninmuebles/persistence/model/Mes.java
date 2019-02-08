@@ -29,5 +29,10 @@ public class Mes {
     @Column(length = 255, unique = true, nullable=false)
 	private String descripcion;
 	
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(length = 2, unique = false, nullable = false)
+    private String lang;
+	
 
 }

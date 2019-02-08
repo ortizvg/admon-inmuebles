@@ -3,7 +3,6 @@ package mx.com.admoninmuebles.service;
 import java.util.Collection;
 
 import mx.com.admoninmuebles.dto.ComunicadoDto;
-import mx.com.admoninmuebles.dto.ReglamentoDto;
 
 public interface ComunicadoService {
 	
@@ -12,5 +11,6 @@ public interface ComunicadoService {
 	void eliminar( Long idComunicado );
 	ComunicadoDto buscarPorId( Long idComunicado );
 	Collection<ComunicadoDto> buscarPorInmuebleId( Long idInmueble );
+	Collection<ComunicadoDto> buscarPorContadorId(Long idContador);
 
 }

@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,16 +36,24 @@ public class ReglamentoServiceImpl implements ReglamentoService {
 	@Override
 	public ReglamentoDto guardar(ReglamentoDto reglamentoDto) {
 		
-		Archivo archivoReporteCreado = null;
-		Archivo archivo = new Archivo();
-		archivo.setId(UUID.randomUUID().toString());
-		archivo.setBytes(reglamentoDto.getArchivoBytes());
-		archivo.setNombre(reglamentoDto.getArchivoNombre());
-		archivo.setTipoContenido(reglamentoDto.getArchivoTipoContenido());
-		archivoReporteCreado = archivoRepository.save(archivo);
+		Archivo archivoCreado = null;
+    	if(  reglamentoDto.getArchivoMP() != null ) {
+    		try {
+    			
+    			Archivo archivo = new Archivo();
+    			archivo.setId(UUID.randomUUID().toString());
+    			archivo.setBytes(reglamentoDto.getArchivoMP().getBytes());
+    			archivo.setNombre(reglamentoDto.getArchivoMP().getOriginalFilename());
+    			archivo.setTipoContenido(reglamentoDto.getArchivoMP().getContentType());
+    			archivoCreado = archivoRepository.save(archivo);
+    			
+    		} catch (IOException e) {
+    			throw new BusinessException("pago.error.carga.archivo");
+    		}
+    	}
 		
 		Reglamento reglamento = modelMapper.map(reglamentoDto, Reglamento.class);
-		reglamento.setArchivo(archivoReporteCreado);
+		reglamento.setArchivo(archivoCreado);
 		
 		reglamento = reglamentoRepository.save(reglamento);
 		
@@ -66,7 +75,6 @@ public class ReglamentoServiceImpl implements ReglamentoService {
 			throw new BusinessException("consulta.noresultados");
 		}
 		
-		archivoRepository.deleteById(reglamentoOpt.get().getArchivo().getId());
 		reglamentoRepository.deleteById(reglamentoOpt.get().getId());
 		
 	}
@@ -85,6 +93,13 @@ public class ReglamentoServiceImpl implements ReglamentoService {
 	@Override
 	public Collection<ReglamentoDto> buscarPorInmuebleId(Long idInmueble) {
 		return StreamSupport.stream(reglamentoRepository.findByInmuebleId( idInmueble ).spliterator(), false)
+				.map(reglamento -> modelMapper.map(reglamento, ReglamentoDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<ReglamentoDto> buscarPorContadorId(Long idContador) {
+		return StreamSupport.stream(reglamentoRepository.findByContadorId( idContador ).spliterator(), false)
 				.map(reglamento -> modelMapper.map(reglamento, ReglamentoDto.class))
 				.collect(Collectors.toList());
 	}

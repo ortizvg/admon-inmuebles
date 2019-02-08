@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{estado.cuenta.carga.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+var serverContext = [[@{/}]];
+	
+$(document).ready(function() {
+// 	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
+// 	addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divSocio'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divArchivoMP'),/*[[#{campo.requerido}]]*/);
+});
+
+function cargarSociosPorInmueble() {
+	var inmuebleId = $("#inmueble").val();
+    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/socios", function(data) {
+        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+        var len = data.length;
+        for ( var i = 0; i < len; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+        }
+        html += '</option>';
+        $('#socio').html(html);
+    });
+}
+
+
+
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{estado.cuenta.carga.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{estado.cuenta.carga.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{estado.cuenta.carga.titulo}"></h6>
+            
+              
+              <form name="estadosCuentaForm" action="#" th:action="@{/reportes/estados-cuenta/carga}" th:object="${estadoCuenta}" method="post" enctype="multipart/form-data">
+              		<div class="alert alert-danger" th:if="${error}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${error}"></span>
+			            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+			        </div>
+			        <div class="alert alert-success" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>
+			            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+			        </div>
+              		<div class="row">
+	                   <div id="divInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? ' has-danger'" >
+	                       <label class="form-control-label" for="colonia" th:text="#{estado.cuenta.carga.inmueble}"></label>
+	                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" onchange="cargarSociosPorInmueble();">
+	                       		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+								<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+	                       </select>
+	                        <span class="form-control-feedback">
+			                	<span th:if="${#fields.hasErrors('inmuebleId')}" th:errors="*{inmuebleId}"></span>
+			              	</span>
+	                   </div>
+	                   <div id="divSocio" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('socioId')}? ' has-danger'" >
+	                       <label class="form-control-label" for="socioId" th:text="#{estado.cuenta.carga.socio}"></label>
+	                       <select  name="socio" id="socio" class="form-control" th:field="*{socioId}" required>
+	                       		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+								<option th:each="socio : ${session.socios}" th:value="${{socio.id}}" th:text="${socio.nombre}"></option>
+	                       </select>
+	                        <span class="form-control-feedback">
+			                	<span th:if="${#fields.hasErrors('socioId')}" th:errors="*{socioId}"></span>
+			              	</span>
+	                   </div>
+	                   
+	                   <div id="divDescripcion"  class="col-md-4 form-group">
+							<label class="form-control-label" th:text="#{estado.cuenta.carga.descripcion}"></label>
+							<input name="descripcion" class="form-control" th:field="*{descripcion}" maxlength="255" />
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+							</span>
+					  </div>
+              		</div>
+				    
+				    <div class="row">
+				    	<div id="divArchivoMP" class="col-md-4" th:classappend="${#fields.hasErrors('archivoMP')}? 'form-group has-danger':'form-group'">
+		                  <label class="form-control-label" th:text="#{estado.cuenta.carga.archivo}"></label>
+		                  <input name="archivoMP" type="file" class="form-control dropify" th:field="*{archivoMP}" th:title="#{mensaje.estado.cuenta.validacion}" required accept="application/pdf">
+		                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('archivoMP')}" th:errors="*{archivoMP}"></span>
+		                  </span>
+		                </div>
+				    </div>
+					
+					
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-info-gesco"  th:text="#{boton.estado.cuenta.cargar}"></button>
+						<a th:href="@{/reportes/estados-cuenta}" class="btn  btn-secondary" th:text="#{boton.regresar}"></a>
+					</div>
+				</form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

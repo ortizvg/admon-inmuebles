@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,16 +35,24 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 	@Transactional
 	@Override
 	public CuotaDepartamentoDto guardar(CuotaDepartamentoDto cuotaDepartamentoDto) {
-		Archivo archivoReporteCreado = null;
-		Archivo archivo = new Archivo();
-		archivo.setId(UUID.randomUUID().toString());
-		archivo.setBytes(cuotaDepartamentoDto.getArchivoBytes());
-		archivo.setNombre(cuotaDepartamentoDto.getArchivoNombre());
-		archivo.setTipoContenido(cuotaDepartamentoDto.getArchivoTipoContenido());
-		archivoReporteCreado = archivoRepository.save(archivo);
+		Archivo archivoCreado = null;
+    	if(  cuotaDepartamentoDto.getArchivoMP() != null ) {
+    		try {
+    			
+    			Archivo archivo = new Archivo();
+    			archivo.setId(UUID.randomUUID().toString());
+    			archivo.setBytes(cuotaDepartamentoDto.getArchivoMP().getBytes());
+    			archivo.setNombre(cuotaDepartamentoDto.getArchivoMP().getOriginalFilename());
+    			archivo.setTipoContenido(cuotaDepartamentoDto.getArchivoMP().getContentType());
+    			archivoCreado = archivoRepository.save(archivo);
+    			
+    		} catch (IOException e) {
+    			throw new BusinessException("pago.error.carga.archivo");
+    		}
+    	}
 		
 		CuotaDepartamento cuotaDepartamento = modelMapper.map(cuotaDepartamentoDto, CuotaDepartamento.class);
-		cuotaDepartamento.setArchivo(archivoReporteCreado);
+		cuotaDepartamento.setArchivo(archivoCreado);
 		
 		cuotaDepartamento = cuotaDepartamentoRepository.save( cuotaDepartamento );
 		
@@ -65,7 +74,6 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 			throw new BusinessException("consulta.noresultados");
 		}
 		
-		archivoRepository.deleteById(cuotaDepartamentoOpt.get().getArchivo().getId());
 		cuotaDepartamentoRepository.deleteById(cuotaDepartamentoOpt.get().getId());
 		
 		
@@ -82,28 +90,37 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 		return modelMapper.map(cuotaDepartamentoOpt.get(), CuotaDepartamentoDto.class);
 	}
 
+	
 	@Override
 	public Collection<CuotaDepartamentoDto> buscarPorInmuebleId(Long idInmueble) {
-		// TODO Auto-generated method stub
-		return null;
+		return StreamSupport.stream(cuotaDepartamentoRepository.findByInmuebleId( idInmueble ).spliterator(), false)
+				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
+				.collect(Collectors.toList());
 	}
-
+	
 	@Override
-	public Collection<CuotaDepartamentoDto> buscarPorSocioId(Long idsocio) {
-		return StreamSupport.stream(cuotaDepartamentoRepository.findBySocioId( idsocio ).spliterator(), false)
+	public Collection<CuotaDepartamentoDto> buscarPorContadorId(Long idContador) {
+		return StreamSupport.stream(cuotaDepartamentoRepository.findByContadorId( idContador ).spliterator(), false)
 				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
 				.collect(Collectors.toList());
 	}
 
-	@Override
-	public CuotaDepartamentoDto buscarRecientePorSocioId(Long idsocio) {
-		Optional<CuotaDepartamento> cuotaDepartamentoOpt = cuotaDepartamentoRepository.findFirst1BySocioIdOrderByFechaModificacionDesc( idsocio );
-		
-		if( !cuotaDepartamentoOpt.isPresent() ) {
-			throw new BusinessException("consulta.noresultados");
-		}
-		
-		return modelMapper.map(cuotaDepartamentoOpt.get(), CuotaDepartamentoDto.class);
-	}
+//	@Override
+//	public Collection<CuotaDepartamentoDto> buscarPorSocioId(Long idsocio) {
+//		return StreamSupport.stream(cuotaDepartamentoRepository.findBySocioId( idsocio ).spliterator(), false)
+//				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
+//				.collect(Collectors.toList());
+//	}
+//
+//	@Override
+//	public CuotaDepartamentoDto buscarRecientePorSocioId(Long idsocio) {
+//		Optional<CuotaDepartamento> cuotaDepartamentoOpt = cuotaDepartamentoRepository.findFirst1BySocioIdOrderByFechaModificacionDesc( idsocio );
+//		
+//		if( !cuotaDepartamentoOpt.isPresent() ) {
+//			throw new BusinessException("consulta.noresultados");
+//		}
+//		
+//		return modelMapper.map(cuotaDepartamentoOpt.get(), CuotaDepartamentoDto.class);
+//	}
 	
 }

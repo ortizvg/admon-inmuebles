@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.ProveedorDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
-import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.listener.event.OnRegistroCompletoEvent;
 import mx.com.admoninmuebles.security.SecurityUtils;

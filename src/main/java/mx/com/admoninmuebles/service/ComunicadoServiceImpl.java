@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,16 +35,25 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 	@Transactional
 	@Override
 	public ComunicadoDto guardar(ComunicadoDto comunicadoDto) {
-		Archivo archivoReporteCreado = null;
-		Archivo archivo = new Archivo();
-		archivo.setId(UUID.randomUUID().toString());
-		archivo.setBytes(comunicadoDto.getArchivoBytes());
-		archivo.setNombre(comunicadoDto.getArchivoNombre());
-		archivo.setTipoContenido(comunicadoDto.getArchivoTipoContenido());
-		archivoReporteCreado = archivoRepository.save(archivo);
+		
+		Archivo archivoCreado = null;
+    	if(  comunicadoDto.getArchivoMP() != null ) {
+    		try {
+    			
+    			Archivo archivo = new Archivo();
+    			archivo.setId(UUID.randomUUID().toString());
+    			archivo.setBytes(comunicadoDto.getArchivoMP().getBytes());
+    			archivo.setNombre(comunicadoDto.getArchivoMP().getOriginalFilename());
+    			archivo.setTipoContenido(comunicadoDto.getArchivoMP().getContentType());
+    			archivoCreado = archivoRepository.save(archivo);
+    			
+    		} catch (IOException e) {
+    			throw new BusinessException("pago.error.carga.archivo");
+    		}
+    	}
 		
 		Comunicado comunicado = modelMapper.map(comunicadoDto, Comunicado.class);
-		comunicado.setArchivo(archivoReporteCreado);
+		comunicado.setArchivo(archivoCreado);
 		
 		comunicado = comunicadoRepository.save(comunicado);
 		
@@ -65,7 +75,6 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 			throw new BusinessException("consulta.noresultados");
 		}
 		
-		archivoRepository.deleteById(comunicadoOpt.get().getArchivo().getId());
 		comunicadoRepository.deleteById(comunicadoOpt.get().getId());
 		
 	}
@@ -84,6 +93,13 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 	@Override
 	public Collection<ComunicadoDto> buscarPorInmuebleId(Long idInmueble) {
 		return StreamSupport.stream(comunicadoRepository.findByInmuebleId( idInmueble ).spliterator(), false)
+				.map(comunicado -> modelMapper.map(comunicado, ComunicadoDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<ComunicadoDto> buscarPorContadorId(Long idContador) {
+		return StreamSupport.stream(comunicadoRepository.findByContadorId( idContador ).spliterator(), false)
 				.map(comunicado -> modelMapper.map(comunicado, ComunicadoDto.class))
 				.collect(Collectors.toList());
 	}

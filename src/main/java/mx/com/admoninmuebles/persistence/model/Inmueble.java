@@ -86,6 +86,18 @@ public class Inmueble extends EntidadBase {
 
     @OneToMany(mappedBy = "inmueble")
     private Collection<AreaComun> areasComunes = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "inmueble")
+    private Collection<ReporteMensual> reportesMensuales = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "inmueble")
+    private Collection<Reglamento> reglamentos = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "inmueble")
+    private Collection<Comunicado> comunicados = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "inmueble")
+    private Collection<CuotaDepartamento> cuotasDepartamento = new ArrayList<>();
 
     public void addAreaComun(final AreaComun areaComun) {
         areasComunes.add(areaComun);

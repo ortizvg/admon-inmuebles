@@ -1,9 +1,13 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,7 +25,8 @@ public class ReporteMensual extends EntidadBase {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "id_mes")
+	@Column(name = "id_reporte_mensual")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@NotNull
@@ -40,12 +45,12 @@ public class ReporteMensual extends EntidadBase {
 	@JoinColumn(name = "id_tipo_reporte_mensual_fk", nullable = false)
 	private TipoReporteMensual tipoReporteMensual;
 
-	@OneToOne
+	@OneToOne( cascade = CascadeType.REMOVE )
 	@JoinColumn(name = "id_archivo_fk", nullable = false)
 	private Archivo archivo;
 
-	@OneToOne
-	@JoinColumn(name = "id_inmueble_fk", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_inmueble_fk")
 	private Inmueble inmueble;
 
 }

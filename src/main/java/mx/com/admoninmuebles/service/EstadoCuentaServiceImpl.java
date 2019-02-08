@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,16 +35,24 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 	@Transactional
 	@Override
 	public EstadoCuentaDto guardar(EstadoCuentaDto estadoCuentaDto) {
-		Archivo archivoReporteCreado = null;
-		Archivo archivo = new Archivo();
-		archivo.setId(UUID.randomUUID().toString());
-		archivo.setBytes(estadoCuentaDto.getArchivoBytes());
-		archivo.setNombre(estadoCuentaDto.getArchivoNombre());
-		archivo.setTipoContenido(estadoCuentaDto.getArchivoTipoContenido());
-		archivoReporteCreado = archivoRepository.save(archivo);
+		Archivo archivoCreado = null;
+    	if(  estadoCuentaDto.getArchivoMP() != null ) {
+    		try {
+    			
+    			Archivo archivo = new Archivo();
+    			archivo.setId(UUID.randomUUID().toString());
+    			archivo.setBytes(estadoCuentaDto.getArchivoMP().getBytes());
+    			archivo.setNombre(estadoCuentaDto.getArchivoMP().getOriginalFilename());
+    			archivo.setTipoContenido(estadoCuentaDto.getArchivoMP().getContentType());
+    			archivoCreado = archivoRepository.save(archivo);
+    			
+    		} catch (IOException e) {
+    			throw new BusinessException("pago.error.carga.archivo");
+    		}
+    	}
 		
 		EstadoCuenta estadoCuenta = modelMapper.map(estadoCuentaDto, EstadoCuenta.class);
-		estadoCuenta.setArchivo(archivoReporteCreado);
+		estadoCuenta.setArchivo(archivoCreado);
 		
 		estadoCuenta = estadoCuentaRepository.save(estadoCuenta);
 		
@@ -65,7 +74,6 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 			throw new BusinessException("consulta.noresultados");
 		}
 		
-		archivoRepository.deleteById(estadoCuentaOpt.get().getArchivo().getId());
 		estadoCuentaRepository.deleteById(estadoCuentaOpt.get().getId());
 		
 		
@@ -85,10 +93,19 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 
 	@Override
 	public Collection<EstadoCuentaDto> buscarPorInmuebleId(Long idInmueble) {
-		// TODO Auto-generated method stub
-		return null;
+		return StreamSupport.stream(estadoCuentaRepository.findByInmuebleId( idInmueble ).spliterator(), false)
+				.map(estadoCuenta -> modelMapper.map(estadoCuenta, EstadoCuentaDto.class))
+				.collect(Collectors.toList());
 	}
-
+	
+	@Override
+	public Collection<EstadoCuentaDto> buscarPorContadorId(Long idContador) {
+		return StreamSupport.stream(estadoCuentaRepository.findByContadorId( idContador ).spliterator(), false)
+				.map(estadoCuenta -> modelMapper.map(estadoCuenta, EstadoCuentaDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	
 	@Override
 	public Collection<EstadoCuentaDto> buscarPorSocioId(Long idsocio) {
 		return StreamSupport.stream(estadoCuentaRepository.findBySocioId( idsocio ).spliterator(), false)
@@ -106,5 +123,6 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 		
 		return modelMapper.map(estadoCuentaOpt.get(), EstadoCuentaDto.class);
 	}
+	
 
 }

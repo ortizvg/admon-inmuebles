@@ -11,5 +11,7 @@ public interface ReporteMensualService {
 	void eliminar( Long idReporte );
 	ReporteMensualDto buscarPorId( Long idReporte );
 	Collection<ReporteMensualDto> buscarPorInmuebleId( Long idInmueble );
+	Collection<ReporteMensualDto> buscarPorContadorId(Long idContador);
+	Collection<ReporteMensualDto> buscarReciente5PorSocioId(Long idsocio);
 
 }

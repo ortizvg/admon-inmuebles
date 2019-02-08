@@ -12,6 +12,8 @@ public interface EstadoCuentaService {
 	EstadoCuentaDto buscarPorId( Long idEstadoCuenta );
 	Collection<EstadoCuentaDto> buscarPorInmuebleId( Long idInmueble );
 	Collection<EstadoCuentaDto> buscarPorSocioId( Long idsocio );
+	Collection<EstadoCuentaDto> buscarPorContadorId(Long idContador);
 	EstadoCuentaDto buscarRecientePorSocioId( Long idsocio );
+	
 
 }

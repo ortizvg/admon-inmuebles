@@ -29,6 +29,13 @@ public class MesServiceImpl implements MesService{
 				.map(mes -> modelMapper.map(mes, MesDto.class))
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public Collection<MesDto> buscarPorLang(String lang) {
+		return StreamSupport.stream(mesRepository.findByLang(lang).spliterator(), false)
+				.map(mes -> modelMapper.map(mes, MesDto.class))
+				.collect(Collectors.toList());
+	}
 
 	@Override
 	public MesDto buscarPorId(Long id) {

@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{reportes.page.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+$(document).ready(function() {
+    
+	var addrow1 = $('#tableReportesMensualesId');
+	addrow1.footable().on('click', '.delete-row-btn', function() {
+		var footable = addrow1.data('footable');
+		var row = $(this).parents('tr:first');
+		footable.removeRow(row);
+	});
+	
+    var addrow2 = $('#tableReglamentosId');
+    addrow2.footable().on('click', '.delete-row-btn', function() {
+		var footable = addrow2.data('footable');
+		var row = $(this).parents('tr:first');
+		footable.removeRow(row);
+	});
+    
+    var addrow2 = $('#tableCuotaDepartamentoId');
+    addrow2.footable().on('click', '.delete-row-btn', function() {
+		var footable = addrow2.data('footable');
+		var row = $(this).parents('tr:first');
+		footable.removeRow(row);
+	});
+
+    var addrow2 = $('#tableEstadosCuentaId');
+    addrow2.footable().on('click', '.delete-row-btn', function() {
+		var footable = addrow2.data('footable');
+		var row = $(this).parents('tr:first');
+		footable.removeRow(row);
+	});
+
+
+});
+	
+	
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" >Mis Reportes</h3>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex no-block">
+                                    <h4 class="card-title" >Reportes</h4>
+                                </div>
+                                <h6 class="card-subtitle"  >Múdulo para reportes de inmuebles</h6>
+                                	
+<!--                                 	 <div class="card"> -->
+<!-- 			                            <div class="card-body"> -->
+<!-- 			                                <h4 class="card-title">Customtab vertical Tab</h4> -->
+<!-- 			                                <h6 class="card-subtitle">Use default tab with class <code>vtabs, tabs-vertical & customvtab</code></h6> -->
+			                                <!-- Nav tabs -->
+			                                <div class="vtabs customvtab">
+			                                    <ul class="nav nav-tabs tabs-vertical" style="width:auto" role="tablist">
+			                                        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#r1" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reportes del mes</span> </a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r2" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reportes históricos</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r3" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reglamentos</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r4" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class=ti-folder></i> <span class="hidden-xs-down">Comunicados</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r5" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Cuotas por departamento</span></a> </li>
+			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r6" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Estados de cuenta</span></a> </li>
+			                                    </ul>
+			                                    <!-- Tab panes -->
+			                                    <div class="tab-content">
+			                                        <div class="tab-pane active" id="r1" role="tabpanel">
+			                                            <div>
+			                                                <h3>Reportes del mes</h3>
+			                                                <p>Espacio para obtener los reportes mensuales</p>
+			                                                
+			                                                
+			                                               <div class="table-responsive">
+											                <table id="tableId" class="table table-hover no-wrap contact-list" data-page-size="5">
+											                  <thead>
+											                    <tr>
+											                      <th th:text="#{reporte.mensual.anio}"></th>
+											                      <th th:text="#{reporte.mensual.mes}"></th>
+											                      <th th:text="#{reporte.mensual.tipo.reporte}"></th>
+											                      <th th:text="#{reporte.mensual.descarga}"></th>
+											                    </tr>
+											                  </thead>
+											                  <tbody>
+											                    <th:block th:each="reporteMensual : ${reporteMensual}">
+											                      <tr>
+											                        <td th:text="${reporteMensual.anio}"></td>
+											                        <td th:text="${reporteMensual.mesDescripcion}"></td>
+											                        <td th:text="${reporteMensual.tipoReporteMensualDescripcion}"></td>
+											                        <td class="text-center">
+											                        	<a th:href="@{|/api/archivos/${reporteMensual.archivoId}|}">
+											                        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+											                        	</a>
+											                        </td>
+											                      </tr>
+											                    </th:block>
+											                  </tbody>
+											                  <tfoot th:if="${#lists.size(reportesMensuales) > 5}">
+											                    <tr>
+											                      <td colspan="6">
+											                        <div class="text-right">
+											                          <ul class="pagination">
+											                          </ul>
+											                        </div>
+											                      </td>
+											                    </tr>
+											                  </tfoot>
+											                </table>
+			                                            </div>
+			                                                
+			                                                
+			                                            </div>
+			                                        </div>
+			                                        <div class="tab-pane" id="r2" role="tabpanel">
+			                                        	<div>
+			                                                <h3>Reportes históricos</h3>
+			                                                <p>Espacio para obtener el historico de reportes</p>
+			                                                
+			                                                <div class="table-responsive">
+											                <table id="tableReportesMensualesId" class="table table-hover no-wrap contact-list" data-page-size="5">
+											                  <thead>
+											                    <tr>
+											                      <th th:text="#{reporte.mensual.anio}"></th>
+											                      <th th:text="#{reporte.mensual.mes}"></th>
+											                      <th th:text="#{reporte.mensual.tipo.reporte}"></th>
+											                      <th th:text="#{reporte.mensual.descarga}"></th>
+											                    </tr>
+											                  </thead>
+											                  <tbody>
+											                    <th:block th:each="reporteMensual : ${reportesMensuales}">
+											                      <tr>
+											                        <td th:text="${reporteMensual.anio}"></td>
+											                        <td th:text="${reporteMensual.mesDescripcion}"></td>
+											                        <td th:text="${reporteMensual.tipoReporteMensualDescripcion}"></td>
+											                        <td class="text-center">
+											                        	<a th:href="@{|/api/archivos/${reporteMensual.archivoId}|}">
+											                        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+											                        	</a>
+											                        </td>
+											                      </tr>
+											                    </th:block>
+											                  </tbody>
+											                  <tfoot th:if="${#lists.size(reportesMensuales) > 5}">
+											                    <tr>
+											                      <td colspan="6">
+											                        <div class="text-right">
+											                          <ul class="pagination">
+											                          </ul>
+											                        </div>
+											                      </td>
+											                    </tr>
+											                  </tfoot>
+											                </table>
+			                                            </div>
+			                                                
+			                                                
+			                                            </div>
+			                                        </div>
+			                                        <div class="tab-pane" id="r3" role="tabpanel">
+			                                        	<div>
+			                                                <h3>Reglamentos</h3>
+			                                                <p>Espacio para obtener reglamentos</p>
+			                                                
+			                                                
+			                                                 <div class="table-responsive">
+												                <table id="tableReglamentosId" class="table table-hover no-wrap contact-list" data-page-size="5">
+												                  <thead>
+												                    <tr>
+												                      <th th:text="#{tabla.id}"></th>
+<!-- 												                      <th th:text="#{reglamento.inmueble}"></th> -->
+												                      <th th:text="#{reglamento.descripcion}"></th>
+												                      <th th:text="#{reglamento.descarga}"></th>
+												                    </tr>
+												                  </thead>
+												                  <tbody>
+												                    <th:block th:each="reglamento : ${reglamentos}">
+												                      <tr>
+												                        <td th:text="${reglamento.id}"></td>
+<!-- 												                        <td th:text="${reglamento.inmuebleNombre}"></td> -->
+												                        <td th:text="${reglamento.descripcion}"></td>
+												                        <td class="text-center">
+												                        	<a th:href="@{|/api/archivos/${reglamento.archivoId}|}">
+												                        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+												                        	</a>
+												                        </td>
+												                      </tr>
+												                    </th:block>
+												                  </tbody>
+												                  <tfoot th:if="${#lists.size(reglamentos) > 5}">
+												                    <tr>
+												                      <td colspan="6">
+												                        <div class="text-right">
+												                          <ul class="pagination">
+												                          </ul>
+												                        </div>
+												                      </td>
+												                    </tr>
+												                  </tfoot>
+												                </table>
+												                </div>
+			                                            </div>
+			                                        </div>
+			                                         <div class="tab-pane" id="r4" role="tabpanel">
+			                                        	<div>
+			                                                <h3>Comunicados</h3>
+			                                                <p>Espacio para revisión de documentos de comunicados</p>
+			                                                
+			                                                 <div class="table-responsive">
+												                <table id="tableId" class="table table-hover no-wrap contact-list" data-page-size="5">
+												                  <thead>
+												                    <tr>
+												                      <th th:text="#{tabla.id}"></th>
+<!-- 												                      <th th:text="#{comunicado.inmueble}"></th> -->
+												                      <th th:text="#{comunicado.descripcion}"></th>
+												                      <th th:text="#{comunicado.descarga}"></th>
+												                    </tr>
+												                  </thead>
+												                  <tbody>
+												                    <th:block th:each="comunicado : ${comunicados}">
+												                      <tr>
+												                        <td th:text="${comunicado.id}"></td>
+<!-- 												                        <td th:text="${comunicado.inmuebleNombre}"></td> -->
+												                        <td th:text="${comunicado.descripcion}"></td>
+												                        <td class="text-center">
+												                        	<a th:href="@{|/api/archivos/${comunicado.archivoId}|}">
+												                        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+												                        	</a>
+												                        </td>
+												                      </tr>
+												                    </th:block>
+												                  </tbody>
+												                  <tfoot th:if="${#lists.size(comunicados) > 5}">
+												                    <tr>
+												                      <td colspan="6">
+												                        <div class="text-right">
+												                          <ul class="pagination">
+												                          </ul>
+												                        </div>
+												                      </td>
+												                    </tr>
+												                  </tfoot>
+												                </table>
+												                </div>
+			                                               
+			                                                
+			                                            </div>
+			                                        </div>
+			                                         <div class="tab-pane" id="r5" role="tabpanel">
+			                                        	<div>
+			                                                <h3>Cuotas por departamento</h3>
+			                                                <p>Espacio para obtener las cuotas por departamento</p>
+			                                                <div class="table-responsive">
+												                <table id="tableCuotaDepartamentoId" class="table table-hover no-wrap contact-list" data-page-size="5">
+												                  <thead>
+												                    <tr>
+												                      <th th:text="#{tabla.id}"></th>
+<!-- 												                      <th th:text="#{cuota.departamento.inmueble}"></th> -->
+												                      <th th:text="#{cuota.departamento.descripcion}"></th>
+												                      <th th:text="#{cuota.departamento.descarga}"></th>
+												                    </tr>
+												                  </thead>
+												                  <tbody>
+												                    <th:block th:each="cuotaDepartamento : ${cuotasDepartamento}">
+												                      <tr>
+												                        <td th:text="${cuotaDepartamento.id}"></td>
+<!-- 												                        <td th:text="${cuotaDepartamento.inmuebleNombre}"></td> -->
+												                        <td th:text="${cuotaDepartamento.descripcion}"></td>
+												                        <td class="text-center">
+												                        	<a th:href="@{|/api/archivos/${cuotaDepartamento.archivoId}|}">
+												                        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+												                        	</a>
+												                        </td>
+												                      </tr>
+												                    </th:block>
+												                  </tbody>
+												                  <tfoot th:if="${#lists.size(cuotasDepartamento) > 5}">
+												                    <tr>
+												                      <td colspan="6">
+												                        <div class="text-right">
+												                          <ul class="pagination">
+												                          </ul>
+												                        </div>
+												                      </td>
+												                    </tr>
+												                  </tfoot>
+												                </table>
+												               </div>
+			                                            </div>
+			                                        </div>
+			                                         <div class="tab-pane" id="r6" role="tabpanel">
+			                                        	<div>
+			                                                <h3>Estados de cuenta</h3>
+			                                                <p>Espacio para obtener los estados de cuenta</p>
+			                                                
+			                                                 <div class="table-responsive">
+												                <table id="tableEstadosCuentaId" class="table table-hover no-wrap contact-list" data-page-size="5">
+												                  <thead>
+												                    <tr>
+												                      <th th:text="#{tabla.id}"></th>
+												                      <th th:text="#{estado.cuenta.socio}"></th>
+												                      <th th:text="#{estado.cuenta.descripcion}"></th>
+												                      <th th:text="#{estado.cuenta.descarga}"></th>
+												                    </tr>
+												                  </thead>
+												                  <tbody>
+												                    <th:block th:each="estadoCuenta : ${estadosCuenta}">
+												                      <tr>
+												                        <td th:text="${estadoCuenta.id}"></td>
+												                        <td th:text="|${estadoCuenta.socioNombre} ${estadoCuenta.socioApellidoPaterno} ${estadoCuenta.socioApellidoMaterno}|"></td>
+												                        <td th:text="${estadoCuenta.descripcion}"></td>
+												                        <td class="text-center">
+												                        	<a th:href="@{|/api/archivos/${estadoCuenta.archivoId}|}">
+												                        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+												                        	</a>
+												                        </td>
+												                      </tr>
+												                    </th:block>
+												                  </tbody>
+												                  <tfoot th:if="${#lists.size(estadosCuenta) > 5}">
+												                    <tr>
+												                      <td colspan="6">
+												                        <div class="text-right">
+												                          <ul class="pagination">
+												                          </ul>
+												                        </div>
+												                      </td>
+												                    </tr>
+												                  </tfoot>
+												                </table>
+												                </div>
+			                                            </div>
+			                                        </div>
+			                                    </div>
+			                                </div>
+<!-- 			                            </div> -->
+<!-- 			                        </div> -->
+			                    </div>
+                                                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+	</div>
+</body>
+</html>

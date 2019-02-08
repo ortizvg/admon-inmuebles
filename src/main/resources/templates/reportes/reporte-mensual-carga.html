@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{reporte.mensual.carga.titulo}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+var serverContext = [[@{/}]];
+	
+$(document).ready(function() {
+// 	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);
+// 	addControlState(document.getElementById('divDescripcion'),/*[[#{campo.requerido}]]*/);
+// 	addControlState(document.getElementById('divAnio'),/*[[#{campo.requerido}]]*/);divTipoReporteMensual
+	addControlState(document.getElementById('divMes'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divTipoReporteMensual'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divReporteArchivo'),/*[[#{campo.requerido}]]*/);
+});
+
+
+
+/*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{reporte.mensual.carga.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{reporte.mensual.carga.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{reporte.mensual.carga.titulo}"></h6>
+            
+              
+              <form name="reporteMensualForm" action="#" th:action="@{/reportes/reportes-mensuales/carga}" th:object="${reporteMensual}" method="post" enctype="multipart/form-data">
+              		<div class="alert alert-danger" th:if="${error}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${error}"></span>
+			            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+			        </div>
+			        <div class="alert alert-success" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>
+			            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+			        </div>
+              		<input type="hidden" class="form-control" th:field="*{anio}"/>
+              		<div class="row">
+	                   <div id="divInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? ' has-danger'" >
+	                       <label class="form-control-label" for="colonia" th:text="#{reporte.mensual.carga.inmueble}"></label>
+	                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required>
+	                       		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+								<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+	                       </select>
+	                        <span class="form-control-feedback">
+			                	<span th:if="${#fields.hasErrors('inmuebleId')}" th:errors="*{inmuebleId}"></span>
+			              	</span>
+	                   </div>
+	                   <div id="divDescripcion"  class="col-md-8 form-group">
+							<label class="form-control-label" th:text="#{reporte.mensual.carga.descripcion}"></label>
+							<input name="descripcion" class="form-control" th:field="*{descripcion}" maxlength="255" />
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+							</span>
+					  </div>
+              		</div>
+				    <div class="row">
+						 <div id="divAnio" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('anio')}? ' has-danger'">
+								<label class="form-control-label" th:text="#{reporte.mensual.carga.anio}"></label>
+								<input name="anio" class="form-control" th:field="*{anio}" required maxlength="4" disabled="disabled" />
+								<span class="form-control-feedback">
+									<span th:if="${#fields.hasErrors('anio')}" th:errors="*{anio}"></span>
+								</span>
+						</div>
+		                   
+		                   <div id="divMes" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('mesId')}? ' has-danger'" >
+				              <label class="form-control-label" th:text="#{reporte.mensual.carga.mes}"></label>
+				              <select name="mesId" id="mesId" class="form-control" th:field="*{mesId}" required>
+				                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+				                <option th:each="mes : ${session.meses}" th:value="${{mes.id}}" th:text="${mes.descripcion}"></option>
+				              </select>
+				              <span class="form-control-feedback">
+				                <span th:if="${#fields.hasErrors('mesId')}" th:errors="*{mesId}"></span>
+				              </span>
+				            </div>
+				            
+				            <div id="divTipoReporteMensual" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('tipoReporteMensualId')}? ' has-danger'" >
+				              <label class="form-control-label" th:text="#{reporte.mensual.carga.tipo.reporte}"></label>
+				              <select name="tipoReporteMensualId" id="tipoReporteMensualId" class="form-control" th:field="*{tipoReporteMensualId}" required>
+				                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+				                <option th:each="tipoReporteMensual : ${session.tiposReporteMensual}" th:value="${{tipoReporteMensual.id}}" th:text="${tipoReporteMensual.descripcion}"></option>
+				              </select>
+				              <span class="form-control-feedback">
+				                <span th:if="${#fields.hasErrors('tipoReporteMensualId')}" th:errors="*{tipoReporteMensualId}"></span>
+				              </span>
+				            </div>
+				    </div>
+				    
+				    <div class="row">
+				    	<div id="divReporteArchivo" class="col-md-4" th:classappend="${#fields.hasErrors('reporteArchivo')}? 'form-group has-danger':'form-group'">
+		                  <label class="form-control-label" th:text="#{reporte.mensual.carga.reporte.archivo}"></label>
+		                  <input name="reporteArchivo" type="file" class="form-control dropify" th:field="*{reporteArchivo}" th:title="#{mensaje.pago.comprobante.validacion}" required accept="application/pdf">
+		                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('reporteArchivo')}" th:errors="*{reporteArchivo}"></span>
+		                  </span>
+		                </div>
+				    </div>
+					
+					
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-info-gesco"  th:text="#{boton.reporte.cargar}"></button>
+						<a th:href="@{/reportes/reportes-mensuales}" class="btn  btn-secondary" th:text="#{boton.regresar}"></a>
+					</div>
+				</form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

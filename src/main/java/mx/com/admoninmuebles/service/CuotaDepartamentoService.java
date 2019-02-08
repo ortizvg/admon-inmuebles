@@ -3,7 +3,6 @@ package mx.com.admoninmuebles.service;
 import java.util.Collection;
 
 import mx.com.admoninmuebles.dto.CuotaDepartamentoDto;
-import mx.com.admoninmuebles.dto.EstadoCuentaDto;
 
 public interface CuotaDepartamentoService {
 	
@@ -12,7 +11,8 @@ public interface CuotaDepartamentoService {
 	void eliminar( Long idCuotaDepartamento );
 	CuotaDepartamentoDto buscarPorId( Long idCuotaDepartamento );
 	Collection<CuotaDepartamentoDto> buscarPorInmuebleId( Long idInmueble );
-	Collection<CuotaDepartamentoDto> buscarPorSocioId( Long idsocio );
-	CuotaDepartamentoDto buscarRecientePorSocioId( Long idsocio );
+	Collection<CuotaDepartamentoDto> buscarPorContadorId(Long idContador);
+//	Collection<CuotaDepartamentoDto> buscarPorSocioId( Long idsocio );
+//	CuotaDepartamentoDto buscarRecientePorSocioId( Long idsocio );
 
 }
