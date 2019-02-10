@@ -34,14 +34,16 @@ public class ColoniaController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/catalogos/colonias")
     public String init(final ColoniaDto coloniaDto, final Model model, final HttpServletRequest request) {
+    	
+    	Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
 
 		 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 			 model.addAttribute("colonias", coloniaService.findByZonaIsNotNull());
             
         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
-	     		Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
-	        	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
-        	 model.addAttribute("colonias", coloniaService.findByZonaCodigo(zona.getCodigo()));
+//	         ZonaDto zona = zonaService.findByAdminZonaId(usuarioLogueadoId).stream().findFirst().get();
+//        	 model.addAttribute("colonias", coloniaService.findByZonaCodigo(zona.getCodigo()));
+        	 model.addAttribute("colonias", coloniaService.findByAdminZona( usuarioLogueadoId) );
         } 
         return "catalogos/colonias";
     }

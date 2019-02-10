@@ -11,6 +11,8 @@ public interface RolService {
     
     RolDto findById(Long id);
     
+    RolDto findByNombre(final String nombre);
+    
     Collection<RolDto> findByNombres(List<String> nombres);
 
     Collection<RolDto> findAll();

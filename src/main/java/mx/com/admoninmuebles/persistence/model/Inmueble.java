@@ -42,15 +42,15 @@ public class Inmueble extends EntidadBase {
     @Column(length = 100, nullable = false)
     private String nombre;
 
-    @NotNull
+//    @NotNull
     @Min(value = 1)
     @Max(value = 31)
-    @Column(name = "dia_cuota_ordinaria", nullable = false)
+    @Column(name = "dia_cuota_ordinaria", nullable = true)
     private Integer diaCuotaOrdinaria;
 
-    @NotNull
+//    @NotNull
     @Digits(integer = 5, fraction = 2)
-    @Column(name = "monto_cuota_ordinaria", nullable = false, precision = 5, scale = 2)
+    @Column(name = "monto_cuota_ordinaria", nullable = true, precision = 5, scale = 2)
     private BigDecimal montoCuotaOrdinaria;
 
     @NotNull

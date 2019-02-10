@@ -7,27 +7,25 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.dto.AreaServicioDto;
 import mx.com.admoninmuebles.dto.ProveedorDto;
-import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.AreaServicio;
 import mx.com.admoninmuebles.persistence.model.Comentario;
 import mx.com.admoninmuebles.persistence.model.DatosAdicionales;
 import mx.com.admoninmuebles.persistence.model.Rol;
-import mx.com.admoninmuebles.persistence.model.Telefono;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.repository.AreaServicioRepository;
 import mx.com.admoninmuebles.persistence.repository.ComentarioRepository;
 import mx.com.admoninmuebles.persistence.repository.DatosAdicionalesRepository;
 import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
-import mx.com.admoninmuebles.persistence.repository.TelefonoRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 
 @Service
@@ -147,6 +145,7 @@ public class ProveedorServiceImpl implements ProveedorService {
 	}
 	
 	
+	@Transactional
 	@Override
 	public ProveedorDto guardar(ProveedorDto proveedorDto) {
     	Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(proveedorDto.getUsername());

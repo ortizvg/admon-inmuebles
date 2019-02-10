@@ -288,5 +288,19 @@ public class PagoServiceImpl implements PagoService {
 		pagoRepository.deleteById(idPago);
 	}
 
+	@Override
+	public Collection<PagoDto> buscarPorAdminBi(Long idAdminBi) {
+		return StreamSupport.stream(pagoRepository.findByAdminBiId( idAdminBi ).spliterator(), false)
+				.map(pago -> modelMapper.map(pago, PagoDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<PagoDto> buscarPorAdminZona(Long idAdminZona) {
+		return StreamSupport.stream(pagoRepository.findByAdminZonaId( idAdminZona ).spliterator(), false)
+				.map(pago -> modelMapper.map(pago, PagoDto.class))
+				.collect(Collectors.toList());
+	}
+
 
 }

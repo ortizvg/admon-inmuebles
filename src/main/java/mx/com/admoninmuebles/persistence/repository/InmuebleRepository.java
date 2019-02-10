@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import mx.com.admoninmuebles.persistence.model.Inmueble;
+import mx.com.admoninmuebles.persistence.model.Zona;
 
 @Repository
 public interface InmuebleRepository extends CrudRepository<Inmueble, Long> {
@@ -20,6 +21,8 @@ public interface InmuebleRepository extends CrudRepository<Inmueble, Long> {
 	Collection<Inmueble> findBySociosId(Long id);
 	
 	Collection<Inmueble> findByDireccionAsentamientoZonaCodigo(String codigo);
+	
+	Collection<Inmueble> findByDireccionAsentamientoZonaIn(Collection<Zona> zonas);
 	
     @Query(value = "select i.* from gescopls.inmuebles i\r\n" + 
     		"join gescopls.inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 

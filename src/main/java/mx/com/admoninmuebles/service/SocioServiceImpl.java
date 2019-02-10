@@ -2,10 +2,8 @@ package mx.com.admoninmuebles.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
@@ -82,6 +80,11 @@ public class SocioServiceImpl implements SocioService{
 	@Override
 	public Collection<UsuarioDto> findSociosByAdminBiId(Long id) {
 		return StreamSupport.stream(usuarioRepository.findSociosByAdminBiId(id).spliterator(), false).map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<UsuarioDto> findSociosByAdminZonaId(Long id) {
+		return StreamSupport.stream(usuarioRepository.findSociosByAdminZonaId(id).spliterator(), false).map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());
 	}
 	
 

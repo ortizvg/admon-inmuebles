@@ -105,7 +105,7 @@ public class UsuarioController {
     	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
 //        model.addAttribute("usuarios", userService.findAll());
         model.addAttribute("colonias", coloniaService.findByZonaCodigo( zona.getCodigo() ));
-        model.addAttribute("inmuebles", inmuebleService.findAll());
+        model.addAttribute("inmuebles", inmuebleService.findByAdminZonaId( adminZonaLogueadoId ) );
         return "adminzona/inicio";
     }
     

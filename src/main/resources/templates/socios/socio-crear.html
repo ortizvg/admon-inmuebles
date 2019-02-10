@@ -156,16 +156,16 @@ function cargarInmueblesPorColonia() {
                                        </div>
                                          
                                        <div class="row">
-                                       	<div id="divRol" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'">
-										 <label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label>
-                                        <select  name="rolId" class="form-control" th:field="*{rolSeleccionado}" required >	
-											<option th:each="rol : ${session.rolesDto}" th:value="${{rol.id}}" th:text="${rol.descripcion}"></option>
-                                        </select>
-                                        <span class="form-control-feedback">
-							                <span th:if="${#fields.hasErrors('rolSeleccionado')}" th:errors="*{rolSeleccionado}"></span>
-							             </span>
-                               			</div>
-                               			 <div id="divTipoSocio" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('tipoSocioId')}? 'form-group has-danger':'form-group'">
+<!--                                        	<div id="divRol" class="col-md-6 form-group" th:classappend="${#fields.hasErrors('rolSeleccionado')}? 'form-group has-danger':'form-group'"> -->
+<!-- 										 <label class="form-control-label" for="rolId" th:text="#{usuario.rol}"></label> -->
+<!--                                         <select  name="rolId" class="form-control" th:field="*{rolSeleccionado}" required >	 -->
+<!-- 											<option th:each="rol : ${session.rolesDto}" th:value="${{rol.id}}" th:text="${rol.descripcion}"></option> -->
+<!--                                         </select> -->
+<!--                                         <span class="form-control-feedback"> -->
+<!-- 							                <span th:if="${#fields.hasErrors('rolSeleccionado')}" th:errors="*{rolSeleccionado}"></span> -->
+<!-- 							             </span> -->
+<!--                                			</div> -->
+                               			 <div id="divTipoSocio" class="col-md-12 form-group" th:classappend="${#fields.hasErrors('tipoSocioId')}? 'form-group has-danger':'form-group'">
                                                 <label class="form-control-label" for="tipoSocio" th:text="#{usuario.tiposocio}"></label>
 			                                        <select name="tipoSocio" id="tipoSocio" class="form-control" th:field="*{tipoSocioId}" required >	
 			                                         	<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
@@ -222,7 +222,7 @@ function cargarInmueblesPorColonia() {
 							              <h3 class="box-title m-t-20" th:text="#{usuario.inmueble}"></h3>
 							              <hr>
 								           <div class="row">
-                                             <div id="divZona" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
+                                             <div id="divZona"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
                                                 <label class="form-control-label" for="rolId" th:text="#{usuario.zona}"></label>
 			                                        <select  name="zona" id="zona" class="form-control" th:field="*{zonaSeleccionado}" onchange="cargarColoniasPorZona();">	
 			                                        	 <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
@@ -232,7 +232,7 @@ function cargarInmueblesPorColonia() {
 										                <span th:if="${#fields.hasErrors('zonaSeleccionado')}" th:errors="*{zonaSeleccionado}"></span>
 										             </span>
                                             </div>
-                                             <div id="divColonia" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('coloniaSeleccionado')}? 'form-group has-danger':'form-group'">
+                                             <div id="divColonia"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('coloniaSeleccionado')}? 'form-group has-danger':'form-group'">
                                                 <label class="form-control-label" for="colonia" th:text="#{usuario.colonia}"></label>
 			                                        <select  name="colonia" id="colonia" class="form-control" th:field="*{coloniaSeleccionado}" onchange="cargarInmueblesPorColonia();">
 			                                        	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
@@ -242,7 +242,7 @@ function cargarInmueblesPorColonia() {
 										                <span th:if="${#fields.hasErrors('coloniaSeleccionado')}" th:errors="*{coloniaSeleccionado}"></span>
 										             </span>
                                             </div>
-                                            <div id="divInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? 'form-group has-danger':'form-group'">
+                                            <div id="divInmueble"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? 'form-group has-danger':'form-group'">
                                                 <label class="form-control-label" for="inmueble" th:text="#{usuario.inmueble}"></label>
 			                                        <select name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required >	
 			                                         	<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>

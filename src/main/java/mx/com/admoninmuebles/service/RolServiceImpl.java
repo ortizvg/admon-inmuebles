@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.RolDto;
 import mx.com.admoninmuebles.dto.SocioDto;
+import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
@@ -46,6 +47,15 @@ public class RolServiceImpl implements RolService {
 //    	return null;
     	
     	return StreamSupport.stream(rolRepository.findByNombres(nombres).spliterator(), false).map(rol -> modelMapper.map(rol, RolDto.class)).collect(Collectors.toList());
+    }
+    
+    @Override
+    public RolDto findByNombre(final String nombre) {
+    	Optional<Rol> rolOpt = rolRepository.findByNombre( nombre );
+    	if(!rolOpt.isPresent()) {
+    		  throw new BusinessException("usuario.rol.no.existe");
+    	}
+    	return modelMapper.map(rolOpt.get(), RolDto.class);
     }
     
 	@Override

@@ -68,6 +68,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioOptional.isPresent()) {
             throw new BusinessException("usuario.error.yaexiste");
         }
+        
         String contrasenia = RandomStringUtils.randomAlphanumeric(8);
         userDto.setContrasenia(contrasenia);
         Usuario usuario = modelMapper.map(userDto, Usuario.class);

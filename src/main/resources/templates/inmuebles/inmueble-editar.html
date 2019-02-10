@@ -102,6 +102,14 @@ $(document).ready(function() {
                 </div>
               </div>
               <div class="row">
+                <div id="divZona" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{colonia.zona}"></label>
+                  <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option>
+                  </select>
+                  <span class="form-control-feedback"> </span>
+                </div>
                 <div id="divAdministradorInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('adminBiId')}? 'has-danger'">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.administradorinmueble}"></label>
                   <select id="adminisitradoresBi" name="adminisitradoresBi" class="form-control" th:field="*{adminBiId}" required>
@@ -120,12 +128,6 @@ $(document).ready(function() {
                   <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('contadorId')}" th:errors="*{contadorId}"></span>
                   </span>
                 </div>
-                <div id="divNombreRepresentante" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesNombreRepresentante')}? 'has-danger'">
-                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label>
-                  <input name="nombreRepresentante" class="form-control" th:field="*{datosAdicionalesNombreRepresentante}" required pattern="^[\s\S]{1,200}$" th:title="#{mensaje.nombreRepresentante.validacion}" />
-                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesNombreRepresentante')}" th:errors="*{datosAdicionalesNombreRepresentante}"></span>
-                  </span>
-                </div>
 
               </div>
               <div class="row">
@@ -141,6 +143,13 @@ $(document).ready(function() {
 <!--                   <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesTelefono')}" th:errors="*{datosAdicionalesTelefono}"></span> -->
 <!--                   </span> -->
 <!--                 </div> -->
+
+				<div id="divNombreRepresentante" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesNombreRepresentante')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.nombrerepresentante}"></label>
+                  <input name="nombreRepresentante" class="form-control" th:field="*{datosAdicionalesNombreRepresentante}" required pattern="^[\s\S]{1,200}$" th:title="#{mensaje.nombreRepresentante.validacion}" />
+                  <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesNombreRepresentante')}" th:errors="*{datosAdicionalesNombreRepresentante}"></span>
+                  </span>
+                </div>
                 <div id="divDiaCuotaOrdinaria" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('diaCuotaOrdinaria')}? 'has-danger'">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.diacuotaordinaria}"></label>
                   <input name="diaCuotaOrdinaria" class="form-control" th:field="*{diaCuotaOrdinaria}" required pattern="^([1-9]|[0-2][0-9]|[3][0-1])$" th:title="#{mensaje.diaCuotaOrdinaria.validacion}" />
@@ -153,22 +162,15 @@ $(document).ready(function() {
                   <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('montoCuotaOrdinaria')}" th:errors="*{montoCuotaOrdinaria}"></span>
                   </span>
                 </div>
-                <div id="divNumeroCuenta" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesNumeroCuenta')}? 'has-danger'">
+               
+              </div>
+              <div class="row">
+				 <div id="divNumeroCuenta" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('datosAdicionalesNumeroCuenta')}? 'has-danger'">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.numerocuenta}"></label>
                   <input name="datosAdicionalesNumeroCuenta" class="form-control" th:field="*{datosAdicionalesNumeroCuenta}" required pattern="^[\w\s]{1,50}$"
                     th:title="#{mensaje.datosAdicionalesNumeroCuenta.validacion}" />
                   <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('datosAdicionalesNumeroCuenta')}" th:errors="*{datosAdicionalesNumeroCuenta}"></span>
                   </span>
-                </div>
-              </div>
-              <div class="row">
-                <div id="divZona" class="col-md-4 form-group">
-                  <label class="form-control-label" th:text="#{colonia.zona}"></label>
-                  <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required>
-                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
-                    <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option>
-                  </select>
-                  <span class="form-control-feedback"> </span>
                 </div>
                 <div id="divColonia" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('direccionAsentamientoId')}? 'has-danger'">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>

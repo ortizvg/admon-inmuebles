@@ -59,12 +59,13 @@ public class PagoController {
 			 model.addAttribute("pagos", pagoService.buscarPorUsuario( usuarioLogueadoId ));
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
         	 ZonaDto zona = zonaService.findByAdminZonaId( usuarioLogueadoId ).stream().findFirst().get();
-        	 model.addAttribute("inmuebles", inmuebleService.findByZonaCodigo( zona.getCodigo() )  );
+//        	 model.addAttribute("inmuebles", inmuebleService.findByZonaCodigo( zona.getCodigo() )  );
+        	 model.addAttribute("inmuebles", inmuebleService.findByAdminZonaId( usuarioLogueadoId )  );
         	 model.addAttribute("pagos", pagoService.buscarPorCodigoZona( zona.getCodigo() ) );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
         	InmuebleDto inmueble = inmuebleService.findByAdminBiId( usuarioLogueadoId ).stream().findFirst().get();
         	model.addAttribute("socios", inmuebleService.findSociosByInmuebleId( inmueble.getId() ) );
-       	 	model.addAttribute("pagos", pagoService.buscarPorInmueble( inmueble.getId() ) );
+       	 	model.addAttribute("pagos", pagoService.buscarPorAdminBi( inmueble.getId() ) );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
         	model.addAttribute("zonas", zonaService.findAll() );
         	model.addAttribute("pagos", pagoService.buscarTodo() );

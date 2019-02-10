@@ -26,5 +26,7 @@ public interface PagoService {
     Collection<PagoDto> buscarPorInmueble(final Long idInmueble);
     Collection<PagoDto> buscarPorCodigoZona(final String codigoZona );
     Collection<PagoDto> buscarPorContador(Long idContador);
+    Collection<PagoDto> buscarPorAdminBi(Long idAdminBi);
+    Collection<PagoDto> buscarPorAdminZona(Long idAdminZona);
     
 }
