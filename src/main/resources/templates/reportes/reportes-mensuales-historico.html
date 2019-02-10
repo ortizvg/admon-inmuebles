@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{cuota.departamento.listado.titulo}"></title>
+<title th:text="#{reporte.mensual.historico.listado.titulo}"></title>
 <script th:inline="javascript">
   /*<![CDATA[*/
   		var serverContext = [[@{/}]];
@@ -14,13 +13,13 @@
 	    	      var nombre = $(this).data('nombre')
 
 	    	      var modal = $("#modalEliminar")
-	    	      var mensaje = /*[[#{cuota.departamento.modal.mensaje.eliminar}]]*/
+	    	      var mensaje = /*[[#{reporte.mensual.historico.modal.mensaje.eliminar}]]*/
 	    	      modal.find('.modal-title').text(/*[[#{modal.eliminar.encabezado}]]*/)
 	    	      modal.find('.modal-body p').text(mensaje.format(nombre))
-	    	      modal.find('.modal-footer a').attr('href', '/reportes/cuotas-departamento/' + id + '/eliminar').text(/*[[#{boton.eliminar}]]*/)
+	    	      modal.find('.modal-footer a').attr('href', '/reportes/reportes-mensuales/historico/' + id + '/eliminar').text(/*[[#{boton.eliminar}]]*/)
 	    	      modal.modal("show");
 	    	    });
-	      
+	    	 
 	    });
 
   
@@ -33,53 +32,56 @@
     <div class="container-fluid">
       <div class="row page-titles">
         <div class="col-md-6 col-8 align-self-center">
-          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{cuota.departamento.listado.titulo.principal}"></h3>
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{reporte.mensual.historico.listado.titulo.principal}"></h3>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title" th:text="#{cuota.departamento.listado.subtitulo}"></h4>
-              <h6 class="card-subtitle" th:text="#{cuota.departamento.listado.titulo}"></h6>
+              <h4 class="card-title" th:text="#{reporte.mensual.historico.listado.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{reporte.mensual.historico.listado.titulo}"></h6>
               <div class="row">
         		<div class="col-4">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
 			  	</div>
 			  	<div class="col-2 ml-auto">
-			  		<a sec:authorize="hasRole('CONTADOR')" th:href="@{/reportes/cuotas-departamento/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.cuota.departamento.cargar}"></a>
+			  		<a sec:authorize="hasRole('CONTADOR')" th:href="@{/reportes/reportes-mensuales/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.reporte.cargar}"></a>
 			  	</div>
 			 </div>
-			 
 								 
               <div class="table-responsive">
-                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="3">
                   <thead>
                     <tr>
                       <th th:text="#{tabla.id}"></th>
-                      <th th:text="#{cuota.departamento.inmueble}"></th>
-                      <th th:text="#{cuota.departamento.descripcion}"></th>
+                      <th th:text="#{reporte.mensual.historico.inmueble}"></th>
+                      <th th:text="#{reporte.mensual.historico.anio}"></th>
+                      <th th:text="#{reporte.mensual.historico.mes}"></th>
+                      <th th:text="#{reporte.mensual.historico.tipo.reporte}"></th>
                       <th th:text="#{tabla.accion}" class="text-center"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <th:block th:each="cuotaDepartamento : ${cuotasDepartamento}">
+                    <th:block th:each="reporteMensual : ${reportesMensuales}">
                       <tr>
-                        <td th:text="${cuotaDepartamento.id}"></td>
-                        <td th:text="${cuotaDepartamento.inmuebleNombre}"></td>
-                        <td th:text="${cuotaDepartamento.descripcion}"></td>
+                        <td th:text="${reporteMensual.id}"></td>
+                        <td th:text="${reporteMensual.inmuebleNombre}"></td>
+                        <td th:text="${reporteMensual.anio}"></td>
+                        <td th:text="${reporteMensual.mesDescripcion}"></td>
+                        <td th:text="${reporteMensual.tipoReporteMensualDescripcion}"></td>
                         <td class="text-center">
-                        	<a th:href="@{|/api/archivos/${cuotaDepartamento.archivoId}|}">
+                        	<a th:href="@{|/api/archivos/${reporteMensual.archivoId}|}">
                         		<i class="fa fa-file-pdf-o color-pdf-primary" aria-hidden="true"></i>
                         	</a>
-                        	<a sec:authorize="hasRole('CONTADOR')" th:attr="data-id=${cuotaDepartamento.id}" th:attrappend="data-nombre=${cuotaDepartamento.id}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> 
+                        	<a sec:authorize="hasRole('CONTADOR')" th:attr="data-id=${reporteMensual.id}" th:attrappend="data-nombre=${reporteMensual.id}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> 
                         		<i class="fa fa-close text-danger" aria-hidden="true"></i>
                         	</a>
                         </td>
                       </tr>
                     </th:block>
                   </tbody>
-                  <tfoot th:if="${#lists.size(cuotasDepartamento) > 20}">
+                  <tfoot th:if="${#lists.size(reportesMensuales) > 3}">
                     <tr>
                       <td colspan="6">
                         <div class="text-right">
@@ -122,7 +124,7 @@
       </div>
     </div>
   </div>
-  
+ 
 </body>
 </html>
 

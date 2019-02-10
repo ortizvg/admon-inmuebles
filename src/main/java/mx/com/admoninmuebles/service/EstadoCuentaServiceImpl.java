@@ -11,8 +11,10 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.dto.EstadoCuentaDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Archivo;
@@ -38,7 +40,7 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 		Archivo archivoCreado = null;
     	if(  estadoCuentaDto.getArchivoMP() != null ) {
     		try {
-    			
+    			validarArhivoEstadoCuenta( estadoCuentaDto );
     			Archivo archivo = new Archivo();
     			archivo.setId(UUID.randomUUID().toString());
     			archivo.setBytes(estadoCuentaDto.getArchivoMP().getBytes());
@@ -47,7 +49,7 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
     			archivoCreado = archivoRepository.save(archivo);
     			
     		} catch (IOException e) {
-    			throw new BusinessException("pago.error.carga.archivo");
+    			throw new BusinessException("estado.cuenta.archivo.guardado.error");
     		}
     	}
 		
@@ -58,6 +60,18 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 		
 		return modelMapper.map(estadoCuenta, EstadoCuentaDto.class);
 	}
+	
+	private void validarArhivoEstadoCuenta(EstadoCuentaDto estadoCuentaDto) {
+		
+		if( !MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( estadoCuentaDto.getArchivoMP().getContentType() ) ) {
+			throw new BusinessException("cuota.departamento.archivo.validacion.mediatype.pdf");
+		}
+		
+		if( estadoCuentaDto.getArchivoMP().getSize() > ComunConst.TAMANIO_1_MB ) {
+			throw new BusinessException("cuota.departamento.archivo.validacion.tamanio");
+		}
+	}
+
 
 	@Override
 	public EstadoCuentaDto actualizar(EstadoCuentaDto estadoCuentaDto) {

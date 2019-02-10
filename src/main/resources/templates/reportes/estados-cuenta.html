@@ -47,7 +47,7 @@
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
 			  	</div>
 			  	<div class="col-2 ml-auto">
-			  		<a sec:authorize="hasAnyRole('CONTADOR')" th:href="@{/reportes/estados-cuenta/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.estado.cuenta.cargar}"></a>
+			  		<a sec:authorize="hasRole('CONTADOR')" th:href="@{/reportes/estados-cuenta/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.estado.cuenta.cargar}"></a>
 			  	</div>
 			 </div>
 			 
@@ -59,7 +59,7 @@
                       <th th:text="#{tabla.id}"></th>
                       <th th:text="#{estado.cuenta.socio}"></th>
                       <th th:text="#{estado.cuenta.descripcion}"></th>
-                      <th th:text="#{tabla.accion}"></th>
+                      <th th:text="#{tabla.accion}" class="text-center"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -68,8 +68,13 @@
                         <td th:text="${estadoCuenta.id}"></td>
                         <td th:text="|${estadoCuenta.socioNombre} ${estadoCuenta.socioApellidoPaterno} ${estadoCuenta.socioApellidoMaterno}|"></td>
                         <td th:text="${estadoCuenta.descripcion}"></td>
-                        <td>
-                        	<a th:attr="data-id=${estadoCuenta.id}" th:attrappend="data-nombre=${estadoCuenta.id}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i class="fa fa-close text-danger" aria-hidden="true"></i></a>
+                        <td class="text-center">
+                        	<a th:href="@{|/api/archivos/${estadoCuenta.archivoId}|}">
+                        		<i class="fa fa-file-pdf-o color-pdf-primary" aria-hidden="true"></i>
+                        	</a>
+                        	<a sec:authorize="hasRole('CONTADOR')" th:attr="data-id=${estadoCuenta.id}" th:attrappend="data-nombre=${estadoCuenta.id}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> 
+                        		<i class="fa fa-close text-danger" aria-hidden="true"></i>
+                        	</a>
                         </td>
                       </tr>
                     </th:block>

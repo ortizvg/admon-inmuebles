@@ -29,9 +29,8 @@ public class ReporteMensual extends EntidadBase {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@NotNull
-	@Size(min = 1, max = 255)
-	@Column(length = 255, unique = true, nullable = false)
+	@Size(min = 0, max = 255)
+	@Column(length = 255, unique = false, nullable = true)
 	private String descripcion;
 
 	@NotNull

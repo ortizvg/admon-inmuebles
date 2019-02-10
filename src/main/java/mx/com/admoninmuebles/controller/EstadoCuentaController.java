@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.EstadoCuentaDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.security.SecurityUtils;
@@ -40,14 +41,20 @@ public class EstadoCuentaController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/estados-cuenta")
 	public String mostrarestadosCuenta(Model model, final HttpServletRequest request) {
 
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+		
+		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
+			model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorSocioId( usuarioLogueadoId ) );
+	         
+	    } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
+			model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorContadorId( usuarioLogueadoId ) );
+			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+	    } 
 
-		model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorContadorId( usuarioLogueadoId ) );
-		model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
 
 		return "reportes/estados-cuenta";
 	}
@@ -74,24 +81,20 @@ public class EstadoCuentaController {
 			@Valid final EstadoCuentaDto estadoCuenta, final BindingResult bindingResult, RedirectAttributes redirect) {
 		
 		if (bindingResult.hasErrors()) {
+			redirect.addFlashAttribute("estadoCuenta",  estadoCuenta );
 			return "reportes/estado-cuenta-carga";
 		}
 		
-		if( !org.springframework.http.MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( estadoCuenta.getArchivoMP().getContentType() ) ) {
-			redirect.addFlashAttribute("error", messages.getMessage("archivo.validacion.mediatype.pdf", null, locale));
+		try {
+			estadoCuentaService.guardar(estadoCuenta);
+		} catch (BusinessException e) {
 			redirect.addFlashAttribute("estadoCuenta",  estadoCuenta );
-			return "redirect:/reportes/estados-cuenta/carga"; 
-		}
-		
-		if( estadoCuenta.getArchivoMP().getSize() > 1000000 ) {
-			redirect.addFlashAttribute("estadoCuenta",  estadoCuenta );
-			redirect.addFlashAttribute("error", messages.getMessage("archivo.validacion.tamanio", null, locale));
-			return "redirect:/reportes/estados-cuenta/carga"; 
+			redirect.addFlashAttribute("error", messages.getMessage(e.getMessage(), null, locale));
+			return "redirect:/reportes/cuotas-departamento/carga"; 
 		}
 			
-		estadoCuentaService.guardar(estadoCuenta);
 
-		redirect.addFlashAttribute("message", messages.getMessage("archivo.guardado.exito", null, locale));
+		redirect.addFlashAttribute("message", messages.getMessage("estado.cuenta.guardado.exito", null, locale));
 		return "redirect:/reportes/estados-cuenta/carga"; 
 	}
 	

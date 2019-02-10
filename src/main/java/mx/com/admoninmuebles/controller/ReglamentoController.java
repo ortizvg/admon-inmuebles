@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.RolConst;
+import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.ReglamentoDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.security.SecurityUtils;
@@ -40,14 +42,21 @@ public class ReglamentoController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/reglamentos")
 	public String mostrarReglamentos(Model model, final HttpServletRequest request) {
 
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+		
+		 if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
+			InmuebleDto inmueble = inmuebleService.findBySocioId( usuarioLogueadoId );
+			model.addAttribute("reglamentos", reglamentoService.buscarPorInmuebleId( inmueble.getId() ) );
+             
+         } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
+			model.addAttribute("reglamentos", reglamentoService.buscarPorContadorId( usuarioLogueadoId ) );
+			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+         } 
 
-		model.addAttribute("reglamentos", reglamentoService.buscarPorContadorId( usuarioLogueadoId ) );
-		model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
 
 		return "reportes/reglamentos";
 	}
@@ -74,24 +83,19 @@ public class ReglamentoController {
 			@Valid final ReglamentoDto reglamento, final BindingResult bindingResult, RedirectAttributes redirect) {
 		
 		if (bindingResult.hasErrors()) {
+			redirect.addFlashAttribute("reglamento",  reglamento );
 			return "reportes/reglamento-carga";
 		}
 		
-		if( !org.springframework.http.MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( reglamento.getArchivoMP().getContentType() ) ) {
-			redirect.addFlashAttribute("error", messages.getMessage("archivo.validacion.mediatype.pdf", null, locale));
+		try {
+			reglamentoService.guardar( reglamento );
+		} catch (BusinessException e) {
 			redirect.addFlashAttribute("reglamento",  reglamento );
+			redirect.addFlashAttribute("error", messages.getMessage(e.getMessage(), null, locale));
 			return "redirect:/reportes/reglamentos/carga"; 
 		}
-		
-		if( reglamento.getArchivoMP().getSize() > 1000000 ) {
-			redirect.addFlashAttribute("reglamento",  reglamento );
-			redirect.addFlashAttribute("error", messages.getMessage("archivo.validacion.tamanio", null, locale));
-			return "redirect:/reportes/reglamentos/carga"; 
-		}
-			
-		reglamentoService.guardar(reglamento);
 
-		redirect.addFlashAttribute("message", messages.getMessage("archivo.guardado.exito", null, locale));
+		redirect.addFlashAttribute("message", messages.getMessage("reglamentos.guardado.exito", null, locale));
 		return "redirect:/reportes/reglamentos/carga"; 
 	}
 	

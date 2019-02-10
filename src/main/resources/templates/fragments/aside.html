@@ -15,7 +15,7 @@
         <li sec:authorize="!isAuthenticated()"><a href="/inicio#sucursales" aria-expanded="false"><i class="mdi mdi-map-marker"></i> <span class="hide-menu" th:text="#{menu.sucursales}"></span></a></li>
         <li sec:authorize="!isAuthenticated()"><a href="/contacto" aria-expanded="false"><i class="mdi mdi-contact-mail"></i> <span class="hide-menu" th:text="#{menu.contactanos}"></span></a></li>
 <!--         <li sec:authorize="!isAuthenticated()"><a href="/preguntas-frecuentes" aria-expanded="false"><i class="mdi mdi-comment-account"></i> <span class="hide-menu" th:text="#{menu.preguntasfrecuentes}"></span></a></li> -->
-<!--         <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li> -->
+        <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li>
         <li sec:authorize="!isAuthenticated()"><a href="/login" aria-expanded="false"><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.ingresosocios}"></span></a></li>
         <li sec:authorize="hasRole('PROVEEDOR')"><a href="/proveedor" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('SOCIO_BI')"><a href="/condomino" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
@@ -32,14 +32,15 @@
                  <li sec:authorize="!hasRole('CONTADOR')"><a th:href="@{/reservaciones/reservar-area}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.reserva}"></span></a></li>
                  <li sec:authorize="hasAnyRole('SOCIO_BI', 'ADMIN_BI')"><a th:href="@{/reservaciones/mis-reservaciones}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.mis.reservaciones}"></span></a></li>
               </ul></li>
-           	   <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-clipboard"></i> <span class="hide-menu" th:text="#{menu.reportes}"></span></a>
+           	   <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-folder-multiple"></i> <span class="hide-menu" th:text="#{menu.reportes}"></span></a>
              	 <ul aria-expanded="false" class="collapse">
-	                 <li sec:authorize="hasRole('CONTADOR')"><a th:href="@{/reportes/reportes-mensuales}" aria-expanded="false"><i class="mdi mdi-book-multiple"></i> <span class="hide-menu" th:text="#{menu.reportes.mensuales}"></span></a></li>
-	                 <li sec:authorize="hasRole('CONTADOR')"><a th:href="@{/reportes/reglamentos}" aria-expanded="false"><i class="mdi mdi-book-multiple"></i> <span class="hide-menu" th:text="#{menu.reglamentos}"></span></a></li>
-	                 <li sec:authorize="hasRole('CONTADOR')"><a th:href="@{/reportes/comunicados}" aria-expanded="false"><i class="mdi mdi-book-multiple"></i> <span class="hide-menu" th:text="#{menu.comunicados}"></span></a></li>
-              		 <li sec:authorize="hasRole('CONTADOR')"><a th:href="@{/reportes/cuotas-departamento}" aria-expanded="false"><i class="mdi mdi-book-multiple"></i> <span class="hide-menu" th:text="#{menu.cuotas.departamento}"></span></a></li>
-              		 <li sec:authorize="hasRole('CONTADOR')"><a th:href="@{/reportes/estados-cuenta}" aria-expanded="false"><i class="mdi mdi-book-multiple"></i> <span class="hide-menu" th:text="#{menu.estados.cuenta}"></span></a></li>
-              		 <li sec:authorize="hasRole('SOCIO_BI')"><a th:href="@{/reportes}" aria-expanded="false"><i class="mdi mdi-book-multiple"></i> <span class="hide-menu" th:text="#{menu.reportes.socios}"></span></a></li>
+	                 <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a th:href="@{/reportes/reportes-mensuales}" aria-expanded="false"><i class="mdi mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.reportes.mensuales}"></span></a></li>
+	                 <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a th:href="@{/reportes/reportes-mensuales/historico}" aria-expanded="false"><i class="mdi mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.reportes.mensuales.historico}"></span></a></li>
+	                 <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a th:href="@{/reportes/reglamentos}" aria-expanded="false"><i class="mdi mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.reglamentos}"></span></a></li>
+	                 <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a th:href="@{/reportes/comunicados}" aria-expanded="false"><i class="mdi mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.comunicados}"></span></a></li>
+              		 <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a th:href="@{/reportes/cuotas-departamento}" aria-expanded="false"><i class="mdi mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.cuotas.departamento}"></span></a></li>
+              		 <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a th:href="@{/reportes/estados-cuenta}" aria-expanded="false"><i class="mdi mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.estados.cuenta}"></span></a></li>
+<!--               		 <li sec:authorize="hasRole('SOCIO_BI')"><a th:href="@{/reportes}" aria-expanded="false"><i class="mdi  mdi-folder-outline"></i> <span class="hide-menu" th:text="#{menu.reportes.socios}"></span></a></li> -->
               	</ul>
               </li>
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/inmuebles}" aria-expanded="false"><i class="mdi mdi-domain"></i> <span class="hide-menu" th:text="#{menu.bieninmueble}"></span></a></li>

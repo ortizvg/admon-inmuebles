@@ -11,8 +11,10 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.dto.CuotaDepartamentoDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Archivo;
@@ -38,7 +40,7 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 		Archivo archivoCreado = null;
     	if(  cuotaDepartamentoDto.getArchivoMP() != null ) {
     		try {
-    			
+    			validarArhivoCuotDepartamento( cuotaDepartamentoDto );
     			Archivo archivo = new Archivo();
     			archivo.setId(UUID.randomUUID().toString());
     			archivo.setBytes(cuotaDepartamentoDto.getArchivoMP().getBytes());
@@ -47,7 +49,7 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
     			archivoCreado = archivoRepository.save(archivo);
     			
     		} catch (IOException e) {
-    			throw new BusinessException("pago.error.carga.archivo");
+    			throw new BusinessException("cuota.departamento.archivo.guardado.error");
     		}
     	}
 		
@@ -57,6 +59,17 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 		cuotaDepartamento = cuotaDepartamentoRepository.save( cuotaDepartamento );
 		
 		return modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class);
+	}
+	
+	private void validarArhivoCuotDepartamento(CuotaDepartamentoDto cuotaDepartamentoDto) {
+		
+		if( !MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( cuotaDepartamentoDto.getArchivoMP().getContentType() ) ) {
+			throw new BusinessException("cuota.departamento.archivo.validacion.mediatype.pdf");
+		}
+		
+		if( cuotaDepartamentoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_1_MB ) {
+			throw new BusinessException("cuota.departamento.archivo.validacion.tamanio");
+		}
 	}
 
 	@Override

@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.ComunicadoDto;
+import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.ComunicadoService;
@@ -40,14 +42,21 @@ public class ComunicadoController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/comunicados")
 	public String mostrarComunidados(Model model, final HttpServletRequest request) {
 
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+		
+		 if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
+			InmuebleDto inmueble = inmuebleService.findBySocioId( usuarioLogueadoId );
+			model.addAttribute("comunicados", comunicadoService.buscarPorInmuebleId( inmueble.getId() ) );
+	         
+	     } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
+			model.addAttribute("comunicados", comunicadoService.buscarPorContadorId( usuarioLogueadoId ) );
+			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+	     } 
 
-		model.addAttribute("comunicados", comunicadoService.buscarPorContadorId( usuarioLogueadoId ) );
-		model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
 
 		return "reportes/comunicados";
 	}
@@ -74,24 +83,19 @@ public class ComunicadoController {
 			@Valid final ComunicadoDto comunicado, final BindingResult bindingResult, RedirectAttributes redirect) {
 		
 		if (bindingResult.hasErrors()) {
+			redirect.addFlashAttribute("comunicado",  comunicado );
 			return "reportes/comunicado-carga";
 		}
 		
-		if( !org.springframework.http.MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( comunicado.getArchivoMP().getContentType() ) ) {
-			redirect.addFlashAttribute("error", messages.getMessage("archivo.validacion.mediatype.pdf", null, locale));
+		try {
+			comunicadoService.guardar( comunicado );
+		} catch (BusinessException e) {
 			redirect.addFlashAttribute("comunicado",  comunicado );
+			redirect.addFlashAttribute("error", messages.getMessage(e.getMessage(), null, locale));
 			return "redirect:/reportes/comunicados/carga"; 
 		}
-		
-		if( comunicado.getArchivoMP().getSize() > 1000000 ) {
-			redirect.addFlashAttribute("comunicado",  comunicado );
-			redirect.addFlashAttribute("error", messages.getMessage("archivo.validacion.tamanio", null, locale));
-			return "redirect:/reportes/comunicados/carga"; 
-		}
-			
-		comunicadoService.guardar( comunicado );
 
-		redirect.addFlashAttribute("message", messages.getMessage("archivo.guardado.exito", null, locale));
+		redirect.addFlashAttribute("message", messages.getMessage("comunicados.guardado.exito", null, locale));
 		return "redirect:/reportes/comunicados/carga"; 
 	}
 	

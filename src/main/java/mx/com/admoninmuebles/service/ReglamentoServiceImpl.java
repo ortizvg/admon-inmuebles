@@ -10,9 +10,13 @@ import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.dto.ReglamentoDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Archivo;
@@ -22,6 +26,8 @@ import mx.com.admoninmuebles.persistence.repository.ReglamentoRepository;
 
 @Service
 public class ReglamentoServiceImpl implements ReglamentoService {
+	
+	Logger logger = LoggerFactory.getLogger(ReglamentoServiceImpl.class);
 	
 	@Autowired
 	private ReglamentoRepository reglamentoRepository;
@@ -40,6 +46,8 @@ public class ReglamentoServiceImpl implements ReglamentoService {
     	if(  reglamentoDto.getArchivoMP() != null ) {
     		try {
     			
+    			validarArhivoReglamento( reglamentoDto );
+    			
     			Archivo archivo = new Archivo();
     			archivo.setId(UUID.randomUUID().toString());
     			archivo.setBytes(reglamentoDto.getArchivoMP().getBytes());
@@ -48,7 +56,8 @@ public class ReglamentoServiceImpl implements ReglamentoService {
     			archivoCreado = archivoRepository.save(archivo);
     			
     		} catch (IOException e) {
-    			throw new BusinessException("pago.error.carga.archivo");
+    			logger.error("Error al guardar el archivo para el reglamento: ", e);
+    			throw new BusinessException("reglamentos.archivo.guardado.error");
     		}
     	}
 		
@@ -58,6 +67,16 @@ public class ReglamentoServiceImpl implements ReglamentoService {
 		reglamento = reglamentoRepository.save(reglamento);
 		
 		return modelMapper.map(reglamento, ReglamentoDto.class);
+	}
+	
+	private void validarArhivoReglamento(ReglamentoDto reglamentoDto) {
+		if( !MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( reglamentoDto.getArchivoMP().getContentType() ) ) {
+			throw new BusinessException("reglamentos.archivo.validacion.mediatype.pdf");
+		}
+		
+		if( reglamentoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_1_MB ) {
+			throw new BusinessException("reglamentos.archivo.validacion.tamanio");
+		}
 	}
 
 	@Override

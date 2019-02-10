@@ -2646,7 +2646,7 @@ insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) v
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (2, 'Balance general', 'es');
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (3, 'Estado de resultados', 'es');
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (4, 'Egresos e ingresos', 'es');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (5, 'Morosos', 'es');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (5, 'Deudores', 'es');
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (6, 'Financial statements', 'en');
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (7, 'Balance sheet', 'en');
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (8, 'Statement of income', 'en');

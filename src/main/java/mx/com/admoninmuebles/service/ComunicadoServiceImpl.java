@@ -11,8 +11,10 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.dto.ComunicadoDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Archivo;
@@ -39,7 +41,7 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 		Archivo archivoCreado = null;
     	if(  comunicadoDto.getArchivoMP() != null ) {
     		try {
-    			
+    			validarArhivoComunicado( comunicadoDto );
     			Archivo archivo = new Archivo();
     			archivo.setId(UUID.randomUUID().toString());
     			archivo.setBytes(comunicadoDto.getArchivoMP().getBytes());
@@ -48,7 +50,7 @@ public class ComunicadoServiceImpl implements ComunicadoService {
     			archivoCreado = archivoRepository.save(archivo);
     			
     		} catch (IOException e) {
-    			throw new BusinessException("pago.error.carga.archivo");
+    			throw new BusinessException("comunicados.archivo.guardado.error");
     		}
     	}
 		
@@ -58,6 +60,16 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 		comunicado = comunicadoRepository.save(comunicado);
 		
 		return modelMapper.map(comunicado, ComunicadoDto.class);
+	}
+	
+	private void validarArhivoComunicado(ComunicadoDto comunicadoDto) {
+		if( !MediaType.APPLICATION_PDF_VALUE.equalsIgnoreCase( comunicadoDto.getArchivoMP().getContentType() ) ) {
+			throw new BusinessException("comunicados.archivo.validacion.mediatype.pdf");
+		}
+		
+		if( comunicadoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_1_MB ) {
+			throw new BusinessException("comunicados.archivo.validacion.tamanio");
+		}
 	}
 
 	@Override
