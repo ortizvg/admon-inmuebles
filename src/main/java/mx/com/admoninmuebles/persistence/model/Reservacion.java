@@ -1,6 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,9 +34,9 @@ public class Reservacion extends EntidadBase {
     @Column(length = 50, nullable = false)
     private String title;
 
-    private LocalDateTime start;
+    private LocalDate start;
 
-    private LocalDateTime end;
+    private LocalDate end;
 
     @ManyToOne
     @JoinColumn(name = "id_area_comun_fk")

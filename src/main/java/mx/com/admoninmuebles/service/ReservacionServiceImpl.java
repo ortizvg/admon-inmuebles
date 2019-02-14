@@ -79,15 +79,15 @@ public class ReservacionServiceImpl implements ReservacionService {
 	@Override
 	public void validateReservation(ReservacionDto reservacionDto) {
 		
-		LocalDateTime diaAnterior = reservacionDto.getStart().minusDays(1);
-		LocalDateTime diasiguiente = reservacionDto.getStart().plusDays(1);
-		
-		Collection<Reservacion> reservaciones = reservacionRepository.
-				findByAreaComunIdAndSocioIdAndStartLessThanEqualAndStartGreaterThanEqual(reservacionDto.getAreaComunId(), reservacionDto.getSocioId(), diasiguiente, diaAnterior);
-		
-		if(reservaciones.size() > 0) {
-			throw new BusinessException("reserva.areacomun.validacion.mensaje.diaanteriorposterior");
-		}
+//		LocalDateTime diaAnterior = reservacionDto.getStart().minusDays(1);
+//		LocalDateTime diasiguiente = reservacionDto.getStart().plusDays(1);
+//		
+//		Collection<Reservacion> reservaciones = reservacionRepository.
+//				findByAreaComunIdAndSocioIdAndStartLessThanEqualAndStartGreaterThanEqual(reservacionDto.getAreaComunId(), reservacionDto.getSocioId(), diasiguiente, diaAnterior);
+//		
+//		if(reservaciones.size() > 0) {
+//			throw new BusinessException("reserva.areacomun.validacion.mensaje.diaanteriorposterior");
+//		}
 		
 	}
 	

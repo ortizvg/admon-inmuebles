@@ -15,18 +15,19 @@
         <li sec:authorize="!isAuthenticated()"><a href="/inicio#sucursales" aria-expanded="false"><i class="mdi mdi-map-marker"></i> <span class="hide-menu" th:text="#{menu.sucursales}"></span></a></li>
         <li sec:authorize="!isAuthenticated()"><a href="/contacto" aria-expanded="false"><i class="mdi mdi-contact-mail"></i> <span class="hide-menu" th:text="#{menu.contactanos}"></span></a></li>
 <!--         <li sec:authorize="!isAuthenticated()"><a href="/preguntas-frecuentes" aria-expanded="false"><i class="mdi mdi-comment-account"></i> <span class="hide-menu" th:text="#{menu.preguntasfrecuentes}"></span></a></li> -->
-        <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li>
+<!--         <li><a href="/iconos" aria-expanded="false"><i class="mdi mdi-airplay"></i> <span class="hide-menu">Iconos</span></a></li> -->
         <li sec:authorize="!isAuthenticated()"><a href="/login" aria-expanded="false"><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.ingresosocios}"></span></a></li>
         <li sec:authorize="hasRole('PROVEEDOR')"><a href="/proveedor" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('SOCIO_BI')"><a href="/condomino" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('ADMIN_BI')"><a href="/adminbi" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('ADMIN_ZONA')"><a href="/adminzona" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="hasRole('ADMIN_CORP')"><a href="/admincorp" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
-        <li sec:authorize="hasRole('CONTADOR')"><a href="/contador" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
+        <li sec:authorize="hasRole('CONTADOR')"><a href="/morosos/tablero" aria-expanded="false"><i class="mdi mdi-home"></i> <span class="hide-menu" th:text="#{menu.usuario.tablero}"></span></a></li>
         <li sec:authorize="isAuthenticated()"><a class="has-arrow" href="#" aria-expanded="true"><i class="mdi mdi-table"></i> <span class="hide-menu" th:text="#{menu.administracion}"></span></a>
           <ul aria-expanded="true" class="collapse in">
             <li sec:authorize="hasAuthority('VER_TICKET')"><a th:href="@{/tickets}" aria-expanded="false"><i class="mdi mdi-tag-multiple"></i> <span class="hide-menu" th:text="#{menu.tickets}"></span></a></li>
 			<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/inmuebles}" aria-expanded="false"><i class="mdi mdi-domain"></i> <span class="hide-menu" th:text="#{menu.bieninmueble}"></span></a></li>             
+           	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a href="/morosos/tablero" aria-expanded="false"><i class="mdi mdi-cash-usd"></i> <span class="hide-menu" th:text="#{menu.morosos}"></span></a></li>
             <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI', 'CONTADOR')"><a href="/pagos" aria-expanded="false"><i class="mdi mdi-cash-usd"></i> <span class="hide-menu" th:text="#{menu.pagos}"></span></a></li>
               <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-clipboard"></i> <span class="hide-menu"
                   th:text="#{menu.reservaciones}"></span></a>

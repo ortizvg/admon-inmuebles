@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{mororos.tablero.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  		var serverContext = [[@{/}]];
+  
+	    $(document).ready(function() {
+	    	
+	    	$("#inmueble").val( /*[[${session.inmuebleSeleccionado}]]*/) ;
+	    	$("#zona").val( /*[[${session.zonaCodigoSeleccionada}]]*/) ;
+	    	reportePagosInmueble();
+	    	poblarGraficoPagosPorInmueble();
+
+	    });
+	    
+	    function cargarInmueblesPorZona() {
+	    	var zonaCodigo = $("#zona").val();
+	        $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + zonaCodigo, function(data) {
+	        	var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
+	            var len = data.length;
+	            for ( var i = 0; i < len; i++) {
+	                html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	            }
+	            html += '</option>';
+	            $('#inmueble').html(html);
+	        });
+	    }
+
+
+
+	    function poblarGraficoPagosPorInmueble() {
+	    	var inmuebleId = $("#inmueble").val();
+	    	if( inmuebleId == '' || inmuebleId == null){
+	    		return;
+	    	}
+	    	var nombreStatusPago = null;
+	    	$("#pagos-grafica-dona").empty();
+	    	request = $.getJSON(serverContext + "api/morosos/inmuebles/" + inmuebleId + "/grafica/dona", function() {
+	           console.log('Petición exitosa');
+	        });
+	    	
+	    	request.done(function(response, textStatus, jqXHR) {
+	    		 console.log(response);
+	    		 console.log(jqXHR.status);
+	    		 
+	    		 if( jqXHR.status == 200 ){
+	    		 	Morris.Donut( response ).on('click', function (i, row) {  
+	    		 		console.log(i);
+	    		 		console.log(row);
+	    		 		if( i == 0){
+	    		 			nombreStatusPago='PAGADO';
+	    		 		}else if( i == 1){
+	    		 			nombreStatusPago='CERCANO';
+	    		 		}else if (i == 2){
+	    		 			nombreStatusPago='VERIFICACION';
+	    		 		}else if (i == 3){
+	    		 			nombreStatusPago='ATRASADO';
+	    		 		}
+	    		 		
+// 	    		 		window.location.href = serverContext + "morosos/detalle?idInmueble=" + inmuebleId + "&nombreStatusPago=" + nombreStatusPago;
+	    		 		
+	    		 		window.location.href = serverContext + "morosos/inmuebles/" + inmuebleId + "/detalle/" + nombreStatusPago;
+	    		 	});
+	    		 }
+	    		 
+	    		 if( jqXHR.status == 204 ){
+	    		 	$("#pagos-grafica-dona").html( "<div>"+ /*[[#{mororos.tablero.inmueble.pagos.cero}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-emoticon-sad'></i></span></div>" );
+	    		 }
+	    		 
+	 	    });
+	 	    request.fail(function(jqXHR, textStatus, errorThrown) {
+	 	    	$("#pagos-grafica-dona").html( "<div>"+ /*[[#{mororos.tablero.inmueble.pagos.error}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-minecraft'></i></span></div>" );
+	 	    });
+	 	
+	    }
+	    
+	    
+	    function reportePagosInmueble() {
+	    	var inmuebleId = $("#inmueble").val();
+	    	if( inmuebleId == '' || inmuebleId == null){
+	    		return;
+	    	}
+	    	var nombreStatusPago = null;
+	    	$("#pagos-grafica-dona").empty();
+	    	request = $.getJSON(serverContext + "api/morosos/inmuebles/" + inmuebleId + "/reporte", function() {
+	           console.log('Petición exitosa');
+	        });
+	    	
+	    	request.done(function(response, textStatus, jqXHR) {
+	    		 console.log(response);
+	    		 console.log(jqXHR.status);
+	    		 
+	    		 if( jqXHR.status == 200 ){
+	    		 	$("#nombreInmuebleId").text(response.inmubleNombre);
+	    		 	$("#pagosRealizados").text(response.pagosRealizados);
+	    		 	$("#pagosPendientes").text(response.pagosPendientes);
+	    		 	$("#pagosVerificacion").text(response.pagosVerificacion);
+	    		 	$("#pagosAtrasados").text(response.pagosAtrasados);
+	    		 }
+	    		 
+	    		 if( jqXHR.status == 204 ){
+	    		 	$("#inmuebleInforamcion").html( "<div>"+ /*[[#{mororos.tablero.inmueble.pagos.cero}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-emoticon-sad'></i></span></div>" );
+	    		 }
+	    		 
+	 	    });
+	 	    request.fail(function(jqXHR, textStatus, errorThrown) {
+	 	    	$("#inmuebleInforamcion").html( "<div>"+ /*[[#{mororos.tablero.inmueble.pagos.error}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-minecraft'></i></span></div>" );
+	 	    });
+	 	
+	    }
+
+  
+  /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{mororos.tablero.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{mororos.tablero.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{mororos.tablero.subtitulo.detalle}"></h6>
+			 
+			   <form name="pagoGeneracionForm" action="#">
+			   	<div class="row">
+			      <div id="divZona" class="form-group col-md-6"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
+	                    <label class="form-control-label" for="rolId" th:text="#{morosos.zona}"></label>
+	                     <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
+	                     	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+							<option th:each="zona : ${zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
+	                     </select>
+	               </div>
+	               <div id="divInmueble" class="form-group col-md-6" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" >
+	               	     <label class="form-control-label" for="inmueble" th:text="#{morosos.inmueble}"></label>
+	                    <select  name="inmueble" id="inmueble" class="form-control" onchange="poblarGraficoPagosPorInmueble();reportePagosInmueble();">
+	                    		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+								<option th:each="inmueble : ${inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+		                </select>
+	               </div>
+			   	</div>
+               </form>
+               
+               <div class="row text-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body ">
+                                <h4 class="card-title" th:text="#{mororos.tablero.inmueble.titulo}"></h4>
+                                <div id="inmuebleInformacion">
+                                	<img src="../images/servicios/ICONOS_SERVICIOS_01_MTTO.png" width="200px" />
+                                	<h4 id="nombreInmuebleId" class="m-t-20"></h4>
+                                	<div class="row">
+	                                    <div class="col-md-3 text-success">
+	                                        <span id="pagosRealizados" class="display-6" ></span>
+	                                        <h6 class="text-muted" th:text="#{mororos.tablero.pago.pagado}"></h6>
+	                                    </div>
+	                                    <div class="col-md-3 text-warning">
+	                                        <span id="pagosPendientes" class="display-6"></span>
+	                                        <h6 class="text-muted"  th:text="#{mororos.tablero.pago.pendiente}"></h6>
+	                                    </div>
+	                                    <div class="col-md-3 text-muted">
+	                                        <span id="pagosVerificacion" class="display-6"></span>
+	                                        <h6 class="text-muted"  th:text="#{mororos.tablero.pago.verificando}"></h6>
+	                                    </div>
+	                                    <div class="col-md-3 text-danger">
+	                                        <span id="pagosAtrasados" class="display-6"></span>
+	                                        <h6 class="text-muted"  th:text="#{mororos.tablero.pago.atrasado}"></h6>
+	                                    </div>
+                                	</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               		<div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="#{mororos.tablero.grafico.titulo}"></h4>
+                                <div id="pagos-grafica-dona"></div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+			 
+								 
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
+

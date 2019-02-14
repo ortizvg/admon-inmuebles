@@ -150,35 +150,24 @@
     
       <form th:action="@{/reservaciones/reservar-area/busqueda}" th:object="${reservacionDto}" method="post">
         <div class="row">
-            <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
-                <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label>
-                 <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
-                 	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
-					<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
-                 </select>
-            </div>
-            <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" >
-                <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
-                <select  name="inmueble" id="inmueble" class="form-control"  onchange="cargarAreasComunesPorInmueble()">
-               		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
-					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
-                </select>
-            </div>
-            
-          <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
-            <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
-            <select id="areaComunId" class="form-control" onchange="cargarReservacionesPorAreaComun()">
-              <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
-              <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option>
-            </select>
-            <span class="form-control-feedback">
-              <span th:if="${#fields.hasErrors('areaComunId')}" th:errors="*{areaComunId}"></span>
-            </span>
-          </div>
+<!--             <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"> -->
+<!--                 <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label> -->
+<!--                  <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	 -->
+<!--                  	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option> -->
+<!-- 					<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option> -->
+<!--                  </select> -->
+<!--             </div> -->
+<!--             <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" > -->
+<!--                 <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label> -->
+<!--                 <select  name="inmueble" id="inmueble" class="form-control"  onchange="cargarAreasComunesPorInmueble()"> -->
+<!--                		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	 -->
+<!-- 					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option> -->
+<!--                 </select> -->
+<!--             </div> -->
             
 <!--           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'"> -->
 <!--             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label> -->
-<!--             <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()"> -->
+<!--             <select id="areaComunId" class="form-control" onchange="cargarReservacionesPorAreaComun()"> -->
 <!--               <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
 <!--               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option> -->
 <!--             </select> -->
@@ -186,6 +175,17 @@
 <!--               <span th:if="${#fields.hasErrors('areaComunId')}" th:errors="*{areaComunId}"></span> -->
 <!--             </span> -->
 <!--           </div> -->
+            
+          <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
+            <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
+            <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
+              <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+              <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option>
+            </select>
+            <span class="form-control-feedback">
+              <span th:if="${#fields.hasErrors('areaComunId')}" th:errors="*{areaComunId}"></span>
+            </span>
+          </div>
         </div>
         
 		<div class="alert alert-danger" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>

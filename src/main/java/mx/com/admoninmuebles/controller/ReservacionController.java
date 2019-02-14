@@ -149,7 +149,7 @@ public class ReservacionController {
         return "redirect:/reservaciones/reservar-area";
     }
     
-    @PreAuthorize("hasAnyRole( 'ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI' )")
+    @PreAuthorize("hasAnyRole( 'ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI' )")
     @PostMapping(value = "/reservaciones/reserva-area/eliminar")
     public String eliminarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
     	ReservacionDto reservacion = reservacioService.findById(reservacionDto.getId());

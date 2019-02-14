@@ -392,7 +392,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Reservacion reservacion = optReservacion.orElse(new Reservacion());
         if (!optReservacion.isPresent()) {
             reservacion.setTitle(title);
-            reservacion.setStart(LocalDateTime.now());
+            reservacion.setStart(LocalDate.now());
             reservacion.setAreaComun(areaComun);
             reservacion.setSocio(usuarioSocioBi);
             reservacion = reservacionRepository.save(reservacion);

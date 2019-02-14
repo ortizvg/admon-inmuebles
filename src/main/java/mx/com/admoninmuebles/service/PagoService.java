@@ -29,4 +29,10 @@ public interface PagoService {
     Collection<PagoDto> buscarPorAdminBi(Long idAdminBi);
     Collection<PagoDto> buscarPorAdminZona(Long idAdminZona);
     
+    Collection<PagoDto> buscarPorInmuebleYEstatusPagoNombre(final Long idInmueble, final String nombre);
+    Long getTotalPagosPorInmueble(final Long idInmueble);
+    Long getTotalPagosPorInmuebleYEstatusPagoNOmbre(final Long idInmueble, final String nombre);
+    
+    Collection<PagoDto> buscarPorSocioYEstatusPagoNombre(final Long idSocio, final String nombre);
+    
 }

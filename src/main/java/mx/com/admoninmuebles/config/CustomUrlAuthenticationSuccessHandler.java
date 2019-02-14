@@ -96,7 +96,8 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         }else if (isProveedor) {
             return "/proveedor";
         }else if (isContador) {
-            return "/contador";
+        	return "/morosos/tablero";
+//            return "/contador";
         }
         else {
             throw new IllegalStateException();

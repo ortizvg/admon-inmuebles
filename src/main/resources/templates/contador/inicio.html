@@ -48,6 +48,110 @@ $(window).on('load', function() {
 		});
 	});
 	
+
+
+
+
+$(document).ready(function() {
+	
+	Morris.Area({
+        element: 'morris-area-chart',
+        data: [{
+            mes: '1',
+            pagado: 75,
+            verificacion: 10,
+            pendiente: 65,
+            atrasado: 55
+        }, {
+        	 mes: '2',
+             pagado: 15,
+             verificacion: 10,
+             pendiente: 70,
+             atrasado: 45
+        }, {
+        	 mes: '3',
+             pagado: 20,
+             verificacion: 10,
+             pendiente: 70,
+             atrasado: 65
+        }, {
+        	 mes: '4',
+             pagado: 40,
+             verificacion: 35,
+             pendiente: 70,
+             atrasado: 55
+        }, {
+        	 mes: '5',
+             pagado: 80,
+             verificacion: 20,
+             pendiente: 80,
+             atrasado: 85
+        }, {
+        	 mes: '6',
+             pagado: 80,
+             verificacion: 50,
+             pendiente: 10,
+             atrasado: 15
+        },
+         {
+        	 mes: '7',
+             pagado: 35,
+             verificacion: 70,
+             pendiente: 80,
+             atrasado: 45
+        },
+        {
+       	 mes: '8',
+            pagado: 15,
+            verificacion: 65,
+            pendiente: 35,
+            atrasado: 20
+       	},
+       	{
+      	 	mes: '9',
+           pagado: 45,
+           verificacion: 90,
+           pendiente: 40,
+           atrasado: 15
+      	},
+       	{
+      	 mes: '10',
+           pagado: 15,
+           verificacion: 35,
+           pendiente: 25,
+           atrasado: 40
+      	},
+      	{
+     	  mes: '11',
+          pagado: 50,
+          verificacion: 55,
+          pendiente: 35,
+          atrasado: 90
+     	},
+     	{
+    	 mes: '12',
+         pagado: 100,
+         verificacion: 70,
+         pendiente: 10,
+         atrasado: 25
+    	}
+        ],
+        xkey: 'mes',
+        ykeys: ['pagado', 'verificacion', 'pendiente', 'atrasado'],
+        labels: ['Pagado', 'Verificación', 'Pendiente', 'Atrasado'],
+        pointSize: 4,
+        fillOpacity: 0,
+        pointStrokeColors:['#55ce63', '#6c757d', '#ffbc34', '#f62d51'],
+        behaveLikeLine: true,
+        gridLineColor: '#e0e0e0',
+        lineWidth: 4,
+        hideHover: 'auto',
+        lineColors: ['#55ce63', '#6c757d', '#ffbc34', '#f62d51'],
+        resize: true
+        
+    });
+});
+	
 /*]]>*/
 </script>
 </head>
@@ -77,66 +181,34 @@ $(window).on('load', function() {
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex no-block">
-                                    <h4 class="card-title" >Reportes</h4>
+                                    <h4 class="card-title" >Reportes de pagos</h4>
                                 </div>
-                                <h6 class="card-subtitle"  >Modúlo para reportes de inmuebles</h6>
+                                <h6 class="card-subtitle"  >Reportes de pagos por inmueble</h6>
                                 	
-<!--                                 	 <div class="card"> -->
-<!-- 			                            <div class="card-body"> -->
-<!-- 			                                <h4 class="card-title">Customtab vertical Tab</h4> -->
-<!-- 			                                <h6 class="card-subtitle">Use default tab with class <code>vtabs, tabs-vertical & customvtab</code></h6> -->
-			                                <!-- Nav tabs -->
-			                                <div class="vtabs customvtab">
-			                                    <ul class="nav nav-tabs tabs-vertical" style="width:auto" role="tablist">
-			                                        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#r1" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reportes del mes</span> </a> </li>
-			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r2" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reportes historicos</span></a> </li>
-			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r3" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Reglamentos</span></a> </li>
-			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r4" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class=ti-folder></i> <span class="hidden-xs-down">Comunicados</span></a> </li>
-			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r5" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Resumen de acuedos asambleas</span></a> </li>
-			                                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#r6" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span><i class="ti-folder"></i> <span class="hidden-xs-down">Coutas por departamento</span></a> </li>
-			                                    </ul>
-			                                    <!-- Tab panes -->
-			                                    <div class="tab-content">
-			                                        <div class="tab-pane active" id="r1" role="tabpanel">
-			                                            <div class="p-20">
-			                                                <h3>Reportes del mes</h3>
-			                                                <p>Espacio para obtener los reportes mensuales</p>
-			                                            </div>
-			                                        </div>
-			                                        <div class="tab-pane" id="r2" role="tabpanel">
-			                                        	<div class="p-20">
-			                                                <h3>Reportes historicos</h3>
-			                                                <p>Espacio para obtener el historico de reportes</p>
-			                                            </div>
-			                                        </div>
-			                                        <div class="tab-pane" id="r3" role="tabpanel">
-			                                        	<div class="p-20">
-			                                                <h3>Reglamentos</h3>
-			                                                <p>Espacio para obtener reglamentos</p>
-			                                            </div>
-			                                        </div>
-			                                         <div class="tab-pane" id="r4" role="tabpanel">
-			                                        	<div class="p-20">
-			                                                <h3>Comunicados</h3>
-			                                                <p>Espacio para revisión de documentos de comunicados</p>
-			                                            </div>
-			                                        </div>
-			                                         <div class="tab-pane" id="r5" role="tabpanel">
-			                                        	<div class="p-20">
-			                                                <h3>Resumen de acuedos asambleas</h3>
-			                                                <p>Espacio para obtener el resumen de acuedos asambleas</p>
-			                                            </div>
-			                                        </div>
-			                                         <div class="tab-pane" id="r6" role="tabpanel">
-			                                        	<div class="p-20">
-			                                                <h3>Coutas por departamento</h3>
-			                                                <p>Espacio para obtener las coutas por departamento</p>
-			                                            </div>
-			                                        </div>
-			                                    </div>
-			                                </div>
-<!-- 			                            </div> -->
-<!-- 			                        </div> -->
+                                	<div class="row">
+                                	 <div class="col-md-12">
+				                        <div class="card">
+				                            <div class="card-body">
+				                                <h4 class="card-title">Resumen pagos mensuales</h4>
+				                                <ul class="list-inline text-right">
+				                                    <li>
+				                                        <h5><i class="fa fa-circle m-r-5 text-success"></i>Pagado</h5>
+				                                    </li>
+				                                    <li>
+				                                        <h5><i class="fa fa-circle m-r-5 text-muted"></i>Verificación</h5>
+				                                    </li>
+				                                    <li>
+				                                        <h5><i class="fa fa-circle m-r-5 text-warning"></i>Pendiente</h5>
+				                                    </li>
+				                                    <li>
+				                                        <h5><i class="fa fa-circle m-r-5 text-danger"></i>Atrasado</h5>
+				                                    </li>
+				                                </ul>
+				                                <div id="morris-area-chart"></div>
+				                            </div>
+				                        </div>
+				                    </div>
+
 			                    </div>
                                                                
                             </div>

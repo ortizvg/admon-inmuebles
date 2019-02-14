@@ -100,7 +100,8 @@ public class SocioController {
     	InmuebleDto inmuebleDto = inmuebleService.findBySocioId(socioBiLogueadoId);
     	model.addAttribute("inmuebleDto", inmuebleDto);
     	
-    	session.setAttribute("notificaciones", notificacionService.findByInmuebleIdNotExpired(inmuebleDto.getId()));
+//    	session.setAttribute("notificaciones", notificacionService.findByInmuebleIdNotExpired(inmuebleDto.getId()));
+    	session.setAttribute("notificaciones", notificacionService.findByUserIdNotExpired( socioBiLogueadoId ));
 //        model.addAttribute("inmuebleDto", inmuebleService.findById(usuarioDto.getInmuebleId()));
 //        session.setAttribute("notificaciones", notificacionService.findByInmuebleId(usuarioDto.getInmuebleId()));
 //        session.setAttribute("notificaciones", notificacionService.findByInmuebleIdNotExpired(usuarioDto.getInmuebleId()));

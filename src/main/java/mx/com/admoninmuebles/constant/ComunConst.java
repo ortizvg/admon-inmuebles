@@ -6,6 +6,6 @@ public final class ComunConst {
 		throw new IllegalAccessException();
 	}
 	
-	public static final Integer TAMANIO_1_MB = 1000000;
+	public static final Integer TAMANIO_1_MB = 2000000;
 
 }

@@ -40,8 +40,9 @@ public class NotificacionDto {
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate fechaExposicionFinal;
     
-    @NotNull
     private Long inmuebleId;
+    
+    private Long usuarioId;
     
     @DateTimeFormat(pattern="dd-MM-yyyy") 
     private Date fechaModificacion;
