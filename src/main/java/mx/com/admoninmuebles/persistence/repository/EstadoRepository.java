@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import mx.com.admoninmuebles.persistence.model.Estado;
 
 @Repository
-public interface EstadoRepository extends CrudRepository<Estado, String> {
+public interface EstadoRepository extends CrudRepository<Estado, Long> {
 
 }

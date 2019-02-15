@@ -14,6 +14,9 @@ public interface AsentamientoRepository extends CrudRepository<Asentamiento, Lon
 
     Collection<Asentamiento> findBycodigoPostal(String codigoPostal);
     
+    Collection<Asentamiento> findBycodigoPostalAndMunicipioEstadoId(String codigoPostal, Long estadoId);
+    
+    
     Collection<Asentamiento> findByZonaCodigo(String codigo);
     Collection<Asentamiento> findByZonaIn(Collection<Zona> zonas);
     

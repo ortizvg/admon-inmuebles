@@ -13,31 +13,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.admoninmuebles.dto.ColoniaDto;
-import mx.com.admoninmuebles.service.ColoniaService;
+import mx.com.admoninmuebles.service.AsentamientoService;
 
 @RestController
 @RequestMapping("/api")
-public class ColoniaResource {
-
+public class AsentamientoResource {
+	
 	@Autowired
-	private ColoniaService coloniaService;
+	private AsentamientoService asentamientoService;
 
-	@GetMapping("/colonias")
+	@GetMapping("/asentamientos")
 	public ResponseEntity<Collection<ColoniaDto>> buscarColonias(
 			@RequestParam(name = "codigoPostal", required = false) String codigoPostal,
-			@RequestParam(name = "zonaCodigo", required = false) String zonaCodigo,
-			@RequestParam(name = "estadoId", required = false) Long estadoId) {
+			@RequestParam(name = "zonaCodigo", required = false) String zonaCodigo) {
 		try {
 			Collection<ColoniaDto> colonias = Collections.emptyList();
 			if ((!StringUtils.isEmpty(codigoPostal) && !StringUtils.isEmpty(zonaCodigo))) {
-				colonias = coloniaService.findBycodigoPostalAndZonaCodigo(codigoPostal, zonaCodigo);
-			} else if (!StringUtils.isEmpty(codigoPostal) && StringUtils.isEmpty(zonaCodigo)) {
-				colonias = coloniaService.findBycodigoPostal(codigoPostal);
-			} else if (StringUtils.isEmpty(codigoPostal) && !StringUtils.isEmpty(zonaCodigo)) {
-				colonias = coloniaService.findByZonaCodigo(zonaCodigo);
-			} else if (!StringUtils.isBlank(codigoPostal) && estadoId != null) {
-				colonias = coloniaService.findBycodigoPostalAndEstadoId(codigoPostal, estadoId);
-			}
+				colonias = asentamientoService.findBycodigoPostalAndZonaCodigo(codigoPostal, zonaCodigo);
+			} 
 			return new ResponseEntity<>(colonias, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);

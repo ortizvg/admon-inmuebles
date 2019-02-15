@@ -20,7 +20,13 @@ public class ZonaDto {
     private String adminZonaNombre;
 
     private String adminZonaApellidoPaterno;
-
+    
     private String adminZonaApellidoMaterno;
+
+    private Long estadoId;
+    
+    private String estadoNombre;
+    
+    
 
 }

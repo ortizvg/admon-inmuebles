@@ -18,6 +18,8 @@ public interface ColoniaService {
 
     Collection<ColoniaDto> findBycodigoPostal(String codigoPostal);
     
+    Collection<ColoniaDto> findBycodigoPostalAndEstadoId(final String codigoPostal, final Long estadoId);
+    
     Collection<ColoniaDto> findByZonaCodigo(String zonaCodigo);
     
     Collection<ColoniaDto> findBycodigoPostalAndZonaCodigo(final String codigoPostal, String zonaCodigo);

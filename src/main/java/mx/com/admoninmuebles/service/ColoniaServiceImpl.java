@@ -70,6 +70,12 @@ public class ColoniaServiceImpl implements ColoniaService {
     }
     
     @Override
+    public Collection<ColoniaDto> findBycodigoPostalAndEstadoId(final String codigoPostal, final Long estadoId) {
+        return StreamSupport.stream(asentamientoRepository.findBycodigoPostalAndMunicipioEstadoId(codigoPostal, estadoId).spliterator(), false).map(asentamiento -> modelMapper.map(asentamiento, ColoniaDto.class))
+                .collect(Collectors.toList());
+    }
+    
+    @Override
     public Collection<ColoniaDto> findBycodigoPostalAndZonaCodigo(final String codigoPostal, String zonaCodigo) {
         return StreamSupport.stream(asentamientoRepository.findBycodigoPostal(codigoPostal).spliterator(), false).map(asentamiento -> modelMapper.map(asentamiento, ColoniaDto.class))
                 .collect(Collectors.toList());

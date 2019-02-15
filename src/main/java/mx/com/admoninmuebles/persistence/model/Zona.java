@@ -38,7 +38,12 @@ public class Zona extends EntidadBase {
 	@ManyToOne
 	@JoinColumn(name = "id_admin_zona_fk")
 	private Usuario adminZona;
-
+	
+	@ManyToOne
+	@JoinColumn(name = "id_estado_fk")
+	private Estado estado;
+	
+	
 	@OneToMany(mappedBy = "zona")
 	private Collection<Asentamiento> asentamientos;
 

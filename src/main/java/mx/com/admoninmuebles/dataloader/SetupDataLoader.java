@@ -46,6 +46,7 @@ import mx.com.admoninmuebles.persistence.repository.AreaServicioRepository;
 import mx.com.admoninmuebles.persistence.repository.AsentamientoRepository;
 import mx.com.admoninmuebles.persistence.repository.DatosAdicionalesRepository;
 import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
+import mx.com.admoninmuebles.persistence.repository.EstadoRepository;
 import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.PagoRepository;
 import mx.com.admoninmuebles.persistence.repository.PrivilegioRepository;
@@ -109,6 +110,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     
     @Autowired
     private TipoSocioRepository tipoSocioRepository;
+    
+    @Autowired
+    private EstadoRepository estadoRepository;
 
     @Override
     @Transactional
@@ -219,11 +223,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createUsuarioIfNotFound("admin_corp", "Administrador", "Corporativo", "", "admin_corp", new ArrayList<>(Arrays.asList(adminCorp)), "correo@gmail.com", null);
         Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com", null);
 
-        Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi);
-        createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null);
-        createZonaIfNotFound("zona3", "Aguascalientes", usuarioAdminZona2, usuarioAdminB2);
-        createZonaIfNotFound("zona4", "Querétaro", usuarioAdminZona2, null);
-        createZonaIfNotFound("zona5", "Cancún", usuarioAdminZona2, null);
+        Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi, 9L);
+        createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null, 9L);
+        createZonaIfNotFound("zona3", "Aguascalientes", usuarioAdminZona2, usuarioAdminB2, 1L);
+        createZonaIfNotFound("zona4", "Querétaro", usuarioAdminZona2, null, 22L);
+        createZonaIfNotFound("zona5", "Cancún", usuarioAdminZona2, null, 23L);
         Asentamiento asentamiento = updateAsentamientoIfFound(1L, zona);
 
         Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi,  contadorBI);
@@ -299,7 +303,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public final Zona createZonaIfNotFound(final String codigo, final String nombre, final Usuario adminZona, final Usuario usuarioAdminBi) {
+    public final Zona createZonaIfNotFound(final String codigo, final String nombre, final Usuario adminZona, final Usuario usuarioAdminBi, final Long idEstado) {
         Optional<Zona> optZona = zonaRepository.findById(codigo);
         Zona zona = optZona.orElse(new Zona());
         if (!optZona.isPresent()) {
@@ -307,6 +311,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             zona.setNombre(nombre);
             zona.setAdminZona(adminZona);
             zona.addAdminBi(usuarioAdminBi);
+            zona.setEstado(estadoRepository.findById(idEstado).get());
             zona = zonaRepository.save(zona);
         }
         return zona;

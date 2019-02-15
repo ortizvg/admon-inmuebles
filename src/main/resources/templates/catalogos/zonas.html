@@ -52,6 +52,7 @@
                     <tr>
                       <th th:text="#{zona.codigo}"></th>
                       <th th:text="#{zona.nombre}"></th>
+                      <th th:text="#{zona.estado}"></th>
                       <th th:text="#{zona.administrador}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
@@ -61,6 +62,7 @@
                       <tr>
                         <td th:text="${zona.codigo}"></td>
                         <td th:text="${zona.nombre}"></td>
+                        <td th:text="${zona.estadoNombre}"></td>
                         <td th:text="|${zona.adminZonaNombre} ${zona.adminZonaApellidoPaterno} ${zona.adminZonaApellidoMaterno}|"></td>
                         <td><a th:href="${'/catalogos/zona-editar/'  + zona.codigo}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
                           <a th:attr="data-id=''+${zona.codigo}+'', data-nombre=''+${zona.nombre}+''" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"><i class="fa fa-close text-danger"

@@ -15,7 +15,8 @@ $(document).ready(function() {
 
 function cargarColonias() {
 	var codigoPostal = $("#codigoPostal").val();
-    $.getJSON(serverContext + "api/colonias?codigoPostal=" + codigoPostal, function(data) {
+	var zonaCodigo = $("#zonaCodigo").val();
+    $.getJSON(serverContext + "api/asentamientos?codigoPostal=" + codigoPostal + "&zonaCodigo=" + zonaCodigo, function(data) {
         var html = '';
         var len = data.length;
         for ( var i = 0; i < len; i++) {
@@ -24,6 +25,10 @@ function cargarColonias() {
         html += '</option>';
         $('#colonia').html(html);
     });
+};
+
+function limpiarCampos() {
+	$('#colonia').empty();
 };
 /*]]>*/
 </script>
@@ -47,7 +52,7 @@ function cargarColonias() {
           <form name="crearColoniaForm" action="#" th:action="@{/catalogos/colonia-agregar}" th:object="${coloniaDto}" method="post">
             <div id="divZona" th:class="${#fields.hasErrors('zonaCodigo')}? 'form-group has-danger':'form-group'">
               <label class="form-control-label" th:text="#{colonia.zona}"></label>
-              <select name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required>
+              <select name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required onchange="limpiarCampos();">
                 <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
                 <option th:each="zona : ${session.zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} -${zona.nombre}|"></option>
               </select>
@@ -66,6 +71,7 @@ function cargarColonias() {
               <span class="form-control-feedback">
                 <span th:if="${#fields.hasErrors('codigoPostal')}" th:errors="*{codigoPostal}"></span>
               </span>
+               <span class="help-block"><small th:text="#{colonia.codigopostal.aviso}">Seleccionar el area para buscar colonias relacionadas</small></span>
             </div>
             <div id="divColonia" th:class="${#fields.hasErrors('id')}? 'form-group has-danger':'form-group'" >
               <label class="form-control-label" th:text="#{colonia.nombre}"></label>

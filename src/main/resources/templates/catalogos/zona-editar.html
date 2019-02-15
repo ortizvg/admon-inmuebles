@@ -7,6 +7,7 @@
 /*<![CDATA[*/
 $(document).ready(function() {
 	addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divEstado'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divAdminZona'),/*[[#{campo.requerido}]]*/);
 });
 /*]]>*/
@@ -38,6 +39,16 @@ $(document).ready(function() {
 							<input name="nombre" class="form-control" th:field="*{nombre}" required pattern="^[\w\s]{6,100}$" th:title="#{zona.nombre.mensaje.validacion}" />
 							<span class="form-control-feedback">
 								<span th:if="${#fields.hasErrors('nombre')}" th:errors="nombre"></span>
+							</span>
+						</div>
+						<div id="divEstado" th:class="${#fields.hasErrors('estadoId')}? 'form-group has-danger':'form-group'">
+							<label class="form-control-label" th:text="#{zona.estado}"></label>
+							<select name="estadoId" class="form-control" th:field="*{estadoId}" required>
+								<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+								<option th:each="estado : ${session.estados}" th:value="${estado.id}" th:text="${estado.nombre}"></option>
+							</select>
+							<span class="form-control-feedback">
+								<span th:if="${#fields.hasErrors('estadoId')}" th:errors="*{estadoId}"></span>
 							</span>
 						</div>
 						<div id="divAdminZona" th:class="${#fields.hasErrors('adminZonaId')}? 'form-group has-danger':'form-group'">
