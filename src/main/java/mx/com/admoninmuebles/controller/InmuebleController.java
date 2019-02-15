@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,9 @@ import mx.com.admoninmuebles.storage.StorageService;
 
 @Controller
 public class InmuebleController {
+	
+	Logger logger = LoggerFactory.getLogger(InmuebleController.class);
+	
     @Autowired
     private StorageService storageService;
     @Autowired
@@ -130,6 +135,7 @@ public class InmuebleController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/inmueble-crear")
     public String guardarInmueble(final Locale locale, final Model model, @Valid final InmuebleDto inmuebleDto, final BindingResult bindingResult) {
+    	logger.info(inmuebleDto.toString());
         if (bindingResult.hasErrors()) {
             return "inmuebles/inmueble-crear";
         }
@@ -182,7 +188,7 @@ public class InmuebleController {
         if (StringUtils.isEmpty(inmuebleDto.getImagenUrl())) {
             inmuebleDto.setImagenUrl("/" + storageService.store(inmuebleDto.getImagen()));
         }
-        inmuebleService.save(inmuebleDto);
+        inmuebleService.update(inmuebleDto);
         return "redirect:/inmuebles";
     }
 

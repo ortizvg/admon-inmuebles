@@ -20,7 +20,7 @@ public class DatosAdicionales extends EntidadBase {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_datos_adicionales")
     private Long id;
 

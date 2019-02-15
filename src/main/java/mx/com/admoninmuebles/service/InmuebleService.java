@@ -9,6 +9,8 @@ import mx.com.admoninmuebles.persistence.model.Inmueble;
 
 public interface InmuebleService {
     Inmueble save(InmuebleDto inmuebleDto);
+    
+    Inmueble update(InmuebleDto inmuebleDto);
 
     Collection<InmuebleDto> findAll();
     

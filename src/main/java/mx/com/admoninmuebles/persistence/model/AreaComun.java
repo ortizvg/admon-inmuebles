@@ -37,13 +37,13 @@ public class AreaComun extends EntidadBase {
     @NotNull
     @Size(min = 1, max = 50)
     @Column(length = 50, nullable = false)
-    @NaturalId
+//    @NaturalId
     private String nombre;
 
     @NotNull
     @Size(min = 1, max = 50)
     @Column(length = 300, nullable = false)
-    @NaturalId
+//    @NaturalId
     private String descripcion;
     
     @Digits(integer = 7, fraction = 2)
