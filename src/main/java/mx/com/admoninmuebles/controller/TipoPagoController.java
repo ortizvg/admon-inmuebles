@@ -31,8 +31,8 @@ public class TipoPagoController {
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP')")
     @GetMapping(value = "/catalogos/tipos-pago")
-    public String showList(Model model) {
-    	model.addAttribute("tiposPago", tipoPagoService.findAll());
+    public String showList(Model model, Locale locale) {
+    	model.addAttribute("tiposPago", tipoPagoService.findAllByLang( locale.getLanguage() ));
         return "/catalogos/tipo-pago";
     }
 

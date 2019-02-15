@@ -206,45 +206,45 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         privilegiosAdminCorp.add(verificarPago);
         Rol contador = createRolIfNotFound(RolConst.ROLE_CONTADOR, "Contador", privilegiosContador);
         
-        TipoSocio condominoEs = createTipoSocioIfNotFound(1l, "CONDOMINO", "Condómino (propietario)", "es");
-        createTipoSocioIfNotFound(2l, "RESIDENTE", "Residente (Arrendatario)", "es");
-        createTipoSocioIfNotFound(3l, "CONDOMINO", "Condominium (owner)", "en");
-        createTipoSocioIfNotFound(4l, "RESIDENTE", "Resident (Tenant)", "en");
+//        TipoSocio condominoEs = createTipoSocioIfNotFound(1l, "CONDOMINO", "Condómino (propietario)", "es");
+//        createTipoSocioIfNotFound(2l, "RESIDENTE", "Residente (Arrendatario)", "es");
+//        createTipoSocioIfNotFound(3l, "CONDOMINO", "Condominium (owner)", "en");
+//        createTipoSocioIfNotFound(4l, "RESIDENTE", "Resident (Tenant)", "en");
 
-        Usuario usuarioProveedorJardineria = createUsuarioIfNotFound("proveedor_jardineria", "Proveedor", "Jardineria", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
-        Usuario usuarioProveedorLimpieza = createUsuarioIfNotFound("proveedor_limpieza", "Proveedor", "Limpieza", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
-        Usuario usuarioProveedorConstruccion = createUsuarioIfNotFound("proveedor_construccion", "Proveedor", "Construccion", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
-        Usuario usuarioSocioBi = createUsuarioIfNotFound("socio_bi", "Socio", "Bi", "Inmueble", "socio_bi", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com", condominoEs);
-        Usuario usuarioSocioBi2 = createUsuarioIfNotFound("socio_bi2", "Socio2", "Bi2", "Inmueble2", "socio_bi2", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com", condominoEs);
-        Usuario usuarioAdminBi = createUsuarioIfNotFound("admin_bi", "Administrador", "Bien", "Inmueble", "admin_bi", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com", null);
-        Usuario usuarioAdminB2 = createUsuarioIfNotFound("admin_bi2", "Administrador2", "Bien", "Inmueble", "admin_bi2", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com", null);
-        Usuario usuarioAdminZona = createUsuarioIfNotFound("admin_zona", "Administrador", "Zona", "", "admin_zona", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
-        Usuario usuarioAdminZona2 = createUsuarioIfNotFound("admin_zona2", "Administrador2", "Zona", "", "admin_zona2", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
+//        Usuario usuarioProveedorJardineria = createUsuarioIfNotFound("proveedor_jardineria", "Proveedor", "Jardineria", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
+//        Usuario usuarioProveedorLimpieza = createUsuarioIfNotFound("proveedor_limpieza", "Proveedor", "Limpieza", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
+//        Usuario usuarioProveedorConstruccion = createUsuarioIfNotFound("proveedor_construccion", "Proveedor", "Construccion", "", "proveedor", new ArrayList<>(Arrays.asList(proveedor)), "correo@gmail.com", null);
+//        Usuario usuarioSocioBi = createUsuarioIfNotFound("socio_bi", "Socio", "Bi", "Inmueble", "socio_bi", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com", condominoEs);
+//        Usuario usuarioSocioBi2 = createUsuarioIfNotFound("socio_bi2", "Socio2", "Bi2", "Inmueble2", "socio_bi2", new ArrayList<>(Arrays.asList(socioBi)), "correo@gmail.com", condominoEs);
+//        Usuario usuarioAdminBi = createUsuarioIfNotFound("admin_bi", "Administrador", "Bien", "Inmueble", "admin_bi", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com", null);
+//        Usuario usuarioAdminB2 = createUsuarioIfNotFound("admin_bi2", "Administrador2", "Bien", "Inmueble", "admin_bi2", new ArrayList<>(Arrays.asList(adminBi)), "correo@gmail.com", null);
+//        Usuario usuarioAdminZona = createUsuarioIfNotFound("admin_zona", "Administrador", "Zona", "", "admin_zona", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
+//        Usuario usuarioAdminZona2 = createUsuarioIfNotFound("admin_zona2", "Administrador2", "Zona", "", "admin_zona2", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
         createUsuarioIfNotFound("admin_corp", "Administrador", "Corporativo", "", "admin_corp", new ArrayList<>(Arrays.asList(adminCorp)), "correo@gmail.com", null);
-        Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com", null);
+//        Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com", null);
 
-        Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi, 9L);
-        createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null, 9L);
-        createZonaIfNotFound("zona3", "Aguascalientes", usuarioAdminZona2, usuarioAdminB2, 1L);
-        createZonaIfNotFound("zona4", "Querétaro", usuarioAdminZona2, null, 22L);
-        createZonaIfNotFound("zona5", "Cancún", usuarioAdminZona2, null, 23L);
-        Asentamiento asentamiento = updateAsentamientoIfFound(1L, zona);
+//        Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi, 9L);
+//        createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null, 9L);
+//        createZonaIfNotFound("zona3", "Aguascalientes", usuarioAdminZona2, usuarioAdminB2, 1L);
+//        createZonaIfNotFound("zona4", "Querétaro", usuarioAdminZona2, null, 22L);
+//        createZonaIfNotFound("zona5", "Cancún", usuarioAdminZona2, null, 23L);
+//        Asentamiento asentamiento = updateAsentamientoIfFound(1L, zona);
 
-        Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi,  contadorBI);
-        Inmueble inmueble2 = createInmuebleIfNotFound(2L, "Inmueble2", asentamiento, usuarioAdminBi, usuarioSocioBi2,  contadorBI);
-
-        AreaComun areaComun = createAreaComunIfNotFound(1L, "Area comun 1", "Area para 30 personas", inmueble);
-
-        createReservacionIfNotFound(1L, "Fiesta Pablito", areaComun, usuarioSocioBi);
-
-        AreaServicio areaServicioJardineria = createAreaServicioIfNotFound(1L, "Jardineria", usuarioProveedorJardineria);
-        createAreaServicioIfNotFound(2L, "Limpieza", usuarioProveedorLimpieza);
-        createAreaServicioIfNotFound(3L, "Construcción", usuarioProveedorConstruccion);
-        
-        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
-        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
-        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
-        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
+//        Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi,  contadorBI);
+//        Inmueble inmueble2 = createInmuebleIfNotFound(2L, "Inmueble2", asentamiento, usuarioAdminBi, usuarioSocioBi2,  contadorBI);
+//
+//        AreaComun areaComun = createAreaComunIfNotFound(1L, "Area comun 1", "Area para 30 personas", inmueble);
+//
+//        createReservacionIfNotFound(1L, "Fiesta Pablito", areaComun, usuarioSocioBi);
+//
+//        AreaServicio areaServicioJardineria = createAreaServicioIfNotFound(1L, "Jardineria", usuarioProveedorJardineria);
+//        createAreaServicioIfNotFound(2L, "Limpieza", usuarioProveedorLimpieza);
+//        createAreaServicioIfNotFound(3L, "Construcción", usuarioProveedorConstruccion);
+//        
+//        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
+//        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
+//        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
+//        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
 
         
 //        createPagoIfNotFound(1L, "4444444", "234242sadads", BigDecimal.valueOf(24l), "Pago1", usuarioSocioBi, "asdsadsadsadasdasd", null);

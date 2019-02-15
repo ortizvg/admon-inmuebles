@@ -1,7 +1,6 @@
 package mx.com.admoninmuebles.service;
 
 import java.util.Collection;
-import java.util.Date;
 
 import mx.com.admoninmuebles.dto.NotificacionDto;
 import mx.com.admoninmuebles.persistence.model.Notificacion;

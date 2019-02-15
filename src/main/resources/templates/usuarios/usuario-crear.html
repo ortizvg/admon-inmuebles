@@ -80,7 +80,8 @@ function showAndHideZona() {
                                          <div id="divNombre" th:class="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
                                            <div class="col-md-12 m-b-20">
                                            		<label class="form-control-label" for="nombre" th:text="#{usuario.nombre}"></label>
-                                               <input type="text" class="form-control" id="nombre" th:field="*{nombre}" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.nombre.mensaje.validacion}"> 
+                                           		<input type="text" class="form-control" id="nombre" th:field="*{nombre}" maxlength="100" required > 
+<!--                                                <input type="text" class="form-control" id="nombre" th:field="*{nombre}" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.nombre.mensaje.validacion}">  -->
                                                <span class="form-control-feedback">
 								                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
 								              </span>
@@ -89,7 +90,8 @@ function showAndHideZona() {
                                           <div id="divApellidoPaterno" th:class="${#fields.hasErrors('apellidoPaterno')}? 'form-group has-danger':'form-group'">
                                            <div class="col-md-12 m-b-20">
                                            		<label class="form-control-label" for="apellidoPaterno" th:text="#{usuario.apellido.paterno}"></label>
-                                               <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.apellido.paterno.mensaje.validacion}"> 
+                                               <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}" maxlength="100" required> 
+<!--                                                 <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}" maxlength="100" required pattern="^[\w\s]{1,100}$" th:title="#{usuario.apellido.paterno.mensaje.validacion}">  -->
                                                <span class="form-control-feedback">
 								                <span th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></span>
 								              </span>
@@ -98,7 +100,8 @@ function showAndHideZona() {
                                           <div id="divApellidoMaterno" th:class="${#fields.hasErrors('apellidoMaterno')}? 'form-group has-danger':'form-group'">
 	                                           <div class="col-md-12 m-b-20">
 													<label class="form-control-label" for="apellidoMaterno" th:text="#{usuario.apellido.materno}"></label>
-	                                                <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}" maxlength="100"  pattern="^[\w\s]{0,100}$" th:title="#{usuario.apellido.materno.mensaje.validacion}"> 
+													<input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}" maxlength="100">
+<!-- 	                                                <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}" maxlength="100"  pattern="^[\w\s]{0,100}$" th:title="#{usuario.apellido.materno.mensaje.validacion}">  -->
 	                                                <span class="form-control-feedback">
 									                	<span th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></span>
 									              	</span>
@@ -120,7 +123,7 @@ function showAndHideZona() {
 		                                	<div id="divZona"  th:class="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
 		                                		   <div class="col-md-12 m-b-20">
 										              <label class="form-control-label" th:text="#{colonia.zona}"></label>
-										              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}" required >
+										              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}" >
 										                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 										                <option th:each="zona : ${session.zonasDto}" th:value="${zona.codigo}" th:text="|${zona.codigo} -${zona.nombre}|"></option>
 										              </select>
