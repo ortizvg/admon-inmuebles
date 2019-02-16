@@ -101,9 +101,11 @@ public class TicketController {
 		if (optId.isPresent()) {
 			ticketDto.setUsuarioCreadorId(optId.get());
 		}
-    	final String MIME_TYPE_JPG = "image/jpeg";
+    	final String MIME_TYPE_JPEG = "image/jpeg";
+    	final String MIME_TYPE_JPG = "image/jpg";
     	final String MIME_TYPE_PDF = "application/pdf";
     	final String MIME_TYPE_PNG = "image/png";
+    	final String MIME_TYPE_GIF= "image/gif";
         if (file.isEmpty()) {
         	redirect.addFlashAttribute("messageEmpty","");
             return showPageFail;
@@ -111,8 +113,8 @@ public class TicketController {
         
         try {
 			String fileType = file.getContentType();
-			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType)
-					|| MIME_TYPE_PNG.contains(fileType))) {
+			logger.info(fileType);
+			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType) || MIME_TYPE_PNG.contains(fileType) || MIME_TYPE_GIF.contains(fileType) || MIME_TYPE_JPEG.contains(fileType))) {
 				redirect.addFlashAttribute("messageType","");
 				return showPageFail;
 			}

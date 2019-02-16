@@ -96,6 +96,7 @@ public class MvcConfig implements WebMvcConfigurer {
         List<MediaType> list = new ArrayList<MediaType>();
         list.add(MediaType.IMAGE_JPEG);
         list.add(MediaType.IMAGE_PNG);
+        list.add(MediaType.IMAGE_GIF);
         list.add(MediaType.APPLICATION_PDF);
         list.add(new MediaType("text", "csv"));
         list.add(new MediaType("application", "csv"));

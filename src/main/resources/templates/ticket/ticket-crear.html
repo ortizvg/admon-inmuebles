@@ -45,7 +45,7 @@ $(document).ready(function() {
                 </div>
                 <div id="divCarga" class="col-md-8 form-group" th:classappend="${#fields.hasErrors('titulo')}? ' has-danger'">
 				 <label class="form-control-label" th:text="#{ticket.evidencia}"></label>
-				 <input type="file" name="file" id="file" class="form-control"/> 
+				 <input type="file" name="file" id="file" class="form-control" accept="image/*, application/pdf"/> 
                 </div>
                  <span class="form-control-feedback">
                     <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>

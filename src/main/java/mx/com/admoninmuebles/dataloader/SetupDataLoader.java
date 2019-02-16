@@ -241,9 +241,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 //        createAreaServicioIfNotFound(2L, "Limpieza", usuarioProveedorLimpieza);
 //        createAreaServicioIfNotFound(3L, "Construcción", usuarioProveedorConstruccion);
 //        
-//        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
-//        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
-//        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
+        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
+        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
+        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
 //        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
 
         

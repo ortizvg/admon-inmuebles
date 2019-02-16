@@ -102,18 +102,18 @@ public class InmuebleServiceImpl implements InmuebleService {
 
 	@Override
 	public Collection<InmuebleDto> findByAdminBiId(Long id) {
-		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+//		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
 		
-//		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false)
-//				.map(inmueble -> 
-//					{
-//						InmuebleDto inmuebleDto = modelMapper.map(inmueble, InmuebleDto.class);
-//						inmuebleDto.setTotalSocios(inmueble.getSocios() != null ? inmueble.getSocios().size() : 0);
-//						
-//						return inmuebleDto;
-//					}
-//				)
-//				.collect(Collectors.toList());
+		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false)
+				.map(inmueble -> 
+					{
+						InmuebleDto inmuebleDto = modelMapper.map(inmueble, InmuebleDto.class);
+						inmuebleDto.setTotalSocios(inmueble.getSocios() != null ? inmueble.getSocios().size() : 0);
+						
+						return inmuebleDto;
+					}
+				)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -193,7 +193,15 @@ public class InmuebleServiceImpl implements InmuebleService {
 	public Collection<InmuebleDto> findByAdminZonaId(Long id) {
 		Collection<Zona> zonas = zonaRepository.findByAdminZonaId( id );
 		return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoZonaIn( zonas ).spliterator(), false)
-				.map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+//				.map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+				.map(inmueble -> 
+				{
+					InmuebleDto inmuebleDto = modelMapper.map(inmueble, InmuebleDto.class);
+					inmuebleDto.setTotalSocios(inmueble.getSocios() != null ? inmueble.getSocios().size() : 0);
+					
+					return inmuebleDto;
+				}
+			)
 				.collect(Collectors.toList());
 	}
 
