@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
+import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
@@ -57,6 +58,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     
     @Autowired
     private TipoSocioRepository tipoSocioRepository;
+    
+	@Autowired
+	private InmuebleService inmuebleService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -166,7 +170,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (userDto.getDatosDomicilio() != null && !userDto.getDatosDomicilio().isEmpty()) {
             usuario.setDatosDomicilio(userDto.getDatosDomicilio());
         }
-
+        
         if (roles.stream().anyMatch(rol -> RolConst.ROLE_SOCIO_BI.equals(rol.getNombre()))) {
 
             if (userDto.getInmuebleId() != null) {

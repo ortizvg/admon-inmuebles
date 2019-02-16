@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -10,7 +9,6 @@
 /*<![CDATA[*/
 	
 var serverContext = [[@{/}]];
-
 $(document).ready(function() {
   $('.dropify').dropify();
   addControlState(document.getElementById('divUsername'),/*[[#{campo.requerido}]]*/);
@@ -27,9 +25,6 @@ $(document).ready(function() {
   addControlState(document.getElementById('divCuotaMensualPagoSocio'), /*[[#{campo.requerido}]]*/); 
   addControlState(document.getElementById('divTipoSocio'), /*[[#{campo.requerido}]]*/); 
 });
-
-
-
 function cargarColoniasPorZona() {
 	var zonaCodigo = $("#zona").val();
     $.getJSON(serverContext + "api/colonias?zonaCodigo=" + zonaCodigo, function(data) {
@@ -42,7 +37,6 @@ function cargarColoniasPorZona() {
         $('#colonia').html(html);
     });
 }
-
 function cargarInmueblesPorColonia() {
 	var coloniaId = $("#colonia").val();
     $.getJSON(serverContext + "api/inmuebles?coloniaId=" + coloniaId, function(data) {
@@ -55,7 +49,6 @@ function cargarInmueblesPorColonia() {
         $('#inmueble').html(html);
     });
 }
-
 /*]]>*/
 </script>
 </head>
@@ -226,33 +219,33 @@ function cargarInmueblesPorColonia() {
                                           <h3 class="box-title m-t-20" th:text="#{usuario.inmueble}"></h3>
 							              <hr>
 								           <div class="row">
-                                             <div id="divZona" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA)" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleDireccionAsentamientoZonaCodigo')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="rolId" th:text="#{usuario.zona}"></label>
-			                                        <select  name="zona" id="zona" class="form-control" th:field="*{inmuebleDireccionAsentamientoZonaCodigo}" onchange="cargarColoniasPorZona();">	
-														<option th:each="zona : ${session.zonasDto}" 
-																th:selected="${usuarioDto.inmuebleDireccionAsentamientoZonaCodigo}"
-																th:value="${{zona.codigo}}" 
-																th:text="${zona.nombre}"></option>
-			                                        </select>
-			                                        <span class="form-control-feedback">
-										                <span th:if="${#fields.hasErrors('inmuebleDireccionAsentamientoZonaCodigo')}" th:errors="inmuebleDireccionAsentamientoZonaCodigo"></span>
-										             </span>
-                                            </div>
-                                             <div id="divColonia" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA)" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleDireccionAsentamientoId')}? 'form-group has-danger':'form-group'">
-                                                <label class="form-control-label" for="colonia" th:text="#{usuario.colonia}"></label>
-			                                        <select  name="colonia" id="colonia" class="form-control" th:field="*{inmuebleDireccionAsentamientoId}" onchange="cargarInmueblesPorColonia();">
-														<option th:each="colonia : ${session.coloniasDto}" 
-																th:selected="${usuarioDto.inmuebleDireccionAsentamientoId}"
-																th:value="${{colonia.id}}" 
-																th:text="${colonia.nombre}"></option>
-			                                        </select>
-			                                        <span class="form-control-feedback">
-										                <span th:if="${#fields.hasErrors('inmuebleDireccionAsentamientoId')}" th:errors="*{inmuebleDireccionAsentamientoId}"></span>
-										             </span>
-                                            </div>
+<!--                                              <div id="divZona" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleDireccionAsentamientoZonaCodigo')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="rolId" th:text="#{usuario.zona}"></label> -->
+<!-- 			                                        <select  name="zona" id="zona" class="form-control" th:field="*{inmuebleDireccionAsentamientoZonaCodigo}" onchange="cargarColoniasPorZona();">	 -->
+<!-- 														<option th:each="zona : ${session.zonasDto}"  -->
+<!-- 																th:selected="${usuarioDto.inmuebleDireccionAsentamientoZonaCodigo}" -->
+<!-- 																th:value="${{zona.codigo}}"  -->
+<!-- 																th:text="${zona.nombre}"></option> -->
+<!-- 			                                        </select> -->
+<!-- 			                                        <span class="form-control-feedback"> -->
+<!-- 										                <span th:if="${#fields.hasErrors('inmuebleDireccionAsentamientoZonaCodigo')}" th:errors="inmuebleDireccionAsentamientoZonaCodigo"></span> -->
+<!-- 										             </span> -->
+<!--                                             </div> -->
+<!--                                              <div id="divColonia" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleDireccionAsentamientoId')}? 'form-group has-danger':'form-group'"> -->
+<!--                                                 <label class="form-control-label" for="colonia" th:text="#{usuario.colonia}"></label> -->
+<!-- 			                                        <select  name="colonia" id="colonia" class="form-control" th:field="*{inmuebleDireccionAsentamientoId}" onchange="cargarInmueblesPorColonia();" disabled="disabled"> -->
+<!-- 														<option th:each="colonia : ${session.coloniasDto}"  -->
+<!-- 																th:selected="${usuarioDto.inmuebleDireccionAsentamientoId}" -->
+<!-- 																th:value="${{colonia.id}}"  -->
+<!-- 																th:text="${colonia.nombre}"></option> -->
+<!-- 			                                        </select> -->
+<!-- 			                                        <span class="form-control-feedback"> -->
+<!-- 										                <span th:if="${#fields.hasErrors('inmuebleDireccionAsentamientoId')}" th:errors="*{inmuebleDireccionAsentamientoId}"></span> -->
+<!-- 										             </span> -->
+<!--                                             </div> -->
                                             <div id="divInmueble" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? 'form-group has-danger':'form-group'">
                                                 <label class="form-control-label" for="inmueble" th:text="#{usuario.inmueble}"></label>
-			                                        <select name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required >	
+			                                        <select name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required  disabled="disabled">	
 														<option th:each="inmueble : ${session.inmueblesDto}" 
 																th:selected="${usuarioDto.inmuebleId}"
 																th:value="${{inmueble.id}}" 

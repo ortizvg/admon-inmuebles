@@ -57,6 +57,55 @@
                 <!-- ============================================================== -->
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
+       <!-- Row -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{zona.titulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{zona.subtitulo}"></h6>
+              
+              <div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
+			  	</div>
+			  </div>
+              
+              <div class="table-responsive">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                  <thead>
+                    <tr>
+                      <th th:text="#{zona.codigo}"></th>
+                      <th th:text="#{zona.nombre}"></th>
+                      <th th:text="#{zona.administrador}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="zona : ${zonas}">
+                      <tr>
+                        <td th:text="${zona.codigo}"></td>
+                        <td th:text="${zona.nombre}"></td>
+                        <td th:text="|${zona.adminZonaNombre} ${zona.adminZonaApellidoPaterno} ${zona.adminZonaApellidoMaterno}|"></td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot th:if="${#lists.size(zonas) > 20}">
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      	<!-- Row -->
                      		<!-- Row -->
        <div class="row">
         <div class="col-12">
@@ -130,7 +179,6 @@
                                                 <th th:text="#{etiqueta.inmueble.nombre}"></th>
                                                 <th th:text="#{etiqueta.inmueble.direccion}"></th>
                                                 <th th:text="#{etiqueta.inmueble.totalsocios}"></th>
-                                                <th th:text="#{etiqueta.inmueble.saldogeneral}"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -147,9 +195,6 @@
                                                 </td>
                                                 <td>
                                                     <h5 th:text="${inmueble.totalSocios}"></h5>
-                                                </td>
-                                                <td>
-                                                    <h5 >357</h5>
                                                 </td>
                                             </tr>
                                         </tbody>

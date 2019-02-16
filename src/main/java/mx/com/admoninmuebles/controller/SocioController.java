@@ -34,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CargaSocioDto;
+import mx.com.admoninmuebles.dto.ColoniaDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.RolDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
@@ -173,7 +174,7 @@ public class SocioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/condomino-detalle/{id}")
     public String buscarsocioPorId(final @PathVariable long id, final Model model) {
-    	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
+    	InmuebleDto inmuebleDto = inmuebleService.findBySocioId(id);
     	model.addAttribute("inmuebleDto", inmuebleDto);
         model.addAttribute("usuarioDto", socioService.buscarSocioPorId(id));
         return "socios/socio-detalle";
@@ -183,10 +184,11 @@ public class SocioController {
     @GetMapping(value = "/condomino-editar/{id}")
     public String editarSocio(final @PathVariable long id, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
     	UsuarioDto usuarioDto = usuarioService.findById(id);
-    	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(id).stream().findFirst().get();
-    	usuarioDto.setInmuebleId(inmuebleDto.getId());
-    	usuarioDto.setInmuebleDireccionAsentamientoZonaCodigo(usuarioDto.getInmuebleDireccionAsentamientoZonaCodigo());
-    	usuarioDto.setInmuebleDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId());
+    	logger.info(usuarioDto.toString());
+//    	InmuebleDto inmuebleDto = inmuebleService.findBySocioId(id);
+//    	usuarioDto.setInmuebleId(inmuebleDto.getId());
+//    	usuarioDto.setInmuebleDireccionAsentamientoZonaCodigo(usuarioDto.getInmuebleDireccionAsentamientoZonaCodigo());
+//    	usuarioDto.setInmuebleDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId());
     	List<Long> rolesUsuario = usuarioDto.getRoles().stream().map(rol -> rol.getId()).collect(Collectors.toList());
     	usuarioDto.setRolSeleccionado( rolesUsuario.get(0) );
         model.addAttribute("usuarioDto", usuarioDto);
@@ -194,17 +196,24 @@ public class SocioController {
         session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
         Optional<Long> optId = SecurityUtils.getCurrentUserId();
         if (optId.isPresent()) {
+        	InmuebleDto inmuebleDto = inmuebleService.findBySocioId(id);
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP) || request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
             	Collection<ZonaDto> zonasDto = request.isUserInRole(RolConst.ROLE_ADMIN_CORP) ? zonaService.findAll() : zonaService.findByAdminZonaId(optId.get());
             	session.setAttribute("zonasDto", zonasDto);
-            	session.setAttribute("coloniasDto", coloniaService.findByZonaCodigo(usuarioDto.getInmuebleDireccionAsentamientoZonaCodigo()));
-            	session.setAttribute("inmueblesDto", inmuebleService.findByDireccionAsentamientoId(usuarioDto.getInmuebleDireccionAsentamientoId()));
+//            	session.setAttribute("coloniasDto", coloniaService.findByZonaCodigo(inmuebleDto.getZonaCodigo()));
+//            	session.setAttribute("coloniasDto", coloniaService.findByZonaCodigo(usuarioDto.getInmuebleDireccionAsentamientoZonaCodigo()));
+            	
+//            	 coloniaService.findByZonaCodigo(inmuebleDto.getZonaCodigo())
+            	
+            	logger.info("ASENTAMIENTO_ID: " + inmuebleDto.getDireccionAsentamientoId());
+            	
+            	session.setAttribute("inmueblesDto", inmuebleService.findByDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId()));
             } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
             	session.setAttribute("inmueblesDto", inmuebleService.findByAdminBiId(optId.get()));
             }
         }
         
-        logger.info(usuarioDto.toString());
+       
         return "socios/socio-editar";
     }
 

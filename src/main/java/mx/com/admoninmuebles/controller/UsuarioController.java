@@ -102,9 +102,10 @@ public class UsuarioController {
     @GetMapping(value = "/adminzona")
     public String initAdminZona(final UsuarioDto usuarioDto, final Model model) {
     	Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
-    	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
+//    	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
 //        model.addAttribute("usuarios", userService.findAll());
-        model.addAttribute("colonias", coloniaService.findByZonaCodigo( zona.getCodigo() ));
+    	model.addAttribute("zonas", zonaService.findByAdminZonaId( adminZonaLogueadoId ));
+        model.addAttribute("colonias", coloniaService.findByAdminZona( adminZonaLogueadoId ));
         model.addAttribute("inmuebles", inmuebleService.findByAdminZonaId( adminZonaLogueadoId ) );
         return "adminzona/inicio";
     }
