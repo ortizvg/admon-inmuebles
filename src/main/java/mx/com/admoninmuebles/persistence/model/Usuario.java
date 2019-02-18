@@ -150,7 +150,7 @@ public class Usuario extends EntidadBase {
     @JoinColumn(name = "id_tipo_socio_fk", nullable = true)
     private TipoSocio tipoSocio;
 
-    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "usuario")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
     private RecuperacionContraseniaToken recuperacionContraseniaToken;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")

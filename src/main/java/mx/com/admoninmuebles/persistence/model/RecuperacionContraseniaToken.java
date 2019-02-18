@@ -28,14 +28,15 @@ public class RecuperacionContraseniaToken extends EntidadBase{
 	private static final int EXPIRATION = 60 * 24;
 	  
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
   
     private String token;
     
     private boolean utilizado;
   
-    @OneToOne @MapsId
+    @OneToOne 
+    @JoinColumn(name = "id_usuario_fk", nullable = false)
     private Usuario usuario;
   
     private Date expiryDate;

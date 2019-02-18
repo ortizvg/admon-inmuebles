@@ -163,7 +163,8 @@ public class UsuarioController {
     	
     	 try {
     		 UsuarioDto newUsuarioDto = userService.crearCuenta(usuarioDto);
-    		 eventPublisher.publishEvent(new OnRegistroCompletoEvent(newUsuarioDto, request.getLocale(), getAppUrl(request)));
+    		 userService.enviarCorreoActivacion( newUsuarioDto , getAppUrl( request ) );
+//    		 eventPublisher.publishEvent(new OnRegistroCompletoEvent(newUsuarioDto, request.getLocale(), getAppUrl(request)));
     		 return "redirect:/usuarios";
     	 }catch(BusinessException e) {
     		 bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
@@ -299,7 +300,8 @@ public class UsuarioController {
     @PostMapping(value = "/usuarios/correo-recuperar-contrasenia")
     public String enviarCorreoRecuperacionContrasenia(final HttpServletRequest request, final Locale locale, final Model model, @Valid final RecuperacionContraseniaCorreoDto recuperacionContraseniaCorreo, final BindingResult bindingResult) {
     	UsuarioDto usuarioDto = userService.findByUsernameOrCorreo(recuperacionContraseniaCorreo.getLogin());
-    	eventPublisher.publishEvent(new OnRecuperacionContraseniaEvent(usuarioDto, request.getLocale(), getAppUrl(request)));
+    	userService.enviarCorreoRecuperacionContrasenia(usuarioDto,  getAppUrl(request));
+//    	eventPublisher.publishEvent(new OnRecuperacionContraseniaEvent(usuarioDto, request.getLocale(), getAppUrl(request)));
         return "redirect:/login";
     }
     

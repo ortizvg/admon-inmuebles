@@ -70,7 +70,8 @@ public class UsuarioResource {
 				return new ResponseEntity<String>(Boolean.FALSE.toString(), HttpStatus.BAD_REQUEST);
 			}
 			UsuarioDto usuarioDto = userService.findByUsernameOrCorreo(recuperacionContraseniaCorreoDto.getLogin());
-			eventPublisher.publishEvent(new OnRecuperacionContraseniaEvent(usuarioDto, request.getLocale(), getAppUrl(request)));
+			userService.enviarCorreoRecuperacionContrasenia(usuarioDto,  getAppUrl(request));
+//			eventPublisher.publishEvent(new OnRecuperacionContraseniaEvent(usuarioDto, request.getLocale(), getAppUrl(request)));
 		} catch(UsernameNotFoundException e) {
 			return new ResponseEntity<String>(Boolean.FALSE.toString(), HttpStatus.OK);
 		}
@@ -95,7 +96,8 @@ public class UsuarioResource {
 		System.out.println("Iniciando reactivacion de usuario " + reactivaUsuarioDto.getUsername());
 		try {
 			UsuarioDto usuarioDto = userService.findByUsernameOrCorreo(reactivaUsuarioDto.getUsername());
-			eventPublisher.publishEvent(new OnRegistroCompletoEvent(usuarioDto, request.getLocale(), getAppUrl(request)));
+			userService.enviarCorreoActivacion(usuarioDto, getAppUrl(request));
+//			eventPublisher.publishEvent(new OnRegistroCompletoEvent(usuarioDto, request.getLocale(), getAppUrl(request)));
 		} catch(UsernameNotFoundException e) {
 			return new ResponseEntity<String>(messages.getMessage(e.getMessage(), null, locale), HttpStatus.BAD_REQUEST);
 		}

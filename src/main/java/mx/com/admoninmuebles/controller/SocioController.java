@@ -163,7 +163,8 @@ public class SocioController {
         	usuarioDto.setRolSeleccionado(rolSocio.getId());
 	        UsuarioDto socioNuevo = (UsuarioDto) usuarioService.crearCuenta(usuarioDto);
 	        inmuebleService.addSocio2Inmueble(socioNuevo, usuarioDto.getInmuebleId());
-	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(socioNuevo, request.getLocale(), getAppUrl(request)));
+	        usuarioService.enviarCorreoActivacion( socioNuevo , getAppUrl( request ) );
+//	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(socioNuevo, request.getLocale(), getAppUrl(request)));
 	        return "redirect:/condominos";
         }catch(BusinessException e) {
    		 bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));

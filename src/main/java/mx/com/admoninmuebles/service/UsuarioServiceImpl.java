@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     
 	@Autowired
 	private InmuebleService inmuebleService;
+	
+    @Autowired
+    private CorreoUsuarioService correoUsuarioService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -354,6 +358,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         return administradoresBi;
     }
-
+    
+	@Async
+	@Override
+	public void enviarCorreoActivacion(UsuarioDto usuario, final String urlContext) {
+			correoUsuarioService.enviarActivacion(usuario, urlContext);
+	}
+	
+	@Async
+	@Override
+	public void enviarCorreoRecuperacionContrasenia(UsuarioDto usuario, final String urlContext) {
+			correoUsuarioService.enviarRecuperacionContrasenia(usuario, urlContext);
+	}
 
 }

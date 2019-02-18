@@ -63,7 +63,8 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 		
 		CorreoDto correoDto = new CorreoDto();
 		correoDto.setDe( env.getProperty( PROPIEDAD_CORREO_USUARIOS_DE ) );
-		correoDto.setAsunto( env.getProperty( PROPIEDAD_CUENTA_RECUPERACION_CONTRASENIA_ASUNTO ) );
+//		correoDto.setAsunto( env.getProperty( PROPIEDAD_CUENTA_RECUPERACION_CONTRASENIA_ASUNTO ) );
+		correoDto.setAsunto( "Recuperacion de contraseña" );
 		correoDto.setPlantilla( PlantillaCorreoConst.RECUPERA_CONTRASENIA );
 		correoDto.setPara(usuarioDto.getCorreo());
 		correoDto.setDatosPlantilla( datosPlantilla );

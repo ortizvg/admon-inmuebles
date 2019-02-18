@@ -3,6 +3,7 @@ package mx.com.admoninmuebles.persistence.repository;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,6 +17,7 @@ public interface NotificacionRepository extends CrudRepository<Notificacion, Lon
 	Collection<Notificacion> findByInmuebleIdAndFechaExposicionInicialBeforeAndFechaExposicionFinalAfter(Long id, Date today, Date todayf);
 	Collection<Notificacion> findByInmuebleIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(Long id, LocalDate today, LocalDate todayf);
 	Collection<Notificacion> findByInmuebleIdOrUsuarioIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(Long idInmueble, Long idUsuario, LocalDate today, LocalDate todayf);
+	Collection<Notificacion> findByInmuebleIdInAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(List<Long> idsInmuebles, LocalDate today, LocalDate todayf);
 
     @Query(value = "select n.* from gescopls.notificaciones n\n" + 
     		"inner join gescopls.inmuebles i on n.id_inmueble = i.id_inmueble\n" + 

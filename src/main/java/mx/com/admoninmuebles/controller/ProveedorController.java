@@ -29,6 +29,7 @@ import mx.com.admoninmuebles.listener.event.OnRegistroCompletoEvent;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.AreaServicioService;
 import mx.com.admoninmuebles.service.ProveedorService;
+import mx.com.admoninmuebles.service.UsuarioService;
 import mx.com.admoninmuebles.service.ZonaService;
 
 @Controller
@@ -47,6 +48,9 @@ public class ProveedorController {
 	
 	@Autowired
 	private ZonaService zonaService;
+	
+    @Autowired
+    private UsuarioService userService;
 	
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -101,7 +105,8 @@ public class ProveedorController {
         
         try {
 	        UsuarioDto proveedorNuevo = proveedorService.guardar(proveedorDto);
-	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(proveedorNuevo, request.getLocale(), getAppUrl(request)));
+	        userService.enviarCorreoActivacion( proveedorNuevo , getAppUrl( request ) );
+//	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(proveedorNuevo, request.getLocale(), getAppUrl(request)));
 	        return "redirect:/proveedores";
         }catch(BusinessException e) {
    		 bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));

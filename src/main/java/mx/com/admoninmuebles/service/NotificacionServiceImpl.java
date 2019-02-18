@@ -97,4 +97,16 @@ public class NotificacionServiceImpl implements NotificacionService {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public Collection<NotificacionDto> findByAdmininBi(Long idAdminZona) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<NotificacionDto> findByAdmininZona(Long idAdminZona) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

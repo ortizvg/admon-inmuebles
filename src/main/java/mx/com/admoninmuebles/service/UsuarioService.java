@@ -1,9 +1,6 @@
 package mx.com.admoninmuebles.service;
 
 import java.util.Collection;
-import java.util.stream.Stream;
-
-import org.springframework.data.jpa.repository.Query;
 
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
@@ -36,4 +33,7 @@ public interface UsuarioService {
 
     Collection<UsuarioDto> findAdministradoresBiByZonaCodigo(String zonaCodigo);
     
+    void enviarCorreoActivacion(UsuarioDto usuario, final String urlContext);
+    
+    void enviarCorreoRecuperacionContrasenia(UsuarioDto usuario, final String urlContext);
 }
