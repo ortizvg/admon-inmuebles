@@ -5,11 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +60,7 @@ import mx.com.admoninmuebles.persistence.repository.TipoSocioRepository;
 import mx.com.admoninmuebles.persistence.repository.TipoTicketRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
+import mx.com.admoninmuebles.util.UtilDate;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -393,15 +397,23 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     public final Reservacion createReservacionIfNotFound(final Long id, final String title, final AreaComun areaComun, final Usuario usuarioSocioBi) {
-        Optional<Reservacion> optReservacion = reservacionRepository.findById(id);
-        Reservacion reservacion = optReservacion.orElse(new Reservacion());
-        if (!optReservacion.isPresent()) {
-            reservacion.setTitle(title);
-            reservacion.setStart(LocalDate.now());
-            reservacion.setAreaComun(areaComun);
-            reservacion.setSocio(usuarioSocioBi);
-            reservacion = reservacionRepository.save(reservacion);
-        }
+        Reservacion reservacion = null;
+		try {
+			Optional<Reservacion> optReservacion = reservacionRepository.findById(id);
+			reservacion = optReservacion.orElse(new Reservacion());
+			if (!optReservacion.isPresent()) {
+				SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			    reservacion.setTitle(title);
+			    reservacion.setStart(sd.format(UtilDate.LocalDateToDate(LocalDate.now())));
+			    reservacion.setFechaCreacion(sd.parse(reservacion.getStart()));
+			    reservacion.setAreaComun(areaComun);
+			    
+			    reservacion.setSocio(usuarioSocioBi);
+			    reservacion = reservacionRepository.save(reservacion);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
         return reservacion;
     }
 
@@ -425,11 +437,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
-            ticket.setFechaCreacionTicket(LocalDate.now());
+            ticket.setFechaCreacion(new Date());
             ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);
-            //ticket.setAreaServicio(areaServicio);
             ticket.setUsuarioCreador(usuarioCreador);
             ticket.setUsuarioAsignado(usuarioAsignado);
             ticket.setTipoTicket(tipoTicket);

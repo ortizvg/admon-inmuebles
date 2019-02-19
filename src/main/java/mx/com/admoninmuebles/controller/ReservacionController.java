@@ -66,6 +66,7 @@ public class ReservacionController {
     public String init(final Model model, final HttpSession session, final Locale locale,  final HttpServletRequest request) {
 
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
+        session.setAttribute("areasComunes", new ArrayList<AreaComunDto>());
         model.addAttribute("reservacionDto", new ReservacionDto());
         if (optUserId.isPresent()) {
             model.addAttribute("reservaciones", reservacioService.findBySocio(optUserId.get()));
@@ -76,7 +77,6 @@ public class ReservacionController {
             	 session.setAttribute("areasComunes", areasComunes);
             } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
             	session.setAttribute("inmuebles", inmuebleService.findByAdminBiId( optUserId.get() ));
-//            	session.setAttribute("areasComunes", new ArrayList<AreaComunDto>());
         	}  else if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
         		session.setAttribute("zonas", zonaService.findByAdminZonaId( optUserId.get() ));
             }  else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
@@ -105,7 +105,6 @@ public class ReservacionController {
     public String buscarReservaciones(final Model model, final HttpSession session, final ReservacionDto reservacionDto, final Locale locale, final HttpServletRequest request) {
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
         session.setAttribute("locale", locale.getLanguage());
-//        model.addAttribute("reservacionDto", new ReservacionDto());
         if (null != reservacionDto.getAreaComunId()) {
             model.addAttribute("reservaciones", reservacioService.findByAreaComun(reservacionDto.getAreaComunId()));
         } else if ( request.isUserInRole( RolConst.ROLE_SOCIO_BI ) ) {
@@ -149,11 +148,11 @@ public class ReservacionController {
         return "redirect:/reservaciones/reservar-area";
     }
     
-    @PreAuthorize("hasAnyRole( 'ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI' )")
+    @PreAuthorize("hasAnyRole( 'ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI' )")
     @PostMapping(value = "/reservaciones/reserva-area/eliminar")
     public String eliminarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
     	ReservacionDto reservacion = reservacioService.findById(reservacionDto.getId());
-    	pagoService. eliminarPorId(reservacion.getPagoId());
+    	pagoService.eliminarPorId(reservacion.getPagoId());
         reservacioService.delete(reservacionDto.getId());
         return "redirect:/reservaciones/reservar-area";
     }

@@ -68,11 +68,7 @@ public class Ticket extends EntidadBase {
     
     @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
     private byte[] archivoEvidencia;
-    
-    @NotNull
-    @Column(name = "fecha_creacion_ticket", nullable = false)
-    private LocalDate fechaCreacionTicket;
-    
+
     public void addCambioTicket(final CambioTicket cambioTicket) {
         cambios.add(cambioTicket);
         cambioTicket.setTicket(this);

@@ -5,20 +5,36 @@
 <title th:text="#{reserva.areacomun.nombre}"></title>
 <script th:inline="javascript">
   /*<![CDATA[*/
-	  
-  var serverContext = [[@{/}]];
-  
-  var reservaciones = [[${reservaciones}]];
-	  
   $(document).ready(function() {
 	  console.log(/*[[${session.locale}]]*/);
 	var enableCalendar = $('#areaComunId').val() !== null && $('#areaComunId').val() !== '' && $('#areaComunId').val() !== 'undefined';
 	console.log(enableCalendar);
     $('#calendar').fullCalendar({
+    	viewRender: function(view,element) {
+            var now = new Date();
+            var end = new Date();
+            end.setMonth(now.getMonth() + 3); //Adjust as needed
+
+            if ( end < view.end) {
+                $("#calendar .fc-next-button").hide();
+                return false;
+            }
+            else {
+                $("#calendar .fc-next-button").show();
+            }
+
+            if ( view.start < now) {
+                $("#calendar .fc-prev-button").hide();
+                return false;
+            }
+            else {
+                $("#calendar .fc-prev-button").show();
+            }
+        },
     	locale: /*[[${session.locale}]]*/,
         defaultView: 'month',
         validRange:{
-            start: moment()
+            start: moment().format()
         },
         handleWindowResize : true,
         header : {
@@ -26,7 +42,7 @@
           center : 'title',
           right:  'next',
         },
-        events : reservaciones,
+        events : [[${reservaciones}]],
         selectable : enableCalendar,
         selectHelper : true,
         selectOverlap : false,
@@ -40,6 +56,7 @@
           $.onEventClick(calEvent);
         }
     });
+
     $.onSelect = function(start, end) {
       console.log('Dio click');
       var mensaje;
@@ -78,6 +95,7 @@
   
   
   function cargarInmueblesPorZona() {
+	  var serverContext = [[@{/}]];
 		var zonaCodigo = $("#zona").val();
 	    $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + zonaCodigo, function(data) {
 	    	var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
@@ -89,12 +107,13 @@
 	        $('#inmueble').html(html);
 	    });
 	}
+
+
+
 	function cargarAreasComunesPorInmueble() {
+		var serverContext = [[@{/}]];
 		var inmuebleId = $("#inmueble").val();
-		console.log('InmuebleID: ' + inmuebleId);
 	    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/areas-comunes", function(data) {
-	    	
-	    	
 	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
 	        var len = data.length;
 	        for ( var i = 0; i < len; i++) {
@@ -105,27 +124,6 @@
 	    });
 	}
 	
-	function cargarReservacionesPorAreaComun() {
-		var areaComunId = $("#areaComunId").val();
-		console.log('areaComunId: ' + areaComunId);
-	    $.getJSON(serverContext + "api/reservaciones?areaComunId=" + areaComunId , function(data) {
-// 	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
-// 	        var len = data.length;
-// 	        for ( var i = 0; i < len; i++) {
-// 	            html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
-// 	        }
-// 	        html += '</option>';
-// 	        $('#areaComunId').html(html);
-			
-			console.log( $('#calendar'));
-			console.log( $('#calendar')[0].events);
-			console.log( $('#calendar')[0].isContentEditable );
-			console.log(data);
-	        
-	        reservaciones = data;
-	        $('#calendar')[0].isContentEditable  = true;
-	    });
-	}
 	
   /*]]>*/
 </script>
@@ -150,32 +148,21 @@
     
       <form th:action="@{/reservaciones/reservar-area/busqueda}" th:object="${reservacionDto}" method="post">
         <div class="row">
-<!--             <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"> -->
-<!--                 <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label> -->
-<!--                  <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	 -->
-<!--                  	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option> -->
-<!-- 					<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option> -->
-<!--                  </select> -->
-<!--             </div> -->
-<!--             <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" > -->
-<!--                 <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label> -->
-<!--                 <select  name="inmueble" id="inmueble" class="form-control"  onchange="cargarAreasComunesPorInmueble()"> -->
-<!--                		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	 -->
-<!-- 					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option> -->
-<!--                 </select> -->
-<!--             </div> -->
-            
-<!--           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'"> -->
-<!--             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label> -->
-<!--             <select id="areaComunId" class="form-control" onchange="cargarReservacionesPorAreaComun()"> -->
-<!--               <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option> -->
-<!--               <option th:each="areaComun : ${session.areasComunes}" th:value="${areaComun.id}" th:text="${areaComun.nombre}"></option> -->
-<!--             </select> -->
-<!--             <span class="form-control-feedback"> -->
-<!--               <span th:if="${#fields.hasErrors('areaComunId')}" th:errors="*{areaComunId}"></span> -->
-<!--             </span> -->
-<!--           </div> -->
-            
+            <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
+                <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label>
+                 <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
+                 	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
+					<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
+                 </select>
+            </div>
+            <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" >
+                <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
+                <!-- select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();"-->
+               	<select  name="inmueble" id="inmueble" class="form-control" required onchange="cargarAreasComunesPorInmueble();">
+               		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
+                </select>
+            </div>
           <div id="divAreaComun" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaComunId')}? 'has-danger'">
             <label class="form-control-label" th:text="#{reserva.areacomun.nombre}"></label>
             <select id="areaComunId" class="form-control" th:field="*{areaComunId}" required onchange="this.form.submit()">
@@ -247,7 +234,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
-                <button type="submit" class="btn btn-danger waves-effect" th:text="#{boton.eliminar}"></button>
+                <button sec:authorize="hasAnyRole('ADMIN_CORP','ADMIN_ZONA','ADMIN_BI')" type="submit" class="btn btn-danger waves-effect" th:text="#{boton.eliminar}"></button>
               </div>
             </form>
           </div>
