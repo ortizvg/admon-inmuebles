@@ -43,6 +43,8 @@ public class NotificacionDto {
     private Long inmuebleId;
     
     private Long usuarioId;
+    private String usuarioNombre;
+    private String usuarioCorreo;
     
     @DateTimeFormat(pattern="dd-MM-yyyy") 
     private Date fechaModificacion;

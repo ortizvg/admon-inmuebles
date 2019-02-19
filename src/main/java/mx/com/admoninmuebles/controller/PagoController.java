@@ -24,7 +24,6 @@ import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.PagoBusquedaDto;
 import mx.com.admoninmuebles.dto.PagoDto;
-import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.InmuebleService;
@@ -219,7 +218,7 @@ public class PagoController {
     		return "error/404";
     	}
     	
-    	pagoService.pagarTranferenciaBancaria(pagoDto);
+    	pagoService.pagarTranferenciaBancaria( pagoDto, locale );
     	
     	return "redirect:/pagos";
     }

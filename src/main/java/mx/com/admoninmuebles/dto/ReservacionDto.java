@@ -35,6 +35,7 @@ public class ReservacionDto {
     private String areaComunNombre;
 
     private Long socioId;
+    private Long socioNombre;
     
     private Long pagoId;
     private String pagoEstatusPagoName;

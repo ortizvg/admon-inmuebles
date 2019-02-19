@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.modelmapper.ModelMapper;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
-import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Inmueble;

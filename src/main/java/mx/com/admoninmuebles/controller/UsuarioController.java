@@ -35,12 +35,11 @@ import mx.com.admoninmuebles.dto.RolDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.error.BusinessException;
-import mx.com.admoninmuebles.listener.event.OnRecuperacionContraseniaEvent;
-import mx.com.admoninmuebles.listener.event.OnRegistroCompletoEvent;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.ActivacionUsuarioService;
 import mx.com.admoninmuebles.service.ColoniaService;
 import mx.com.admoninmuebles.service.InmuebleService;
+import mx.com.admoninmuebles.service.NotificacionService;
 import mx.com.admoninmuebles.service.RecuperacionContraseniaService;
 import mx.com.admoninmuebles.service.RolService;
 import mx.com.admoninmuebles.service.UsuarioService;
@@ -78,6 +77,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private ZonaService zonaService;
+	
+	@Autowired
+	private NotificacionService notificacionService;
     
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -112,8 +114,9 @@ public class UsuarioController {
     
     @PreAuthorize("hasAnyRole('ADMIN_BI')")
     @GetMapping(value = "/adminbi")
-    public String initAdminBi(final UsuarioDto usuarioDto, final Model model) {
+    public String initAdminBi(final UsuarioDto usuarioDto, final Model model,final HttpSession session) {
     	Long adminBiLogueadoId = SecurityUtils.getCurrentUserId().get();
+    	session.setAttribute("notificaciones", notificacionService.findByUserIdNotExpired( adminBiLogueadoId ));
         model.addAttribute("inmuebles", inmuebleService.findByAdminBiId(adminBiLogueadoId));
         return "adminbi/inicio";
     }

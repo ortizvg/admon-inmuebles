@@ -32,6 +32,9 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 	private ArchivoRepository archivoRepository;
 	
 	@Autowired
+	private NotificacionReporteService notificacionReporteService;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 
 	@Transactional
@@ -48,6 +51,8 @@ public class ComunicadoServiceImpl implements ComunicadoService {
     			archivo.setNombre(comunicadoDto.getArchivoMP().getOriginalFilename());
     			archivo.setTipoContenido(comunicadoDto.getArchivoMP().getContentType());
     			archivoCreado = archivoRepository.save(archivo);
+    			
+    			notificacionReporteService.notificarComunicado( comunicadoDto );
     			
     		} catch (IOException e) {
     			throw new BusinessException("comunicados.archivo.guardado.error");

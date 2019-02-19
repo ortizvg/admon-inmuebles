@@ -50,24 +50,26 @@ public class NotificacionController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/catalogos/notificaciones")
-    public String init(Model model, final HttpServletRequest request) {
+    public String init(Model model, final HttpServletRequest request, final HttpSession session) {
+    	
+    	Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
     	
     	 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
     		 model.addAttribute("notificaciones", notificacionService.findAll());
-             
+    		 session.setAttribute("zonas", zonaService.findAll() );
          } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
-        	 Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
-         	 ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
+         	 ZonaDto zona = zonaService.findByAdminZonaId(usuarioLogueadoId).stream().findFirst().get();
+         	 session.setAttribute("zonas", zonaService.findByAdminZonaId( usuarioLogueadoId ));
          	 model.addAttribute("notificaciones", notificacionService.findByZonaId( zona.getCodigo() ));
          
          } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
-        	 Long adminBiId = SecurityUtils.getCurrentUserId().get();
-        	 model.addAttribute("notificaciones", notificacionService.findByInmuebleAdminBiId( adminBiId ));
+        	 session.setAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId )  );
+        	 model.addAttribute("notificaciones", notificacionService.findByInmuebleAdminBiId( usuarioLogueadoId ));
          }
     	return "catalogos/notificaciones";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/catalogos/notificacion-crear")
     public String guardarNotificacion(final NotificacionDto notificacionDto, Model model, final HttpSession session) {
     	Optional<Long> optId = SecurityUtils.getCurrentUserId();
@@ -77,7 +79,7 @@ public class NotificacionController {
         return "catalogos/notificacion-crear";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/catalogos/notificacion-crear")
     public String guardarNotificacion(final Locale locale, final Model model, @Valid final NotificacionDto notificacionDto, final BindingResult bindingResult) {
     	 if (bindingResult.hasErrors()) {
@@ -87,7 +89,7 @@ public class NotificacionController {
         return "redirect:/catalogos/notificaciones";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/catalogos/notificacion-editar/{idNotificacion}")
     public String buscarNotificacionPorId(final @PathVariable long idNotificacion, Model model, final HttpSession session) {
     	model.addAttribute("notificacionDto", notificacionService.findById(idNotificacion));
@@ -98,7 +100,7 @@ public class NotificacionController {
         return "catalogos/notificacion-edicion";
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/catalogos/notificacion-editar")
     public String editarNotificacion(final Locale locale, final Model model, @Valid final NotificacionDto notificacionDto, final BindingResult bindingResult) {
     	notificacionService.save(notificacionDto);

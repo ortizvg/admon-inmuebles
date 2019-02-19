@@ -15,7 +15,11 @@ public interface NotificacionService {
     Collection<NotificacionDto> findByZonaId(String id);
     Collection<NotificacionDto> findByInmuebleAdminBiId(Long id);
     Collection<NotificacionDto> findByUserIdNotExpired(Long idUsuario);
+    Collection<NotificacionDto> findBySocioIdtExpired(Long idSocio);
     
     Collection<NotificacionDto> findByAdmininBi(Long idAdminZona);
     Collection<NotificacionDto> findByAdmininZona(Long idAdminZona);
+    
+    void notificarUsuario(final NotificacionDto notificacionDto);
+    void notificarInmueble(final NotificacionDto notificacionDto);
 }

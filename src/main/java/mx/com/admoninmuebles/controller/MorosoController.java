@@ -18,6 +18,7 @@ import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.InmuebleService;
+import mx.com.admoninmuebles.service.NotificacionService;
 import mx.com.admoninmuebles.service.PagoService;
 import mx.com.admoninmuebles.service.ZonaService;
 
@@ -29,6 +30,9 @@ public class MorosoController {
 
 	@Autowired
 	private InmuebleService inmuebleService;
+	
+	@Autowired
+	private NotificacionService notificacionService;
 	
 	@Autowired
 	private PagoService pagoService;
@@ -44,6 +48,7 @@ public class MorosoController {
 			Collection<InmuebleDto> inmuebles = inmuebleService.findByContadorId(usuarioLogueadoId);
 			if( inmuebles != null && !inmuebles.isEmpty() ) {
 				session.setAttribute("inmuebleSeleccionado", inmuebles.stream().findFirst().get().getId() );
+				session.setAttribute("notificaciones", notificacionService.findByUserIdNotExpired( usuarioLogueadoId ));
 			}
 			model.addAttribute("inmuebles", inmuebles);
 		} else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
@@ -89,11 +94,6 @@ public class MorosoController {
 		return "morosos/morosos-tablero";
 	}
 	
-//	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
-//	@GetMapping(value = "/morosos/detalle")
-//	public String mostrarDetalleMorosos(Model model, final HttpServletRequest request, 
-//			@RequestParam( name = "idInmueble", required = true ) final Long idInmueble, @RequestParam(name = "nombreStatusPago", required = true) final String nombreStatusPago ) {
-		
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
 	@GetMapping(value = "/morosos/inmuebles/{idInmueble}/detalle/{nombreStatusPago}")
 	public String mostrarDetalleMorosos(Model model, final HttpServletRequest request, @PathVariable final Long idInmueble, @PathVariable final String nombreStatusPago ) {

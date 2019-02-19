@@ -16,6 +16,7 @@ public interface NotificacionRepository extends CrudRepository<Notificacion, Lon
 	Collection<Notificacion> findByInmuebleId(Long id);
 	Collection<Notificacion> findByInmuebleIdAndFechaExposicionInicialBeforeAndFechaExposicionFinalAfter(Long id, Date today, Date todayf);
 	Collection<Notificacion> findByInmuebleIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(Long id, LocalDate today, LocalDate todayf);
+	Collection<Notificacion> findByUsuarioIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(Long idUsuario, LocalDate today, LocalDate todayf);
 	Collection<Notificacion> findByInmuebleIdOrUsuarioIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(Long idInmueble, Long idUsuario, LocalDate today, LocalDate todayf);
 	Collection<Notificacion> findByInmuebleIdInAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(List<Long> idsInmuebles, LocalDate today, LocalDate todayf);
 

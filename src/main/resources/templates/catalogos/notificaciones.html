@@ -49,7 +49,7 @@
 								  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 								  	</div>
 								  	<div class="col-1 ml-auto">
-					                     <a sec:authorize="hasRole('ADMIN_BI')" th:href="@{/catalogos/notificacion-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
+					                     <a sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA' ,'ADMIN_BI')" th:href="@{/catalogos/notificacion-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
 								  	</div>
 								 </div>
                                 

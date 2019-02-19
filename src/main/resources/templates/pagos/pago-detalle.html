@@ -39,7 +39,9 @@
                 </div>
                 <div id="divMonto" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{pago.monto}"></label>
-                  <p class="form-control-static" th:text="*{monto}"></p>
+<!--                   <p class="form-control-static" th:text="*{monto}"></p> -->
+<!--                   <p class="form-control-static" th:text="*{#numbers.formatDecimal(monto, 1, 'DEFAULT', 2, 'DEFAULT')}"></p> -->
+                  <p class="form-control-static" th:text="*{#numbers.formatCurrency(monto)}"></p>
                 </div>
                 <div id="divEstausPago" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{pago.estatus}"></label>

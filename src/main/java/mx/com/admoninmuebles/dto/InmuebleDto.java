@@ -37,10 +37,12 @@ public class InmuebleDto {
     private String contadorNombre;
     private String contadorApellidoPaterno;
     private String contadorApellidoMaterno;
+    private String contadorCorreo;
     private Long adminBiId;
     private String adminBiNombre;
     private String adminBiApellidoPaterno;
     private String adminBiApellidoMaterno;
+    private String adminBiCorreo;
     private String direccionCalle;
     private String direccionNumeroExterior;
     private String direccionNumeroInterior;

@@ -9,5 +9,6 @@ public final class PlantillaCorreoConst {
 	public static final String RECUPERA_CONTRASENIA = "correo/correoRecuperaContrasenia";
 	public static final String ACTIVACION_CUENTA= "correo/correoActivacionCuenta";
 	public static final String CONTACTANOS = "correo/plantilla-correo-contacto";
+	public static final String NOTIFICACION = "correo/notificacion";
 
 }
