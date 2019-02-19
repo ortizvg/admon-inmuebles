@@ -1,8 +1,11 @@
 package mx.com.admoninmuebles.service;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
@@ -11,20 +14,27 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.controller.SocioController;
 import mx.com.admoninmuebles.dto.ReservacionDto;
 import mx.com.admoninmuebles.error.BusinessException;
+import mx.com.admoninmuebles.persistence.model.EstatusPago;
 import mx.com.admoninmuebles.persistence.model.Reservacion;
 import mx.com.admoninmuebles.persistence.repository.PagoRepository;
 import mx.com.admoninmuebles.persistence.repository.ReservacionRepository;
+import mx.com.admoninmuebles.util.UtilDate;
 
 @Service
 public class ReservacionServiceImpl implements ReservacionService {
+	
+	Logger logger = LoggerFactory.getLogger(ReservacionServiceImpl.class);
 
     @Autowired
     private ReservacionRepository reservacionRepository;
@@ -73,21 +83,21 @@ public class ReservacionServiceImpl implements ReservacionService {
 
     @Override
     public void delete(final Long id) {
-        reservacionRepository.deleteById(id);
+    	reservacionRepository.deleteById(id);
     }
 
 	@Override
 	public void validateReservation(ReservacionDto reservacionDto) {
 		
-//		LocalDateTime diaAnterior = reservacionDto.getStart().minusDays(1);
-//		LocalDateTime diasiguiente = reservacionDto.getStart().plusDays(1);
-//		
-//		Collection<Reservacion> reservaciones = reservacionRepository.
-//				findByAreaComunIdAndSocioIdAndStartLessThanEqualAndStartGreaterThanEqual(reservacionDto.getAreaComunId(), reservacionDto.getSocioId(), diasiguiente, diaAnterior);
-//		
-//		if(reservaciones.size() > 0) {
-//			throw new BusinessException("reserva.areacomun.validacion.mensaje.diaanteriorposterior");
-//		}
+		LocalDate ldAnterior = LocalDate.parse(reservacionDto.getStart()).minusDays(1);
+		LocalDate ldSiguiente = LocalDate.parse(reservacionDto.getStart()).plusDays(1);
+		
+		Collection<Reservacion> reservaciones = reservacionRepository.findByAreaComunIdAndSocioIdAndStartLessThanEqualAndStartGreaterThanEqual(reservacionDto.getAreaComunId(), reservacionDto.getSocioId(), 
+						ldSiguiente.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), ldAnterior.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		
+		if(reservaciones!=null && !reservaciones.isEmpty()) {
+			throw new BusinessException("reserva.areacomun.validacion.mensaje.diaanteriorposterior");
+		}
 		
 	}
 	
@@ -96,20 +106,21 @@ public class ReservacionServiceImpl implements ReservacionService {
 	@Override
 	public void deleteNoPaidReservations() {
 		
-		Collection<Reservacion> reservaciones = reservacionRepository.findAll(); 
-		LocalDateTime now = LocalDateTime.now();
-		
-		for( Reservacion reservacion: reservaciones ) {
-			LocalDateTime reservationDate = reservacion.getFechaCreacion()
-			.toInstant()
-			.atZone(ZoneId.systemDefault())
-			.toLocalDateTime();
+		Collection<Reservacion> reservaciones = null;
+		try {
+			reservaciones = reservacionRepository.findByPagoEstatusPagoNameAndPagoEstatusPagoLang(EstatusPago.CERCANO, "es"); 
 			
-			long hoursSinceReservation = reservationDate.until(now, ChronoUnit.HOURS);
-			if( hoursSinceReservation >= RESERVA_PAGO_TIEMPO_TOLERANICA_HORAS ) {
-				pagoRepository.deleteById(reservacion.getId());
-				reservacionRepository.deleteById(reservacion.getId());
+			for( Reservacion reservacion: reservaciones ) {
+				LocalDateTime reservationDate = UtilDate.dateToLocalDateTime(reservacion.getFechaCreacion());
+							
+				long hoursSinceReservation = ChronoUnit.HOURS.between(reservationDate, LocalDateTime.now());
+				if( hoursSinceReservation >= RESERVA_PAGO_TIEMPO_TOLERANICA_HORAS ) {
+					pagoRepository.deleteById(reservacion.getPago().getId());
+					reservacionRepository.deleteById(reservacion.getId());
+				}
 			}
+		} catch (Exception e) {
+			logger.error("Hubo un error al eliminar reservaciones sin pago");
 		}
 		
 	}

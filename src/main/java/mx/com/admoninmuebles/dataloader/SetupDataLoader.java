@@ -388,15 +388,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     public final Reservacion createReservacionIfNotFound(final Long id, final String title, final AreaComun areaComun, final Usuario usuarioSocioBi) {
-        Optional<Reservacion> optReservacion = reservacionRepository.findById(id);
-        Reservacion reservacion = optReservacion.orElse(new Reservacion());
-        if (!optReservacion.isPresent()) {
-            reservacion.setTitle(title);
-            reservacion.setStart(LocalDate.now());
-            reservacion.setAreaComun(areaComun);
-            reservacion.setSocio(usuarioSocioBi);
-            reservacion = reservacionRepository.save(reservacion);
-        }
+        Reservacion reservacion = null;
+		try {
+			Optional<Reservacion> optReservacion = reservacionRepository.findById(id);
+			reservacion = optReservacion.orElse(new Reservacion());
+			if (!optReservacion.isPresent()) {
+				SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			    reservacion.setTitle(title);
+			    reservacion.setStart(sd.format(UtilDate.LocalDateToDate(LocalDate.now())));
+			    reservacion.setFechaCreacion(sd.parse(reservacion.getStart()));
+			    reservacion.setAreaComun(areaComun);
+			    
+			    reservacion.setSocio(usuarioSocioBi);
+			    reservacion = reservacionRepository.save(reservacion);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return reservacion;
     }
 
@@ -420,11 +429,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
-            ticket.setFechaCreacionTicket(LocalDate.now());
+            ticket.setFechaCreacion(new Date());
             ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);
-            //ticket.setAreaServicio(areaServicio);
             ticket.setUsuarioCreador(usuarioCreador);
             ticket.setUsuarioAsignado(usuarioAsignado);
             ticket.setTipoTicket(tipoTicket);

@@ -33,7 +33,7 @@
                   th:text="#{menu.reservaciones}"></span></a>
               <ul aria-expanded="false" class="collapse">
                  <li sec:authorize="!hasRole('CONTADOR')"><a th:href="@{/reservaciones/reservar-area}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.reserva}"></span></a></li>
-                 <li sec:authorize="hasAnyRole('SOCIO_BI', 'ADMIN_BI')"><a th:href="@{/reservaciones/mis-reservaciones}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.mis.reservaciones}"></span></a></li>
+                 <li sec:authorize="hasRole('SOCIO_BI')"><a th:href="@{/reservaciones/mis-reservaciones}" aria-expanded="false"><i class="mdi mdi-nature-people"></i> <span class="hide-menu" th:text="#{menu.areascomunes.mis.reservaciones}"></span></a></li>
               </ul></li>
            	   <li sec:authorize="hasAnyRole('CONTADOR', 'SOCIO_BI')"><a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-folder-multiple"></i> <span class="hide-menu" th:text="#{menu.reportes}"></span></a>
              	 <ul aria-expanded="false" class="collapse">

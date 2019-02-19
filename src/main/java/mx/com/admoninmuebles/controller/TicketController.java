@@ -1,8 +1,10 @@
 package mx.com.admoninmuebles.controller;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -39,6 +41,7 @@ import mx.com.admoninmuebles.service.AreaServicioService;
 import mx.com.admoninmuebles.service.TicketService;
 import mx.com.admoninmuebles.service.TipoTicketService;
 import mx.com.admoninmuebles.service.UsuarioService;
+import mx.com.admoninmuebles.util.UtilDate;
 
 @Controller
 public class TicketController {
@@ -77,7 +80,8 @@ public class TicketController {
  
 	private Collection<TicketDto> revisaRetraso(Collection<TicketDto> tickets) {
 		for (TicketDto ticketDto : tickets) {
-			if(!EstatusTicketConst.ATENDIDO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(ticketDto.getFechaCreacionTicket(), LocalDate.now()) > 5) {
+			LocalDate fechaCreacion = UtilDate.dateToLocalDate(ticketDto.getFechaCreacion()); 
+			if(!EstatusTicketConst.ATENDIDO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(fechaCreacion, LocalDate.now()) > 5) {
 				ticketDto.setRetraso(true);
 			}
 		}
@@ -116,7 +120,7 @@ public class TicketController {
 				redirect.addFlashAttribute("messageType","");
 				return showPageFail;
 			}
-			ticketDto.setFechaCreacionTicket(LocalDate.now());
+			ticketDto.setFechaCreacion(new Date());
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
 			ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
 			ticketDto.setTitulo(file.getOriginalFilename());

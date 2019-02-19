@@ -1,6 +1,5 @@
 package mx.com.admoninmuebles.persistence.repository;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.data.repository.CrudRepository;
@@ -19,6 +18,8 @@ public interface ReservacionRepository extends CrudRepository<Reservacion, Long>
 
     Collection<Reservacion> findBySocioId(Long socioId);
     
-    Collection<Reservacion> findByAreaComunIdAndSocioIdAndStartLessThanEqualAndStartGreaterThanEqual(Long areaComunId, Long socioId, LocalDateTime startDate, LocalDateTime finalDate);
+    Collection<Reservacion> findByAreaComunIdAndSocioIdAndStartLessThanEqualAndStartGreaterThanEqual(Long areaComunId, Long socioId, String siguiente, String anterior);
+
+	Collection<Reservacion> findByPagoEstatusPagoNameAndPagoEstatusPagoLang(String name, String lang);
 
 }
