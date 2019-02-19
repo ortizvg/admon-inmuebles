@@ -1,5 +1,8 @@
 package mx.com.admoninmuebles.controller;
 
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.ColoniaDto;
-import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.ColoniaService;
 import mx.com.admoninmuebles.service.ZonaService;
@@ -34,14 +36,29 @@ public class ColoniaController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/catalogos/colonias")
     public String init(final ColoniaDto coloniaDto, final Model model, final HttpServletRequest request) {
+    	System.out.println("Inicio");
+    	URL urlFolderReportes = Thread.currentThread().getContextClassLoader().getResource("gesco");
+		URL urlFolderReportesSlash = Thread.currentThread().getContextClassLoader().getResource("/gesco");
+		InputStream inputStream1 = ColoniaController.class.getResourceAsStream("/gesco");
+		InputStream inputStream2 = getClass().getClassLoader().getResourceAsStream("gesco");
+		
+		try {
+			System.out.println( urlFolderReportes.getPath());
+			System.out.println( urlFolderReportes.toURI().getPath());
+		} catch (URISyntaxException e) {
+			System.out.println("TRONO");
+			e.printStackTrace();
+		}
+    	
+    	Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
 
 		 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 			 model.addAttribute("colonias", coloniaService.findByZonaIsNotNull());
             
         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
-	     		Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
-	        	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
-        	 model.addAttribute("colonias", coloniaService.findByZonaCodigo(zona.getCodigo()));
+//	         ZonaDto zona = zonaService.findByAdminZonaId(usuarioLogueadoId).stream().findFirst().get();
+//        	 model.addAttribute("colonias", coloniaService.findByZonaCodigo(zona.getCodigo()));
+        	 model.addAttribute("colonias", coloniaService.findByAdminZona( usuarioLogueadoId) );
         } 
         return "catalogos/colonias";
     }

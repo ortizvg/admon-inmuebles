@@ -35,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CargaSocioDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
+import mx.com.admoninmuebles.dto.RolDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.error.BusinessException;
@@ -95,10 +96,12 @@ public class SocioController {
     	UsuarioDto usuarioDto = usuarioService.findById(socioBiLogueadoId);
     	model.addAttribute("socioDto", usuarioDto);
     	
-    	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(socioBiLogueadoId).stream().findFirst().get();
+//    	InmuebleDto inmuebleDto = inmuebleService.findBySociosId(socioBiLogueadoId).stream().findFirst().get();
+    	InmuebleDto inmuebleDto = inmuebleService.findBySocioId(socioBiLogueadoId);
     	model.addAttribute("inmuebleDto", inmuebleDto);
     	
-    	session.setAttribute("notificaciones", notificacionService.findByInmuebleIdNotExpired(inmuebleDto.getId()));
+//    	session.setAttribute("notificaciones", notificacionService.findByInmuebleIdNotExpired(inmuebleDto.getId()));
+    	session.setAttribute("notificaciones", notificacionService.findByUserIdNotExpired( socioBiLogueadoId ));
 //        model.addAttribute("inmuebleDto", inmuebleService.findById(usuarioDto.getInmuebleId()));
 //        session.setAttribute("notificaciones", notificacionService.findByInmuebleId(usuarioDto.getInmuebleId()));
 //        session.setAttribute("notificaciones", notificacionService.findByInmuebleIdNotExpired(usuarioDto.getInmuebleId()));
@@ -111,17 +114,16 @@ public class SocioController {
 	public String init(final Model model, final HttpServletRequest request) {
 		model.addAttribute("socios", socioService.getSocios());
 		
+		Long userLogueadoId = SecurityUtils.getCurrentUserId().get();
+		
 		 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 			 model.addAttribute("socios", socioService.getSocios());
              
          } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
-        	 Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
-         	 ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
-        	 model.addAttribute("socios", socioService.findSociosByZonaCodigo(zona.getCodigo()));
+        	 model.addAttribute("socios", socioService.findSociosByAdminZonaId( userLogueadoId ));
          
          } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
-        	 Long adminBiId = SecurityUtils.getCurrentUserId().get();
-        	 model.addAttribute("socios", socioService.findSociosByAdminBiId( adminBiId ));
+        	 model.addAttribute("socios", socioService.findSociosByAdminBiId( userLogueadoId ));
          }
 		 
 		return "socios/socios";
@@ -130,7 +132,7 @@ public class SocioController {
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/condomino-crear")
     public String crearSocioInit(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
-		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes()); 
+//		session.setAttribute("rolesDto", rolService.getRolesSociosRepresentantes()); 
 		session.setAttribute("tiposSocios", tipoSocioService.findAllByLang(locale.getLanguage()));
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
         if (optId.isPresent()) {
@@ -156,6 +158,8 @@ public class SocioController {
         }
         
         try {
+        	RolDto rolSocio = rolService.findByNombre(RolConst.ROLE_SOCIO_BI);
+        	usuarioDto.setRolSeleccionado(rolSocio.getId());
 	        UsuarioDto socioNuevo = (UsuarioDto) usuarioService.crearCuenta(usuarioDto);
 	        inmuebleService.addSocio2Inmueble(socioNuevo, usuarioDto.getInmuebleId());
 	        eventPublisher.publishEvent(new OnRegistroCompletoEvent(socioNuevo, request.getLocale(), getAppUrl(request)));
@@ -211,6 +215,8 @@ public class SocioController {
             return "socios/socio-editar";
         }
 
+        RolDto rolSocio = rolService.findByNombre(RolConst.ROLE_SOCIO_BI);
+    	usuarioDto.setRolSeleccionado(rolSocio.getId());
         usuarioService.editarCuenta(usuarioDto);
 //        inmuebleService.addSocio2Inmueble(socio, usuarioDto.getInmuebleId());
         return "redirect:/condominos";

@@ -68,7 +68,7 @@ public class Ticket extends EntidadBase {
     
     @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
     private byte[] archivoEvidencia;
-   
+
     public void addCambioTicket(final CambioTicket cambioTicket) {
         cambios.add(cambioTicket);
         cambioTicket.setTicket(this);

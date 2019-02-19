@@ -55,10 +55,13 @@ public class InmuebleController {
         if (optUsuarioId.isPresent()) {
             if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
                 zonas = zonaService.findAll();
+                model.addAttribute("inmuebles", inmuebleService.findAll() );
             } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
                 zonas = zonaService.findByAdminZonaId(optUsuarioId.get());
+                model.addAttribute("inmuebles", inmuebleService.findByAdminZonaId( optUsuarioId.get() ) );
             } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
                 zonas = zonaService.findByAdministradoresBiId(optUsuarioId.get());
+                model.addAttribute("inmuebles", inmuebleService.findByAdminBiId( optUsuarioId.get() ) );
             }
         }
         model.addAttribute("zonas", zonas);

@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.NotificacionDto;
 import mx.com.admoninmuebles.persistence.model.Notificacion;
 import mx.com.admoninmuebles.persistence.repository.NotificacionRepository;
@@ -19,6 +20,9 @@ public class NotificacionServiceImpl implements NotificacionService {
 
     @Autowired
     private NotificacionRepository notificacionRepository;
+    
+    @Autowired
+    private InmuebleService inmuebleService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -65,6 +69,16 @@ public class NotificacionServiceImpl implements NotificacionService {
 //		hoy =  cal.getTime();
 		
 		return StreamSupport.stream(notificacionRepository.findByInmuebleIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(id, hoy, hoy).spliterator(), false)
+				.map(notificacion -> modelMapper.map(notificacion, NotificacionDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<NotificacionDto> findByUserIdNotExpired(Long idUsuario) {
+		InmuebleDto inmueble = inmuebleService.findBySocioId( idUsuario );
+		LocalDate hoy = LocalDate.now();
+		return StreamSupport.stream(notificacionRepository.findByInmuebleIdOrUsuarioIdAndFechaExposicionInicialLessThanEqualAndFechaExposicionFinalGreaterThanEqual(inmueble.getId(), idUsuario, hoy, hoy)
+				.spliterator(), false)
 				.map(notificacion -> modelMapper.map(notificacion, NotificacionDto.class))
 				.collect(Collectors.toList());
 	}

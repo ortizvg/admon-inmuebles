@@ -13,6 +13,7 @@ import mx.com.admoninmuebles.dto.ColoniaDto;
 import mx.com.admoninmuebles.persistence.model.Asentamiento;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.AsentamientoRepository;
+import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
 @Service
 public class ColoniaServiceImpl implements ColoniaService {
@@ -22,6 +23,9 @@ public class ColoniaServiceImpl implements ColoniaService {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    private ZonaRepository zonaRepository;
 
     @Override
     public void save(final ColoniaDto coloniaDto) {
@@ -80,6 +84,13 @@ public class ColoniaServiceImpl implements ColoniaService {
 	@Override
 	public Collection<ColoniaDto> findByZonaCodigo(String zonaCodigo) {
 		 return StreamSupport.stream(asentamientoRepository.findByZonaCodigo( zonaCodigo ).spliterator(), false).map(asentamiento -> modelMapper.map(asentamiento, ColoniaDto.class))
+	                .collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<ColoniaDto> findByAdminZona(Long adminZonaId) {
+		 Collection<Zona> zonas = zonaRepository.findByAdminZonaId( adminZonaId );
+		 return StreamSupport.stream(asentamientoRepository.findByZonaIn( zonas ).spliterator(), false).map(asentamiento -> modelMapper.map(asentamiento, ColoniaDto.class))
 	                .collect(Collectors.toList());
 	}
 

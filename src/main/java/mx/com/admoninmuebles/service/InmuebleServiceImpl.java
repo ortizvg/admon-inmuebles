@@ -18,11 +18,13 @@ import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
 import mx.com.admoninmuebles.persistence.model.Ticket;
 import mx.com.admoninmuebles.persistence.model.Usuario;
+import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.DatosAdicionalesRepository;
 import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
 import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.TicketRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
+import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
 @Service
 public class InmuebleServiceImpl implements InmuebleService {
@@ -39,6 +41,9 @@ public class InmuebleServiceImpl implements InmuebleService {
     private ModelMapper modelMapper;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private ZonaRepository zonaRepository;
 
     @Override
     public Inmueble save(final InmuebleDto inmuebleDto) {
@@ -85,16 +90,18 @@ public class InmuebleServiceImpl implements InmuebleService {
 
 	@Override
 	public Collection<InmuebleDto> findByAdminBiId(Long id) {
-		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false)
-				.map(inmueble -> 
-					{
-						InmuebleDto inmuebleDto = modelMapper.map(inmueble, InmuebleDto.class);
-						inmuebleDto.setTotalSocios(inmueble.getSocios() != null ? inmueble.getSocios().size() : 0);
-						
-						return inmuebleDto;
-					}
-				)
-				.collect(Collectors.toList());
+		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+		
+//		return StreamSupport.stream(inmuebleRepository.findByAdminBiId(id).spliterator(), false)
+//				.map(inmueble -> 
+//					{
+//						InmuebleDto inmuebleDto = modelMapper.map(inmueble, InmuebleDto.class);
+//						inmuebleDto.setTotalSocios(inmueble.getSocios() != null ? inmueble.getSocios().size() : 0);
+//						
+//						return inmuebleDto;
+//					}
+//				)
+//				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -166,6 +173,14 @@ public class InmuebleServiceImpl implements InmuebleService {
 	@Override
 	public Collection<InmuebleDto> findByContadorId(Long id) {
 		return StreamSupport.stream(inmuebleRepository.findByContadorId(id).spliterator(), false)
+				.map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<InmuebleDto> findByAdminZonaId(Long id) {
+		Collection<Zona> zonas = zonaRepository.findByAdminZonaId( id );
+		return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoZonaIn( zonas ).spliterator(), false)
 				.map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
 				.collect(Collectors.toList());
 	}

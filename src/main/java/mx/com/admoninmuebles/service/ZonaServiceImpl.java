@@ -59,5 +59,11 @@ public class ZonaServiceImpl implements ZonaService {
 	public Collection<ZonaDto> findByAdministradoresBiId(Long id) {
 		return StreamSupport.stream(zonaRepository.findByAdministradoresBiId(id).spliterator(), false).map(zona -> modelMapper.map(zona, ZonaDto.class)).collect(Collectors.toList());
 	}
+	
+//    @Override
+//    public ZonaDto findByAdministradorBiId(final Long id) {
+//        Zona zona = zonaRepository.findByAdministradorBiId(id);
+//        return modelMapper.map(zona, ZonaDto.class);
+//    }
 
 }

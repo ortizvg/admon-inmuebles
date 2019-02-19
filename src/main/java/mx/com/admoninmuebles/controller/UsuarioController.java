@@ -26,25 +26,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.RolConst;
+import mx.com.admoninmuebles.dto.ActivacionUsuarioDto;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
 import mx.com.admoninmuebles.dto.RecuperaContraseniaDto;
 import mx.com.admoninmuebles.dto.RecuperacionContraseniaCorreoDto;
+import mx.com.admoninmuebles.dto.RolDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.error.BusinessException;
-import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.dto.ActivacionUsuarioDto;
 import mx.com.admoninmuebles.listener.event.OnRecuperacionContraseniaEvent;
 import mx.com.admoninmuebles.listener.event.OnRegistroCompletoEvent;
 import mx.com.admoninmuebles.security.SecurityUtils;
-import mx.com.admoninmuebles.service.RolService;
-import mx.com.admoninmuebles.service.UsuarioService;
-import mx.com.admoninmuebles.service.ZonaService;
-import mx.com.admoninmuebles.storage.StorageService;
 import mx.com.admoninmuebles.service.ActivacionUsuarioService;
 import mx.com.admoninmuebles.service.ColoniaService;
 import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.RecuperacionContraseniaService;
+import mx.com.admoninmuebles.service.RolService;
+import mx.com.admoninmuebles.service.UsuarioService;
+import mx.com.admoninmuebles.service.ZonaService;
+import mx.com.admoninmuebles.storage.StorageService;
 
 @Controller
 public class UsuarioController {
@@ -104,7 +105,7 @@ public class UsuarioController {
     	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
 //        model.addAttribute("usuarios", userService.findAll());
         model.addAttribute("colonias", coloniaService.findByZonaCodigo( zona.getCodigo() ));
-        model.addAttribute("inmuebles", inmuebleService.findAll());
+        model.addAttribute("inmuebles", inmuebleService.findByAdminZonaId( adminZonaLogueadoId ) );
         return "adminzona/inicio";
     }
     
@@ -135,13 +136,15 @@ public class UsuarioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/usuarios/nuevo")
     public String nuevoInit(final UsuarioDto usuarioDto, final Model model, final HttpSession session, final HttpServletRequest request) {
-    	
+    	Long userLogueadoId = SecurityUtils.getCurrentUserId().get();
     	if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
     		session.setAttribute("rolesDto", rolService.getRolesAdministradores());
+    		session.setAttribute("zonasDto", zonaService.findAll());
     	}  else if(request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)){
     		List<String> nombres = new ArrayList<>();
     		nombres.add(  RolConst.ROLE_ADMIN_BI );
     		session.setAttribute("rolesDto", rolService.findByNombres( nombres ));
+    		session.setAttribute("zonasDto", zonaService.findByAdminZonaId( userLogueadoId ) );
     	} else {
     		session.setAttribute("rolesDto", Collections.emptyList());
     	}
@@ -170,19 +173,28 @@ public class UsuarioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/usuarios/editar/{idUsuario}")
     public String edicionInit(final @PathVariable Long idUsuario, final Model model, final HttpSession session, final HttpServletRequest request) {
+    	Long userLogueadoId = SecurityUtils.getCurrentUserId().get();
     	UsuarioDto usuarioDto = userService.findById(idUsuario);
     	List<Long> rolesUsuario = usuarioDto.getRoles().stream().map(rol -> rol.getId()).collect(Collectors.toList());
     	usuarioDto.setRolSeleccionado( rolesUsuario.get(0) );
     	model.addAttribute("usuarioDto", usuarioDto);
     	
+    	RolDto rol = rolService.findById( usuarioDto.getRolSeleccionado() );
+    	if( RolConst.ROLE_ADMIN_BI.equalsIgnoreCase(rol.getNombre()) ) {
+    		ZonaDto zona = zonaService.findByAdministradoresBiId( usuarioDto.getId() ).stream().findFirst().get();
+    		usuarioDto.setZonaSeleccionado( zona.getCodigo() );
+    	}
+    	
     	if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 //    		session.setAttribute("rolesDto", rolService.getRolesAdministradores());
     		model.addAttribute("rolesDto", rolService.getRolesAdministradores());
+    		session.setAttribute("zonasDto", zonaService.findAll());
     	}  else if(request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)){
     		List<String> nombres = new ArrayList<>();
     		nombres.add(  RolConst.ROLE_ADMIN_BI );
 //    		session.setAttribute("rolesDto", rolService.findByNombres( nombres ));
     		model.addAttribute("rolesDto", rolService.findByNombres( nombres ));
+    		session.setAttribute("zonasDto", zonaService.findByAdminZonaId( userLogueadoId ) );
     	} else {
 //    		session.setAttribute("rolesDto", Collections.emptyList());
     		model.addAttribute("rolesDto", Collections.emptyList());

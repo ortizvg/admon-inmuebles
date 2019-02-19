@@ -50,7 +50,11 @@ public class Notificacion extends EntidadBase {
     private LocalDate fechaExposicionFinal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_inmueble", referencedColumnName = "id_inmueble", nullable = false)
+    @JoinColumn(name = "id_inmueble", referencedColumnName = "id_inmueble", nullable = true)
     private Inmueble inmueble;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = true)
+    private Usuario usuario;
 
 }

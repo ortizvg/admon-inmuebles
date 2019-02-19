@@ -1,6 +1,7 @@
 package mx.com.admoninmuebles.persistence.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -168,6 +169,9 @@ public class Usuario extends EntidadBase {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<Pago> pagos;
+    
+    @OneToMany(mappedBy = "socio")
+    private Collection<EstadoCuenta> estadosCuenta = new ArrayList<>();
 
     public void addAreaServicio(final AreaServicio areaServicio) {
         areasServicio.add(areaServicio);

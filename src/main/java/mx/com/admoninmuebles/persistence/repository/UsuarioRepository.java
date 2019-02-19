@@ -6,10 +6,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Usuario;
 
@@ -46,5 +44,17 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     		"where u.id_usuario =  ?1)", 
 			nativeQuery = true)
     Collection<Usuario> findSociosByAdminBiId(Long id);
+    
+    @Query(value = "select s.* from gescopls.usuarios az\r\n" + 
+    		"	 inner join gescopls.zonas z on az.id_usuario = z.id_admin_zona_fk\r\n" + 
+    		"    inner join gescopls.asentamientos a on  z.codigo = a.id_zona_fk\r\n" + 
+    		"    inner join gescopls.direcciones d on a.id_asentamiento = d.id_asentamiento_fk\r\n" + 
+    		"    inner join gescopls.inmuebles i on d.id_direccion = i.id_direccion_fk\r\n" + 
+    		"    inner join gescopls.inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 
+    		"    inner join gescopls.usuarios s on inso.socios_id_usuario = s.id_usuario\r\n" + 
+    		"    inner join gescopls.pagos p on s.id_usuario = p.id_usuario\r\n" + 
+    		"    where az.id_usuario = ?1", 
+			nativeQuery = true)
+    Collection<Usuario> findSociosByAdminZonaId(Long id);
     
 }

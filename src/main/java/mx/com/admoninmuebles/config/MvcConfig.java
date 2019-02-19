@@ -10,8 +10,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -105,11 +103,24 @@ public class MvcConfig implements WebMvcConfigurer {
         return list;
     }
     
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
-        registrar.setUseIsoFormat(true);
-        registrar.registerFormatters(registry);
-    }
+//    @Override
+//    public void addFormatters(FormatterRegistry registry) {
+//        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+//        registrar.setUseIsoFormat(true);
+//        registrar.registerFormatters(registry);
+//    }
+    
+//    @Bean
+//    public FormattingConversionService conversionService() {
+//        DefaultFormattingConversionService conversionService = 
+//          new DefaultFormattingConversionService(false);
+// 
+//        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+//        registrar.setDateFormatter(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+//        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+//        registrar.registerFormatters(conversionService);
+// 
+//        return conversionService;
+//    }
 
 }

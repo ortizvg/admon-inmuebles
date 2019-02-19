@@ -51,6 +51,7 @@ public class TicketDto {
     @JsonFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(iso = ISO.DATE)
     private Date fechaCreacion;
+
     private boolean retraso;
 
     public String getNombreSocio() {

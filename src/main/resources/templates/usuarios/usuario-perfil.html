@@ -165,16 +165,16 @@ function cambiarContrasenia(){
                                                 <th:block th:each="rol : ${usuarioDto.roles}" sec:authorize="!hasRole('ROLE_SOCIO_BI')">
                                                 	 <p class="text-muted" th:text="${rol.descripcion}"></p>
                                                 </th:block>
-                                                <p sec:authorize="hasRole('ROLE_SOCIO_BI')" class="text-muted" th:text="${usuarioDto.tipoSocioDescription}"></p>
+                                                <p sec:authorize="hasRole('ROLE_SOCIO_BI')" class="text-muted" th:text="${usuarioDto.tipoSocioDescripction}"></p>
                                             </div>
-                                        	 <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p>
-                                            </div>
-                                            <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong>
-                                                <br>
-                                                <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p>
-                                            </div>
+<!--                                         	 <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.movil}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoMovil}"></p> -->
+<!--                                             </div> -->
+<!--                                             <div class="col-md-4 col-xs-6 b-r"> <strong th:text="#{usuario.telefono.oficina}"></strong> -->
+<!--                                                 <br> -->
+<!--                                                 <p class="text-muted" th:text="${usuarioDto.telefonoOficina}"></p> -->
+<!--                                             </div> -->
 <!--                                              <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.youtube}"></strong> -->
 <!--                                                 <br> -->
 <!--                                                 <p class="text-muted" th:text="${usuarioDto.youtube}"></p> -->
@@ -283,24 +283,24 @@ function cambiarContrasenia(){
 <!--                                                      <a  target="_blank"  th:href="@{/informacion/mapa-google}"><small class="text-muted p-t-30 db" th:text="#{usuario.googlemaps.tutorial}"> </small></a> -->
 <!--                                                 </div> -->
 <!--                                             </div> -->
-                                            <div class="form-group">
-                                                <label for="example-telefono-movil" th:text="#{usuario.telefono.movil}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{telefonoMovil}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
-                                                </div>
-                                            </div>
+<!--                                             <div class="form-group"> -->
+<!--                                                 <label for="example-telefono-movil" th:text="#{usuario.telefono.movil}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{telefonoMovil}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
 <!--                                             <div class="form-group"> -->
 <!--                                                 <label for="example-telefono-fijo" th:text="#{usuario.telefono.fijo}" class="col-md-12"></label> -->
 <!--                                                 <div class="col-md-12"> -->
 <!--                                                     <input type="text" class="form-control" th:field="*{telefonoFijo}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">   -->
 <!--                                                 </div> -->
 <!--                                             </div> -->
-                                            <div class="form-group">
-                                                <label for="example-telefono-oficina" th:text="#{usuario.telefono.oficina}" class="col-md-12"></label>
-                                                <div class="col-md-12">
-                                                    <input type="text" class="form-control" th:field="*{telefonoOficina}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">  
-                                                </div>
-                                            </div>
+<!--                                             <div class="form-group"> -->
+<!--                                                 <label for="example-telefono-oficina" th:text="#{usuario.telefono.oficina}" class="col-md-12"></label> -->
+<!--                                                 <div class="col-md-12"> -->
+<!--                                                     <input type="text" class="form-control" th:field="*{telefonoOficina}" pattern="^[0-9]{0,15}$" th:title="#{usuario.telefono.mensaje.validacion}">   -->
+<!--                                                 </div> -->
+<!--                                             </div> -->
 <!--                                             <div class="form-group"> -->
 <!--                                                 <label for="example-telefono-alternativo" th:text="#{usuario.telefono.alternativo}" class="col-md-12"></label> -->
 <!--                                                 <div class="col-md-12"> -->

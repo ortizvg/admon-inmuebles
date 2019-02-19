@@ -14,6 +14,8 @@ public interface InmuebleService {
     
     Collection<InmuebleDto> findByAdminBiId(Long id);
     
+    Collection<InmuebleDto> findByAdminZonaId(Long id);
+    
     Collection<InmuebleDto> findByContadorId(Long id);
     
     Collection<InmuebleDto> findByDireccionAsentamientoId(Long id);

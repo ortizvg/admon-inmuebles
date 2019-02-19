@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{mororos.detalle.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  		var serverContext = [[@{/}]];
+		var seleccione = /*[[#{etiqueta.seleccione}]]*/
+		var opcionSeleccione= '<option selected="selected" value="">'+seleccione+'</option>';
+	    $(document).ready(function() {
+	        $('#zonaCodigo').on('change', function() {
+	            $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + this.value, function(data) {
+	                var html = opcionSeleccione;
+	                var len = data.length;
+	                for (var i = 0; i < len; i++) {
+	                    html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+	                }
+	                html += '</option>';
+	                $('#inmuebles').html(html);
+	            });
+	        });
+	    });
+	    
+	    
+	    function notificarRecordatorioPago( idPago ) {
+	    	console.log('idPago ' + idPago );
+	    	request = $.getJSON(serverContext + "api/morosos/pagos/" + idPago + "/notificacion", function() {
+	           console.log('Petición exitosa');
+	        });
+	    	
+	    	request.done(function(response, textStatus, jqXHR) {
+	    		 console.log('exitoso');
+	    		 console.log(response.descripcion);
+	    		 console.log(jqXHR.status);
+	    		 if( jqXHR.status == 200 ){
+	    		 	$("#mensaje").html("<div class='alert alert-info'> <i class='ti-info'></i> <span class='form-control-feedback' >"+response.descripcion+"</span><button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>×</span></button>");
+	    		 } 
+	    		 
+	 	    });
+	 	    request.fail(function(jqXHR, textStatus, errorThrown) {
+	 	    	console.log('fallo');
+	 	    	console.log(jqXHR.status);
+	 	    	console.log(textStatus);
+	 	    	console.log(errorThrown);
+	 	    	$("#mensaje").html("<div class='alert alert-danger'> <i class='ti-info'></i> <span class='form-control-feedback' >Error</span><button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>×</span></button>");
+	 	    });
+	 	
+	 	    request.always(function() {
+	 	        console.log("Fin de peticion");
+	 	    });
+	    }
+  
+  /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{mororos.detalle.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{mororos.detalle.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{mororos.detalle.subtitulo.detalle}"></h6>
+              <div class="row">
+        		<div class="col-4">
+			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
+			  	</div>
+			  	<div class="col-1 ml-auto">
+                      <a th:href="@{/morosos/tablero}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+			  	</div>
+			 </div>
+			 
+			 <div id="mensaje" class="m-t-20"> </div>
+			 
+			 <div class="table-responsive">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                  <thead>
+                    <tr>
+                      <th th:text="#{pago.condomino}"></th>
+                      <th th:text="#{pago.monto}"></th>
+                      <th th:text="#{pago.tipopago}"></th>
+                      <th th:text="#{pago.concepto}"></th>
+                      <th th:text="#{pago.estatus}"></th>
+                      <th th:text="#{tabla.accion}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="pago : ${pagos}">
+                      <tr>
+                        <td th:text="${pago.socio}"></td>
+                        <td th:text="|$${pago.monto}|"></td>
+                        <td th:text="${pago.tipoPagoDescripction}"></td>
+                        <td th:text="${pago.concepto}"></td>
+                        <td>
+	                        <div th:switch="${pago.estatusPagoName}"> 
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).PAGADO}" class="text-success" th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO}" class="text-warning"  th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).VERIFICACION}" class="text-muted"  th:text="${pago.estatusPagoDescripction}"></span>
+							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
+							</div>
+                        </td> 
+                        <td>
+                          <button th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:onclick="'notificarRecordatorioPago('+${pago.id}+')'" class="btn btn-outline-success btn-xs"> <i class="fa fa-bullhorn text-inverse m-r-10" aria-hidden="true"></i><span th:text="#{boton.notificar}"></span></button>
+                        </td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot th:if="${#lists.size(pagos) > 20}">
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
+

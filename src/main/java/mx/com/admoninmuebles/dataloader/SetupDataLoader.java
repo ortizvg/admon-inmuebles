@@ -5,16 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +56,6 @@ import mx.com.admoninmuebles.persistence.repository.TipoSocioRepository;
 import mx.com.admoninmuebles.persistence.repository.TipoTicketRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
-import mx.com.admoninmuebles.util.UtilDate;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -246,7 +240,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
         TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
         TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
-//        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
+        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
 
         
 //        createPagoIfNotFound(1L, "4444444", "234242sadads", BigDecimal.valueOf(24l), "Pago1", usuarioSocioBi, "asdsadsadsadasdasd", null);
