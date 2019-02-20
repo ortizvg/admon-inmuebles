@@ -118,9 +118,13 @@ public class MorosoController {
 				return "error/404";
 			} else {
 				InmuebleDto inmuebleDto = inmuebleService.findById( idInmueble );
-				if(!inmuebles.contains( inmuebleDto ) ) {
+				
+				if(!inmuebles.stream().anyMatch( inmueble -> inmueble.getId() == inmuebleDto.getId()) ) {
 					return "error/404";
 				}
+//				if(!inmuebles.contains( inmuebleDto ) ) {
+//					return "error/404";
+//				}
 			}
 		}
 		

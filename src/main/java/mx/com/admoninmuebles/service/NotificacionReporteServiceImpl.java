@@ -31,8 +31,8 @@ public class NotificacionReporteServiceImpl implements NotificacionReporteServic
 		notificacionDto.setInmuebleId(comunicadoDto.getInmuebleId());
 		
 		StringBuffer notificacionDesc = new StringBuffer(messages.getMessage("notificacion.comunicado.nuevo.descripcion", null, Locale.getDefault()));
-		notificacionDesc.append("\n");
-		notificacionDesc.append(messages.getMessage("notificacion.comunicado.inmueble", null, Locale.getDefault())).append(" ").append(comunicadoDto.getInmuebleNombre());
+//		notificacionDesc.append("\n");
+//		notificacionDesc.append(messages.getMessage("notificacion.comunicado.inmueble", null, Locale.getDefault())).append(" ").append(comunicadoDto.getInmuebleNombre());
 		notificacionDesc.append("\n");
 		notificacionDesc.append(messages.getMessage("notificacion.comunicado.descripcion", null, Locale.getDefault())).append(" ").append( comunicadoDto.getDescripcion() );
 

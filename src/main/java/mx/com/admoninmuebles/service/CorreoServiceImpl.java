@@ -42,7 +42,7 @@ public class CorreoServiceImpl implements CorreoService{
 	        sender.send(message);
 	    } catch (MessagingException e) {
 	        throw new BusinessException(e.getMessage(), e);
-	    } catch (MailException e) {
+	    } catch (Exception e) {
 	    	throw new BusinessException(e.getMessage(), e);
 	    }
 	}

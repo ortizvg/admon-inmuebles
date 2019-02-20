@@ -227,7 +227,7 @@
 							                </div>
 							                 <div id="divMontoCuotaOrdinaria" class="col-md-4 form-group">
 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.montocuotaordinaria}"></label>
-							                  <p class="form-control-static" th:text="*{montoCuotaOrdinaria}"></p>
+							                  <p class="form-control-static" th:text="*{#numbers.formatCurrency(montoCuotaOrdinaria)}"></p>
 							                </div>
 							             	 <div id="divNumeroCuenta" class="col-md-4 form-group">
 							                  <label class="form-control-label" th:text="#{etiqueta.inmueble.numerocuenta}"></label>

@@ -52,7 +52,6 @@ public class ComunicadoServiceImpl implements ComunicadoService {
     			archivo.setTipoContenido(comunicadoDto.getArchivoMP().getContentType());
     			archivoCreado = archivoRepository.save(archivo);
     			
-    			notificacionReporteService.notificarComunicado( comunicadoDto );
     			
     		} catch (IOException e) {
     			throw new BusinessException("comunicados.archivo.guardado.error");
@@ -63,6 +62,8 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 		comunicado.setArchivo(archivoCreado);
 		
 		comunicado = comunicadoRepository.save(comunicado);
+		
+		notificacionReporteService.notificarComunicado( modelMapper.map(comunicado, ComunicadoDto.class) );
 		
 		return modelMapper.map(comunicado, ComunicadoDto.class);
 	}

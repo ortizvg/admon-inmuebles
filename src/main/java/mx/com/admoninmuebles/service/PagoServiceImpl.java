@@ -1,11 +1,9 @@
 package mx.com.admoninmuebles.service;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,13 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.dto.InmuebleDto;
-import mx.com.admoninmuebles.dto.NotificacionDto;
 import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.PagoPaypalDto;
 import mx.com.admoninmuebles.dto.PagoTarjetaDto;
@@ -339,7 +334,11 @@ public class PagoServiceImpl implements PagoService {
 		pago.setVerificado(false);
 		pago.setUsuario( socio );
 		
-		return modelMapper.map( pagoRepository.save(pago) , PagoDto.class );
+		PagoDto pageGenerado =  modelMapper.map( pagoRepository.save(pago) , PagoDto.class );
+				
+		notificacionPagoService.notificarGeneracionPago( pageGenerado );
+		
+		return pageGenerado;
 	}
 
 	@Override

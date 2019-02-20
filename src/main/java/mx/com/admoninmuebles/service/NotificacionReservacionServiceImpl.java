@@ -46,9 +46,9 @@ public class NotificacionReservacionServiceImpl implements NotificacionReservaci
 		StringBuffer notificacionDesc = new StringBuffer(messages.getMessage("notificacion.reservacion.realizado.descripcion", null, Locale.getDefault()));
 		notificacionDesc.append("\n");
 		notificacionDesc.append(messages.getMessage("notificacion.reservacion.socio", null, Locale.getDefault())).append(" ").append(reservacionDto.getSocioNombre());
-		notificacionDesc.append("\n");
+		notificacionDesc.append(",\n");
 		notificacionDesc.append(messages.getMessage("notificacion.reservacion.fecha", null, Locale.getDefault())).append(" ").append(reservacionDto.getStart());
-		notificacionDesc.append("\n");
+		notificacionDesc.append(",\n");
 		notificacionDesc.append(messages.getMessage("notificacion.reservacion.area", null, Locale.getDefault())).append(" ").append(reservacionDto.getAreaComunNombre());
 
 		notificacionDto.setDescripcion(notificacionDesc.toString());

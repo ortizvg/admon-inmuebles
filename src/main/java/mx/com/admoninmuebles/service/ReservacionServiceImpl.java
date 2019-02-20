@@ -1,7 +1,5 @@
 package mx.com.admoninmuebles.service;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,8 +19,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import mx.com.admoninmuebles.controller.SocioController;
 import mx.com.admoninmuebles.dto.ReservacionDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
@@ -41,16 +39,25 @@ public class ReservacionServiceImpl implements ReservacionService {
     
     @Autowired
     private PagoRepository pagoRepository;
+    
+    @Autowired
+    private NotificacionReservacionService notificacionReservacionService;
 
     @Autowired
     private ModelMapper modelMapper;
     
     @Value( "${reservas.pago.horas.tolerancia}" )
     private Long RESERVA_PAGO_TIEMPO_TOLERANICA_HORAS;
+    
+    
 
+    @Transactional
     @Override
     public Reservacion save(final ReservacionDto reservacionDto) {
-        return reservacionRepository.save(modelMapper.map(reservacionDto, Reservacion.class));
+    	Reservacion reservacionCreada = reservacionRepository.save(modelMapper.map(reservacionDto, Reservacion.class));
+    	notificacionReservacionService.notificarReservacion(modelMapper.map(reservacionCreada, ReservacionDto.class));
+    	
+    	return reservacionCreada;
     }
 
     @Override

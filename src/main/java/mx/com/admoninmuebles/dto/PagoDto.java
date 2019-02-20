@@ -64,6 +64,7 @@ public class PagoDto {
 	private String usuarioNombre;
 	private String usuarioApellidoPaterno;
 	private String usuarioApellidoMaterno;
+	private String usuarioCorreo;
 	
 //	private byte[] comprobantePago;
     private MultipartFile comprobantePagoMf;

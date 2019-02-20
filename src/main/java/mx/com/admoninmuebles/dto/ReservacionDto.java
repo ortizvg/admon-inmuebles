@@ -1,13 +1,5 @@
 package mx.com.admoninmuebles.dto;
 
-import java.time.LocalDate;
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 
 @Data
@@ -30,7 +22,7 @@ public class ReservacionDto {
     private String areaComunNombre;
 
     private Long socioId;
-    private Long socioNombre;
+    private String socioNombre;
     
     private Long pagoId;
     private String pagoEstatusPagoName;

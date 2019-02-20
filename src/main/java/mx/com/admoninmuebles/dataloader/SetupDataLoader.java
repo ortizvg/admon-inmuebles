@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import mx.com.admoninmuebles.constant.EstatusTicketConst;
 import mx.com.admoninmuebles.constant.PrivilegioConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.persistence.model.AreaComun;
@@ -31,6 +29,7 @@ import mx.com.admoninmuebles.persistence.model.AreaServicio;
 import mx.com.admoninmuebles.persistence.model.Asentamiento;
 import mx.com.admoninmuebles.persistence.model.DatosAdicionales;
 import mx.com.admoninmuebles.persistence.model.Direccion;
+import mx.com.admoninmuebles.persistence.model.Estado;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
 import mx.com.admoninmuebles.persistence.model.Municipio;
 import mx.com.admoninmuebles.persistence.model.Pago;
@@ -226,14 +225,16 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 //        Usuario usuarioAdminZona2 = createUsuarioIfNotFound("admin_zona2", "Administrador2", "Zona", "", "admin_zona2", new ArrayList<>(Arrays.asList(adminZona)), "correo@gmail.com", null);
         createUsuarioIfNotFound("admin_corp", "Administrador", "Corporativo", "", "admin_corp", new ArrayList<>(Arrays.asList(adminCorp)), "correo@gmail.com", null);
 //        Usuario contadorBI = createUsuarioIfNotFound("contador", "Contador", "Contador", "", "contador", new ArrayList<>(Arrays.asList(contador)), "correo@gmail.com", null);
-
+        
+//        createEstadoIfNotFound(1L, "CDMX");
+//        
 //        Zona zona = createZonaIfNotFound("zona1", "Zona 1", usuarioAdminZona, usuarioAdminBi, 9L);
 //        createZonaIfNotFound("zona2", "CDMX", usuarioAdminZona, null, 9L);
 //        createZonaIfNotFound("zona3", "Aguascalientes", usuarioAdminZona2, usuarioAdminB2, 1L);
 //        createZonaIfNotFound("zona4", "Querétaro", usuarioAdminZona2, null, 22L);
 //        createZonaIfNotFound("zona5", "Cancún", usuarioAdminZona2, null, 23L);
 //        Asentamiento asentamiento = updateAsentamientoIfFound(1L, zona);
-
+//
 //        Inmueble inmueble = createInmuebleIfNotFound(1L, "Inmueble", asentamiento, usuarioAdminBi, usuarioSocioBi,  contadorBI);
 //        Inmueble inmueble2 = createInmuebleIfNotFound(2L, "Inmueble2", asentamiento, usuarioAdminBi, usuarioSocioBi2,  contadorBI);
 //
@@ -245,9 +246,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 //        createAreaServicioIfNotFound(2L, "Limpieza", usuarioProveedorLimpieza);
 //        createAreaServicioIfNotFound(3L, "Construcción", usuarioProveedorConstruccion);
 //        
-        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
-        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
-        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
+//        TipoTicket tipoTicketAdministrativo = createTipoTicketIfNotFound(1L, "Administrativo");
+//        TipoTicket tipoTicketSolServ = createTipoTicketIfNotFound(2L, "Solicitud de servicios");
+//        TipoTicket tipoTicketQuejas = createTipoTicketIfNotFound(3L, "Quejas y sugerencias");
 //        createTicketIfNotFound(1L, "Podar cesped", "Quiero que poden el ceped de mi casa.", usuarioSocioBi, usuarioProveedorJardineria, EstatusTicketConst.ABIERTO,tipoTicketSolServ);
 
         
@@ -282,6 +283,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         return rol;
     }
+    
+    @Transactional
+    public final Estado createEstadoIfNotFound(final Long id, final String descripcion) {
+        Optional<Estado> estadoOpt = estadoRepository.findById(id);
+        Estado estado = estadoOpt.orElse(new Estado());
+        if (!estadoOpt.isPresent()) {
+        	estado.setId(id);
+        	estado.setNombre(descripcion);
+        	estado = estadoRepository.save(estado);
+        }
+
+        return estado;
+    }
 
     @Transactional
     public final Usuario createUsuarioIfNotFound(final String username, final String firstNombre, final String apellidoPatarno, final String apellidoMaterno, final String contrasenia,
@@ -315,7 +329,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             zona.setNombre(nombre);
             zona.setAdminZona(adminZona);
             zona.addAdminBi(usuarioAdminBi);
-            zona.setEstado(estadoRepository.findById(idEstado).get());
+//            zona.setEstado(estadoRepository.findById(idEstado).get());
+            Estado estado = new Estado();
+            estado.setId(1L);
+            zona.setEstado(estado);
             zona = zonaRepository.save(zona);
         }
         return zona;
