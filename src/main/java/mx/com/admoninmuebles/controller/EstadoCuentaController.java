@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.controller;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -41,7 +42,7 @@ public class EstadoCuentaController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/estados-cuenta")
 	public String mostrarestadosCuenta(Model model, final HttpServletRequest request) {
 
@@ -49,11 +50,16 @@ public class EstadoCuentaController {
 		
 		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorSocioId( usuarioLogueadoId ) );
-	         
 	    } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorContadorId( usuarioLogueadoId ) );
 			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
-	    } 
+	    } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
+			model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorAdminBiId( usuarioLogueadoId ) );
+        } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
+			model.addAttribute("estadosCuenta", estadoCuentaService.buscarPorAdminZonaId( usuarioLogueadoId ) );
+        } else if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+			model.addAttribute("estadosCuenta", estadoCuentaService.buscarTodo() );
+        } 
 
 
 		return "reportes/estados-cuenta";
@@ -86,10 +92,21 @@ public class EstadoCuentaController {
 		}
 		
 		try {
-			estadoCuentaService.guardar(estadoCuenta);
+			estadoCuenta.setArchivoBytes(estadoCuenta.getArchivoMP().getBytes());
+			estadoCuenta.setArchivoNombre(estadoCuenta.getArchivoMP().getOriginalFilename());
+			estadoCuenta.setArchivoTipoContenido(estadoCuenta.getArchivoMP().getContentType());
+			if( estadoCuenta.getSocioId() == null ) {
+				estadoCuentaService.guardarPorInmueble(estadoCuenta);
+			} else {
+				estadoCuentaService.guardar(estadoCuenta);
+			}
 		} catch (BusinessException e) {
 			redirect.addFlashAttribute("estadoCuenta",  estadoCuenta );
 			redirect.addFlashAttribute("error", messages.getMessage(e.getMessage(), null, locale));
+			return "redirect:/reportes/cuotas-departamento/carga"; 
+		} catch (IOException e) {
+			redirect.addFlashAttribute("estadoCuenta",  estadoCuenta );
+			redirect.addFlashAttribute("error", messages.getMessage("estado.cuenta.archivo.guardado.error", null, locale));
 			return "redirect:/reportes/cuotas-departamento/carga"; 
 		}
 			

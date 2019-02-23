@@ -12,7 +12,8 @@ public interface CuotaDepartamentoService {
 	CuotaDepartamentoDto buscarPorId( Long idCuotaDepartamento );
 	Collection<CuotaDepartamentoDto> buscarPorInmuebleId( Long idInmueble );
 	Collection<CuotaDepartamentoDto> buscarPorContadorId(Long idContador);
-//	Collection<CuotaDepartamentoDto> buscarPorSocioId( Long idsocio );
-//	CuotaDepartamentoDto buscarRecientePorSocioId( Long idsocio );
+	Collection<CuotaDepartamentoDto> buscarPorAdminBiId( Long idAdminBi );
+	Collection<CuotaDepartamentoDto> buscarPorAdminZonaId( Long idAdminZona );
+	Collection<CuotaDepartamentoDto> buscarTodo();
 
 }

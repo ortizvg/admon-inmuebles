@@ -175,5 +175,26 @@ public class ReporteMensualServiceImpl implements ReporteMensualService {
 				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public Collection<ReporteMensualDto> buscarPorAdminBiId(Long idAdminBi) {
+		return StreamSupport.stream(reporteMensualRepository.findByAdminBiId( idAdminBi ).spliterator(), false)
+				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<ReporteMensualDto> buscarPorAdminZonaId(Long idAdminZona) {
+		return StreamSupport.stream(reporteMensualRepository.findByAdminZonaId( idAdminZona ).spliterator(), false)
+				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<ReporteMensualDto> buscarTodo() {
+		return StreamSupport.stream(reporteMensualRepository.findAll().spliterator(), false)
+				.map(reporteMensual -> modelMapper.map(reporteMensual, ReporteMensualDto.class))
+				.collect(Collectors.toList());
+	}
 	
 }

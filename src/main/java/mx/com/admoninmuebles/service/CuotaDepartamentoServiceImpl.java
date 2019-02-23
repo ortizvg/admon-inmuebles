@@ -118,22 +118,25 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 				.collect(Collectors.toList());
 	}
 
-//	@Override
-//	public Collection<CuotaDepartamentoDto> buscarPorSocioId(Long idsocio) {
-//		return StreamSupport.stream(cuotaDepartamentoRepository.findBySocioId( idsocio ).spliterator(), false)
-//				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
-//				.collect(Collectors.toList());
-//	}
-//
-//	@Override
-//	public CuotaDepartamentoDto buscarRecientePorSocioId(Long idsocio) {
-//		Optional<CuotaDepartamento> cuotaDepartamentoOpt = cuotaDepartamentoRepository.findFirst1BySocioIdOrderByFechaModificacionDesc( idsocio );
-//		
-//		if( !cuotaDepartamentoOpt.isPresent() ) {
-//			throw new BusinessException("consulta.noresultados");
-//		}
-//		
-//		return modelMapper.map(cuotaDepartamentoOpt.get(), CuotaDepartamentoDto.class);
-//	}
-	
+	@Override
+	public Collection<CuotaDepartamentoDto> buscarPorAdminBiId(Long idAdminBi) {
+		return StreamSupport.stream(cuotaDepartamentoRepository.findByAdminBiId( idAdminBi ).spliterator(), false)
+				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<CuotaDepartamentoDto> buscarPorAdminZonaId(Long idAdminZona) {
+		return StreamSupport.stream(cuotaDepartamentoRepository.findByAdminZonaId( idAdminZona ).spliterator(), false)
+				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<CuotaDepartamentoDto> buscarTodo() {
+		return StreamSupport.stream(cuotaDepartamentoRepository.findAll().spliterator(), false)
+				.map(cuotaDepartamento -> modelMapper.map(cuotaDepartamento, CuotaDepartamentoDto.class))
+				.collect(Collectors.toList());
+	}
+
 }

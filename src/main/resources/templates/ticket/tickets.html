@@ -76,7 +76,7 @@
                           <span th:case="'CANCELADO'" class="text-danger" th:text="${ticket.estatus}"></span>
                         </div>
                       </td>
-                        <td th:text="${ticket.fechaCreacionTicket}"></td>
+                        <td th:text="${ticket.fechaCreacion}"></td>
                         <td>
                           <a th:href="${'ticket-detalle/'  + ticket.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
                         </td>

@@ -121,5 +121,26 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 				.map(comunicado -> modelMapper.map(comunicado, ComunicadoDto.class))
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public Collection<ComunicadoDto> buscarPorAdminBiId(Long idAdminBi) {
+		return StreamSupport.stream(comunicadoRepository.findByAdminBiId( idAdminBi ).spliterator(), false)
+				.map(comunicado -> modelMapper.map(comunicado, ComunicadoDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Collection<ComunicadoDto> buscarPorAdminZonaId(Long idAdminZona) {
+		return StreamSupport.stream(comunicadoRepository.findByAdminZonaId( idAdminZona ).spliterator(), false)
+				.map(comunicado -> modelMapper.map(comunicado, ComunicadoDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<ComunicadoDto> buscarTodo() {
+		return StreamSupport.stream(comunicadoRepository.findAll().spliterator(), false)
+				.map(comunicado -> modelMapper.map(comunicado, ComunicadoDto.class))
+				.collect(Collectors.toList());
+	}
 
 }

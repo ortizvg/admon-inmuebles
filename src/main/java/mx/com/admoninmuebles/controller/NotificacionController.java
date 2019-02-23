@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.NotificacionDto;
-import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.NotificacionService;
@@ -58,13 +57,12 @@ public class NotificacionController {
     		 model.addAttribute("notificaciones", notificacionService.findAll());
     		 session.setAttribute("zonas", zonaService.findAll() );
          } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
-         	 ZonaDto zona = zonaService.findByAdminZonaId(usuarioLogueadoId).stream().findFirst().get();
          	 session.setAttribute("zonas", zonaService.findByAdminZonaId( usuarioLogueadoId ));
-         	 model.addAttribute("notificaciones", notificacionService.findByZonaId( zona.getCodigo() ));
+         	 model.addAttribute("notificaciones", notificacionService.findByAdminZonaId( usuarioLogueadoId ));
          
          } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
         	 session.setAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId )  );
-        	 model.addAttribute("notificaciones", notificacionService.findByInmuebleAdminBiId( usuarioLogueadoId ));
+        	 model.addAttribute("notificaciones", notificacionService.findByAdminBiId( usuarioLogueadoId ));
          }
     	return "catalogos/notificaciones";
     }

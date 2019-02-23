@@ -42,7 +42,7 @@ public class CuotaDepartamentoController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/cuotas-departamento")
 	public String mostrarCuotasDepartamento(Model model, final HttpServletRequest request) {
 
@@ -55,6 +55,12 @@ public class CuotaDepartamentoController {
 	    } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			model.addAttribute("cuotasDepartamento", cuotaDepartamentoService.buscarPorContadorId( usuarioLogueadoId ) );
 			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+	    } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
+			model.addAttribute("cuotasDepartamento", cuotaDepartamentoService.buscarPorAdminBiId( usuarioLogueadoId ) );
+	    } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
+			model.addAttribute("cuotasDepartamento", cuotaDepartamentoService.buscarPorAdminZonaId( usuarioLogueadoId ) );
+	    } else if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+			model.addAttribute("cuotasDepartamento", cuotaDepartamentoService.buscarTodo() );
 	    } 
 
 

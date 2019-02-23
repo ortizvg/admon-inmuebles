@@ -15,5 +15,8 @@ public interface ReporteMensualService {
 	Collection<ReporteMensualDto> buscarReciente5PorSocioId(Long idSocio);
 	Collection<ReporteMensualDto> buscarActualPorInmuebleId(Long idInmueble);
 	Collection<ReporteMensualDto> buscarActualPorContadorId(Long idContador);
+	Collection<ReporteMensualDto> buscarPorAdminBiId(Long idAdminBi);
+	Collection<ReporteMensualDto> buscarPorAdminZonaId(Long idAdminZona);
+	Collection<ReporteMensualDto> buscarTodo();
 
 }

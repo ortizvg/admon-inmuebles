@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.NotificacionDto;
 import mx.com.admoninmuebles.dto.PagoDto;
@@ -58,7 +59,30 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 			LocalDate fechaCreacionLocalDate = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
 			
 			if( (fechaCreacionLocalDate.until(hoy).getDays() % DIAS_PARA_VENCIMIENTO_PAGO ) == 0 ) {
-				notificarMoroso( pago );
+				notificarMorosoUsuario( pago );
+			}
+			
+		});
+		
+	}
+    
+    
+    @Async
+    @Transactional
+	@Override
+	public void notificarMorososPorInmueble(Long idInmueble) {
+		
+    	LocalDate hoy = LocalDate.now();
+		Collection<Pago> pagosAtrasados = pagoRepository.findByInmuebleIdAndEstatusPagoName( idInmueble, EstatusPago.ATRASADO );
+		InmuebleDto inmueble = inmuebleService.findById( idInmueble );
+		
+		pagosAtrasados.forEach( pago -> {
+			
+			LocalDate fechaCreacionLocalDate = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
+			
+			if( (fechaCreacionLocalDate.until(hoy).getDays() % DIAS_PARA_VENCIMIENTO_PAGO ) == 0 ) {
+				notificarMorosoUsuario( pago );
+				notificarMorosoAdminBi( pago, inmueble);
 			}
 			
 		});
@@ -82,15 +106,15 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
 		notificacionDto.setUsuarioId( pagoDto.getUsuarioId() );
 		notificacionDto.setUsuarioCorreo(pagoDto.getUsuarioCorreo());
-		notificacionDto.setTitulo( messages.getMessage("notificacion.pago.verificado.titulo" , null, Locale.getDefault()) );
+		notificacionDto.setTitulo( messages.getMessage("notificacion.pago.verificado.titulo" , null, LocaleConst.LOCALE_MX ) );
 		
-		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.pago.verificado.descripcion" , null, Locale.getDefault())  );
+		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.pago.verificado.descripcion" , null, LocaleConst.LOCALE_MX)  );
 		notificacionDesc.append("\n");
-		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, Locale.getDefault()) ).append(" ").append( pagoDto.getConcepto() );
+		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pagoDto.getConcepto() );
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, Locale.getDefault()) ).append(" ").append( pagoDto.getMonto() );
+		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pagoDto.getMonto() );
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.pago.tipopago" , null, Locale.getDefault() ) ).append(" ").append( pagoDto.getTipoPagoDescripction() );
+		notificacionDesc.append(messages.getMessage("notificacion.pago.tipopago" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pagoDto.getTipoPagoDescripction() );
 		
 		notificacionDto.setDescripcion( notificacionDesc.toString() );
 		
@@ -107,13 +131,13 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
 		notificacionDto.setUsuarioId( pagoDto.getUsuarioId() );
 		notificacionDto.setUsuarioCorreo(pagoDto.getUsuarioCorreo());
-		notificacionDto.setTitulo( messages.getMessage("notificacion.pago.generado.titulo" , null, Locale.getDefault()) );
+		notificacionDto.setTitulo( messages.getMessage("notificacion.pago.generado.titulo" , null, LocaleConst.LOCALE_MX) );
 		
-		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.pago.generado.descripcion" , null, Locale.getDefault())  );
+		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.pago.generado.descripcion" , null, LocaleConst.LOCALE_MX)  );
 		notificacionDesc.append("\n");
-		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, Locale.getDefault()) ).append(" ").append( pagoDto.getConcepto() );
+		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pagoDto.getConcepto() );
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, Locale.getDefault()) ).append(" ").append( pagoDto.getMonto() );
+		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pagoDto.getMonto() );
 		
 		notificacionDto.setDescripcion( notificacionDesc.toString() );
 		
@@ -122,12 +146,12 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		
 	}
 	
-	private void notificarMoroso( Pago pago ) {
+	private void notificarMorosoUsuario( Pago pago ) {
 		NotificacionDto notificacionDto = new NotificacionDto();
 		notificacionDto.setFechaExposicionInicial( LocalDate.now() );
 		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
 		notificacionDto.setUsuarioId( pago.getUsuario().getId() );
-		notificacionDto.setTitulo( messages.getMessage("notificacion.morosos.recordatorio.pago.titulo" , null, Locale.getDefault()) );
+		notificacionDto.setTitulo( messages.getMessage("notificacion.morosos.recordatorio.pago.titulo" , null, LocaleConst.LOCALE_MX) );
 		notificacionDto.setUsuarioCorreo( pago.getUsuario().getCorreo() );
 		
 		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
@@ -135,13 +159,44 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		
 		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
 		
-		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.morosos.recordatorio.pago.descripcion" , null, Locale.getDefault())  );
-		notificacionDesc.append("\n");
-		notificacionDesc.append( messages.getMessage("notificacion.morosos.recordatorio.pago.concepto" , null, Locale.getDefault()) ).append(" ").append( pago.getConcepto() );
-		notificacionDesc.append("\n");
-		notificacionDesc.append(messages.getMessage("notificacion.morosos.recordatorio.pago.monto" , null, Locale.getDefault()) ).append(" ").append( pago.getMonto() );
-		notificacionDesc.append("\n");
-		notificacionDesc.append(messages.getMessage("notificacion.morosos.recordatorio.pago.atraso.dias" , null, Locale.getDefault() ) ).append(" ").append( diasAtraso );
+		StringBuffer notificacionDesc = new StringBuffer();
+//		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.morosos.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX)  );
+//		notificacionDesc.append("\n");
+		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pago.getConcepto() );
+		notificacionDesc.append(",\n");
+		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pago.getMonto() );
+		notificacionDesc.append(",\n");
+		notificacionDesc.append(messages.getMessage("notificacion.morosos.recordatorio.pago.atraso.dias" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( diasAtraso );
+		
+		notificacionDto.setDescripcion( notificacionDesc.toString() );
+		
+		
+		notificacionService.notificarUsuario(notificacionDto);
+	}
+	
+	private void notificarMorosoAdminBi( Pago pago, InmuebleDto inmueble ) {
+		NotificacionDto notificacionDto = new NotificacionDto();
+		notificacionDto.setFechaExposicionInicial( LocalDate.now() );
+		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
+		notificacionDto.setUsuarioId( inmueble.getAdminBiId() );
+		notificacionDto.setTitulo( messages.getMessage("notificacion.morosos.recordatorio.pago.titulo" , null, LocaleConst.LOCALE_MX) );
+		notificacionDto.setUsuarioCorreo( inmueble.getAdminBiCorreo() );
+		
+		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
+		LocalDateTime fechaActual =  LocalDateTime.now();
+		
+		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
+		
+		StringBuffer notificacionDesc = new StringBuffer();
+//		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.morosos.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX)  );
+//		notificacionDesc.append("\n");
+		notificacionDesc.append( messages.getMessage("morosos.notificacion.recordatorio.pago.deudor" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pago.getUsuario().getNombre());
+		notificacionDesc.append(",\n");
+		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pago.getConcepto() );
+		notificacionDesc.append(",\n");
+		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, LocaleConst.LOCALE_MX) ).append(" ").append( pago.getMonto() );
+		notificacionDesc.append(",\n");
+		notificacionDesc.append(messages.getMessage("notificacion.morosos.recordatorio.pago.atraso.dias" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( diasAtraso );
 		
 		notificacionDto.setDescripcion( notificacionDesc.toString() );
 		
@@ -164,17 +219,17 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		notificacionDto.setFechaExposicionInicial( LocalDate.now() );
 		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
 		notificacionDto.setUsuarioId( idUsuarioANotificar );
-		notificacionDto.setTitulo( messages.getMessage("notificacion.pago.realizado.titulo" , null, Locale.getDefault() ) );
+		notificacionDto.setTitulo( messages.getMessage("notificacion.pago.realizado.titulo" , null, LocaleConst.LOCALE_MX ) );
 		
-		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.pago.realizado.descripcion" , null, Locale.getDefault() )  );
+		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.pago.realizado.descripcion" , null, LocaleConst.LOCALE_MX )  );
 		notificacionDesc.append("\n");
-		notificacionDesc.append( messages.getMessage("notificacion.pago.socio" , null, Locale.getDefault() ) ).append(" ").append( pagoDto.getUsuarioNombre() );
+		notificacionDesc.append( messages.getMessage("notificacion.pago.socio" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pagoDto.getUsuarioNombre() );
 		notificacionDesc.append(",\n");
-		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, Locale.getDefault() ) ).append(" ").append( pagoDto.getConcepto() );
+		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pagoDto.getConcepto() );
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, Locale.getDefault() ) ).append(" ").append( pagoDto.getMonto() );
+		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pagoDto.getMonto() );
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.pago.tipopago" , null, Locale.getDefault() ) ).append(" ").append( pagoDto.getTipoPagoDescripction() );
+		notificacionDesc.append(messages.getMessage("notificacion.pago.tipopago" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pagoDto.getTipoPagoDescripction() );
 		
 		notificacionDto.setDescripcion( notificacionDesc.toString() );
 		

@@ -10,7 +10,10 @@ public interface ComunicadoService {
 	ComunicadoDto actualizar( ComunicadoDto comunicadoDto );
 	void eliminar( Long idComunicado );
 	ComunicadoDto buscarPorId( Long idComunicado );
+	Collection<ComunicadoDto> buscarTodo();
 	Collection<ComunicadoDto> buscarPorInmuebleId( Long idInmueble );
 	Collection<ComunicadoDto> buscarPorContadorId(Long idContador);
+	Collection<ComunicadoDto> buscarPorAdminBiId(Long idAdminBi);
+	Collection<ComunicadoDto> buscarPorAdminZonaId(Long idAdminZona);
 
 }

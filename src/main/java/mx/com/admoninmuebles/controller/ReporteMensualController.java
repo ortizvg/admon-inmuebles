@@ -59,26 +59,31 @@ public class ReporteMensualController {
 		 if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			 InmuebleDto inmueble = inmuebleService.findBySocioId( usuarioLogueadoId );
 			 model.addAttribute("reportesMensuales", reporteMensualService.buscarActualPorInmuebleId( inmueble.getId() ) );
-             
          } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			model.addAttribute("reportesMensuales", reporteMensualService.buscarActualPorContadorId( usuarioLogueadoId ) );
          } 
 		 
+		 
 		return "reportes/reportes-mensuales";
 	}
 	
-	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/reportes-mensuales/historico")
 	public String mostrarHistoricoReportesMesuales(Model model, final HttpServletRequest request) {
 
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
-		
 		 if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			 InmuebleDto inmueble = inmuebleService.findBySocioId( usuarioLogueadoId );
 			 model.addAttribute("reportesMensuales", reporteMensualService.buscarPorInmuebleId( inmueble.getId() ) );
              
          } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			model.addAttribute("reportesMensuales", reporteMensualService.buscarPorContadorId( usuarioLogueadoId ) );
+         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
+			model.addAttribute("reportesMensuales", reporteMensualService.buscarPorAdminBiId( usuarioLogueadoId ) );
+         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
+			model.addAttribute("reportesMensuales", reporteMensualService.buscarPorAdminZonaId( usuarioLogueadoId ) );
+         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+			model.addAttribute("reportesMensuales", reporteMensualService.buscarTodo() );
          } 
 
 		return "reportes/reportes-mensuales-historico";

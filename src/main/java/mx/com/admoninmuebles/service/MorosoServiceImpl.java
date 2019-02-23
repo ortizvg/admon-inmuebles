@@ -8,13 +8,13 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.constant.EstatusPagoConst;
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.dto.GraficaDonaMorrisDataDto;
 import mx.com.admoninmuebles.dto.GraficaDonaMorrisDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
@@ -80,7 +80,7 @@ public class MorosoServiceImpl implements MorosoService {
 	}
 	
 	@Override
-	public GraficaDonaMorrisDto generarGraficaDonaPorInmuebleId( Long inmuebleId, Locale locale ) {
+	public GraficaDonaMorrisDto generarGraficaDonaPorInmuebleId( Long inmuebleId ) {
 		
 		final String IDENTIFICADOR_TIPO_GRAFICA = "pagos-grafica-dona";
 		
@@ -93,19 +93,19 @@ public class MorosoServiceImpl implements MorosoService {
 		coloresEstatusPagos.add( EstatusPagoConst.ESTATUS_PAGO_COLOR_ATRASADO );
 		
 		GraficaDonaMorrisDataDto pagosAtrasados = new GraficaDonaMorrisDataDto();
-		pagosAtrasados.setLabel( messages.getMessage("mororos.tablero.pago.atrasado", null, locale)  );
+		pagosAtrasados.setLabel( messages.getMessage("mororos.tablero.pago.atrasado", null, LocaleConst.LOCALE_MX )  );
 		pagosAtrasados.setValue( reporte.getPagosAtrasadosPorcentaje() );
 		
 		GraficaDonaMorrisDataDto pagosPendientes = new GraficaDonaMorrisDataDto();
-		pagosPendientes.setLabel(  messages.getMessage("mororos.tablero.pago.pendiente", null, locale) );
+		pagosPendientes.setLabel(  messages.getMessage("mororos.tablero.pago.pendiente", null, LocaleConst.LOCALE_MX ) );
 		pagosPendientes.setValue( reporte.getPagosPendientesPorcentaje() );
 		
 		GraficaDonaMorrisDataDto pagosRealizados = new GraficaDonaMorrisDataDto();
-		pagosRealizados.setLabel( messages.getMessage("mororos.tablero.pago.pagado", null, locale) );
+		pagosRealizados.setLabel( messages.getMessage("mororos.tablero.pago.pagado", null, LocaleConst.LOCALE_MX ) );
 		pagosRealizados.setValue( reporte.getPagosRealizadosPorcentaje() );
 		
 		GraficaDonaMorrisDataDto pagosVerificacion = new GraficaDonaMorrisDataDto();
-		pagosVerificacion.setLabel( messages.getMessage("mororos.tablero.pago.verificando" , null, locale) );
+		pagosVerificacion.setLabel( messages.getMessage("mororos.tablero.pago.verificando" , null, LocaleConst.LOCALE_MX ) );
 		pagosVerificacion.setValue( reporte.getPagosVerificacionPorcentaje() );
 		
 		List<GraficaDonaMorrisDataDto> data = new ArrayList<> ();
@@ -126,7 +126,7 @@ public class MorosoServiceImpl implements MorosoService {
 	}
 	
 	@Override
-	public void enviarNotificacionRecordatorioPago( Long pagoId, Locale locale ) {
+	public void enviarNotificacionRecordatorioPago( Long pagoId ) {
 		
 		final Long DIAS_PARA_VENCIMIENTO_PAGO = 5L;
 		
@@ -138,7 +138,7 @@ public class MorosoServiceImpl implements MorosoService {
 		notificacionDto.setFechaExposicionInicial( LocalDate.now() );
 		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
 		notificacionDto.setUsuarioId( pago.getUsuarioId() );
-		notificacionDto.setTitulo( messages.getMessage("morosos.notificacion.recordatorio.pago.titulo" , null, locale) );
+		notificacionDto.setTitulo( messages.getMessage("morosos.notificacion.recordatorio.pago.titulo" , null, LocaleConst.LOCALE_MX ) );
 		
 		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
 //		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -146,13 +146,13 @@ public class MorosoServiceImpl implements MorosoService {
 		
 		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
 		
-		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("morosos.notificacion.recordatorio.pago.descripcion" , null, locale)  );
+		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("morosos.notificacion.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX )  );
 		notificacionDesc.append("\n");
-		notificacionDesc.append( messages.getMessage("morosos.notificacion.recordatorio.pago.concepto" , null, locale) ).append(" ").append( pago.getConcepto() );
+		notificacionDesc.append( messages.getMessage("morosos.notificacion.recordatorio.pago.concepto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pago.getConcepto() );
 		notificacionDesc.append("\n");
-		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.monto" , null, locale) ).append(" ").append( pago.getMonto() );
+		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.monto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pago.getMonto() );
 		notificacionDesc.append("\n");
-		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.atraso.dias" , null, locale) ).append(" ").append( diasAtraso );
+		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.atraso.dias" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( diasAtraso );
 		
 		notificacionDto.setDescripcion( notificacionDesc.toString() );
 		

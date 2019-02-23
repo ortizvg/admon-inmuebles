@@ -47,7 +47,7 @@
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
 			  	</div>
 			  	<div class="col-2 ml-auto">
-			  		<a sec:authorize="hasRole('CONTADOR')" th:href="@{/reportes/reglamentos/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.reglamento.cargar}"></a>
+			  		<a sec:authorize="hasRole('ADMIN_BI')" th:href="@{/reportes/reglamentos/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.reglamento.cargar}"></a>
 			  	</div>
 			 </div>
 			 
@@ -72,7 +72,7 @@
                         	<a th:href="@{|/api/archivos/${reglamento.archivoId}|}">
                         		<i class="fa fa-file-pdf-o color-pdf-primary" aria-hidden="true"></i>
                         	</a>
-                        	<a sec:authorize="hasRole('CONTADOR')"  th:attr="data-id=${reglamento.id}" th:attrappend="data-nombre=${reglamento.id}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> 
+                        	<a sec:authorize="hasRole('ADMIN_BI')"  th:attr="data-id=${reglamento.id}" th:attrappend="data-nombre=${reglamento.id}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> 
                         		<i class="fa fa-close text-danger" aria-hidden="true"></i>
                         	</a>
                         </td>

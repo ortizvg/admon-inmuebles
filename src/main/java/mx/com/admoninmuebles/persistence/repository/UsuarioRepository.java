@@ -13,6 +13,8 @@ import mx.com.admoninmuebles.persistence.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
+	
+//	boolean existByUsername( String userName );
 
     Optional<Usuario> findByUsername(String username);
     

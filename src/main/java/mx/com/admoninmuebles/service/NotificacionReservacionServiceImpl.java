@@ -1,13 +1,13 @@
 package mx.com.admoninmuebles.service;
 
 import java.time.LocalDate;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.NotificacionDto;
 import mx.com.admoninmuebles.dto.ReservacionDto;
@@ -41,15 +41,15 @@ public class NotificacionReservacionServiceImpl implements NotificacionReservaci
 		notificacionDto.setFechaExposicionInicial(LocalDate.now());
 		notificacionDto.setFechaExposicionFinal(LocalDate.now().plusDays(DIAS_EXPOSICION_NOTIFICACION));
 		notificacionDto.setUsuarioId(idAdminBiANotificar);
-		notificacionDto.setTitulo(messages.getMessage("notificacion.reservacion.realizado.titulo", null, Locale.getDefault()));
+		notificacionDto.setTitulo(messages.getMessage("notificacion.reservacion.realizado.titulo", null, LocaleConst.LOCALE_MX));
 
-		StringBuffer notificacionDesc = new StringBuffer(messages.getMessage("notificacion.reservacion.realizado.descripcion", null, Locale.getDefault()));
+		StringBuffer notificacionDesc = new StringBuffer(messages.getMessage("notificacion.reservacion.realizado.descripcion", null, LocaleConst.LOCALE_MX));
 		notificacionDesc.append("\n");
-		notificacionDesc.append(messages.getMessage("notificacion.reservacion.socio", null, Locale.getDefault())).append(" ").append(reservacionDto.getSocioNombre());
+		notificacionDesc.append(messages.getMessage("notificacion.reservacion.socio", null, LocaleConst.LOCALE_MX)).append(" ").append(reservacionDto.getSocioNombre());
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.reservacion.fecha", null, Locale.getDefault())).append(" ").append(reservacionDto.getStart());
+		notificacionDesc.append(messages.getMessage("notificacion.reservacion.fecha", null, LocaleConst.LOCALE_MX)).append(" ").append(reservacionDto.getStart());
 		notificacionDesc.append(",\n");
-		notificacionDesc.append(messages.getMessage("notificacion.reservacion.area", null, Locale.getDefault())).append(" ").append(reservacionDto.getAreaComunNombre());
+		notificacionDesc.append(messages.getMessage("notificacion.reservacion.area", null, LocaleConst.LOCALE_MX)).append(" ").append(reservacionDto.getAreaComunNombre());
 
 		notificacionDto.setDescripcion(notificacionDesc.toString());
 

@@ -42,7 +42,7 @@ public class ComunicadoController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/comunicados")
 	public String mostrarComunidados(Model model, final HttpServletRequest request) {
 
@@ -52,16 +52,25 @@ public class ComunicadoController {
 			InmuebleDto inmueble = inmuebleService.findBySocioId( usuarioLogueadoId );
 			model.addAttribute("comunicados", comunicadoService.buscarPorInmuebleId( inmueble.getId() ) );
 	         
-	     } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
-			model.addAttribute("comunicados", comunicadoService.buscarPorContadorId( usuarioLogueadoId ) );
-			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+	     } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
+			model.addAttribute("comunicados", comunicadoService.buscarPorAdminBiId( usuarioLogueadoId ) );
+			model.addAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId ) );
+	     } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
+			model.addAttribute("comunicados", comunicadoService.buscarPorAdminZonaId( usuarioLogueadoId ) );
+		 } else if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+			model.addAttribute("comunicados", comunicadoService.buscarTodo() );
 	     } 
+		 
+//	     else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
+//				model.addAttribute("comunicados", comunicadoService.buscarPorContadorId( usuarioLogueadoId ) );
+//				model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+//		     } 
 
 
 		return "reportes/comunicados";
 	}
 
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasRole('ADMIN_BI')")
 	@GetMapping(value = "/reportes/comunicados/carga")
 	public String mostrarFormaComunidacodo(Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
 
@@ -72,12 +81,12 @@ public class ComunicadoController {
 			model.addAttribute("comunicado",  comunicado );
         }
 		
-		session.setAttribute("inmuebles", inmuebleService.findByContadorId(usuarioLogueadoId));
+		session.setAttribute("inmuebles", inmuebleService.findByAdminBiId(usuarioLogueadoId));
 
 		return "reportes/comunicado-carga";
 	}
 
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasRole('ADMIN_BI')")
 	@PostMapping(value = "/reportes/comunicados/carga")
 	public String guardarComunicado(final HttpServletRequest request, final Locale locale, final Model model,
 			@Valid final ComunicadoDto comunicado, final BindingResult bindingResult, RedirectAttributes redirect) {
@@ -99,7 +108,7 @@ public class ComunicadoController {
 		return "redirect:/reportes/comunicados/carga"; 
 	}
 	
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasRole('ADMIN_BI')")
 	@GetMapping(value = "/reportes/comunicados/{id}/eliminar")
 	public String eliminarComunicado(final @PathVariable long id) {
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
@@ -111,7 +120,7 @@ public class ComunicadoController {
 			return "error/404";
 		}
 		
-		Collection<ComunicadoDto> comunicados =  comunicadoService.buscarPorContadorId( usuarioLogueadoId );
+		Collection<ComunicadoDto> comunicados =  comunicadoService.buscarPorAdminBiId( usuarioLogueadoId );
 		
 		if(!comunicados.contains( comunicadoAEliminar )) {
 			return "error/404";

@@ -12,5 +12,5 @@ public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Collection<Ticket> findByUsuarioCreadorId(Long id);
 
     Collection<Ticket> findByUsuarioAsignadoId(Long id);
-
+    
 }

@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -16,10 +17,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.constant.SimbolosConst;
 import mx.com.admoninmuebles.constant.SociosConst;
 import mx.com.admoninmuebles.dto.CargaSocioDto;
 import mx.com.admoninmuebles.dto.ErrorDto;
+import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
@@ -28,6 +31,7 @@ import mx.com.admoninmuebles.persistence.model.Usuario;
 import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
+import mx.com.admoninmuebles.validation.CargaMasivaSocioValidator;
 
 @Service
 public class CargaSocioServiceImpl implements CargaSocioService {
@@ -51,6 +55,9 @@ public class CargaSocioServiceImpl implements CargaSocioService {
     
     @Autowired
     private CorreoUsuarioService correoUsuarioService;
+    
+    @Autowired
+    private CargaMasivaSocioValidator cargaMasivaSocioValidator;
 
 	/**
 	 * Lee archivo para carga de usuarios en 
@@ -67,7 +74,16 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 				String[] arrayStr = line.split(SimbolosConst.COMA);
 				agregarSocio(arrayStr, contadorLinea, socio);
 			}
+			
+			if(socio.getListaErrores() == null || socio.getListaErrores().isEmpty()) {
+				cargaMasivaSocioValidator.validarCargaMasiva( socio.getListaSocios() );
+			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			ErrorDto error = new ErrorDto();
+			error.setId(1);
+			error.setMessage(e.getMessage());
+			socio.getListaErrores().add( error );
 		} 
 		if(socio.getListaErrores() == null || socio.getListaErrores().isEmpty()) {
 			List<UsuarioDto> listaSociosCreados = guardaSocioMasivo(socio.getListaSocios());
@@ -93,7 +109,7 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 		String mensajeError = "Error en la línea ";
 		try {
 			socio.setUsername(arrayStr[SociosConst.USER_NAME]);
-			socio = validaUserName(socio);
+//			socio = validaUserName(socio);
 			socio.setCorreo(arrayStr[SociosConst.CORREO]);
 			socio.setNombre(arrayStr[SociosConst.NOMBRE]);
 			socio.setApellidoPaterno(arrayStr[SociosConst.APELLIDO_PATERNO]);
@@ -158,22 +174,42 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	 * respectivos roles
 	 * @param listaSocios
 	 */
+//	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
+//		List<UsuarioDto> listaSociosCreados = new ArrayList<>();
+//		for (UsuarioDto usuarioDto : listaSocios) {
+//	        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+//
+//	        Collection<Rol> roles = new ArrayList<>();
+//	        roles.add(rolRepository.findById(usuarioDto.getRolSeleccionado()).get());
+//	        usuario.setRoles(roles);
+//	        Usuario usuarioCreado = usuarioRepository.save(usuario);
+//	        guardaInmuebleActualizaUsuario(usuarioCreado, usuarioDto.getInmuebleId());
+//	        UsuarioDto usuarioCreadoDto =  modelMapper.map(usuarioCreado, UsuarioDto.class);
+//	        listaSociosCreados.add( usuarioCreadoDto );
+//		}
+//		
+//		return listaSociosCreados;
+//	}
+	
 	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
-		List<UsuarioDto> listaSociosCreados = new ArrayList<>();
-		for (UsuarioDto usuarioDto : listaSocios) {
-	        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
-
-	        Collection<Rol> roles = new ArrayList<>();
-	        roles.add(rolRepository.findById(usuarioDto.getRolSeleccionado()).get());
-	        usuario.setRoles(roles);
-	        Usuario usuarioCreado = usuarioRepository.save(usuario);
-	        guardaInmuebleActualizaUsuario(usuarioCreado, usuarioDto.getInmuebleId());
-	        UsuarioDto usuarioCreadoDto =  modelMapper.map(usuarioCreado, UsuarioDto.class);
-	        listaSociosCreados.add( usuarioCreadoDto );
-		}
+		Collection<Rol> roles = new ArrayList<>();
+		roles.add(rolRepository.findByNombre(RolConst.ROLE_SOCIO_BI).get());
 		
-		return listaSociosCreados;
+		List<Usuario> socios = listaSocios.parallelStream().map( socio -> {
+			Usuario usuario = modelMapper.map(socio, Usuario.class);
+			usuario.setRoles(roles);
+			return usuario;
+		}).collect(Collectors.toList());
+		
+		Iterable<Usuario> sociosCreados = usuarioRepository.saveAll( socios );
+		
+		return StreamSupport.stream(sociosCreados.spliterator(), false)
+				.map(socio -> modelMapper.map(socio, UsuarioDto.class))
+				.collect(Collectors.toList());
+		
 	}
+	
+	
 
 	/**
 	 * Se recupera el inmueble, se actualiza
@@ -197,6 +233,12 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	public void enviarCorreoMasivo(List<UsuarioDto> listaSocios, final String urlContext) {
 		for (UsuarioDto usuarioDto : listaSocios) {
 			correoUsuarioService.enviarActivacion(usuarioDto, urlContext);
+		}
+	}
+	
+	public static void main(String[] args) {
+		for(int i = 1; i<=100; i++) {
+			System.out.println("paco10" + i + ",ffcojaviercarrillo@gmail.com,Paco,Carrillo,Medina,100.14,correoalternativo1@gmail.com,correoalternativo2@gmail.com,31,1,Mi domicilio,45");
 		}
 	}
 

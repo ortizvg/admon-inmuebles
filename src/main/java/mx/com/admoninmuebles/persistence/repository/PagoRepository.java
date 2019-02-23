@@ -74,11 +74,14 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
 			nativeQuery = true)
 	Collection<Pago> findByAdminBiId(Long id);
     
-    @Query(value = "select p.* from gescopls.usuarios u \r\n" + 
-    		"inner join gescopls.inmuebles i on u.id_usuario = i.id_contador_fk \r\n" + 
-    		"inner join gescopls.inmuebles_socios ist on i.id_inmueble = ist.Inmueble_id_inmueble \r\n" + 
-    		"join gescopls.pagos p on ist.socios_id_usuario = p.id_usuario \r\n" + 
-    		"where u.id_usuario = ?1 order by p.id_pago",
+    @Query(value = "select p.* from gescopls.usuarios az \r\n" + 
+    		"inner join gescopls.zonas z on az.id_usuario = z.id_admin_zona_fk\r\n" + 
+    		"inner join gescopls.asentamientos a on  z.codigo = a.id_zona_fk\r\n" + 
+    		"inner join gescopls.direcciones d on a.id_asentamiento = d.id_asentamiento_fk\r\n" + 
+    		"inner join gescopls.inmuebles i on d.id_direccion = i.id_direccion_fk\r\n" + 
+    		"inner join gescopls.inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 
+    		"join gescopls.pagos p on inso.socios_id_usuario = p.id_usuario\r\n" + 
+    		"where az.id_usuario = ?1 order by p.id_pago",
 			nativeQuery = true)
 	Collection<Pago> findByAdminZonaId(Long id);
 

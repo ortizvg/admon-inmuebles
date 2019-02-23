@@ -96,7 +96,7 @@ public class MorosoController {
 	
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
 	@GetMapping(value = "/morosos/inmuebles/{idInmueble}/detalle/{nombreStatusPago}")
-	public String mostrarDetalleMorosos(Model model, final HttpServletRequest request, @PathVariable final Long idInmueble, @PathVariable final String nombreStatusPago ) {
+	public String mostrarDetalleMorosos(Model model, final HttpServletRequest request, @PathVariable final Long idInmueble, @PathVariable final String nombreStatusPago, final HttpSession session ) {
 		
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
 		
@@ -122,13 +122,11 @@ public class MorosoController {
 				if(!inmuebles.stream().anyMatch( inmueble -> inmueble.getId() == inmuebleDto.getId()) ) {
 					return "error/404";
 				}
-//				if(!inmuebles.contains( inmuebleDto ) ) {
-//					return "error/404";
-//				}
 			}
 		}
 		
-		
+		session.setAttribute("idInmueble", idInmueble );
+		session.setAttribute("nombreStatusPago", nombreStatusPago );
 		model.addAttribute("pagos", pagoService.buscarPorInmuebleYEstatusPagoNombre( idInmueble, nombreStatusPago ) );
 
 		return "morosos/morosos-detalle";

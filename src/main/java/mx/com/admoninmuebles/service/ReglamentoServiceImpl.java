@@ -122,5 +122,26 @@ public class ReglamentoServiceImpl implements ReglamentoService {
 				.map(reglamento -> modelMapper.map(reglamento, ReglamentoDto.class))
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public Collection<ReglamentoDto> buscarPorAdminBiId(Long idAdminBi) {
+		return StreamSupport.stream(reglamentoRepository.findByAdminBiId( idAdminBi ).spliterator(), false)
+				.map(reglamento -> modelMapper.map(reglamento, ReglamentoDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<ReglamentoDto> buscarPorAdminZonaId(Long idAdminZona) {
+		return StreamSupport.stream(reglamentoRepository.findByAdminZonaId( idAdminZona ).spliterator(), false)
+				.map(reglamento -> modelMapper.map(reglamento, ReglamentoDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<ReglamentoDto> buscarTodo() {
+		return StreamSupport.stream(reglamentoRepository.findAll().spliterator(), false)
+				.map(reglamento -> modelMapper.map(reglamento, ReglamentoDto.class))
+				.collect(Collectors.toList());
+	}
 
 }

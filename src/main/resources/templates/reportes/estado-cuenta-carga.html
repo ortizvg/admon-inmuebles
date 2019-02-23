@@ -10,7 +10,7 @@ var serverContext = [[@{/}]];
 	
 $(document).ready(function() {
 // 	addControlState(document.getElementById('divNumeroReferencia'),/*[[#{campo.requerido}]]*/);
-// 	addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);
+	addControlState(document.getElementById('divInmueble'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divSocio'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divArchivoMP'),/*[[#{campo.requerido}]]*/);
 });
@@ -59,7 +59,7 @@ function cargarSociosPorInmueble() {
               		<div class="row">
 	                   <div id="divInmueble" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('inmuebleId')}? ' has-danger'" >
 	                       <label class="form-control-label" for="colonia" th:text="#{estado.cuenta.carga.inmueble}"></label>
-	                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" onchange="cargarSociosPorInmueble();">
+	                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" onchange="cargarSociosPorInmueble();" required>
 	                       		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 								<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
 	                       </select>
@@ -69,7 +69,7 @@ function cargarSociosPorInmueble() {
 	                   </div>
 	                   <div id="divSocio" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('socioId')}? ' has-danger'" >
 	                       <label class="form-control-label" for="socioId" th:text="#{estado.cuenta.carga.socio}"></label>
-	                       <select  name="socio" id="socio" class="form-control" th:field="*{socioId}" required>
+	                       <select  name="socio" id="socio" class="form-control" th:field="*{socioId}">
 	                       		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 								<option th:each="socio : ${session.socios}" th:value="${{socio.id}}" th:text="${socio.nombre}"></option>
 	                       </select>

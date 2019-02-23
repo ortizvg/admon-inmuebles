@@ -1,5 +1,7 @@
 package mx.com.admoninmuebles.dto;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +11,9 @@ import lombok.ToString;
 
 @Data
 @ToString(includeFieldNames=true)
-public class EstadoCuentaDto {
+public class EstadoCuentaDto implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
 	private Long id;
 
@@ -20,12 +24,12 @@ public class EstadoCuentaDto {
 	private String archivoTipoContenido;
 	private byte[] archivoBytes;
 	
-	@NotNull
 	private Long socioId;
 	private String socioNombre;
 	private String socioApellidoPaterno;
 	private String socioApellidoMaterno;
 	
+	@NotNull
 	private Long inmuebleId;
 	
 	private MultipartFile archivoMP;

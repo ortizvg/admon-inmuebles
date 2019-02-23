@@ -8,5 +8,6 @@ public interface NotificacionPagoService {
 	void notificarPagoRealizado(final PagoDto pagoDto);
 	void notificarVerificacionPago(final PagoDto pagoDto);
 	void notificarGeneracionPago(PagoDto pagoDto);
+	void notificarMorososPorInmueble(Long idInmueble);
 
 }

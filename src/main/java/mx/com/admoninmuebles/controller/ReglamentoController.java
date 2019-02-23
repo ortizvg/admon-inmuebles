@@ -42,7 +42,7 @@ public class ReglamentoController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasAnyRole('CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/reglamentos")
 	public String mostrarReglamentos(Model model, final HttpServletRequest request) {
 
@@ -52,16 +52,25 @@ public class ReglamentoController {
 			InmuebleDto inmueble = inmuebleService.findBySocioId( usuarioLogueadoId );
 			model.addAttribute("reglamentos", reglamentoService.buscarPorInmuebleId( inmueble.getId() ) );
              
-         } else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
-			model.addAttribute("reglamentos", reglamentoService.buscarPorContadorId( usuarioLogueadoId ) );
-			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
-         } 
+         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
+			model.addAttribute("reglamentos", reglamentoService.buscarPorAdminBiId( usuarioLogueadoId ) );
+			model.addAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId ) );
+         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
+ 			model.addAttribute("reglamentos", reglamentoService.buscarPorAdminZonaId( usuarioLogueadoId ) );
+         }else if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+ 			model.addAttribute("reglamentos", reglamentoService.buscarTodo() );
+         }  
+		 
+//         else if (request.isUserInRole(RolConst.ROLE_CONTADOR)) {
+// 			model.addAttribute("reglamentos", reglamentoService.buscarPorContadorId( usuarioLogueadoId ) );
+// 			model.addAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
+//          } 
 
 
 		return "reportes/reglamentos";
 	}
 
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasRole('ADMIN_BI')")
 	@GetMapping(value = "/reportes/reglamentos/carga")
 	public String mostrarFormaCargaReglamento(Model model, final HttpServletRequest request, final HttpSession session, Locale locale) {
 
@@ -72,12 +81,12 @@ public class ReglamentoController {
 			model.addAttribute("reglamento",  reglamento );
         }
 		
-		session.setAttribute("inmuebles", inmuebleService.findByContadorId(usuarioLogueadoId));
+		session.setAttribute("inmuebles", inmuebleService.findByAdminBiId(usuarioLogueadoId));
 
 		return "reportes/reglamento-carga";
 	}
 
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasRole('ADMIN_BI')")
 	@PostMapping(value = "/reportes/reglamentos/carga")
 	public String guardarReglamento(final HttpServletRequest request, final Locale locale, final Model model,
 			@Valid final ReglamentoDto reglamento, final BindingResult bindingResult, RedirectAttributes redirect) {
@@ -99,7 +108,7 @@ public class ReglamentoController {
 		return "redirect:/reportes/reglamentos/carga"; 
 	}
 	
-	@PreAuthorize("hasRole('CONTADOR')")
+	@PreAuthorize("hasRole('ADMIN_BI')")
 	@GetMapping(value = "/reportes/reglamentos/{id}/eliminar")
 	public String eliminarReglamento(final @PathVariable long id) {
 		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
@@ -111,7 +120,7 @@ public class ReglamentoController {
 			return "error/404";
 		}
 		
-		Collection<ReglamentoDto> reglamentos =  reglamentoService.buscarPorContadorId( usuarioLogueadoId );
+		Collection<ReglamentoDto> reglamentos =  reglamentoService.buscarPorAdminBiId( usuarioLogueadoId );
 		
 		if(!reglamentos.contains( reglamentoAEliminar )) {
 			return "error/404";

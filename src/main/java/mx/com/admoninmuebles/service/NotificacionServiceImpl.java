@@ -125,15 +125,17 @@ public class NotificacionServiceImpl implements NotificacionService {
 	}
 
 	@Override
-	public Collection<NotificacionDto> findByAdmininBi(Long idAdminZona) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<NotificacionDto> findByAdminBiId(Long idAdminBi) {
+		return StreamSupport.stream(notificacionRepository.findByAdminBiId(idAdminBi).spliterator(), false)
+				.map(notificacion -> modelMapper.map(notificacion, NotificacionDto.class))
+				.collect(Collectors.toList());
 	}
 
 	@Override
-	public Collection<NotificacionDto> findByAdmininZona(Long idAdminZona) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<NotificacionDto> findByAdminZonaId(Long idAdminZona) {
+		return StreamSupport.stream(notificacionRepository.findByAdminZonaId(idAdminZona).spliterator(), false)
+				.map(notificacion -> modelMapper.map(notificacion, NotificacionDto.class))
+				.collect(Collectors.toList());
 	}
 
 	@Async

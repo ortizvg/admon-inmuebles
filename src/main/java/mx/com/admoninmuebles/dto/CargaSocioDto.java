@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -8,6 +9,6 @@ import lombok.Data;
 public class CargaSocioDto {
 
 	private List<UsuarioDto> listaSocios;
-	private List<ErrorDto> listaErrores;
+	private List<ErrorDto> listaErrores = new ArrayList<ErrorDto>();
 
 }
