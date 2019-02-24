@@ -1,6 +1,6 @@
 package mx.com.admoninmuebles.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
@@ -48,9 +48,9 @@ public class TicketDto {
     private byte[] archivoEvidencia;
     
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(iso = ISO.DATE)
-    private LocalDate fechaCreacion;
+    private Date fechaCreacion;
     private boolean retraso;
 
     public String getNombreSocio() {

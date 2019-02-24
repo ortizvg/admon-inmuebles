@@ -11,10 +11,31 @@
 	var enableCalendar = $('#areaComunId').val() !== null && $('#areaComunId').val() !== '' && $('#areaComunId').val() !== 'undefined';
 	console.log(enableCalendar);
     $('#calendar').fullCalendar({
+    	viewRender: function(view,element) {
+            var now = new Date();
+            var end = new Date();
+            end.setMonth(now.getMonth() + 3); //Adjust as needed
+
+            if ( end < view.end) {
+                $("#calendar .fc-next-button").hide();
+                return false;
+            }
+            else {
+                $("#calendar .fc-next-button").show();
+            }
+
+            if ( view.start < now) {
+                $("#calendar .fc-prev-button").hide();
+                return false;
+            }
+            else {
+                $("#calendar .fc-prev-button").show();
+            }
+        },
     	locale: /*[[${session.locale}]]*/,
         defaultView: 'month',
         validRange:{
-            start: moment()
+            start: moment().format()
         },
         handleWindowResize : true,
         header : {
@@ -75,6 +96,7 @@
   
   
   function cargarInmueblesPorZona() {
+	  var serverContext = [[@{/}]];
 		var zonaCodigo = $("#zona").val();
 	    $.getJSON(serverContext + "api/inmuebles?zonaCodigo=" + zonaCodigo, function(data) {
 	    	var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
@@ -90,6 +112,7 @@
 
 
 	function cargarAreasComunesPorInmueble() {
+		var serverContext = [[@{/}]];
 		var inmuebleId = $("#inmueble").val();
 	    $.getJSON(serverContext + "api/inmuebles/" + inmuebleId + "/areas-comunes", function(data) {
 	        var html = '<option selected="selected" value="">' + /*[[#{combo.seleccionar}]]*/ + '</option>';
@@ -135,7 +158,8 @@
             </div>
             <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')" >
                 <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
-                <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
+                <!-- select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();"-->
+               	<select  name="inmueble" id="inmueble" class="form-control" required onchange="cargarAreasComunesPorInmueble();">
                		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 					<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
                 </select>
@@ -211,7 +235,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" th:text="#{boton.cerrar}"></button>
-                <button type="submit" class="btn btn-danger waves-effect" th:text="#{boton.eliminar}"></button>
+                <button sec:authorize="hasAnyRole('ADMIN_CORP','ADMIN_ZONA','ADMIN_BI')" type="submit" class="btn btn-danger waves-effect" th:text="#{boton.eliminar}"></button>
               </div>
             </form>
           </div>

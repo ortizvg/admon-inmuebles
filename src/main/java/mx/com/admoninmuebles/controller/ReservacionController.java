@@ -152,7 +152,7 @@ public class ReservacionController {
     @PostMapping(value = "/reservaciones/reserva-area/eliminar")
     public String eliminarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale) {
     	ReservacionDto reservacion = reservacioService.findById(reservacionDto.getId());
-    	pagoService. eliminarPorId(reservacion.getPagoId());
+    	pagoService.eliminarPorId(reservacion.getPagoId());
         reservacioService.delete(reservacionDto.getId());
         return "redirect:/reservaciones/reservar-area";
     }

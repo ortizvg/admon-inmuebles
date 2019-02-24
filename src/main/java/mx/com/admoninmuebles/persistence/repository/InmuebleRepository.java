@@ -21,8 +21,8 @@ public interface InmuebleRepository extends CrudRepository<Inmueble, Long> {
 	
 	Collection<Inmueble> findByDireccionAsentamientoZonaCodigo(String codigo);
 	
-    @Query(value = "select i.* from gescopls.inmuebles i\r\n" + 
-    		"join gescopls.inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 
+    @Query(value = "select i.* from inmuebles i\r\n" + 
+    		"join inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 
     		"where inso.socios_id_usuario =  ?1", 
 			nativeQuery = true)
 	Inmueble findBySocioId(Long id);
