@@ -9,7 +9,7 @@ public interface MorosoService {
 	
 	GraficaDonaMorrisDto generarGraficaDonaPorInmuebleId( final Long inmuebleId );
 	
-	void enviarNotificacionRecordatorioPago( Long usuarioId );
+//	void enviarNotificacionRecordatorioPago( Long usuarioId );
 	
 	
 

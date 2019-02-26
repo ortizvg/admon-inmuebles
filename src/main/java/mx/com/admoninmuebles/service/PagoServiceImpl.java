@@ -396,6 +396,11 @@ public class PagoServiceImpl implements PagoService {
 	public Long getTotalPagosPorInmuebleYEstatusPagoNOmbre(Long idInmueble, String nombre) {
 		return pagoRepository.countByInmuebleIdAndEstatusPagoName( idInmueble, nombre );
 	}
+	
+	@Override
+	public Long getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre(Long idInmueble, String estatusPagoNombre, String tipoPagoNombre) {
+		return pagoRepository.countByInmuebleIdAndEstatusPagoNameAndTipoPagoName( idInmueble, estatusPagoNombre,  tipoPagoNombre);
+	}
 
 	@Override
 	public Collection<PagoDto> buscarPorSocioYEstatusPagoNombre(Long idSocio, String nombre) {
