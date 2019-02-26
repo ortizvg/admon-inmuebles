@@ -19,6 +19,11 @@ function cargarColonias() {
     $.getJSON(serverContext + "api/asentamientos?codigoPostal=" + codigoPostal + "&zonaCodigo=" + zonaCodigo, function(data) {
         var html = '';
         var len = data.length;
+       	if( len > 0 ) {
+       		$("#mensaje").html("<div class='alert alert-warning'> <i class='ti-info'></i> <span class='form-control-feedback' >" + /*[[#{colonia.codigo.postal.no.eccnotrado}]]*/ + "</span><button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>×</span></button>");
+       	} else {
+       		$("#mensaje").hide();
+       	}
         for ( var i = 0; i < len; i++) {
             html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
         }
@@ -50,6 +55,7 @@ function limpiarCampos() {
           <h3 class="card-title" th:text="#{colonia.crear.titulo}"></h3>
           <h6 class="card-subtitle" th:text="#{colonia.crear.subtitulo}"></h6>
           <form name="crearColoniaForm" action="#" th:action="@{/catalogos/colonia-agregar}" th:object="${coloniaDto}" method="post">
+            <div id="mensaje" class="m-t-20"> </div>
             <div id="divZona" th:class="${#fields.hasErrors('zonaCodigo')}? 'form-group has-danger':'form-group'">
               <label class="form-control-label" th:text="#{colonia.zona}"></label>
               <select name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}" required onchange="limpiarCampos();">
@@ -63,15 +69,15 @@ function limpiarCampos() {
             <div id="divCodigoPostal" th:class="${#fields.hasErrors('codigoPostal')}? 'form-group has-danger':'form-group'">
               <label class="form-control-label" th:text="#{colonia.codigopostal}"></label>
               <div class="input-group">
-                <input name="codigoPostal" id="codigoPostal" class="form-control" th:field="*{codigoPostal}" required pattern="^\d{5}$" th:title="#{colonia.codigoPostal.mensajes.validacion}" />
-                <div class="input-group-append">
-                  <button type="button" name="buscar" onclick="cargarColonias();" class="btn btn-info" th:text="#{boton.buscar}"></button>
-                </div>
+                <input name="codigoPostal" id="codigoPostal" class="form-control" onkeyup="cargarColonias()" th:field="*{codigoPostal}" required pattern="^\d{5}$" th:title="#{colonia.codigoPostal.mensajes.validacion}" />
+<!--                 <div class="input-group-append"> -->
+<!--                   <button type="button" name="buscar" onclick="cargarColonias();" class="btn btn-info" th:text="#{boton.buscar}"></button> -->
+<!--                 </div> -->
               </div>
               <span class="form-control-feedback">
                 <span th:if="${#fields.hasErrors('codigoPostal')}" th:errors="*{codigoPostal}"></span>
               </span>
-               <span class="help-block"><small th:text="#{colonia.codigopostal.aviso}">Seleccionar el area para buscar colonias relacionadas</small></span>
+               <span class="help-block"><small th:text="#{colonia.codigopostal.aviso}"></small></span>
             </div>
             <div id="divColonia" th:class="${#fields.hasErrors('id')}? 'form-group has-danger':'form-group'" >
               <label class="form-control-label" th:text="#{colonia.nombre}"></label>

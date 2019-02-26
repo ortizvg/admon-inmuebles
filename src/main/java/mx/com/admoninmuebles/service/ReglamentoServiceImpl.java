@@ -74,7 +74,7 @@ public class ReglamentoServiceImpl implements ReglamentoService {
 			throw new BusinessException("reglamentos.archivo.validacion.mediatype.pdf");
 		}
 		
-		if( reglamentoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_1_MB ) {
+		if( reglamentoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_2_MB ) {
 			throw new BusinessException("reglamentos.archivo.validacion.tamanio");
 		}
 	}

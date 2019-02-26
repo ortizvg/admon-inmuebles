@@ -67,7 +67,7 @@ public class CuotaDepartamentoServiceImpl implements CuotaDepartamentoService{
 			throw new BusinessException("cuota.departamento.archivo.validacion.mediatype.pdf");
 		}
 		
-		if( cuotaDepartamentoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_1_MB ) {
+		if( cuotaDepartamentoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_2_MB ) {
 			throw new BusinessException("cuota.departamento.archivo.validacion.tamanio");
 		}
 	}
