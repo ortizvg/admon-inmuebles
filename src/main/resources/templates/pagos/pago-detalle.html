@@ -71,7 +71,7 @@
                 </div>
               </div>
               
-               <div class="row">
+              <div class="row">
                <div id="divConcepto" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{pago.concepto}"></label>
                   <p class="form-control-static" th:text="*{concepto}"></p>
@@ -83,6 +83,21 @@
                 <div id="divFechaPago" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{pago.fecha.pago}"></label>
                   <p class="form-control-static" th:text="*{fechaPago}"></p>
+                </div>
+              </div>
+              
+              <div class="row">
+               <div id="divUsuarioGenerador" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.usuario.generador}"></label>
+                  <p class="form-control-static" th:text="*{usuarioGenerador}"></p>
+                </div>
+                <div id="divUsuarioVerificador" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.usuario.verificador}"></label>
+                  <p class="form-control-static" th:text="*{usuarioVerificador}"></p>
+                </div>
+                <div id="divFechaVerificacion" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{pago.fecha.verificacion}"></label>
+                  <p class="form-control-static" th:text="*{fechaVerificacion}"></p>
                 </div>
               </div>
               

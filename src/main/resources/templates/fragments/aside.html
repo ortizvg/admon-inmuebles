@@ -51,6 +51,7 @@
                   th:text="#{menu.usuarios}"></span></a>
               <ul aria-expanded="false" class="collapse">
                 <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a th:href="@{/usuarios}" href="#" aria-expanded="false" ><i class="mdi mdi-account-key"></i> <span class="hide-menu" th:text="#{menu.administradores}"></span></a></li>
+                <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a th:href="@{/contadores}" href="#" aria-expanded="false" ><i class="mdi mdi-account-edit"></i> <span class="hide-menu" th:text="#{menu.contadores}"></span></a></li>
              	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')"><a  th:href="@{/condominos}" aria-expanded="false"><i class="mdi mdi-account-check"></i> <span class="hide-menu" th:text="#{menu.socios}"></span></a></li>
               	<li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a  th:href="@{/proveedores}" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i> <span class="hide-menu" th:text="#{menu.proveedores}"></span></a></li>
               </ul>

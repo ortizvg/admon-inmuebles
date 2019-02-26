@@ -8,6 +8,8 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -42,12 +44,38 @@ public class MorosoServiceImpl implements MorosoService {
 	@Override
 	public ReporteInmuebleMorososDto generarReporteMorososPorInmuebleId(final Long inmuebleId) {
 		
+		Long pagosTotal = 0L;
+		Long pagosAtrasados = 0L;
+		Long pagosRealizados = 0L;
+		Long pagosVerificacion = 0L;
+		Long pagosPendientes = 0L;
+		
 		InmuebleDto inmuebleDto = inmuebleService.findById( inmuebleId );
-		Long pagosTotal = pagoService.getTotalPagosPorInmueble( inmuebleId );
-		Long pagosAtrasados = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.ATRASADO );
-		Long pagosRealizados = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.PAGADO );
-		Long pagosVerificacion = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.VERIFICACION );
-		Long pagosPendientes = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.CERCANO );
+//		Long pagosTotal = pagoService.getTotalPagosPorInmueble( inmuebleId );
+//		Long pagosAtrasados = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.ATRASADO );
+//		Long pagosRealizados = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.PAGADO );
+//		Long pagosVerificacion = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.VERIFICACION );
+//		Long pagosPendientes = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.CERCANO );
+		
+		CompletableFuture<Long> pagosTotalFuture  = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmueble( inmuebleId ));
+		CompletableFuture<Long> pagosAtrasadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.ATRASADO ) );
+		CompletableFuture<Long> pagosRealizadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.PAGADO ) );
+		CompletableFuture<Long> pagosVerificacionFuture   = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.VERIFICACION ) );
+		CompletableFuture<Long> pagosPendientesFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.CERCANO ) );
+		CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(pagosTotalFuture, pagosAtrasadosFuture, pagosRealizadosFuture, pagosVerificacionFuture, pagosPendientesFuture);
+		 
+		try {
+			combinedFuture.get();
+			pagosTotal = pagosTotalFuture.get();
+			pagosAtrasados = pagosAtrasadosFuture.get();
+			pagosRealizados = pagosRealizadosFuture.get();
+			pagosVerificacion = pagosVerificacionFuture.get();
+			pagosPendientes = pagosPendientesFuture.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		
 		if( pagosTotal == null || pagosTotal == 0 ) {
 			throw new BusinessException("morosos.inmueble.pagos.vacio");

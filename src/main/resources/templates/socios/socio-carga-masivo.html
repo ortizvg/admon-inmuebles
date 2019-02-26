@@ -65,10 +65,20 @@
 								</div> 								                                             
                                   <!-- div th:unless=${lists.isEmpty(errores)}-->
                                   <div>
-                                  	<table  class="table table-striped">
-           			     	      		<tr th:each="errores : ${errores}">
-               								<td th:text="${errores.message}"></td>
+                                  	<table  id="tableId" class="table table-striped">
+           			     	      		<tr th:each="error : ${errores}">
+               								<td th:text="|${error.id} ${error.message}|"></td>
 							           </tr>
+							            <tfoot th:if="${#lists.size(errores) > 20}">
+					                    <tr>
+					                      <td colspan="6">
+					                        <div class="text-right">
+					                          <ul class="pagination">
+					                          </ul>
+					                        </div>
+					                      </td>
+					                    </tr>
+					                  </tfoot>
        								</table>
                                   </div>       
 

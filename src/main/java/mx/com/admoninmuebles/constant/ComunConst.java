@@ -7,5 +7,8 @@ public final class ComunConst {
 	}
 	
 	public static final Integer TAMANIO_1_MB = 2000000;
+	
+	public static final String USUARIO_SISTEMA = "Sistema";
+	public static final String CADENA_VACIA = "";
 
 }

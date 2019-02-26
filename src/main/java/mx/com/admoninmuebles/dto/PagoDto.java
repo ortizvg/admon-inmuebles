@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 import lombok.ToString;
+import mx.com.admoninmuebles.constant.ComunConst;
 
 @Data
 @ToString(includeFieldNames=true)
@@ -45,10 +46,12 @@ public class PagoDto {
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate fechaPago;
     
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @DateTimeFormat(iso = ISO.DATE)
+    @DateTimeFormat(iso = ISO.NONE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date fechaCreacion;
     
+    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
+    private Date fechaVerificacion;
 
 	private Long tipoPagoBancarioId;
 	private String tipoPagoBancarioDescripction;
@@ -66,6 +69,18 @@ public class PagoDto {
 	private String usuarioApellidoMaterno;
 	private String usuarioCorreo;
 	
+	private Long usuarioGeneradorId;
+	private String usuarioGeneradorNombre;
+	private String usuarioGeneradorApellidoPaterno;
+	private String usuarioGeneradorApellidoMaterno;
+	private String usuarioGeneradorusuarioCorreo;
+	
+	private Long usuarioVerificadorId;
+	private String usuarioVerificadorNombre;
+	private String usuarioVerificadorApellidoPaterno;
+	private String usuarioVerificadorusuarioGeneradorApellidoMaterno;
+	private String usuarioVerificadorusuarioCorreo;
+	
 //	private byte[] comprobantePago;
     private MultipartFile comprobantePagoMf;
     
@@ -78,6 +93,18 @@ public class PagoDto {
 		return this.usuarioNombre + " " + this.usuarioApellidoPaterno + " " + this.usuarioApellidoMaterno;
 	}
 	
+	public String getUsuarioVerificador() {
+		if(this.usuarioVerificadorId == null ) {
+			return ComunConst.CADENA_VACIA;
+		}
+		return this.usuarioVerificadorNombre + " " + this.usuarioVerificadorApellidoPaterno + " " + this.usuarioVerificadorusuarioGeneradorApellidoMaterno;
+	}
 	
+	public String getUsuarioGenerador() {
+		if(this.usuarioGeneradorId == null ) {
+			return ComunConst.USUARIO_SISTEMA;
+		}
+		return this.usuarioGeneradorNombre + " " + this.usuarioGeneradorApellidoPaterno + " " + this.usuarioGeneradorApellidoMaterno;
+	}
 
 }

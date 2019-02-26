@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -34,13 +35,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CargaSocioDto;
-import mx.com.admoninmuebles.dto.ColoniaDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.RolDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.error.BusinessException;
-import mx.com.admoninmuebles.listener.event.OnRegistroCompletoEvent;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.CargaSocioService;
 import mx.com.admoninmuebles.service.ColoniaService;
@@ -287,7 +286,6 @@ public class SocioController {
         	cargaSocio = cargaSocioService.validaCSVSocios(br);
         	if(cargaSocio!=null && cargaSocio.getListaErrores() !=null && !cargaSocio.getListaErrores().isEmpty()) {
         		model.addAttribute("errores", cargaSocio.getListaErrores());
-//        		return showPage.replace("redirect:", "socios");
         		 return "socios/socio-carga-masivo";
         	}
         	
@@ -310,8 +308,9 @@ public class SocioController {
         catch(BusinessException e) {
                bindingResult.addError(new ObjectError(messages.getMessage(e.getMessage(), null, locale), messages.getMessage(e.getMessage(), null, locale)));
                return "redirect:/condominos";
-               } 
+        } 
         
+        model.addAttribute("errores", Collections.emptyList());
         return "socios/socio-carga-masivo";
         
     }

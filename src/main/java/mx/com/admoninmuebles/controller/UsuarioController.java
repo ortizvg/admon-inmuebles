@@ -124,13 +124,13 @@ public class UsuarioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/usuarios")
     public String init(final UsuarioDto usuarioDto, final Model model, final HttpServletRequest request) {
+    	Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
     	
     	if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
     		model.addAttribute("usuarios", userService.findAllAdministradores());
     	} else if(request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)){
-    		Long adminZonaLogueadoId = SecurityUtils.getCurrentUserId().get();
-        	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
-    		model.addAttribute("usuarios", userService.findAdministradoresBiByZonaCodigo(zona.getCodigo()));
+//        	ZonaDto zona = zonaService.findByAdminZonaId(adminZonaLogueadoId).stream().findFirst().get();
+    		model.addAttribute("usuarios", userService.findAdminsBiByAdminZona( adminZonaLogueadoId ));
     	}else {
     		model.addAttribute("usuarios", Collections.EMPTY_LIST);
     	}

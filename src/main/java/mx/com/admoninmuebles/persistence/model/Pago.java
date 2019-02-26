@@ -2,6 +2,7 @@ package mx.com.admoninmuebles.persistence.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,9 +16,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -73,6 +78,11 @@ public class Pago extends EntidadBase {
     
     @Column(nullable = true)
     private LocalDate fechaPago;
+    
+    //NUEVO
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_verificacion")
+    private Date fechaVerificacion;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_pago_bancario", referencedColumnName = "id_tipo_pago_bancario", nullable = true)
@@ -89,6 +99,16 @@ public class Pago extends EntidadBase {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuario;
+    
+    //NUEVO
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario_generador", referencedColumnName = "id_usuario", nullable = true)
+    private Usuario usuarioGenerador;
+    
+    //NUEVO
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario_verificador", referencedColumnName = "id_usuario", nullable = true)
+    private Usuario usuarioVerificador;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_archivo", referencedColumnName = "id_archivo", nullable = true)

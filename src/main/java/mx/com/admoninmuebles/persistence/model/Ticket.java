@@ -35,8 +35,8 @@ public class Ticket extends EntidadBase {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(length = 100, nullable = false)
+    @Size(min = 0, max = 100)
+    @Column(length = 100, nullable = true)
     private String titulo;
 
     @NotNull

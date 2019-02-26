@@ -14,10 +14,9 @@ public final class SociosConst {
 	public static final int CUOTA_MENSUAL_PAGO_SOCIO = 5;
 	public static final int CORREO_ALTERNATIVO_1 = 6;
 	public static final int CORREO_ALTERNATIVO_2 = 7;
-	public static final int ROL_ID = 8;
-	public static final int TIPO_SOCIO = 9;
-	public static final int DATOS_DOMICILIO = 10;
-	public static final int INMUEBLE_ID = 11;
+	public static final int TIPO_SOCIO = 8;
+	public static final int DATOS_DOMICILIO = 9;
+	public static final int INMUEBLE_ID = 10;
 	
 
 }

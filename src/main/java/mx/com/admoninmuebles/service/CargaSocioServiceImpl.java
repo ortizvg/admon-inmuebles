@@ -13,10 +13,12 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.constant.SimbolosConst;
 import mx.com.admoninmuebles.constant.SociosConst;
@@ -58,6 +60,9 @@ public class CargaSocioServiceImpl implements CargaSocioService {
     
     @Autowired
     private CargaMasivaSocioValidator cargaMasivaSocioValidator;
+    
+	@Autowired
+	private MessageSource messages;
 
 	/**
 	 * Lee archivo para carga de usuarios en 
@@ -67,21 +72,29 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	public CargaSocioDto validaCSVSocios(BufferedReader br) {
 		String line = null;
 		CargaSocioDto socio = new CargaSocioDto();
-		int contadorLinea = 0;
+		long contadorLinea = 0;
+		List<ErrorDto> listaErroresValidacion = null;
+		Rol rolSocio = rolRepository.findByNombre(RolConst.ROLE_SOCIO_BI).get();
 		try {
 			while((line = br.readLine()) != null) {
-				contadorLinea++;
-				String[] arrayStr = line.split(SimbolosConst.COMA);
-				agregarSocio(arrayStr, contadorLinea, socio);
+				if( !line.isEmpty() ) {
+					contadorLinea++;
+					String[] arrayStr = line.split(SimbolosConst.COMA);
+					agregarSocio(arrayStr, contadorLinea, socio, rolSocio.getId() );
+				}
 			}
 			
-			if(socio.getListaErrores() == null || socio.getListaErrores().isEmpty()) {
-				cargaMasivaSocioValidator.validarCargaMasiva( socio.getListaSocios() );
+			if( socio.getListaErrores().isEmpty() ) {
+				listaErroresValidacion =  cargaMasivaSocioValidator.validarCargaMasiva( socio.getListaSocios() );
+				if( listaErroresValidacion != null && !listaErroresValidacion.isEmpty() ) {
+					socio.setListaErrores(listaErroresValidacion);
+				}
 			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			ErrorDto error = new ErrorDto();
-			error.setId(1);
+			error.setId(contadorLinea);
 			error.setMessage(e.getMessage());
 			socio.getListaErrores().add( error );
 		} 
@@ -102,25 +115,46 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	 * @param cargaSocio
 	 * @return
 	 */
-	private CargaSocioDto agregarSocio(String[] arrayStr, int contador, CargaSocioDto cargaSocio) {
+	private CargaSocioDto agregarSocio(String[] arrayStr, long contador, CargaSocioDto cargaSocio, long rolId) {
 		UsuarioDto socio = new UsuarioDto();
 		List<UsuarioDto> listaSocios = null;
-		List<ErrorDto> listaErrores = null;
-		String mensajeError = "Error en la línea ";
 		try {
+			socio.setId(contador);
 			socio.setUsername(arrayStr[SociosConst.USER_NAME]);
 //			socio = validaUserName(socio);
 			socio.setCorreo(arrayStr[SociosConst.CORREO]);
 			socio.setNombre(arrayStr[SociosConst.NOMBRE]);
 			socio.setApellidoPaterno(arrayStr[SociosConst.APELLIDO_PATERNO]);
 			socio.setApellidoMaterno(arrayStr[SociosConst.APELLIDO_MATERNO]);
-			socio.setCoutaMensualPagoSocio(new BigDecimal(arrayStr[SociosConst.CUOTA_MENSUAL_PAGO_SOCIO]));
+			try {
+				socio.setCoutaMensualPagoSocio(new BigDecimal(arrayStr[SociosConst.CUOTA_MENSUAL_PAGO_SOCIO]));
+			} catch ( NumberFormatException e ) {
+				ErrorDto errorDto = new ErrorDto();
+				errorDto.setId( contador );
+				errorDto.setMessage( messages.getMessage("socios.cargamasiva.validacion.valor.cuota", null, LocaleConst.LOCALE_MX) );
+				cargaSocio.getListaErrores().add( errorDto );
+			}
+			try {
+				socio.setTipoSocioId( Long.valueOf(arrayStr[SociosConst.TIPO_SOCIO]) );
+			} catch ( NumberFormatException e ) {
+				ErrorDto errorDto = new ErrorDto();
+				errorDto.setId( contador );
+				errorDto.setMessage( messages.getMessage("socios.cargamasiva.validacion.valor.tiposocio", null, LocaleConst.LOCALE_MX) );
+				cargaSocio.getListaErrores().add( errorDto );
+			}
+			try {
+				socio.setInmuebleId(Long.valueOf(arrayStr[SociosConst.INMUEBLE_ID]));
+			} catch ( NumberFormatException e ) {
+				ErrorDto errorDto = new ErrorDto();
+				errorDto.setId( contador );
+				errorDto.setMessage( messages.getMessage("socios.cargamasiva.validacion.valor.inmueble", null, LocaleConst.LOCALE_MX) );
+				cargaSocio.getListaErrores().add( errorDto );
+			}
 			socio.setCorreoAlternativo1(arrayStr[SociosConst.CORREO_ALTERNATIVO_1]);
 			socio.setCorreoAlternativo2(arrayStr[SociosConst.CORREO_ALTERNATIVO_2]);
-			socio.setRolSeleccionado(Long.valueOf(arrayStr[SociosConst.ROL_ID]));
-			socio.setTipoSocioId( Long.valueOf(arrayStr[SociosConst.TIPO_SOCIO]) );
+//			socio.setRolSeleccionado(Long.valueOf(arrayStr[SociosConst.ROL_ID]));
+			socio.setRolSeleccionado( rolId );
 			socio.setDatosDomicilio(arrayStr[SociosConst.DATOS_DOMICILIO]);
-			socio.setInmuebleId(Long.valueOf(arrayStr[SociosConst.INMUEBLE_ID]));
 			if(cargaSocio.getListaSocios() == null || cargaSocio.getListaSocios().isEmpty()) {
 				listaSocios = new ArrayList<UsuarioDto>();
 				listaSocios.add(socio);
@@ -132,22 +166,11 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 			}
 			
 		} catch (Exception e) {
-			logger.error("Dato sin podeer leer");
-			if(cargaSocio.getListaErrores() == null || cargaSocio.getListaErrores().isEmpty()) {
-				listaErrores = new ArrayList<ErrorDto>();
-				ErrorDto errorDto = new ErrorDto();
-				errorDto.setId(contador);
-				errorDto.setMessage(mensajeError.concat(String.valueOf(contador)).concat(" "+e.getMessage()));
-				listaErrores.add(errorDto);
-				cargaSocio.setListaErrores(listaErrores);
-			}else {
-				listaErrores = cargaSocio.getListaErrores();
-				ErrorDto errorDto = new ErrorDto();
-				errorDto.setId(contador);
-				errorDto.setMessage(mensajeError.concat(String.valueOf(contador)));
-				listaErrores.add(errorDto);
-				cargaSocio.setListaErrores(listaErrores);
-			}
+			logger.error("Dato sin podeer leer en linea" + contador + e.getMessage() , e);
+			ErrorDto errorDto = new ErrorDto();
+			errorDto.setId( contador );
+			errorDto.setMessage( e.getMessage() );
+			cargaSocio.getListaErrores().add( errorDto );
 		}
 		return cargaSocio;
 	}
@@ -174,40 +197,40 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 	 * respectivos roles
 	 * @param listaSocios
 	 */
-//	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
-//		List<UsuarioDto> listaSociosCreados = new ArrayList<>();
-//		for (UsuarioDto usuarioDto : listaSocios) {
-//	        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
-//
-//	        Collection<Rol> roles = new ArrayList<>();
-//	        roles.add(rolRepository.findById(usuarioDto.getRolSeleccionado()).get());
-//	        usuario.setRoles(roles);
-//	        Usuario usuarioCreado = usuarioRepository.save(usuario);
-//	        guardaInmuebleActualizaUsuario(usuarioCreado, usuarioDto.getInmuebleId());
-//	        UsuarioDto usuarioCreadoDto =  modelMapper.map(usuarioCreado, UsuarioDto.class);
-//	        listaSociosCreados.add( usuarioCreadoDto );
-//		}
-//		
-//		return listaSociosCreados;
-//	}
-	
 	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
-		Collection<Rol> roles = new ArrayList<>();
-		roles.add(rolRepository.findByNombre(RolConst.ROLE_SOCIO_BI).get());
+		List<UsuarioDto> listaSociosCreados = new ArrayList<>();
+		for (UsuarioDto usuarioDto : listaSocios) {
+	        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+
+	        Collection<Rol> roles = new ArrayList<>();
+	        roles.add(rolRepository.findById(usuarioDto.getRolSeleccionado()).get());
+	        usuario.setRoles(roles);
+	        Usuario usuarioCreado = usuarioRepository.save(usuario);
+	        guardaInmuebleActualizaUsuario(usuarioCreado, usuarioDto.getInmuebleId());
+	        UsuarioDto usuarioCreadoDto =  modelMapper.map(usuarioCreado, UsuarioDto.class);
+	        listaSociosCreados.add( usuarioCreadoDto );
+		}
 		
-		List<Usuario> socios = listaSocios.parallelStream().map( socio -> {
-			Usuario usuario = modelMapper.map(socio, Usuario.class);
-			usuario.setRoles(roles);
-			return usuario;
-		}).collect(Collectors.toList());
-		
-		Iterable<Usuario> sociosCreados = usuarioRepository.saveAll( socios );
-		
-		return StreamSupport.stream(sociosCreados.spliterator(), false)
-				.map(socio -> modelMapper.map(socio, UsuarioDto.class))
-				.collect(Collectors.toList());
-		
+		return listaSociosCreados;
 	}
+	
+//	private List<UsuarioDto> guardaSocioMasivo(List<UsuarioDto> listaSocios) {
+//		Collection<Rol> roles = new ArrayList<>();
+//		roles.add(rolRepository.findByNombre(RolConst.ROLE_SOCIO_BI).get());
+//		
+//		List<Usuario> socios = listaSocios.parallelStream().map( socio -> {
+//			Usuario usuario = modelMapper.map(socio, Usuario.class);
+//			usuario.setRoles(roles);
+//			return usuario;
+//		}).collect(Collectors.toList());
+//		
+//		Iterable<Usuario> sociosCreados = usuarioRepository.saveAll( socios );
+//		
+//		return StreamSupport.stream(sociosCreados.spliterator(), false)
+//				.map(socio -> modelMapper.map(socio, UsuarioDto.class))
+//				.collect(Collectors.toList());
+//		
+//	}
 	
 	
 

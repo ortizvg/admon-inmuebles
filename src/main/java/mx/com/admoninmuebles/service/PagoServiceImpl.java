@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +37,7 @@ import mx.com.admoninmuebles.persistence.repository.PagoRepository;
 import mx.com.admoninmuebles.persistence.repository.TipoPagoBancarioRepository;
 import mx.com.admoninmuebles.persistence.repository.TipoPagoRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
+import mx.com.admoninmuebles.security.SecurityUtils;
 
 @Service
 public class PagoServiceImpl implements PagoService {
@@ -78,6 +80,11 @@ public class PagoServiceImpl implements PagoService {
     @Override
     public PagoDto pagarTranferenciaBancaria(final PagoDto pagoDto, Locale locale) {
     	
+    	Optional<Pago> pagoOpt = pagoRepository.findById( pagoDto.getId() );
+        if (!pagoOpt.isPresent()) {
+            throw new BusinessException("pago.error.noencontrado");
+        }
+    	
     	Archivo comprobantePagoCreado = null;
     	if(  pagoDto.getComprobantePagoMf() != null ) {
     		try {
@@ -94,7 +101,7 @@ public class PagoServiceImpl implements PagoService {
     	}
     	
     	
-    	 Pago pago =  modelMapper.map(pagoDto, Pago.class);
+    	 Pago pago =  pagoOpt.get();
     	 
     	 pago.setTipoPagoBancario( tipoPagoBancarioRepository.findByNameAndLang( TipoPagoBancario.TRANSFERENCIA, "es" ) );
     	 pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.VERIFICACION, "es") );
@@ -170,9 +177,14 @@ public class PagoServiceImpl implements PagoService {
             throw new BusinessException("pago.error.noencontrado");
         }
         
+        Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+        Usuario usuarioVerificador = usuarioRepository.findById( usuarioLogueadoId ).get();
+        
         Pago pagoVerificado = pagoOpt.get();
         pagoVerificado.setVerificado(true);
+        pagoVerificado.setFechaVerificacion(new Date());
         pagoVerificado.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.PAGADO, "es") );
+        pagoVerificado.setUsuarioVerificador(usuarioVerificador);
         
         Pago pagoActualizado =  pagoRepository.save( pagoVerificado );
         
@@ -296,6 +308,8 @@ public class PagoServiceImpl implements PagoService {
 	}
 	
 	private void generarPagosPorInmueble(PagoDto pagoDto) {
+		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+		Usuario usuarioGenerador = usuarioRepository.findById( usuarioLogueadoId ).get();
 		
 		Collection<UsuarioDto> sociosActivos = inmuebleService.findSociosActivosByInmuebleId( pagoDto.getInmuebleId() );
 		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
@@ -309,6 +323,7 @@ public class PagoServiceImpl implements PagoService {
 			pago.setMonto(pagoDto.getMonto());
 			pago.setConcepto(pagoDto.getConcepto());
 			pago.setVerificado(false);
+			pago.setUsuarioGenerador(usuarioGenerador);
 //			Usuario usuario = new Usuario();
 //			socio.setId();
 			pago.setUsuario( usuarioRepository.findById(socio.getId()).get() );
@@ -320,6 +335,10 @@ public class PagoServiceImpl implements PagoService {
 	
 	@Override
 	public PagoDto generarPagosPorSocio(PagoDto pagoDto) {
+		
+		Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
+		Usuario usuarioGenerador = usuarioRepository.findById( usuarioLogueadoId ).get();
+		
 		Usuario socio = usuarioRepository.findById( pagoDto.getUsuarioId() ).get();
 		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
 		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
@@ -333,6 +352,7 @@ public class PagoServiceImpl implements PagoService {
 		pago.setConcepto(pagoDto.getConcepto());
 		pago.setVerificado(false);
 		pago.setUsuario( socio );
+		pago.setUsuarioGenerador(usuarioGenerador);
 		
 		PagoDto pageGenerado =  modelMapper.map( pagoRepository.save(pago) , PagoDto.class );
 				

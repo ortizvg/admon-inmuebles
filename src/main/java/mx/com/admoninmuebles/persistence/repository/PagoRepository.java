@@ -74,14 +74,13 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
 			nativeQuery = true)
 	Collection<Pago> findByAdminBiId(Long id);
     
-    @Query(value = "select p.* from gescopls.usuarios az \r\n" + 
+    @Query(value = "select abi.* from gescopls.usuarios az  \r\n" + 
     		"inner join gescopls.zonas z on az.id_usuario = z.id_admin_zona_fk\r\n" + 
     		"inner join gescopls.asentamientos a on  z.codigo = a.id_zona_fk\r\n" + 
     		"inner join gescopls.direcciones d on a.id_asentamiento = d.id_asentamiento_fk\r\n" + 
     		"inner join gescopls.inmuebles i on d.id_direccion = i.id_direccion_fk\r\n" + 
-    		"inner join gescopls.inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 
-    		"join gescopls.pagos p on inso.socios_id_usuario = p.id_usuario\r\n" + 
-    		"where az.id_usuario = ?1 order by p.id_pago",
+    		"inner join gescopls.usuarios abi on i.id_admin_bi_fk = abi.id_usuario\r\n" + 
+    		"where az.id_usuario = ?1 order by abi.id_usuario",
 			nativeQuery = true)
 	Collection<Pago> findByAdminZonaId(Long id);
 

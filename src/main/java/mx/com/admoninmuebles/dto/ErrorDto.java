@@ -8,7 +8,7 @@ public class ErrorDto {
 	public ErrorDto() {
 	}
 	
-	private int id;
+	private long id;
 	private String message;
 
 }

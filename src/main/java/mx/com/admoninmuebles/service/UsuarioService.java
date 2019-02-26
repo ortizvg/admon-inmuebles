@@ -36,4 +36,6 @@ public interface UsuarioService {
     void enviarCorreoActivacion(UsuarioDto usuario, final String urlContext);
     
     void enviarCorreoRecuperacionContrasenia(UsuarioDto usuario, final String urlContext);
+    
+    Collection<UsuarioDto> findAdminsBiByAdminZona(Long id);
 }

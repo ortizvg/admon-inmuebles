@@ -257,7 +257,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Optional<Usuario> usuarioOptional = userRepository.findById(idUsuario);
 
         if (!usuarioOptional.isPresent()) {
-
+        	throw new BusinessException("usuario.error.noencontrado");
         }
 
         return modelMapper.map(usuarioOptional.get(), UsuarioDto.class);
@@ -341,7 +341,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Collection<UsuarioDto> findAllAdministradores() {
         List<Rol> roles = StreamSupport.stream(rolRepository.findAll().spliterator(), false)
-                .filter(rol -> (RolConst.ROLE_CONTADOR.equals(rol.getNombre()) ) || (RolConst.ROLE_ADMIN_BI.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_ZONA.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_CORP.equals(rol.getNombre())))
+                .filter(rol ->  (RolConst.ROLE_ADMIN_BI.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_ZONA.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_CORP.equals(rol.getNombre())))
                 .collect(Collectors.toList());
 
         return StreamSupport.stream(userRepository.findByRolesIn(roles).spliterator(), false).map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());
@@ -367,6 +367,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public void enviarCorreoRecuperacionContrasenia(UsuarioDto usuario, final String urlContext) {
 			correoUsuarioService.enviarRecuperacionContrasenia(usuario, urlContext);
+	}
+
+	@Override
+	public Collection<UsuarioDto> findAdminsBiByAdminZona(Long id) {
+		 return StreamSupport.stream(userRepository.findAdministradoresBiByAdminZona( id ).spliterator(), false).map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());
 	}
 
 }

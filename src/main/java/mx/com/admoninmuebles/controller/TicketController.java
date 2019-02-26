@@ -98,7 +98,7 @@ public class TicketController {
 	@PreAuthorize("hasAuthority('ABRIR_TICKET')")
 	@PostMapping(value = "/ticket")
 	public String crearTicket(final Locale locale, @Valid final TicketDto ticketDto,
-			final BindingResult bindingResult, @RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
+			final BindingResult bindingResult, @RequestParam(name="file", required=false) MultipartFile file, RedirectAttributes redirect) {
 		String showPageFail = "ticket/ticket-crear"; 
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
 		if (optId.isPresent()) {
@@ -109,25 +109,28 @@ public class TicketController {
     	final String MIME_TYPE_PDF = "application/pdf";
     	final String MIME_TYPE_PNG = "image/png";
     	final String MIME_TYPE_GIF= "image/gif";
-        if (file.isEmpty()) {
-        	redirect.addFlashAttribute("messageEmpty","");
-            return showPageFail;
-        }
+//        if (file.isEmpty()) {
+//        	redirect.addFlashAttribute("messageEmpty","");
+//            return showPageFail;
+//        }
         
         try {
-			String fileType = file.getContentType();
-			logger.info(fileType);
-			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType) || MIME_TYPE_PNG.contains(fileType) || MIME_TYPE_GIF.contains(fileType) || MIME_TYPE_JPEG.contains(fileType))) {
-				redirect.addFlashAttribute("messageType","");
-				return showPageFail;
-			}
+        	
+        	if (!file.isEmpty()) {
+                String fileType = file.getContentType();
+                if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType) || MIME_TYPE_PNG.contains(fileType) || MIME_TYPE_GIF.contains(fileType) || MIME_TYPE_JPEG.contains(fileType))) {
+                	redirect.addFlashAttribute("messageType","");
+                	return showPageFail;
+                }else {
+                	ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
+                }
+            }
 			ticketDto.setFechaCreacion(new Date());
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
-			ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
 			ticketDto.setTitulo(file.getOriginalFilename());
 			ticketService.save(ticketDto);
 		} catch (Exception e) {
-			logger.error("Hubo un problema al crear el ticket");
+			logger.error("Hubo un problema al crear el ticket", e);
 			return showPageFail;
 		}
 		return "redirect:tickets";
