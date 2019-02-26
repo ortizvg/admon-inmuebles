@@ -2,6 +2,10 @@ package mx.com.admoninmuebles.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -16,6 +20,8 @@ import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.dto.GraficaDonaMorrisDataDto;
 import mx.com.admoninmuebles.dto.GraficaDonaMorrisDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
+import mx.com.admoninmuebles.dto.NotificacionDto;
+import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.ReporteInmuebleMorososDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
@@ -30,8 +36,8 @@ public class MorosoServiceImpl implements MorosoService {
 	@Autowired
 	private InmuebleService inmuebleService;
 	
-//	@Autowired
-//	private NotificacionService notificacionService;
+	@Autowired
+	private NotificacionService notificacionService;
 	
     @Autowired
     private MessageSource messages;
@@ -154,39 +160,39 @@ public class MorosoServiceImpl implements MorosoService {
 		return graficaDonaMorrisDto;
 	}
 	
-//	@Override
-//	public void enviarNotificacionRecordatorioPago( Long pagoId ) {
-//		
-//		final Long DIAS_PARA_VENCIMIENTO_PAGO = 5L;
-//		
-//		final Long DIAS_EXPOSICION_NOTIFICACION = 5L;
-//		
-//		PagoDto pago = pagoService.buscarId( pagoId );
-//		
-//		NotificacionDto notificacionDto = new NotificacionDto();
-//		notificacionDto.setFechaExposicionInicial( LocalDate.now() );
-//		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
-//		notificacionDto.setUsuarioId( pago.getUsuarioId() );
-//		notificacionDto.setTitulo( messages.getMessage("morosos.notificacion.recordatorio.pago.titulo" , null, LocaleConst.LOCALE_MX ) );
-//		
-//		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
-////		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-//		LocalDateTime fechaActual =  LocalDateTime.now();
-//		
-//		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
-//		
-//		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("morosos.notificacion.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX )  );
-//		notificacionDesc.append("\n");
-//		notificacionDesc.append( messages.getMessage("morosos.notificacion.recordatorio.pago.concepto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pago.getConcepto() );
-//		notificacionDesc.append("\n");
-//		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.monto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pago.getMonto() );
-//		notificacionDesc.append("\n");
-//		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.atraso.dias" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( diasAtraso );
-//		
-//		notificacionDto.setDescripcion( notificacionDesc.toString() );
-//		
-//		
-//		notificacionService.save(notificacionDto);
-//	}
+	@Override
+	public void enviarNotificacionRecordatorioPago( Long pagoId ) {
+		
+		final Long DIAS_PARA_VENCIMIENTO_PAGO = 5L;
+		
+		final Long DIAS_EXPOSICION_NOTIFICACION = 5L;
+		
+		PagoDto pago = pagoService.buscarId( pagoId );
+		
+		NotificacionDto notificacionDto = new NotificacionDto();
+		notificacionDto.setFechaExposicionInicial( LocalDate.now() );
+		notificacionDto.setFechaExposicionFinal( LocalDate.now().plusDays( DIAS_EXPOSICION_NOTIFICACION ) );
+		notificacionDto.setUsuarioId( pago.getUsuarioId() );
+		notificacionDto.setTitulo( messages.getMessage("morosos.notificacion.recordatorio.pago.titulo" , null, LocaleConst.LOCALE_MX ) );
+		
+		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusDays( DIAS_PARA_VENCIMIENTO_PAGO );
+//		LocalDateTime fechavencimientoPago = pago.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		LocalDateTime fechaActual =  LocalDateTime.now();
+		
+		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
+		
+		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("morosos.notificacion.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX )  );
+		notificacionDesc.append("\n");
+		notificacionDesc.append( messages.getMessage("morosos.notificacion.recordatorio.pago.concepto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pago.getConcepto() );
+		notificacionDesc.append("\n");
+		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.monto" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( pago.getMonto() );
+		notificacionDesc.append("\n");
+		notificacionDesc.append(messages.getMessage("morosos.notificacion.recordatorio.pago.atraso.dias" , null, LocaleConst.LOCALE_MX ) ).append(" ").append( diasAtraso );
+		
+		notificacionDto.setDescripcion( notificacionDesc.toString() );
+		
+		
+		notificacionService.save(notificacionDto);
+	}
 
 }

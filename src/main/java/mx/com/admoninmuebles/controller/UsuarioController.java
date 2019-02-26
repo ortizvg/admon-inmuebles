@@ -178,10 +178,17 @@ public class UsuarioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/usuarios/editar/{idUsuario}")
     public String edicionInit(final @PathVariable Long idUsuario, final Model model, final HttpSession session, final HttpServletRequest request) {
+    	
+    	
     	Long userLogueadoId = SecurityUtils.getCurrentUserId().get();
     	UsuarioDto usuarioDto = userService.findById(idUsuario);
     	List<Long> rolesUsuario = usuarioDto.getRoles().stream().map(rol -> rol.getId()).collect(Collectors.toList());
     	usuarioDto.setRolSeleccionado( rolesUsuario.get(0) );
+    	
+    	if( RolConst.ROLE_ADMIN_CORP.equals( usuarioDto.getRoles().stream().findFirst().get().getNombre()) ){
+    		return "error/403";
+    	}
+    	
     	model.addAttribute("usuarioDto", usuarioDto);
     	
     	RolDto rol = rolService.findById( usuarioDto.getRolSeleccionado() );
