@@ -230,6 +230,19 @@ public class UsuarioController {
     @GetMapping(value = "/usuarios/eliminar/{idUsuario}")
     public String eliminar(final @PathVariable Long idUsuario, final Model model) {
     	Long adminCorpLogueadoId = SecurityUtils.getCurrentUserId().get();
+    	UsuarioDto usuarioDto = null;
+		try {
+			userService.deleteById(idUsuario);
+			usuarioDto = userService.findById(idUsuario);
+		} catch (BusinessException be) {
+			 return "error/404";
+		}
+    	List<Long> rolesUsuario = usuarioDto.getRoles().stream().map(rol -> rol.getId()).collect(Collectors.toList());
+    	usuarioDto.setRolSeleccionado( rolesUsuario.get(0) );
+    	
+    	if( RolConst.ROLE_ADMIN_CORP.equals( usuarioDto.getRoles().stream().findFirst().get().getNombre()) ){
+    		return "error/403";
+    	}
     	
     	if(idUsuario != null && adminCorpLogueadoId != idUsuario ) {
     		try {
