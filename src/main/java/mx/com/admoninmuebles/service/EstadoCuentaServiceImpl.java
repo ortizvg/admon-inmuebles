@@ -86,7 +86,7 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 			throw new BusinessException("cuota.departamento.archivo.validacion.mediatype.pdf");
 		}
 		
-		if( estadoCuentaDto.getArchivoMP().getSize() > ComunConst.TAMANIO_2_MB ) {
+		if( estadoCuentaDto.getArchivoMP().getSize() > ComunConst.TAMANIO_5_MB ) {
 			throw new BusinessException("cuota.departamento.archivo.validacion.tamanio");
 		}
 	}

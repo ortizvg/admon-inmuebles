@@ -67,7 +67,7 @@ public class ReporteMensualController {
 		return "reportes/reportes-mensuales";
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/reportes-mensuales/historico")
 	public String mostrarHistoricoReportesMesuales(Model model, final HttpServletRequest request) {
 

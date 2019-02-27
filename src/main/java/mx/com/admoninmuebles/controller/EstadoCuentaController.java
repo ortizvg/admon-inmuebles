@@ -42,7 +42,7 @@ public class EstadoCuentaController {
     @Autowired
     private MessageSource messages;
 	
-	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'CONTADOR', 'SOCIO_BI')")
 	@GetMapping(value = "/reportes/estados-cuenta")
 	public String mostrarestadosCuenta(Model model, final HttpServletRequest request) {
 

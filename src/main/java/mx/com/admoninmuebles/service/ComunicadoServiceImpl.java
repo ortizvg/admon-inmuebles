@@ -73,7 +73,7 @@ public class ComunicadoServiceImpl implements ComunicadoService {
 			throw new BusinessException("comunicados.archivo.validacion.mediatype.pdf");
 		}
 		
-		if( comunicadoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_2_MB ) {
+		if( comunicadoDto.getArchivoMP().getSize() > ComunConst.TAMANIO_5_MB ) {
 			throw new BusinessException("comunicados.archivo.validacion.tamanio");
 		}
 	}

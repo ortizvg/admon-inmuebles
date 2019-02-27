@@ -84,7 +84,7 @@ public class ReporteMensualServiceImpl implements ReporteMensualService {
 			throw new BusinessException("reporte.mensual.archivo.validacion.mediatype.pdf");
 		}
 		
-		if( reporteMensualDto.getReporteArchivo().getSize() > ComunConst.TAMANIO_2_MB ) {
+		if( reporteMensualDto.getReporteArchivo().getSize() > ComunConst.TAMANIO_5_MB ) {
 			throw new BusinessException("reporte.mensual.archivo.validacion.tamanio");
 		}
 	}
