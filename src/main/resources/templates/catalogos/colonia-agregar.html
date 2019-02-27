@@ -16,13 +16,26 @@ $(document).ready(function() {
 function cargarColonias() {
 	var codigoPostal = $("#codigoPostal").val();
 	var zonaCodigo = $("#zonaCodigo").val();
+	var mensajeAlerta = null;
+	
+	
+	
     $.getJSON(serverContext + "api/asentamientos?codigoPostal=" + codigoPostal + "&zonaCodigo=" + zonaCodigo, function(data) {
         var html = '';
         var len = data.length;
-       	if( len > 0 ) {
-       		$("#mensaje").html("<div class='alert alert-warning'> <i class='ti-info'></i> <span class='form-control-feedback' >" + /*[[#{colonia.codigo.postal.no.eccnotrado}]]*/ + "</span><button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>×</span></button>");
+        console.log('Size ' + len);
+       	if( len == 0 ) {
+       		if( zonaCodigo === null || zonaCodigo === '') {
+       			mensajeAlerta = /*[[#{colonia.crear.validacion.zona.seleccionar}]]*/ ;
+       			mostraMesajeAlerta( mensajeAlerta );
+       			
+       		} else {
+	        	console.log('zonaCodigo ' + zonaCodigo);
+	       		mensajeAlerta = /*[[#{colonia.crear.validacion.zona.vs.codigo.postal}]]*/ ;
+	       		mostraMesajeAlerta( mensajeAlerta );
+       		}
        	} else {
-       		$("#mensaje").hide();
+       		ocultarMesajeAlerta();
        	}
         for ( var i = 0; i < len; i++) {
             html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
@@ -32,8 +45,17 @@ function cargarColonias() {
     });
 };
 
+function mostraMesajeAlerta(mensaje) {
+	$("#mensaje").html("<div class='alert alert-warning'> <i class='ti-info'></i> <span class='form-control-feedback' >" + mensaje + "</span><button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>×</span></button>");
+}
+
+function ocultarMesajeAlerta() {
+	$("#mensaje").html("");
+}
+
 function limpiarCampos() {
 	$('#colonia').empty();
+	ocultarMesajeAlerta();
 };
 /*]]>*/
 </script>
