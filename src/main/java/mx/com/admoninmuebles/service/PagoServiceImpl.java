@@ -381,6 +381,13 @@ public class PagoServiceImpl implements PagoService {
 	}
 
 	@Override
+	public Collection<PagoDto> buscarPorInmuebleYEstatusPagoNombreYTipoPagoNombre(Long idInmueble, String estatusPagoNombre, String tipoPagoNombre) {
+		return StreamSupport.stream(pagoRepository.findByInmuebleIdAndEstatusPagoNameAndTipoPagoName( idInmueble, estatusPagoNombre,  tipoPagoNombre).spliterator(), false)
+				.map(pago -> modelMapper.map(pago, PagoDto.class))
+				.collect(Collectors.toList());
+	}
+	
+	@Override
 	public Collection<PagoDto> buscarPorInmuebleYEstatusPagoNombre(Long idInmueble, String nombre) {
 		return StreamSupport.stream(pagoRepository.findByInmuebleIdAndEstatusPagoName( idInmueble, nombre ).spliterator(), false)
 				.map(pago -> modelMapper.map(pago, PagoDto.class))

@@ -33,6 +33,16 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
 			nativeQuery = true)
 	Collection<Pago> findByInmuebleIdAndEstatusPagoName(Long inmuebleId, String estatusPagoName);
     
+    @Query(value = "SELECT p.* FROM gescopls.inmuebles_socios ist\r\n" + 
+    		"join gescopls.pagos p on ist.socios_id_usuario = p.id_usuario\r\n" + 
+    		"join gescopls.estatus_pagos ep on p.id_estatus_pago = ep.id_estatus_pago\r\n" + 
+    		"join gescopls.tipos_pagos tp on p.id_tipo_pago = tp.id_tipo_pago\r\n" + 
+    		"where ist.Inmueble_id_inmueble = ?1\r\n" + 
+    		"and ep.name = ?2\r\n" +
+    		"and tp.name = ?3", 
+			nativeQuery = true)
+	Collection<Pago> findByInmuebleIdAndEstatusPagoNameAndTipoPagoName(Long inmuebleId, String estatusPagoName, String tipoPagoName);
+    
     @Query(value = "SELECT count(p.id_pago) FROM gescopls.inmuebles_socios ist\r\n" + 
     		"join gescopls.pagos p on ist.socios_id_usuario = p.id_usuario\r\n" + 
     		"join gescopls.estatus_pagos ep on p.id_estatus_pago = ep.id_estatus_pago\r\n" + 

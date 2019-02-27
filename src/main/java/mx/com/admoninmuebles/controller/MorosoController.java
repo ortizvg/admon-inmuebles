@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
+import mx.com.admoninmuebles.persistence.model.TipoPago;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.NotificacionService;
@@ -127,7 +128,7 @@ public class MorosoController {
 		
 		session.setAttribute("idInmueble", idInmueble );
 		session.setAttribute("nombreStatusPago", nombreStatusPago );
-		model.addAttribute("pagos", pagoService.buscarPorInmuebleYEstatusPagoNombre( idInmueble, nombreStatusPago ) );
+		model.addAttribute("pagos", pagoService.buscarPorInmuebleYEstatusPagoNombreYTipoPagoNombre( idInmueble, nombreStatusPago, TipoPago.CUOTA ) );
 
 		return "morosos/morosos-detalle";
 	}

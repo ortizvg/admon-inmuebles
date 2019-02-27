@@ -39,4 +39,5 @@ public interface PagoService {
     
     Long getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre(Long idInmueble, String estatusPagoNombre, String tipoPagoNombre);
     
+    Collection<PagoDto> buscarPorInmuebleYEstatusPagoNombreYTipoPagoNombre(Long idInmueble, String estatusPagoNombre, String tipoPagoNombre);
 }
