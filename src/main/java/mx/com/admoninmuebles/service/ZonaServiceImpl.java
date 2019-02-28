@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.ws.rs.NotFoundException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class ZonaServiceImpl implements ZonaService {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    private ColoniaService coloniaService;
 
     @Override
     public Zona save(final ZonaDto zonaDto) {
@@ -35,11 +40,17 @@ public class ZonaServiceImpl implements ZonaService {
     @Override
     public ZonaDto findById(final String codigo) {
         Optional<Zona> zona = zonaRepository.findById(codigo);
-        return modelMapper.map(zona.get(), ZonaDto.class);
+        if( zona.isPresent() ) {
+        	return modelMapper.map(zona.get(), ZonaDto.class);
+        }
+        
+        throw new NotFoundException();
+        
     }
 
     @Override
     public void deleteById(final String codigo) {
+    	findById( codigo );
         zonaRepository.deleteById(codigo);
 
     }

@@ -15,4 +15,8 @@ public interface AreaComunService {
 	AreaComunDto findById(Long id);
 
 	void delete(Long id);
+	
+	Collection<AreaComunDto> findByAdminBiId(Long id);
+	
+	Collection<AreaComunDto> findByAdminZonaId(Long id);
 }

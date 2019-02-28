@@ -55,4 +55,16 @@ public class AreaComunServiceImpl implements AreaComunService {
 				.map(areaComun -> modelMapper.map(areaComun, AreaComunDto.class)).collect(Collectors.toList());
 	}
 
+	@Override
+	public Collection<AreaComunDto> findByAdminBiId(Long id) {
+		return StreamSupport.stream(areaComunRepository.findByInmuebleAdminBiId(id).spliterator(), false)
+				.map(areaComun -> modelMapper.map(areaComun, AreaComunDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<AreaComunDto> findByAdminZonaId(Long id) {
+		return StreamSupport.stream(areaComunRepository.findByAdminZonaId( id ).spliterator(), false)
+				.map(areaComun -> modelMapper.map(areaComun, AreaComunDto.class)).collect(Collectors.toList());
+	}
+
 }
