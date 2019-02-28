@@ -97,6 +97,12 @@
 	    		 	$("#pagosPendientes").text(response.pagosPendientes);
 	    		 	$("#pagosVerificacion").text(response.pagosVerificacion);
 	    		 	$("#pagosAtrasados").text(response.pagosAtrasados);
+	    		 	
+	    		 	if( response.inmubleImagenUrl == null || response.inmubleImagenUrl == ''){
+	    		 		$('#inmubleImagenUrlId').attr('src', '../images/servicios/ICONOS_SERVICIOS_01_MTTO.png');
+	    		 	} else {
+	    		 		$('#inmubleImagenUrlId').attr('src', response.inmubleImagenUrl);
+	    		 	}
 	    		 }
 	    		 
 	    		 if( jqXHR.status == 204 ){
@@ -154,7 +160,8 @@
                             <div class="card-body ">
                                 <h4 class="card-title" th:text="#{mororos.tablero.inmueble.titulo}"></h4>
                                 <div id="inmuebleInformacion">
-                                	<img src="../images/servicios/ICONOS_SERVICIOS_01_MTTO.png" width="200px" />
+<!--                                 	<img id="inmubleImagenUrlId" src="../images/servicios/ICONOS_SERVICIOS_01_MTTO.png" width="200px" /> -->
+                                	<img id="inmubleImagenUrlId" width="200px" />
                                 	<h4 id="nombreInmuebleId" class="m-t-20"></h4>
                                 	<div class="row">
 	                                    <div class="col-md-3 text-success">

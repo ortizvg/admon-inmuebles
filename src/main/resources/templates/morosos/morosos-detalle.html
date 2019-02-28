@@ -143,9 +143,10 @@
 							  <span th:case="${T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO}" class="text-danger"  th:text="${pago.estatusPagoDescripction}"></span>
 							</div>
                         </td> 
-<!--                         <td> -->
+                        <td>
+                        	<a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-outline-success btn-xs"> <i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i><span th:text="#{tabla.ver}"></span></a>
 <!--                           <button th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:onclick="'notificarRecordatorioPago('+${pago.id}+')'" class="btn btn-outline-success btn-xs"> <i class="fa fa-bullhorn text-inverse m-r-10" aria-hidden="true"></i><span th:text="#{boton.notificar}"></span></button> -->
-<!--                         </td> -->
+                        </td>
                       </tr>
                     </th:block>
                   </tbody>

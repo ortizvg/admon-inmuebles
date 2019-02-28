@@ -11,6 +11,7 @@ public class ReporteInmuebleMorososDto {
 	
 	private Long inmuebleId;
 	private String inmubleNombre;
+	private String inmubleImagenUrl;
 	private Long adminBiId;
 	private String adminBiNombre;
 	private String adminBiApellidoPaterno;

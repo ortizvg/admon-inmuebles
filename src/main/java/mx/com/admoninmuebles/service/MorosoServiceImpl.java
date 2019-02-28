@@ -91,6 +91,7 @@ public class MorosoServiceImpl implements MorosoService {
 		ReporteInmuebleMorososDto reporteMorososPorInmueble = new ReporteInmuebleMorososDto();
 		reporteMorososPorInmueble.setInmuebleId( inmuebleId );
 		reporteMorososPorInmueble.setInmubleNombre( inmuebleDto.getNombre() );
+		reporteMorososPorInmueble.setInmubleImagenUrl( inmuebleDto.getImagenUrl() );
 		reporteMorososPorInmueble.setAdminBiId( inmuebleDto.getAdminBiId() );
 		reporteMorososPorInmueble.setAdminBiNombre( inmuebleDto.getAdminBiNombre() );
 		reporteMorososPorInmueble.setAdminBiApellidoPaterno( inmuebleDto.getAdminBiApellidoPaterno() );

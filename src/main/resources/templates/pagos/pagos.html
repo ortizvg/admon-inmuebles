@@ -119,7 +119,7 @@
 							</div>
                         </td> 
                         <td>
-                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-outline-success btn-xs"> <i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i><span>Ver</span></a>
+                          <a  th:href="${'/pagos/' + pago.id + '/detalle' }" class="btn btn-outline-success btn-xs"> <i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i><span th:text="#{tabla.ver}"></span></a>
                           <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-outline-success btn-xs"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i><span>Pagar</span></a>
 <!--                           <a sec:authorize="hasRole('SOCIO_BI')" th:if="${(T(mx.com.admoninmuebles.persistence.model.EstatusPago).CERCANO == pago.estatusPagoName) || (T(mx.com.admoninmuebles.persistence.model.EstatusPago).ATRASADO == pago.estatusPagoName)}" 	th:href="${'/pagos/' + pago.id + '/opciones' }" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa  fa-dollar text-inverse m-r-10" aria-hidden="true"></i></a> -->
                         </td>
