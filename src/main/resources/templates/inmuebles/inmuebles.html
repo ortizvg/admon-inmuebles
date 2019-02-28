@@ -89,7 +89,7 @@
                 </div>
               </form>
               <div class="table-responsive">
-                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                   <thead>
                     <tr>
                       <th th:text="#{tabla.id}"></th>
@@ -98,9 +98,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <th:block th:each="inmueble : ${inmuebles}">
+                    <th:block th:each="inmueble, iterator : ${inmuebles}">
                       <tr>
-                        <td th:text="${inmueble.id}"></td>
+                        <td th:text="${iterator.index + 1}"></td>
                         <td th:text="${inmueble.nombre}"></td>
                         <td><a th:href="${'/inmueble-detalle/'  + inmueble.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
                           <a th:href="${'/inmueble-editar/'  + inmueble.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a> <a
@@ -109,7 +109,7 @@
                       </tr>
                     </th:block>
                   </tbody>
-                  <tfoot th:if="${#lists.size(inmuebles) > 20}">
+                  <tfoot th:if="${#lists.size(inmuebles) > T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                     <tr>
                       <td colspan="6">
                         <div class="text-right">

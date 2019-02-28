@@ -54,23 +54,23 @@
 								 </div>
                                 
                                 <div class="table-responsive">
-                                    <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                                    <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                                         <thead>
                                             <tr>
                                                 <th th:text="#{tabla.id}"></th>
                                                 <th th:text="#{notificaciones.titulo}"></th>
-                                                <th th:text="#{notificaciones.descripcion}"></th>
+<!--                                                 <th th:text="#{notificaciones.descripcion}"></th> -->
                                                 <th th:text="#{notificaciones.fechainicial}"></th>
                                                 <th th:text="#{notificaciones.fechafinal}"></th>
                                                 <th th:text="#{tabla.accion}"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        	<th:block th:each="notificacion : ${notificaciones}">
+                                        	<th:block th:each="notificacion, iterator : ${notificaciones}">
 	                                            <tr>
-	                                                <td th:text="${notificacion.id}"></td>
+	                                                <td th:text="${iterator.index + 1}"></td>
 	                                                <td th:text="${notificacion.titulo}"></td>
-	                                                <td th:text="${notificacion.descripcion}"></td>
+<!-- 	                                                <td th:text="${notificacion.descripcion}"></td> -->
 	                                                <td th:text="${notificacion.fechaExposicionInicial}"></td>
 	                                                <td th:text="${notificacion.fechaExposicionFinal}"></td>
 	                                                <td>
@@ -82,7 +82,7 @@
                                              </th:block>
                                            
                                         </tbody>
-                                        <tfoot th:if="${#lists.size(notificaciones) > 20}">
+                                        <tfoot th:if="${#lists.size(notificaciones) > T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                                             <tr>
                                                 <td colspan="7">
                                                        <div class="text-right">

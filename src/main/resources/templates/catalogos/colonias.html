@@ -45,7 +45,7 @@
 			  	</div>
 			 </div>
               <div class="table-responsive">
-                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                   <thead>
                     <tr>
                       <th th:text="#{tabla.id}"></th>
@@ -55,9 +55,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <th:block th:each="colonia : ${colonias}">
+                    <th:block th:each="colonia, iterator : ${colonias}">
                       <tr>
-                        <td th:text="${colonia.id}"></td>
+                        <td th:text="${iterator.index + 1}"></td>
                         <td th:text="${colonia.nombre}"></td>
                         <td th:text="|${colonia.zonaCodigo} - ${colonia.zonaNombre}|"></td>
                         <td>
@@ -68,7 +68,7 @@
                       </tr>
                     </th:block>
                   </tbody>
-                  <tfoot th:if="${#lists.size(colonias) > 20}">
+                  <tfoot th:if="${#lists.size(colonias) > T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                     <tr>
                       <td colspan="4">
                         <div class="text-right">

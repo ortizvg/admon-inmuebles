@@ -51,7 +51,7 @@
 									</div>
 							
                                     <div class="table-responsive">
-                                        <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                                        <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                                             <thead>
                                                 <tr>
                                                     <th th:text="#{tabla.id}"></th>
@@ -64,9 +64,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            	<th:block th:each="usuario : ${usuarios}">
+                                            	<th:block th:each="usuario, iterator : ${usuarios}">
 	                                                <tr>
-	                                                    <td th:text="${usuario.id}"></td>
+	                                                    <td th:text="${iterator.index + 1}"></td>
 	                                                    <td th:switch="${usuario.fotoUrl != null}">
 	                                                        <a th:href="${'/usuarios/ver/'  + usuario.id}">
 	                                                        		<span  th:case="${false}" class="round round-success" width="100">U</span>
@@ -97,7 +97,7 @@
 	                                                </tr>
                                                </th:block>
                                             </tbody>
-                                            <tfoot th:if="${#lists.size(usuarios) > 20}">
+                                            <tfoot th:if="${#lists.size(usuarios) > T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                                                 <tr>
                                                     <td colspan="7">
                                                         <div class="text-right">

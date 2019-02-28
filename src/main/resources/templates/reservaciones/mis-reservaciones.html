@@ -35,7 +35,7 @@
 			 
 								 
               <div class="table-responsive">
-                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                   <thead>
                     <tr>
                       <th th:text="#{tabla.id}"></th>
@@ -47,9 +47,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <th:block th:each="reservacion : ${reservaciones}">
+                    <th:block th:each="reservacion, iterator : ${reservaciones}">
                       <tr>
-                        <td th:text="${reservacion.id}"></td>
+                        <td th:text="${iterator.index + 1}"></td>
                         <td th:text="${reservacion.title}"></td>
                         <td th:text="${reservacion.areaComunNombre}"></td>
                         <td th:text="${reservacion.start}"></td>
@@ -68,7 +68,7 @@
                       </tr>
                     </th:block>
                   </tbody>
-                  <tfoot th:if="${#lists.size(reservaciones) > 20}">
+                  <tfoot th:if="${#lists.size(reservaciones) > T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                     <tr>
                       <td colspan="6">
                         <div class="text-right">

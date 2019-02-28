@@ -54,7 +54,7 @@
 								 </div>
                                 
                                 <div class="table-responsive">
-                                    <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                                    <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                                         <thead>
                                             <tr>
                                                 <th th:text="#{tabla.id}"></th>
@@ -64,9 +64,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        	<th:block th:each="preguntaFrecuente : ${preguntasFrecuentes}">
+                                        	<th:block th:each="preguntaFrecuente, iterator : ${preguntasFrecuentes}">
 	                                            <tr>
-	                                                <td th:text="${preguntaFrecuente.id}"></td>
+	                                                <td th:text="${iterator.index + 1}"></td>
 	                                                <td th:text="${preguntaFrecuente.pregunta}"></td>
 	                                                <td th:text="${preguntaFrecuente.respuesta}"></td>
 	             
@@ -78,7 +78,7 @@
                                              </th:block>
                                            
                                         </tbody>
-                                        <tfoot th:if="${#lists.size(preguntasFrecuentes) > 20}">
+                                        <tfoot th:if="${#lists.size(preguntasFrecuentes) > T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                                             <tr>
                                                 <td colspan="6">
                                                     <div class="text-right">
