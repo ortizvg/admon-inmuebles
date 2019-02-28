@@ -110,5 +110,12 @@ public class NotificacionController {
     	notificacionService.deleteById(idNotificacion);;
         return "redirect:/catalogos/notificaciones";
     }
+    
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @GetMapping(value = "/catalogos/notificacion-detalle/{idNotificacion}")
+    public String verNotificacionPorId(final @PathVariable long idNotificacion, Model model, final HttpSession session) {
+    	model.addAttribute("notificacionDto", notificacionService.findById(idNotificacion));
+        return "catalogos/notificacion-detalle";
+    }
 
 }

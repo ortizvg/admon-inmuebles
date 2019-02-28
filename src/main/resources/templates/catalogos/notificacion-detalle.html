@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{notificaciones.titulo.principal}"></title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	
+
+/*]]>*/
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+	<div class="container-fluid">
+		 <div class="row page-titles">
+                     <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{notificaciones.titulo.principal}"></h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-gesco-secundario" th:href="@{/catalogos/notificaciones}" th:text="#{notificaciones.titulo.principal}"></a></li>
+                            <li class="breadcrumb-item active" th:text="#{notificaciones.detalle.titulo}"></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="#{notificaciones.detalle.titulo}"></h4>
+                                <h6 class="card-subtitle" th:text="#{notificaciones.detalle.subtitulo}"></h6>
+                                <th:block th:object="${notificacionDto}">
+	                                <div class="row">
+						                <div class="col-md-4 form-group">
+						                  <label class="control-label" th:text="#{pago.generacion.inmueble}"></label>
+						                  <p class="form-control-static" th:text="*{inmuebleNombre}"></p>
+						                </div>
+						                <div class="col-md-4 form-group">
+						                  <label class="form-control-label" th:text="#{pago.generacion.socio}"></label>
+						                  <p class="form-control-static" th:text="*{socio}"></p>
+						                </div>
+						                <div class="col-md-4 form-group">
+						                  <label class="control-label" th:text="#{notificaciones.titulo}"></label>
+						                  <p class="form-control-static" th:text="*{titulo}"></p>
+						                </div>
+						              </div>
+						              <div class="row">
+						                <div class="col-md-4 form-group">
+						                  <label class="form-control-label" th:text="#{notificaciones.fecha.inicial}"></label>
+						                  <p class="form-control-static" th:text="*{fechaExposicionInicial}"></p>
+						                </div>
+						                <div  class="col-md-4 form-group">
+						                  <label class="control-label" th:text="#{notificaciones.fecha.final}"></label>
+						                  <p class="form-control-static" th:text="*{fechaExposicionFinal}"></p>
+						                </div>
+						                <div class="col-md-4 form-group">
+						                  <label class="control-label" th:text="#{notificaciones.fecha.creacion}"></label>
+						                  <p class="form-control-static" th:text="*{fechaCreacion}"></p>
+						                </div>
+						              </div>
+						              <div class="row">
+						                <div class="col-md-4 form-group">
+						                  <label class="form-control-label" th:text="#{notificaciones.usuario.creador}"></label>
+						                  <p class="form-control-static" th:text="*{creadoPor}"></p>
+						                </div>
+						                <div class="col-md-8 form-group">
+						                  <label class="control-label" th:text="#{notificaciones.descripcion}"></label>
+						                  <p class="form-control-static" th:text="*{descripcion}"></p>
+						                </div>
+						              </div>
+						              <a th:href="@{/catalogos/notificaciones}" class="btn btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+                                </th:block>
+								
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                </div>
+	</div>
+</body>
+</html>

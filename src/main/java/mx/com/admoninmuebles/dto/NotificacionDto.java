@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.validation.ComparacionFechas;
 
 @Data
@@ -41,13 +42,37 @@ public class NotificacionDto {
     private LocalDate fechaExposicionFinal;
     
     private Long inmuebleId;
+    private String inmuebleNombre;
     
     private Long usuarioId;
     private String usuarioNombre;
+    private String usuarioApellidoPaterno;
+    private String usuarioApellidoMaterno;
     private String usuarioCorreo;
     
     @DateTimeFormat(pattern="dd-MM-yyyy") 
     private Date fechaModificacion;
+    
+    private Date fechaCreacion;
+    
+    private Long creadoPorId;
+    private String creadoPorNombre;
+    private String creadoPorApellidoPaterno;
+    private String creadoPorApellidoMaterno;
+    
+    public String getSocio() {
+    	if(usuarioId == null) {
+    		return ComunConst.CADENA_VACIA;
+    	}
+    	return this.usuarioNombre + " " + this.usuarioApellidoPaterno + " " + this.usuarioApellidoMaterno;
+    }
+    
+    public String getCreadoPor() {
+    	if(creadoPorId == null) {
+    		return ComunConst.USUARIO_SISTEMA;
+    	}
+    	return this.creadoPorNombre + " " + this.creadoPorApellidoPaterno + " " + this.creadoPorApellidoMaterno;
+    }
     
 
 }

@@ -60,8 +60,8 @@
                                                 <th th:text="#{tabla.id}"></th>
                                                 <th th:text="#{notificaciones.titulo}"></th>
 <!--                                                 <th th:text="#{notificaciones.descripcion}"></th> -->
-                                                <th th:text="#{notificaciones.fechainicial}"></th>
-                                                <th th:text="#{notificaciones.fechafinal}"></th>
+                                                <th th:text="#{notificaciones.fecha.inicial}"></th>
+                                                <th th:text="#{notificaciones.fecha.final}"></th>
                                                 <th th:text="#{tabla.accion}"></th>
                                             </tr>
                                         </thead>
@@ -76,6 +76,7 @@
 	                                                <td>
 	                                                	<a sec:authorize="hasRole('ADMIN_BI')" th:href="${'/catalogos/notificacion-editar/'  + notificacion.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
 <!-- 	                                                	<a th:href="${'/catalogos/notificacion-eliminar/'  + notificacion.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a> -->
+														<a th:href="${'/catalogos/notificacion-detalle/'  + notificacion.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i></a>
 	                                               		<a th:attr="data-id=${notificacion.id}" th:attrappend="data-nombre=${notificacion.titulo}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i class="fa fa-close text-danger" aria-hidden="true"></i></a>
 	                                                </td>
 	                                            </tr>
