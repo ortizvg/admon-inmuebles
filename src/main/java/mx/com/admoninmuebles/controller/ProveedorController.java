@@ -1,5 +1,8 @@
 package mx.com.admoninmuebles.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -89,9 +92,16 @@ public class ProveedorController {
 	
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/proveedor-crear")
-    public String crearProveedorInit(final ProveedorDto proveedorDto, final Model model, final HttpSession session) {
-//		 model.addAttribute("areasServicio", areaServicioService.findAll());
-		 session.setAttribute("areasServicio", areaServicioService.findAll());
+    public String crearProveedorInit(final ProveedorDto proveedorDto, final Model model, final HttpSession session, final HttpServletRequest request) {
+		
+		Long userLogueadoId = SecurityUtils.getCurrentUserId().get();
+		 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+    		session.setAttribute("zonasDto", zonaService.findAll());
+    	}  else if(request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)){
+    		session.setAttribute("zonasDto", zonaService.findByAdminZonaId( userLogueadoId ) );
+    	} 
+		 
+		session.setAttribute("areasServicio", areaServicioService.findAll());
         return "proveedores/proveedor-crear";
     }
 
@@ -129,9 +139,19 @@ public class ProveedorController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/proveedor-editar/{id}")
-    public String editarProveedor(final @PathVariable long id, final Model model, final HttpSession session) {
+    public String editarProveedor(final @PathVariable long id, final Model model, final HttpSession session, final HttpServletRequest request) {
+    	
+    	Long userLogueadoId = SecurityUtils.getCurrentUserId().get();
+		if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
+			session.setAttribute("zonasDto", zonaService.findAll());
+	   	}  else if(request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)){
+	   		session.setAttribute("zonasDto", zonaService.findByAdminZonaId( userLogueadoId ) );
+	   	}
+    	
     	ProveedorDto proveedorDto = proveedorService.buscarProveedorPorId(id);
     	proveedorDto.setAreasServicioSeleccionados(proveedorDto.getAreasServicio().stream().map(as -> as.getId()).collect(Collectors.toList()));
+    	proveedorDto.setZonaSeleccionado(zonaService.findByProveedorId(id).getCodigo());
+    	logger.info("ZONA " + proveedorDto.getZonaSeleccionado());
         model.addAttribute("proveedorDto", proveedorDto);
         model.addAttribute("areasServicio", areaServicioService.findAll());
 //        model.addAttribute("coloniaDto", proveedorDto);

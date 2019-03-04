@@ -65,12 +65,14 @@ public class ReservacionController {
     @GetMapping(value = "/reservaciones/reservar-area")
     public String init(final Model model, final HttpSession session, final Locale locale,  final HttpServletRequest request) {
 
+		boolean mostrarMensajeSeleccion = false;
         Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
         session.setAttribute("areasComunes", new ArrayList<AreaComunDto>());
         model.addAttribute("reservacionDto", new ReservacionDto());
         if (optUserId.isPresent()) {
             model.addAttribute("reservaciones", reservacioService.findBySocio(optUserId.get()));
             if ( request.isUserInRole( RolConst.ROLE_SOCIO_BI ) ) {
+            	mostrarMensajeSeleccion = true;
 //            	 InmuebleDto inmuebleDto = inmuebleService.findBySociosId( optUserId.get() ).stream().findFirst().get();
             	 InmuebleDto inmuebleDto = inmuebleService.findBySocioId( optUserId.get() );
             	 Collection<AreaComunDto> areasComunes = areaComunService.findByInmuebleId(inmuebleDto.getId());
@@ -83,6 +85,8 @@ public class ReservacionController {
             	session.setAttribute("zonas", zonaService.findAll() );
             } 
         }
+        
+        session.setAttribute("mostrarMensajeSeleccion", mostrarMensajeSeleccion);
         session.setAttribute("locale", locale.getLanguage());
         return "/reservaciones/reservar-area-comun";
     }
@@ -111,6 +115,7 @@ public class ReservacionController {
             model.addAttribute("reservaciones", reservacioService.findBySocio(optUserId.get()));
         }
         session.setAttribute("areaComunId", reservacionDto.getAreaComunId());
+        model.addAttribute("reservacionDto", reservacionDto);
         return "/reservaciones/reservar-area-comun";
     }
 

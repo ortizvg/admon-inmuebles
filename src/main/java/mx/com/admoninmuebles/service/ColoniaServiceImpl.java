@@ -8,11 +8,13 @@ import java.util.stream.StreamSupport;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.dto.ColoniaDto;
 import mx.com.admoninmuebles.persistence.model.Asentamiento;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.AsentamientoRepository;
+import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
 @Service
@@ -23,6 +25,9 @@ public class ColoniaServiceImpl implements ColoniaService {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    private DireccionRepository direccionRepository;
     
     @Autowired
     private ZonaRepository zonaRepository;
@@ -40,12 +45,14 @@ public class ColoniaServiceImpl implements ColoniaService {
         }
     }
     
+    @Transactional
     @Override
     public void deleteById(final Long codigo) {
         Optional<Asentamiento> optAsentamiento = asentamientoRepository.findById(codigo);
         Asentamiento asentamiento;
         if (optAsentamiento.isPresent()) {
-            asentamiento = optAsentamiento.get();
+        	asentamiento = optAsentamiento.get();
+        	direccionRepository.deleteAll( asentamiento.getDirecciones() );
             asentamiento.setZona(null);
             asentamientoRepository.save(asentamiento);
         }

@@ -3,6 +3,7 @@ package mx.com.admoninmuebles.persistence.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,6 +36,7 @@ public class Zona extends EntidadBase {
 	@Column(length = 100)
 	private String nombre;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_admin_zona_fk")
 	private Usuario adminZona;
@@ -49,6 +51,9 @@ public class Zona extends EntidadBase {
 
 	@OneToMany
 	private Collection<Usuario> administradoresBi = new ArrayList<>();
+	
+	@OneToMany(cascade = { CascadeType.MERGE })
+	private Collection<Usuario> proveedores = new ArrayList<>();
 
 	public void addAdminBi(Usuario adminBi) {
     	administradoresBi.add(adminBi);

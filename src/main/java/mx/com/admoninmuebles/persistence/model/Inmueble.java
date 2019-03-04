@@ -66,37 +66,38 @@ public class Inmueble extends EntidadBase {
     @JoinColumn(name = "id_contador_fk", nullable = false)
     public Usuario contador;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "id_direccion_fk", nullable = false)
     private Direccion direccion;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "id_datos_adicionales_fk", nullable = false)
     private DatosAdicionales datosAdicionales;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "inmueble")
     private Collection<Notificacion> notificaciones;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(cascade = CascadeType.ALL)
     private Collection<Usuario> socios = new HashSet<>();
 
     public void addSocio(final Usuario socio) {
         socios.add(socio);
     }
 
-    @OneToMany(mappedBy = "inmueble")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inmueble")
     private Collection<AreaComun> areasComunes = new ArrayList<>();
     
-    @OneToMany(mappedBy = "inmueble")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inmueble")
     private Collection<ReporteMensual> reportesMensuales = new ArrayList<>();
     
-    @OneToMany(mappedBy = "inmueble")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inmueble")
     private Collection<Reglamento> reglamentos = new ArrayList<>();
     
-    @OneToMany(mappedBy = "inmueble")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inmueble")
     private Collection<Comunicado> comunicados = new ArrayList<>();
     
-    @OneToMany(mappedBy = "inmueble")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inmueble")
     private Collection<CuotaDepartamento> cuotasDepartamento = new ArrayList<>();
 
     public void addAreaComun(final AreaComun areaComun) {

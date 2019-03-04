@@ -21,12 +21,14 @@ import mx.com.admoninmuebles.persistence.model.Comentario;
 import mx.com.admoninmuebles.persistence.model.DatosAdicionales;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Usuario;
+import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.AreaServicioRepository;
 import mx.com.admoninmuebles.persistence.repository.ComentarioRepository;
 import mx.com.admoninmuebles.persistence.repository.DatosAdicionalesRepository;
 import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
+import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
 @Service
 public class ProveedorServiceImpl implements ProveedorService {
@@ -46,6 +48,8 @@ public class ProveedorServiceImpl implements ProveedorService {
 	@Autowired
 	private DireccionRepository direccionRepository;
 	
+	@Autowired
+	private ZonaRepository zonaRepository;
 
 	@Autowired
 	private DatosAdicionalesRepository datosAdicionalesRepository;
@@ -75,6 +79,12 @@ public class ProveedorServiceImpl implements ProveedorService {
 		 Optional<Usuario> proveedor = usuarioRepository.findById(idProveedor);
 	     return modelMapper.map(proveedor.get(), ProveedorDto.class);
 	}
+	
+	private void addProveedorZona(Usuario proveedor, String codigoZona) {
+		 Zona zona = zonaRepository.findById( codigoZona ).get();
+		 zona.getProveedores().add(proveedor);
+		 zonaRepository.save(zona);
+	}
 
 	@Override
 	public ProveedorDto editar(ProveedorDto proveedorDto) {
@@ -88,59 +98,63 @@ public class ProveedorServiceImpl implements ProveedorService {
 
 	        usuario.setAreasServicio(areasServicio);
 	        
-	        if(proveedorDto.getApellidoMaterno() != null && !proveedorDto.getApellidoMaterno().isEmpty()) {
-	        	usuario.setApellidoMaterno(proveedorDto.getApellidoMaterno() );
-	        }
-	        if(proveedorDto.getApellidoPaterno() != null && !proveedorDto.getApellidoPaterno().isEmpty()) {
-	        	usuario.setApellidoPaterno(proveedorDto.getApellidoPaterno());
-	        }
+//	        if(proveedorDto.getApellidoMaterno() != null && !proveedorDto.getApellidoMaterno().isEmpty()) {
+//	        	usuario.setApellidoMaterno(proveedorDto.getApellidoMaterno() );
+//	        }
+//	        if(proveedorDto.getApellidoPaterno() != null && !proveedorDto.getApellidoPaterno().isEmpty()) {
+//	        	usuario.setApellidoPaterno(proveedorDto.getApellidoPaterno());
+//	        }
 	        if(proveedorDto.getCorreo() != null && !proveedorDto.getCorreo().isEmpty()) {
 	        	usuario.setCorreo(proveedorDto.getCorreo());
 	        }
 	        if(proveedorDto.getNombre() != null && !proveedorDto.getNombre().isEmpty()) {
 	        	usuario.setNombre(proveedorDto.getNombre());
 	        }
-	        if(proveedorDto.getFacebook() != null && !proveedorDto.getFacebook().isEmpty()) {
-	        	usuario.setFacebook(proveedorDto.getFacebook());
-	        }
+//	        if(proveedorDto.getFacebook() != null && !proveedorDto.getFacebook().isEmpty()) {
+//	        	usuario.setFacebook(proveedorDto.getFacebook());
+//	        }
 	        if(proveedorDto.getFotoUrl() != null && !proveedorDto.getFotoUrl().isEmpty()) {
 	        	usuario.setFotoUrl(proveedorDto.getFotoUrl());
 	        }
-	        if(proveedorDto.getGoogleMapsDir() != null && !proveedorDto.getGoogleMapsDir().isEmpty()) {
-	        	usuario.setGoogleMapsDir(proveedorDto.getGoogleMapsDir());
-	        }
-	        if( proveedorDto.getTwiter() != null && !proveedorDto.getTwiter().isEmpty()) {
-	        	usuario.setTwiter(proveedorDto.getTwiter());
-	        }
-	        if(proveedorDto.getYoutube() != null && !proveedorDto.getYoutube().isEmpty()) {
-	        	usuario.setYoutube(proveedorDto.getYoutube());
-	        }
+//	        if(proveedorDto.getGoogleMapsDir() != null && !proveedorDto.getGoogleMapsDir().isEmpty()) {
+//	        	usuario.setGoogleMapsDir(proveedorDto.getGoogleMapsDir());
+//	        }
+//	        if( proveedorDto.getTwiter() != null && !proveedorDto.getTwiter().isEmpty()) {
+//	        	usuario.setTwiter(proveedorDto.getTwiter());
+//	        }
+//	        if(proveedorDto.getYoutube() != null && !proveedorDto.getYoutube().isEmpty()) {
+//	        	usuario.setYoutube(proveedorDto.getYoutube());
+//	        }
 	        if(proveedorDto.getTelefonoAlternativo() != null && !proveedorDto.getTelefonoAlternativo().isEmpty()) {
 	        	usuario.setTelefonoAlternativo(proveedorDto.getTelefonoAlternativo());
 	        }
-	        if(proveedorDto.getTelefonoFijo() != null && !proveedorDto.getTelefonoFijo().isEmpty()) {
-	        	usuario.setTelefonoFijo(proveedorDto.getTelefonoFijo());
-	        }
-	        if(proveedorDto.getTelefonoMovil() != null && !proveedorDto.getTelefonoMovil().isEmpty()) {
-	        	usuario.setTelefonoMovil(proveedorDto.getTelefonoMovil());
-	        }
+//	        if(proveedorDto.getTelefonoFijo() != null && !proveedorDto.getTelefonoFijo().isEmpty()) {
+//	        	usuario.setTelefonoFijo(proveedorDto.getTelefonoFijo());
+//	        }
+//	        if(proveedorDto.getTelefonoMovil() != null && !proveedorDto.getTelefonoMovil().isEmpty()) {
+//	        	usuario.setTelefonoMovil(proveedorDto.getTelefonoMovil());
+//	        }
 	        if(proveedorDto.getTelefonoOficina() != null && !proveedorDto.getTelefonoOficina().isEmpty()) {
 	        	usuario.setTelefonoOficina(proveedorDto.getTelefonoOficina());
 	        }
-	        if(proveedorDto.getDatosDomicilio() != null && !proveedorDto.getDatosDomicilio().isEmpty()) {
-	        	usuario.setDatosDomicilio(proveedorDto.getDatosDomicilio());
-	        }
+//	        if(proveedorDto.getDatosDomicilio() != null && !proveedorDto.getDatosDomicilio().isEmpty()) {
+//	        	usuario.setDatosDomicilio(proveedorDto.getDatosDomicilio());
+//	        }
 	        
 			if(proveedorDto.getComentario() != null && !proveedorDto.getComentario().trim().isEmpty()) {
 				comentarioRepository.save(new Comentario(proveedorDto.getComentario(), usuario));
 			}
 			
+			
 			DatosAdicionales datosAdicionales = modelMapper.map(proveedorDto, Usuario.class).getDatosAdicionales();
 			usuario.setDatosAdicionales(datosAdicionalesRepository.save(datosAdicionales));
 			
-			usuario.setDireccion(direccionRepository.save(modelMapper.map(proveedorDto, Usuario.class).getDireccion()));
+//			usuario.setDireccion(direccionRepository.save(modelMapper.map(proveedorDto, Usuario.class).getDireccion()));
 	        
 	        Usuario usuarioActualizado = usuarioRepository.save(usuario);
+	        if(proveedorDto.getZonaSeleccionado() != null && !proveedorDto.getZonaSeleccionado().trim().isEmpty()) {
+	        	zonaRepository.updateZonaProveedor(proveedorDto.getZonaSeleccionado(), usuarioActualizado.getId());
+	        }
 	        return modelMapper.map(usuarioActualizado, ProveedorDto.class);
 	}
 	
@@ -163,10 +177,12 @@ public class ProveedorServiceImpl implements ProveedorService {
 
 		proveedor.setAreasServicio(areasServicio);
 		proveedor.setRoles(rolProveedor);
-		proveedor.setDireccion(direccionRepository.save(proveedor.getDireccion()));
+//		proveedor.setDireccion(direccionRepository.save(proveedor.getDireccion()));
 		proveedor.setDatosAdicionales(datosAdicionalesRepository.save(proveedor.getDatosAdicionales()));
 		
 		Usuario proveedorCreado = usuarioRepository.save(proveedor);
+		
+		addProveedorZona(proveedorCreado, proveedorDto.getZonaSeleccionado());
 		
 		if(proveedorDto.getComentario() != null && !proveedorDto.getComentario().trim().isEmpty()) {
 			comentarioRepository.save(new Comentario(proveedorDto.getComentario(), proveedorCreado));

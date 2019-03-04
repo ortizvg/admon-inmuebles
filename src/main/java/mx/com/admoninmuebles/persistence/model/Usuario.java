@@ -138,11 +138,11 @@ public class Usuario extends EntidadBase {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Collection<Rol> roles;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "id_datos_adicionales_fk", nullable = true)
     private DatosAdicionales datosAdicionales;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "id_direccion_fk", nullable = true)
     private Direccion direccion;
     
@@ -167,10 +167,13 @@ public class Usuario extends EntidadBase {
                inverseJoinColumns = @JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio"))
     private Collection<AreaServicio> areasServicio = new HashSet<>();
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.REMOVE , mappedBy = "usuario")
     private Collection<Pago> pagos;
     
-    @OneToMany(mappedBy = "socio")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socio")
+    private Collection<Reservacion> reservaciones;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socio")
     private Collection<EstadoCuenta> estadosCuenta = new ArrayList<>();
 
     public void addAreaServicio(final AreaServicio areaServicio) {

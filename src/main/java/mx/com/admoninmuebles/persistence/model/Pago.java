@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,8 +19,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -110,7 +106,7 @@ public class Pago extends EntidadBase {
     @JoinColumn(name = "id_usuario_verificador", referencedColumnName = "id_usuario", nullable = true)
     private Usuario usuarioVerificador;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "id_archivo", referencedColumnName = "id_archivo", nullable = true)
     private Archivo comprobantePago;
     

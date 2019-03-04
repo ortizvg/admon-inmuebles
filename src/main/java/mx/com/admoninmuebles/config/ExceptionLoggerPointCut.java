@@ -15,7 +15,12 @@ public class ExceptionLoggerPointCut {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@AfterThrowing(pointcut="execution(* mx.com.admoninmuebles.controller.*.*(..))", throwing="exception")
-	public void logException(JoinPoint joinPoint, Exception exception) {
+	public void logControllerException(JoinPoint joinPoint, Exception exception) {
+		logger.error( ExceptionUtils.getStackTrace( exception ) );
+	}
+	
+	@AfterThrowing(pointcut="execution(* mx.com.admoninmuebles.service.*.*(..))", throwing="exception")
+	public void logServiceException(JoinPoint joinPoint, Exception exception) {
 		logger.error( ExceptionUtils.getStackTrace( exception ) );
 	}
 

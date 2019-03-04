@@ -28,7 +28,7 @@ public class DatosAdicionales extends EntidadBase {
     @Column(length = 200, nullable = true)
     private String nombreRepresentante;
 
-    @NotNull
+//    @NotNull
     @Size(max = 200)
     @Column(length = 200, nullable = true)
     private String razonSocial;
@@ -45,8 +45,8 @@ public class DatosAdicionales extends EntidadBase {
     @Column(length = 100, nullable = true)
     private String correo;
 
-    @Size(max = 50)
-    @Column(length = 50, nullable = true)
+    @Size(max = 100)
+    @Column(length = 100, nullable = true)
     private String numeroCuenta;
 
 }

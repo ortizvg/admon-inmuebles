@@ -10,6 +10,7 @@ import javax.ws.rs.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.dto.ZonaDto;
 import mx.com.admoninmuebles.persistence.model.Zona;
@@ -48,9 +49,18 @@ public class ZonaServiceImpl implements ZonaService {
         
     }
 
+    @Transactional
     @Override
     public void deleteById(final String codigo) {
-    	findById( codigo );
+    	Optional<Zona> zona = zonaRepository.findById(codigo);
+        if( !zona.isPresent() ) {
+        	//TODO Hacer algo
+        }
+        
+        zona.get().getAsentamientos().stream().forEach( asentamiento -> {
+        	coloniaService.deleteById( asentamiento.getId() );
+        });
+        
         zonaRepository.deleteById(codigo);
 
     }
@@ -69,6 +79,16 @@ public class ZonaServiceImpl implements ZonaService {
 	@Override
 	public Collection<ZonaDto> findByAdministradoresBiId(Long id) {
 		return StreamSupport.stream(zonaRepository.findByAdministradoresBiId(id).spliterator(), false).map(zona -> modelMapper.map(zona, ZonaDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public ZonaDto findByProveedorId(Long id) {
+		  Optional<Zona> zona = zonaRepository.findByProveedorId(id);
+	        if( zona.isPresent() ) {
+	        	return modelMapper.map(zona.get(), ZonaDto.class);
+	        }
+	        
+	        throw new NotFoundException();
 	}
 	
 //    @Override

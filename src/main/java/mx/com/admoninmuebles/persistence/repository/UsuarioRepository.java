@@ -54,7 +54,6 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     		"    inner join gescopls.inmuebles i on d.id_direccion = i.id_direccion_fk\r\n" + 
     		"    inner join gescopls.inmuebles_socios inso on i.id_inmueble = inso.inmueble_id_inmueble\r\n" + 
     		"    inner join gescopls.usuarios s on inso.socios_id_usuario = s.id_usuario\r\n" + 
-    		"    inner join gescopls.pagos p on s.id_usuario = p.id_usuario\r\n" + 
     		"    where az.id_usuario = ?1", 
 			nativeQuery = true)
     Collection<Usuario> findSociosByAdminZonaId(Long id);

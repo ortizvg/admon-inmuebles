@@ -48,7 +48,7 @@ public class Reservacion extends EntidadBase {
     @JoinColumn(name = "id_socio_fk")
     private Usuario socio;
     
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "id_pago_fk")
     private Pago pago;
 

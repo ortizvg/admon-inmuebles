@@ -273,13 +273,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void deleteById(final Long idUsuario) {
-        Optional<Usuario> usuarioOptional = userRepository.findById(idUsuario);
-
-        if (!usuarioOptional.isPresent()) {
-            throw new BusinessException("usuario.error.noencontrado");
-        }
-
-        userRepository.deleteById(idUsuario);
+		Optional<Usuario> usuarioOptional = userRepository.findById(idUsuario);
+		
+		if (!usuarioOptional.isPresent()) {
+			throw new BusinessException("usuario.error.noencontrado");
+		}
+		
+		userRepository.deleteById(idUsuario);
 
     }
 

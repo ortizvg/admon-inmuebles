@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -28,7 +27,7 @@ public abstract class EntidadBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @LastModifiedBy
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_modificado_por_fk")
     private Usuario modificadoPor;
 
@@ -38,7 +37,7 @@ public abstract class EntidadBase implements Serializable {
     private Date fechaModificacion;
     
     @CreatedBy
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_creado_por_fk", updatable = false )
     private Usuario creadoPor;
     

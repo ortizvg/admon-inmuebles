@@ -26,7 +26,7 @@ public class UsuarioDto {
     @Size(min = 1, max = 100)
     private String nombre;
 
-    @NotNull
+//    @NotNull
     @Size(max = 100)
     private String apellidoPaterno;
 

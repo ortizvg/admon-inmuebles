@@ -17,8 +17,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.NaturalId;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -54,7 +52,7 @@ public class AreaComun extends EntidadBase {
     @JoinColumn(name = "id_inmueble_fk")
     private Inmueble inmueble;
 
-    @OneToMany(mappedBy = "areaComun")
+    @OneToMany(mappedBy = "areaComun", orphanRemoval = true)
     private List<Reservacion> reservaciones = new ArrayList<>();
 
     public void addReservacion(final Reservacion reservacion) {
