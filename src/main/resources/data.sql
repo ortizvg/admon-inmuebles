@@ -125,7 +125,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (36,'2019-02-27 20:51:40','2019-02-27 20:51:40',_binary '','','Corporativo','$2a$10$iRoO/dhcQ6wFuv0d79M4zu2aSWUuhYBAe3Lxt.y5XdqDpxBKBJnq.','correo@gmail.com',NULL,NULL,100.29,_binary '\0',_binary '\0',_binary '\0','343242453556464',NULL,NULL,NULL,NULL,NULL,'Administrador','123456',NULL,NULL,NULL,NULL,NULL,'admin_corp',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `usuarios` VALUES (36,'2019-02-27 20:51:40','2019-02-27 20:51:40',_binary '\0','','Corporativo','$2a$10$iRoO/dhcQ6wFuv0d79M4zu2aSWUuhYBAe3Lxt.y5XdqDpxBKBJnq.','correo@gmail.com',NULL,NULL,100.29,_binary '\0',_binary '\0',_binary '\0','343242453556464',NULL,NULL,NULL,NULL,NULL,'Administrador','123456',NULL,NULL,NULL,NULL,NULL,'admin_corp',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 

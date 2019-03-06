@@ -17,11 +17,14 @@ public interface ZonaService {
 	
 	Collection<ZonaDto> findByAdministradoresBiId(Long id);
 	
+	ZonaDto findByAdministradorBiId(Long id);
+	
 	ZonaDto findByProveedorId(Long id);
 
 	void deleteById(String codigo);
+	
+	void deleteByAdminZonaId(Long id);
 
 	boolean exist(String codigo);
 	
-//	ZonaDto findByAdministradorBiId(final Long id);
 }

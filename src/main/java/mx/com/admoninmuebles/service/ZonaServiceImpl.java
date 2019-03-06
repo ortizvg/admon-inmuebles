@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.NotFoundException;
 
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.dto.ZonaDto;
+import mx.com.admoninmuebles.persistence.model.Asentamiento;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
@@ -21,7 +23,7 @@ public class ZonaServiceImpl implements ZonaService {
 
     @Autowired
     private ZonaRepository zonaRepository;
-
+    
     @Autowired
     private ModelMapper modelMapper;
     
@@ -52,14 +54,13 @@ public class ZonaServiceImpl implements ZonaService {
     @Transactional
     @Override
     public void deleteById(final String codigo) {
-    	Optional<Zona> zona = zonaRepository.findById(codigo);
-        if( !zona.isPresent() ) {
-        	//TODO Hacer algo
+    	Optional<Zona> zonaOpt = zonaRepository.findById(codigo);
+        if( !zonaOpt.isPresent() ) {
+        	throw new EntityNotFoundException();
         }
         
-        zona.get().getAsentamientos().stream().forEach( asentamiento -> {
-        	coloniaService.deleteById( asentamiento.getId() );
-        });
+        Zona zona = zonaOpt.get();
+        deleteAsentamientos( zona.getAsentamientos() );
         
         zonaRepository.deleteById(codigo);
 
@@ -90,11 +91,34 @@ public class ZonaServiceImpl implements ZonaService {
 	        
 	        throw new NotFoundException();
 	}
+
+	@Override
+	public ZonaDto findByAdministradorBiId(Long id) {
+		 Optional<Zona> zona = zonaRepository.findByProveedorId(id);
+	        if( zona.isPresent() ) {
+	        	return modelMapper.map(zona.get(), ZonaDto.class);
+	        }
+	        
+	        return null;
+//	        throw new NotFoundException();
+	}
 	
-//    @Override
-//    public ZonaDto findByAdministradorBiId(final Long id) {
-//        Zona zona = zonaRepository.findByAdministradorBiId(id);
-//        return modelMapper.map(zona, ZonaDto.class);
-//    }
+	private void deleteAsentamientos(Collection<Asentamiento> asentamientos) {
+		if( !asentamientos.isEmpty() ) {
+			
+			asentamientos.stream().forEach( asentamiento -> {
+		        	coloniaService.deleteById( asentamiento.getId() );
+		     });
+		}
+	}
+
+	@Override
+	public void deleteByAdminZonaId(Long id) {
+		Collection<Zona> zonas = zonaRepository.findByAdminZonaId(id);
+		if( !zonas.isEmpty() ) {
+			zonas.forEach( zona -> deleteById( zona.getCodigo() ));
+		}
+		
+	}
 
 }

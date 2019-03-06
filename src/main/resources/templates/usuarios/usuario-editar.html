@@ -21,7 +21,7 @@ $(document).ready(function() {
   addControlState(document.getElementById('divApellidoPaterno'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divApellidoMaterno'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divRol'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divZona'),/*[[#{campo.requerido}]]*/);
+  addControlState(document.getElementById('divZona'));
   
   showAndHideZona();
 });
@@ -149,7 +149,7 @@ function showAndHideZona() {
 		                                 <div id="divZona"  th:class="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
 	                                		   <div class="col-md-12 m-b-20">
 									              <label class="form-control-label" th:text="#{colonia.zona}"></label>
-									              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}" required >
+									              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}"  >
 									                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 									                <option th:each="zona : ${session.zonasDto}" 
 									                		th:selected="${usuarioDto.zonaSeleccionado}"

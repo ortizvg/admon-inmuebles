@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -146,6 +147,8 @@ public class ContadorController {
     		usuarioService.deleteById(id);
     	} catch (BusinessException e) {
     		return "error/404";
+		} catch (DataIntegrityViolationException e) {
+    		return "error/403";
 		}
         return "redirect:/contadores";
     }

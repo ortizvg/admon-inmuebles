@@ -37,5 +37,8 @@ public class MensajeContactoEstatus implements Serializable{
     @Column(length = 100, nullable = false)
     private String idioma;
     
+    @NotNull
+    private boolean activo;
+    
 
 }

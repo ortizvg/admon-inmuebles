@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -81,9 +80,6 @@ public class UsuarioController {
 	@Autowired
 	private NotificacionService notificacionService;
     
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
-
     @GetMapping(value = "/crearUsuario")
     public String showForm(final UsuarioDto userDto) {
         return "crearUsuario";
@@ -193,8 +189,8 @@ public class UsuarioController {
     	
     	RolDto rol = rolService.findById( usuarioDto.getRolSeleccionado() );
     	if( RolConst.ROLE_ADMIN_BI.equalsIgnoreCase(rol.getNombre()) ) {
-    		ZonaDto zona = zonaService.findByAdministradoresBiId( usuarioDto.getId() ).stream().findFirst().get();
-    		usuarioDto.setZonaSeleccionado( zona.getCodigo() );
+    		ZonaDto zona = zonaService.findByAdministradorBiId( usuarioDto.getId() );
+    		usuarioDto.setZonaSeleccionado( zona == null ? null : zona.getCodigo() );
     	}
     	
     	if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
@@ -231,7 +227,7 @@ public class UsuarioController {
     public String eliminar(final @PathVariable Long idUsuario, final Model model) {
     	Long adminCorpLogueadoId = SecurityUtils.getCurrentUserId().get();
     	UsuarioDto usuarioDto = null;
-    	if(idUsuario != null && adminCorpLogueadoId != idUsuario ) {
+    	if(idUsuario != null && adminCorpLogueadoId == idUsuario ) {
     		return "error/403";
     	}
 		try {

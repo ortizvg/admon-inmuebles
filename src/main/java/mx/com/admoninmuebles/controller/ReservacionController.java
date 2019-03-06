@@ -123,8 +123,8 @@ public class ReservacionController {
     @PostMapping(value = "/reservaciones/reserva-area/crear")
     public String reservarReservacion(final HttpSession session, final ReservacionDto reservacionDto, final Locale locale, RedirectAttributes redirect) {
     	session.setAttribute("locale", locale.getLanguage());
-    	Optional<Long> optUserId = SecurityUtils.getCurrentUserId();
-    	reservacionDto.setSocioId(SecurityUtils.getCurrentUserId().get());
+    	Long optUserId = SecurityUtils.getCurrentUserId().get();
+    	reservacionDto.setSocioId( optUserId );
     	reservacionDto.setAreaComunId((Long) session.getAttribute("areaComunId"));
 		
     	try {
@@ -139,7 +139,7 @@ public class ReservacionController {
 		TipoPago tipoPagoReservaAreaComun = tipoPagoRepository.findByNameAndLang( TipoPago.RESERVA, locale.getLanguage() );
     	
     	PagoDto pagoDto = new PagoDto();
-    	pagoDto.setUsuarioId(optUserId.get());
+    	pagoDto.setUsuarioId( optUserId );
     	pagoDto.setTipoPagoId(tipoPagoReservaAreaComun.getId());
     	pagoDto.setMonto(areaComunDto.getCuotaPorDia());
     	pagoDto.setConcepto(reservacionDto.getTitle());

@@ -95,7 +95,9 @@ public class EstadoCuentaController {
 			estadoCuenta.setArchivoBytes(estadoCuenta.getArchivoMP().getBytes());
 			estadoCuenta.setArchivoNombre(estadoCuenta.getArchivoMP().getOriginalFilename());
 			estadoCuenta.setArchivoTipoContenido(estadoCuenta.getArchivoMP().getContentType());
+			logger.info("estadoCuenta.getSocioId() " + estadoCuenta.getSocioId());
 			if( estadoCuenta.getSocioId() == null ) {
+				logger.info("Guadando por inmueble");
 				estadoCuentaService.guardarPorInmueble(estadoCuenta);
 			} else {
 				estadoCuentaService.guardar(estadoCuenta);

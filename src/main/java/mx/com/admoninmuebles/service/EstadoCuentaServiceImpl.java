@@ -9,12 +9,15 @@ import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import mx.com.admoninmuebles.constant.ComunConst;
+import mx.com.admoninmuebles.controller.EstadoCuentaController;
 import mx.com.admoninmuebles.dto.EstadoCuentaDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
@@ -26,6 +29,8 @@ import mx.com.admoninmuebles.persistence.repository.EstadoCuentaRepository;
 @Service
 @Transactional
 public class EstadoCuentaServiceImpl implements EstadoCuentaService{
+	
+	Logger logger = LoggerFactory.getLogger(EstadoCuentaServiceImpl.class);
 	
 	@Autowired
 	private EstadoCuentaRepository estadoCuentaRepository;
@@ -69,10 +74,11 @@ public class EstadoCuentaServiceImpl implements EstadoCuentaService{
 		return modelMapper.map(estadoCuenta, EstadoCuentaDto.class);
 	}
 	
+	@Transactional
 	@Async
 	@Override
 	public void guardarPorInmueble(EstadoCuentaDto estadoCuentaDto) {
-		
+		logger.info("Guardando por inmueble id: " + estadoCuentaDto.getInmuebleId());
 		Collection<UsuarioDto> socios = inmuebleService.findSociosActivosByInmuebleId( estadoCuentaDto.getInmuebleId() );
 		socios.stream().forEach(socio -> {
 			estadoCuentaDto.setSocioId(socio.getId());

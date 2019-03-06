@@ -108,7 +108,6 @@ public class ReservacionServiceImpl implements ReservacionService {
 		
 	}
 	
-	@Async
 	@Scheduled(cron = "${reservas.nopagadas.borrado.cron.expresion}")
 	@Override
 	public void deleteNoPaidReservations() {

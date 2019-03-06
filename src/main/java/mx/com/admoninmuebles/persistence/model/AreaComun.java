@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,7 +53,7 @@ public class AreaComun extends EntidadBase {
     @JoinColumn(name = "id_inmueble_fk")
     private Inmueble inmueble;
 
-    @OneToMany(mappedBy = "areaComun", orphanRemoval = true)
+    @OneToMany(mappedBy = "areaComun", cascade = CascadeType.ALL)
     private List<Reservacion> reservaciones = new ArrayList<>();
 
     public void addReservacion(final Reservacion reservacion) {

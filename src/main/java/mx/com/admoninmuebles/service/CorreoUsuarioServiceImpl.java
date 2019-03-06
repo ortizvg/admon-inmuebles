@@ -3,10 +3,12 @@ package mx.com.admoninmuebles.service;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.PlantillaCorreoConst;
 import mx.com.admoninmuebles.dto.CorreoDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
@@ -28,12 +30,14 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 	@Autowired
     private ActivacionUsuarioService activacionUsuarioService;
 	
-	
 	@Autowired
 	private CorreoService correoService;
 	
     @Autowired
     private Environment env;
+    
+    @Autowired
+    private MessageSource messages;
 
 	@Override
 	public void enviarActivacion( final UsuarioDto usuarioDto, final String urlContext ) {
@@ -41,12 +45,12 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 		
 		Context datosPlantilla = new Context();
 		datosPlantilla.setVariable( PARAMETRO_CORREO_URL_ACTIVACION, urlActiacion );
-		datosPlantilla.setVariable( "nombre", usuarioDto.getNombre() );
+		datosPlantilla.setVariable( "nombre", usuarioDto.getUsername() );
 		
 		CorreoDto correoDto = new CorreoDto();
 		correoDto.setDe( env.getProperty( PROPIEDAD_CORREO_USUARIOS_DE ) );
-//		correoDto.setAsunto( env.getProperty( PROPIEDAD_CUENTA_ACTIVACION_ASUNTO ) );
-		correoDto.setAsunto( "Activación de cuenta" );
+		correoDto.setAsunto(messages.getMessage(PROPIEDAD_CUENTA_ACTIVACION_ASUNTO , null, LocaleConst.LOCALE_MX ) );
+//		correoDto.setAsunto( "Activación de cuenta" );
 		correoDto.setPlantilla( PlantillaCorreoConst.ACTIVACION_CUENTA );
 		correoDto.setPara(usuarioDto.getCorreo());
 		correoDto.setDatosPlantilla( datosPlantilla );
@@ -60,11 +64,12 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 		
 		Context datosPlantilla = new Context();
 		datosPlantilla.setVariable( PARAMETRO_CORREO_URL_RECUPERACION_CONTRASENIA, urlRecuperacionContrasenia );
+		datosPlantilla.setVariable( "nombre", usuarioDto.getUsername() );
 		
 		CorreoDto correoDto = new CorreoDto();
 		correoDto.setDe( env.getProperty( PROPIEDAD_CORREO_USUARIOS_DE ) );
-//		correoDto.setAsunto( env.getProperty( PROPIEDAD_CUENTA_RECUPERACION_CONTRASENIA_ASUNTO ) );
-		correoDto.setAsunto( "Recuperacion de contraseña" );
+		correoDto.setAsunto(messages.getMessage(PROPIEDAD_CUENTA_RECUPERACION_CONTRASENIA_ASUNTO , null, LocaleConst.LOCALE_MX ) );
+//		correoDto.setAsunto( "Recuperacion de contraseña" );
 		correoDto.setPlantilla( PlantillaCorreoConst.RECUPERA_CONTRASENIA );
 		correoDto.setPara(usuarioDto.getCorreo());
 		correoDto.setDatosPlantilla( datosPlantilla );

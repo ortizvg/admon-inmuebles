@@ -138,10 +138,10 @@ public class NotificacionServiceImpl implements NotificacionService {
 				.collect(Collectors.toList());
 	}
 
+	@Transactional
 	@Async
 	@Override
 	public void notificarUsuario(NotificacionDto notificacionDto) {
-		
 		try {
 			save(notificacionDto);
 			

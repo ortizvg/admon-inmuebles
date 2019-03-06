@@ -12,9 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.dto.ColoniaDto;
 import mx.com.admoninmuebles.persistence.model.Asentamiento;
+import mx.com.admoninmuebles.persistence.model.Inmueble;
 import mx.com.admoninmuebles.persistence.model.Zona;
 import mx.com.admoninmuebles.persistence.repository.AsentamientoRepository;
-import mx.com.admoninmuebles.persistence.repository.DireccionRepository;
+import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.ZonaRepository;
 
 @Service
@@ -27,10 +28,10 @@ public class ColoniaServiceImpl implements ColoniaService {
     private ModelMapper modelMapper;
     
     @Autowired
-    private DireccionRepository direccionRepository;
+    private ZonaRepository zonaRepository;
     
     @Autowired
-    private ZonaRepository zonaRepository;
+    private InmuebleRepository inmuebleRepository;
 
     @Override
     public void save(final ColoniaDto coloniaDto) {
@@ -52,7 +53,12 @@ public class ColoniaServiceImpl implements ColoniaService {
         Asentamiento asentamiento;
         if (optAsentamiento.isPresent()) {
         	asentamiento = optAsentamiento.get();
-        	direccionRepository.deleteAll( asentamiento.getDirecciones() );
+        	
+        	Collection<Inmueble> inmuebles = inmuebleRepository.findByDireccionAsentamientoId( asentamiento.getId() );
+        	if( !inmuebles.isEmpty() ) {
+        		inmuebleRepository.deleteAll( inmuebles );
+        	}
+        	
             asentamiento.setZona(null);
             asentamientoRepository.save(asentamiento);
         }

@@ -205,4 +205,13 @@ public class InmuebleServiceImpl implements InmuebleService {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public void deleteByAdminBiId(Long id) {
+		Collection<Inmueble> inmuebles = inmuebleRepository.findByAdminBiId(id);
+		if( !inmuebles.isEmpty() ) {
+			inmuebles.forEach(inmueble -> deleteById( inmueble.getId() ));
+		}
+		
+	}
+
 }

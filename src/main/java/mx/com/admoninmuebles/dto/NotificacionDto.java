@@ -11,7 +11,9 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.validation.ComparacionFechas;
 
@@ -55,10 +57,15 @@ public class NotificacionDto {
     
     private Date fechaCreacion;
     
-    private Long creadoPorId;
-    private String creadoPorNombre;
-    private String creadoPorApellidoPaterno;
-    private String creadoPorApellidoMaterno;
+//    private Long creadoPorId;
+//    @Setter(AccessLevel.NONE)
+//    private String creadoPorNombre;
+//    @Setter(AccessLevel.NONE)
+//    private String creadoPorApellidoPaterno;
+//    @Setter(AccessLevel.NONE)
+//    private String creadoPorApellidoMaterno;
+    
+    
     
     public String getSocio() {
     	if(usuarioId == null) {
@@ -67,12 +74,12 @@ public class NotificacionDto {
     	return this.usuarioNombre + " " + this.usuarioApellidoPaterno + " " + this.usuarioApellidoMaterno;
     }
     
-    public String getCreadoPor() {
-    	if(creadoPorId == null) {
-    		return ComunConst.USUARIO_SISTEMA;
-    	}
-    	return this.creadoPorNombre + " " + this.creadoPorApellidoPaterno + " " + this.creadoPorApellidoMaterno;
-    }
+//    public String getCreadoPor() {
+//    	if(creadoPorNombre == null) {
+//    		return ComunConst.USUARIO_SISTEMA;
+//    	}
+//    	return this.creadoPorNombre + " " + this.creadoPorApellidoPaterno + " " + this.creadoPorApellidoMaterno;
+//    }
     
 
 }

@@ -41,4 +41,6 @@ public interface InmuebleService {
     void addSocio2Inmueble(final UsuarioDto usuarioDto, final Long inmuebleId);
     
     InmuebleDto findBySocioId(final Long id);
+    
+    void deleteByAdminBiId(Long id);
 }

@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CambioContraseniaDto;
+import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
@@ -58,14 +61,17 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private TipoSocioRepository tipoSocioRepository;
     
-	@Autowired
-	private InmuebleService inmuebleService;
-	
     @Autowired
     private CorreoUsuarioService correoUsuarioService;
+    
+    @Autowired
+    private ZonaService zonaService;
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    private InmuebleService inmuebleService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -109,7 +115,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDto editarCuenta(final UsuarioDto userDto) {
-//        Usuario usuario = modelMapper.map(userDto, Usuario.class);
         Optional<Usuario> usuarioOptional = userRepository.findById(userDto.getId());
         Usuario usuario = usuarioOptional.get();
 
@@ -131,11 +136,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuario.setCorreoAlternativo1(userDto.getCorreoAlternativo1());
         }
         
-        logger.info("userDto.getCorreoAlternativo2(): " + userDto.getCorreoAlternativo2());
         if (userDto.getCorreoAlternativo2() != null && !userDto.getCorreoAlternativo2().isEmpty()) {
             usuario.setCorreoAlternativo2(userDto.getCorreoAlternativo2());
         }
-        logger.info("userDto.getTipoSocioId(): " + userDto.getTipoSocioId());
         if (userDto.getTipoSocioId() != null) {
             usuario.setTipoSocio(tipoSocioRepository.findById(userDto.getTipoSocioId()).get());
         }
@@ -184,12 +187,15 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuarioActualizado = userRepository.save(usuario);
         
         if( RolConst.ROLE_ADMIN_BI.equals(usuarioActualizado.getRoles().stream().findFirst().get().getNombre() ) ) {
-        	Optional<Zona> zonaOpt = zonaRepository.findById(userDto.getZonaSeleccionado());
-        	if( zonaOpt.isPresent() && !zonaOpt.get().getCodigo().equals(userDto.getZonaSeleccionado()) ) {
-        		Zona zona = zonaOpt.get();
+        	 Optional<Zona> zonaOpt = zonaRepository.findByAdministradorBiId( userDto.getId() );
+        	if( userDto.getZonaSeleccionado() != null &&  StringUtils.isNotBlank( userDto.getZonaSeleccionado() ) && zonaOpt.isPresent() ) {
+        		zonaRepository.updateZonaAdministradoresBi( userDto.getZonaSeleccionado() , userDto.getId() );
+        	}
+        	
+        	if(userDto.getZonaSeleccionado() != null &&  StringUtils.isNotBlank( userDto.getZonaSeleccionado() ) && !zonaOpt.isPresent() ) {
+        		Zona zona = zonaRepository.findById( userDto.getZonaSeleccionado() ).get();
         		zona.addAdminBi(usuarioActualizado);
         		zonaRepository.save(zona);
-        		
         	}
         }
         
@@ -271,12 +277,29 @@ public class UsuarioServiceImpl implements UsuarioService {
         return modelMapper.map(usuarioOptional.get(), UsuarioDto.class);
     }
 
+    @Transactional
     @Override
     public void deleteById(final Long idUsuario) {
 		Optional<Usuario> usuarioOptional = userRepository.findById(idUsuario);
+		Rol rolUsuarioEliminar = rolRepository.findByUserId( idUsuario ).get() ;
 		
 		if (!usuarioOptional.isPresent()) {
 			throw new BusinessException("usuario.error.noencontrado");
+		}
+		
+		if( RolConst.ROLE_CONTADOR.equals( rolUsuarioEliminar.getNombre()  ) ) {
+			Collection<InmuebleDto> inmuebles = inmuebleService.findByContadorId( idUsuario );
+			if( !inmuebles.isEmpty() ) {
+				throw new DataIntegrityViolationException("exception.data.integrity.violation");
+			}
+		}
+		
+		if( RolConst.ROLE_ADMIN_ZONA.equals( rolUsuarioEliminar.getNombre() ) ) {
+			zonaService.deleteByAdminZonaId( idUsuario );
+		}
+		
+		if( RolConst.ROLE_ADMIN_BI.equals( rolUsuarioEliminar.getNombre() ) ) {
+			inmuebleService.deleteByAdminBiId( idUsuario );
 		}
 		
 		userRepository.deleteById(idUsuario);
@@ -341,7 +364,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Collection<UsuarioDto> findAllAdministradores() {
         List<Rol> roles = StreamSupport.stream(rolRepository.findAll().spliterator(), false)
-//                .filter(rol ->  (RolConst.ROLE_ADMIN_BI.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_ZONA.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_CORP.equals(rol.getNombre())))
                 .filter(rol ->  (RolConst.ROLE_ADMIN_BI.equals(rol.getNombre()) || RolConst.ROLE_ADMIN_ZONA.equals(rol.getNombre()) ))
                 .collect(Collectors.toList());
 

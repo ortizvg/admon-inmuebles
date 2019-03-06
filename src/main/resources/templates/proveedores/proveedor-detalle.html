@@ -95,7 +95,7 @@
                                                 <br>
                                                 <p class="text-muted" th:text="${proveedorDto.correo}"></p>
                                             </div>
-                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.activo}"></strong>
+                                            <div class="col-md-3 col-xs-6 b-r"> <strong th:text="#{usuario.estatus.activo}"></strong>
                                                 <br>
                                                  <div th:switch="${proveedorDto.activo}"> 
                                                   <p th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></p>

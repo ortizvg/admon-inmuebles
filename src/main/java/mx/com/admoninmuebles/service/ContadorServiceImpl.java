@@ -8,7 +8,6 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +17,7 @@ import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Rol;
 import mx.com.admoninmuebles.persistence.model.Usuario;
+import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 import mx.com.admoninmuebles.persistence.repository.RolRepository;
 import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 
@@ -29,12 +29,9 @@ public class ContadorServiceImpl implements ContadorService {
 	
 	@Autowired UsuarioService usuarioService;
 	
-	@Autowired
-    private UsuarioRepository userRepository;
-    
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    private InmuebleRepository inmuebleRepository;
+    
     @Autowired
     private RolRepository rolRepository;
 
@@ -42,7 +39,13 @@ public class ContadorServiceImpl implements ContadorService {
     private ModelMapper modelMapper;
 	
 	public Collection<UsuarioDto> buscarTodos() {
-		 return StreamSupport.stream(usuarioRepository.findByRolesNombre(RolConst.ROLE_CONTADOR) .spliterator(), false).map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());
+		 return StreamSupport.stream(usuarioRepository.findByRolesNombre(RolConst.ROLE_CONTADOR) .spliterator(), false)
+				 .map(usuario -> {
+					 UsuarioDto contadorDto = modelMapper.map(usuario, UsuarioDto.class);
+					 contadorDto.setContadorNumeroInmuebles(inmuebleRepository.countByContadorId( usuario.getId() ));
+					 return contadorDto;
+					 })
+				 .collect( Collectors.toList() );
 	}
 
 	@Override

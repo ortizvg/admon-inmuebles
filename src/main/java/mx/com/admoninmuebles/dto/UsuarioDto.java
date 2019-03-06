@@ -113,6 +113,8 @@ public class UsuarioDto {
     private String tipoSocioName;
     private String tipoSocioDescripction;
     
+    private Long contadorNumeroInmuebles;
+    
 
     public String getNombreCompleto() {
         return String.format("%s %s %s", nombre, apellidoPaterno, apellidoMaterno);

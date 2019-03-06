@@ -92,7 +92,7 @@
 	                                                    	<a th:href="${'/contadores/'  + usuario.id + '/detalle'}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-search text-inverse m-r-10" aria-hidden="true"></i></a> 
 	                                                    	<a th:href="${'/contadores/'  + usuario.id + '/edicion'}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
 <!-- 	                                                    	<a th:if="${usuario.username != #authentication.principal.username}" th:href="${'/usuarios/eliminar/'  + usuario.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a> -->
-	                                                    	<a th:if="${usuario.username != #authentication.principal.username}" th:attr="data-id=${usuario.id}" th:attrappend="data-nombre=${usuario.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i class="fa fa-close text-danger" aria-hidden="true"></i></a>
+	                                                    	<a th:if="${usuario.username != #authentication.principal.username && usuario.contadorNumeroInmuebles == 0}" th:attr="data-id=${usuario.id}" th:attrappend="data-nombre=${usuario.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i class="fa fa-close text-danger" aria-hidden="true"></i></a>
 	                                                    </td>
 	                                                </tr>
                                                </th:block>

@@ -18,5 +18,11 @@ public interface RolRepository extends CrudRepository<Rol, Long> {
     
     @Query( "select o from Rol o where nombre in :nombres" )
     Collection<Rol> findByNombres(@Param("nombres")List<String> nombres);
+    
+    @Query(value = "SELECT * FROM gescopls.roles r\r\n" + 
+    		"	join gescopls.usuarios_roles ur on r.id_rol = ur.roles_id_rol\r\n" + 
+    		"	where ur.usuarios_id_usuario = ?1", 
+			nativeQuery = true)
+    Optional<Rol> findByUserId(Long userId );
 
 }

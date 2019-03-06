@@ -1,5 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,7 +49,9 @@ public class Reservacion extends EntidadBase {
     @JoinColumn(name = "id_socio_fk")
     private Usuario socio;
     
-    @OneToOne(orphanRemoval = true)
+//    @OneToOne(orphanRemoval = true)
+//    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "id_pago_fk")
     private Pago pago;
 
