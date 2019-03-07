@@ -9,5 +9,7 @@ import mx.com.admoninmuebles.persistence.model.EstatusPago;
 public interface EstatusPagoRepository   extends CrudRepository<EstatusPago, Long> {
 	
 	EstatusPago findByNameAndLang(final String name,final String lang);
+	
+	EstatusPago findByNameAndLangAndActivo(final String name,final String lang, final boolean activo);
 
 }

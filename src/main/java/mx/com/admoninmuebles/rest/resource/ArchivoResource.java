@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import mx.com.admoninmuebles.dto.ArchivoDto;
-import mx.com.admoninmuebles.error.BusinessException;
-import mx.com.admoninmuebles.persistence.model.Archivo;
 import mx.com.admoninmuebles.service.ArchivoService;
 
 @RestController
@@ -41,6 +40,7 @@ public class ArchivoResource {
     @Autowired
     private MessageSource messages;
     
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/archivos/{id}")
     public ResponseEntity<ByteArrayResource> obtenerArchivo(@PathVariable String id) {
     	
@@ -55,7 +55,7 @@ public class ArchivoResource {
                  .body(resource);
     }
     
-    
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/archivos")
     public ResponseEntity<List<String>> obtenerArchivo() {
         
@@ -68,6 +68,7 @@ public class ArchivoResource {
     	return ResponseEntity.ok().body(nombres);
     }
     
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/archivos/carga")
     public  ResponseEntity<String> guardarArchivo(@RequestParam("archivo") MultipartFile archivo, Locale locale) {
     	

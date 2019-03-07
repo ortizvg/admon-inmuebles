@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class InmuebleResource {
     @Autowired
     private InmuebleService inmuebleService;
 
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
     @GetMapping("/inmuebles")
     public ResponseEntity<Collection<InmuebleDto>> buscarPorColonia(@RequestParam(name = "coloniaId", required = false) final Long coloniaId, @RequestParam(name = "zonaCodigo", required = false) final String zonaCodigo) {
         try {
@@ -41,6 +43,7 @@ public class InmuebleResource {
 
     }
     
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
     @GetMapping("/inmuebles/{id}/socios")
     public ResponseEntity<Collection<UsuarioDto>> buscarSociosPorInmueble( @PathVariable Long id ) {
         try {
@@ -51,6 +54,7 @@ public class InmuebleResource {
         }
     }
     
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/inmuebles/{id}/areas-comunes")
     public ResponseEntity<Collection<AreaComunDto>> buscarAreasComunesPorInmueble( @PathVariable Long id ) {
         try {

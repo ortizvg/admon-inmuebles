@@ -12,5 +12,7 @@ public class TipoPagoBancarioDto {
     @NotNull
     @Size(min = 1, max = 50)
     private String nombre;
+    
+    private boolean activo;
 
 }

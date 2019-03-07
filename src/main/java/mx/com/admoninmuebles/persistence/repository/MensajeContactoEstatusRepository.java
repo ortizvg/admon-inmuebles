@@ -6,10 +6,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import mx.com.admoninmuebles.persistence.model.MensajeContactoEstatus;
-import mx.com.admoninmuebles.persistence.model.Sector;
 
 @Repository
 public interface MensajeContactoEstatusRepository extends CrudRepository<MensajeContactoEstatus, Long>{
 	
-	Collection<MensajeContactoEstatus> findByIdioma(String idioma);
+	Collection<MensajeContactoEstatus> findByIdioma(final String idioma);
+	
+	Collection<MensajeContactoEstatus> findByActivo(final boolean activo);
+	
+	Collection<MensajeContactoEstatus> findByIdiomaAndActivo(final String idioma, final boolean activo);
 }

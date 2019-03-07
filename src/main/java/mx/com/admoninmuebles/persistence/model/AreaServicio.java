@@ -32,6 +32,9 @@ public class AreaServicio extends EntidadBase {
     @Size(min = 1, max = 50)
     @Column(length = 50, nullable = false)
     private String nombre;
+    
+    @NotNull
+    private boolean activo;
 
     @ManyToMany(mappedBy = "areasServicio")
     private Collection<Usuario> proveedores = new HashSet<>();

@@ -237,7 +237,7 @@
 							                            <div class="comment-widgets">
 							                            	<th:block th:each="comentarioDto : ${comentariosDto}">
 								                                <!-- Comment Row -->
-								                                <div class="d-flex flex-row comment-row">
+								                                <div class="d-flex flex-row comment-row" th:if="${comentarioDto.modificadoPor != null}">
 								                                    <div class="p-2"><span class="round"  th:text="${#strings.substring(comentarioDto.modificadoPor.nombre,0,1)}" ></span></div>
 								                                    <div class="comment-text w-100">
 								                                        <h5 th:text="${comentarioDto.modificadoPor.nombre}"></h5>

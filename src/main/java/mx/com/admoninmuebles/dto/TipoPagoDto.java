@@ -9,6 +9,7 @@ public class TipoPagoDto {
     private String name;
     private String descripction;
     private String lang;
+    private boolean activo;
 
 
 }

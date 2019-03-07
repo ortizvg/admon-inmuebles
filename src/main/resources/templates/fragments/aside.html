@@ -62,7 +62,7 @@
                 <li sec:authorize="hasRole('ADMIN_CORP')"><a href="/catalogos/zonas" th:text="#{menu.zonas}"></a></li>
                 <li sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')"><a href="/catalogos/colonias" th:text="#{menu.colonias}"></a></li>
 <!--                 <li><a href="/catalogos/servicios" th:text="#{menu.servicios}"></a></li> -->
-                <li><a href="/catalogos/areas-servicio" th:text="#{menu.areasservicio}"></a></li>
+                <li sec:authorize="hasRole('ADMIN_CORP')"><a href="/catalogos/areas-servicio" th:text="#{menu.areasservicio}"></a></li>
                  <li><a href="/catalogos/areas-comunes" th:text="#{menu.areascomunes.catalogo}"></a></li>
 <!--                 <li><a href="/catalogos/aviso-oportuno" th:text="#{menu.avisooportuno}"></a></li> -->
 <!--                 <li><a href="/catalogos/estatus-ticket" th:text="#{menu.estatustickets}"></a></li> -->

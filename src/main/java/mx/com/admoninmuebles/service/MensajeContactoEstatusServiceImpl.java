@@ -24,7 +24,7 @@ public class MensajeContactoEstatusServiceImpl implements MensajeContactoEstatus
 	
 	@Override
 	public Collection<MensajeContactoEstatusDto> findAll() {
-		return StreamSupport.stream(mensajeContactoEstatusRepository.findAll().spliterator(), false)
+		return StreamSupport.stream(mensajeContactoEstatusRepository.findByActivo( Boolean.TRUE ).spliterator(), false)
 		.map(mensajeContactoEstatus -> modelMapper.map(mensajeContactoEstatus, MensajeContactoEstatusDto.class))
 		.collect(Collectors.toList());
 	}
@@ -37,7 +37,7 @@ public class MensajeContactoEstatusServiceImpl implements MensajeContactoEstatus
 
 	@Override
 	public Collection<MensajeContactoEstatusDto> findByIdioma(String idioma) {
-		return StreamSupport.stream(mensajeContactoEstatusRepository.findByIdioma( idioma ).spliterator(), false)
+		return StreamSupport.stream(mensajeContactoEstatusRepository.findByIdiomaAndActivo( idioma, Boolean.TRUE ).spliterator(), false)
 				.map(mensajeContactoEstatus -> modelMapper.map(mensajeContactoEstatus, MensajeContactoEstatusDto.class))
 				.collect(Collectors.toList());
 	}

@@ -25,12 +25,17 @@ public class TipoPagoServiceImpl implements TipoPagoService {
 
     @Override
     public TipoPago save(final TipoPagoDto tipoPagoDto) {
+    	tipoPagoDto.setActivo( Boolean.TRUE );
         return tipoPagoRepository.save(modelMapper.map(tipoPagoDto, TipoPago.class));
     }
 
 	@Override
 	public Collection<TipoPagoDto> findAll() {
-		return StreamSupport.stream(tipoPagoRepository.findAll().spliterator(), false)
+//		return StreamSupport.stream(tipoPagoRepository.findAll().spliterator(), false)
+//				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
+//				.collect(Collectors.toList());
+		
+		return StreamSupport.stream(tipoPagoRepository.findByActivo( Boolean.TRUE ).spliterator(), false)
 				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
 				.collect(Collectors.toList());
 	}
@@ -43,17 +48,25 @@ public class TipoPagoServiceImpl implements TipoPagoService {
 
 	@Override
 	public void deleteById(Long idTipoPago) {
-		Optional<TipoPago> tipoPago = tipoPagoRepository.findById(idTipoPago);
-		if( !tipoPago.isPresent() ) {
+		Optional<TipoPago> tipoPagoOpt = tipoPagoRepository.findById(idTipoPago);
+		if( !tipoPagoOpt.isPresent() ) {
 			throw new BusinessException();
 		}
-		tipoPagoRepository.deleteById(idTipoPago);
+//		tipoPagoRepository.deleteById(idTipoPago);
+		
+		TipoPago tipoPago = tipoPagoOpt.get();
+		tipoPago.setActivo( Boolean.FALSE );
+		tipoPagoRepository.save( tipoPago );
 		
 	}
 
 	@Override
 	public Collection<TipoPagoDto> findAllByLang(String lang) {
-		return StreamSupport.stream(tipoPagoRepository.findAllByLang(lang).spliterator(), false)
+//		return StreamSupport.stream(tipoPagoRepository.findAllByLang(lang).spliterator(), false)
+//				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
+//				.collect(Collectors.toList());
+		
+		return StreamSupport.stream(tipoPagoRepository.findAllByLangAndActivo( lang, Boolean.TRUE ).spliterator(), false)
 				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
 				.collect(Collectors.toList());
 	}

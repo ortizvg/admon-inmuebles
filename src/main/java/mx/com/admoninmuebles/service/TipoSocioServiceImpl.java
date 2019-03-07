@@ -24,14 +24,22 @@ public class TipoSocioServiceImpl implements TipoSocioService{
 
 	@Override
 	public Collection<TipoSocioDto> findAll() {
-		return StreamSupport.stream(tipoSocioRepository.findAll().spliterator(), false)
+//		return StreamSupport.stream(tipoSocioRepository.findAll().spliterator(), false)
+//				.map(tipoSocio -> modelMapper.map(tipoSocio, TipoSocioDto.class))
+//				.collect(Collectors.toList());
+		
+		return StreamSupport.stream(tipoSocioRepository.findByActivo( Boolean.TRUE ).spliterator(), false)
 				.map(tipoSocio -> modelMapper.map(tipoSocio, TipoSocioDto.class))
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public Collection<TipoSocioDto> findAllByLang(String lang) {
-		return StreamSupport.stream(tipoSocioRepository.findByLang(lang).spliterator(), false)
+//		return StreamSupport.stream(tipoSocioRepository.findByLang(lang).spliterator(), false)
+//				.map(tipoSocio -> modelMapper.map(tipoSocio, TipoSocioDto.class))
+//				.collect(Collectors.toList());
+		
+		return StreamSupport.stream(tipoSocioRepository.findByLangAndActivo( lang, Boolean.TRUE ).spliterator(), false)
 				.map(tipoSocio -> modelMapper.map(tipoSocio, TipoSocioDto.class))
 				.collect(Collectors.toList());
 	}

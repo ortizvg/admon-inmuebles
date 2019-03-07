@@ -8,5 +8,6 @@ public class MensajeContactoEstatusDto {
 	
 	private Long id;
     private String nombre;
+    private boolean activo;
 
 }

@@ -125,7 +125,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (36,'2019-02-27 20:51:40','2019-02-27 20:51:40',_binary '\0','','Corporativo','$2a$10$iRoO/dhcQ6wFuv0d79M4zu2aSWUuhYBAe3Lxt.y5XdqDpxBKBJnq.','correo@gmail.com',NULL,NULL,100.29,_binary '\0',_binary '\0',_binary '\0','343242453556464',NULL,NULL,NULL,NULL,NULL,'Administrador','123456',NULL,NULL,NULL,NULL,NULL,'admin_corp',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `usuarios` VALUES (36,'2019-02-27 20:51:40','2019-02-27 20:51:40',`activo` = BIN(1),'','Corporativo','$2a$10$iRoO/dhcQ6wFuv0d79M4zu2aSWUuhYBAe3Lxt.y5XdqDpxBKBJnq.','correo@gmail.com',NULL,NULL,100.29,_binary '\0',_binary '\0',_binary '\0','343242453556464',NULL,NULL,NULL,NULL,NULL,'Administrador','123456',NULL,NULL,NULL,NULL,NULL,'admin_corp',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,12 +135,12 @@ INSERT INTO `usuarios_roles` VALUES (36,34);
 /*!40000 ALTER TABLE `usuarios_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
-insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma) values(1, 'No Atendido', 'es');
-insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma) values(2, 'En Proceso', 'es');
-insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma) values(3, 'Atendido', 'es');
-insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma) values(4, 'To do', 'en');
-insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma) values(5, 'In Progress', 'en');
-insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma) values(6, 'Done', 'en');
+insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma, activo) values(1, 'No Atendido', 'es', `activo` = BIN(1));
+insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma, activo) values(2, 'En Proceso', 'es', `activo` = BIN(1));
+insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma, activo) values(3, 'Atendido', 'es', `activo` = BIN(1));
+insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma, activo) values(4, 'To do', 'en', `activo` = BIN(1));
+insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma, activo) values(5, 'In Progress', 'en', `activo` = BIN(1));
+insert into mensajes_contacto_estatus (id_mensajes_contacto_estatus, nombre, idioma, activo) values(6, 'Done', 'en', `activo` = BIN(1));
 
 insert into sectores (id_sector, nombre, idioma) values(1, 'Condiminios', 'es');
 insert into sectores (id_sector, nombre, idioma) values(2, 'Corporativos', 'es');
@@ -189,33 +189,33 @@ insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_sec
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (31, 'contacto.corpo@gesco-pls.com', null, 'Yucatán');
 insert into estados_correos (`id_estado_correo`, `correo_principal`, `correo_secundario`, `nombre`)  values (32, 'contacto.corpo@gesco-pls.com', null, 'Zacatecas');
 
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (1, 'CUOTA', 'Cuota Mensual', 'es');
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (2, 'RESERVA', 'Pago por reserva de área común', 'es');
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (3, 'OTRO', 'Otro pago', 'es');
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (4, 'CUOTA', 'Maintenance fee', 'en');
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (5, 'RESERVA', 'Reserve payment', 'en');
-insert into tipos_pagos (id_tipo_pago, name, descripction, lang) values (6, 'OTRO', 'Other payments', 'en');
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang, activo) values (1, 'CUOTA', 'Cuota Mensual', 'es', `activo` = BIN(1));
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang, activo) values (2, 'RESERVA', 'Pago por reserva de área común', 'es', `activo` = BIN(1));
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang, activo) values (3, 'OTRO', 'Otro pago', 'es', `activo` = BIN(1));
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang, activo) values (4, 'CUOTA', 'Maintenance fee', 'en', `activo` = BIN(1));
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang, activo) values (5, 'RESERVA', 'Reserve payment', 'en', `activo` = BIN(1));
+insert into tipos_pagos (id_tipo_pago, name, descripction, lang, activo) values (6, 'OTRO', 'Other payments', 'en', `activo` = BIN(1));
 
-insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (1, 'TRANSFERENCIA', 'Pago con transferencia bancaria o cheque', 'es');
-insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (2, 'PAYPAL', 'Pago con Paypal', 'es');
-insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (3, 'TARJETA', 'Pago con tarjeta', 'es');
-insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (4, 'TRANSFERENCIA', 'Bank transfer or check payment', 'en');
-insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (5, 'PAYPAL', 'Paypal payment', 'en');
-insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang) values (6, 'TARJETA', 'Credit card payment', 'en');
+insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang, activo) values (1, 'TRANSFERENCIA', 'Pago con transferencia bancaria o cheque', 'es', `activo` = BIN(1));
+insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang, activo) values (2, 'PAYPAL', 'Pago con Paypal', 'es', `activo` = BIN(1));
+insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang, activo) values (3, 'TARJETA', 'Pago con tarjeta', 'es', `activo` = BIN(1));
+insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang, activo) values (4, 'TRANSFERENCIA', 'Bank transfer or check payment', 'en', `activo` = BIN(1));
+insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang, activo) values (5, 'PAYPAL', 'Paypal payment', 'en', `activo` = BIN(1));
+insert into tipos_pagos_bancarios (id_tipo_pago_bancario, name, descripction, lang, activo) values (6, 'TARJETA', 'Credit card payment', 'en', `activo` = BIN(1));
 
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (1, 'PAGADO', 'Pagado', 'es');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (2, 'CERCANO', 'Pendiente de pago', 'es');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (3, 'VERIFICACION', 'Verificando', 'es');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (4, 'ATRASADO', 'Atrasado', 'es');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (5, 'PAGADO', 'Paid', 'en');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (6, 'CERCANO', 'Outstanding', 'en');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (7, 'VERIFICACION', 'Verifying', 'en');
-insert into estatus_pagos (id_estatus_pago, name, descripction, lang) values (8, 'ATRASADO', 'Overdue', 'en');
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (1, 'PAGADO', 'Pagado', 'es', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (2, 'CERCANO', 'Pendiente de pago', 'es', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (3, 'VERIFICACION', 'Verificando', 'es', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (4, 'ATRASADO', 'Atrasado', 'es', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (5, 'PAGADO', 'Paid', 'en', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (6, 'CERCANO', 'Outstanding', 'en', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (7, 'VERIFICACION', 'Verifying', 'en', `activo` = BIN(1));
+insert into estatus_pagos (id_estatus_pago, name, descripction, lang, activo) values (8, 'ATRASADO', 'Overdue', 'en', `activo` = BIN(1));
 
-insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (1, 'CONDOMINO', 'Condómino (propietario)', 'es');
-insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (2, 'RESIDENTE', 'Residente (Arrendatario)', 'es');
-insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (3, 'CONDOMINO', 'Condominium (owner)', 'en');
-insert into tipos_socios (id_tipo_socio, name, descripction, lang) values (4, 'RESIDENTE', 'Resident (Tenant)', 'en');
+insert into tipos_socios (id_tipo_socio, name, descripction, lang, activo) values (1, 'CONDOMINO', 'Condómino (propietario)', 'es', `activo` = BIN(1));
+insert into tipos_socios (id_tipo_socio, name, descripction, lang, activo) values (2, 'RESIDENTE', 'Residente (Arrendatario)', 'es', `activo` = BIN(1));
+insert into tipos_socios (id_tipo_socio, name, descripction, lang, activo) values (3, 'CONDOMINO', 'Condominium (owner)', 'en', `activo` = BIN(1));
+insert into tipos_socios (id_tipo_socio, name, descripction, lang, activo) values (4, 'RESIDENTE', 'Resident (Tenant)', 'en', `activo` = BIN(1));
 
 insert into meses (id_mes, descripcion, lang) values (1, 'Enero', 'es');
 insert into meses (id_mes, descripcion, lang) values (2, 'Febrero', 'es');
@@ -242,14 +242,14 @@ insert into meses (id_mes, descripcion, lang) values (22, 'October', 'en');
 insert into meses (id_mes, descripcion, lang) values (23, 'November', 'en');
 insert into meses (id_mes, descripcion, lang) values (24, 'December', 'en');
 
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (1, 'Estados financieros', 'es');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (2, 'Balance general', 'es');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (3, 'Estado de resultados', 'es');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (4, 'Egresos e ingresos', 'es');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (5, 'Deudores', 'es');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (6, 'Financial statements', 'en');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (7, 'Balance sheet', 'en');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (8, 'Statement of income', 'en');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (9, 'Expenses and income', 'en');
-insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang) values (10, 'Defaulters', 'en');
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (1, 'Estados financieros', 'es', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (2, 'Balance general', 'es', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (3, 'Estado de resultados', 'es', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (4, 'Egresos e ingresos', 'es', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (5, 'Deudores', 'es', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (6, 'Financial statements', 'en', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (7, 'Balance sheet', 'en', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (8, 'Statement of income', 'en', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (9, 'Expenses and income', 'en', `activo` = BIN(1));
+insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (10, 'Defaulters', 'en', `activo` = BIN(1));
 

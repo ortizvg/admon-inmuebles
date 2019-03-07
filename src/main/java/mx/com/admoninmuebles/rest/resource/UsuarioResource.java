@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -79,6 +80,7 @@ public class UsuarioResource {
 		return new ResponseEntity<String>(Boolean.TRUE.toString(), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/usuarios/cambioContrasenia")
     public ResponseEntity<String> cambiarContrasenia(final Locale locale, final Model model, @Valid final CambioContraseniaDto cambioContraseniaDto, BindingResult result) {
     	
@@ -91,6 +93,7 @@ public class UsuarioResource {
     	
     }
     
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/usuarios/reactivacion")
 	public ResponseEntity<String> reactivarUsuario(final Locale locale, final HttpServletRequest request, @Valid final ReactivaUsuarioDto reactivaUsuarioDto) {
 		System.out.println("Iniciando reactivacion de usuario " + reactivaUsuarioDto.getUsername());
@@ -105,6 +108,7 @@ public class UsuarioResource {
 		return new ResponseEntity<String>(messages.getMessage("usuario.reactivacion.ok", null, locale), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/findAdministradoresBiByZonaCodigo")
 	public ResponseEntity<Collection<UsuarioDto>> buscarColonias( @RequestParam(name = "zonaCodigo", required = false) String zonaCodigo) {
 		try {

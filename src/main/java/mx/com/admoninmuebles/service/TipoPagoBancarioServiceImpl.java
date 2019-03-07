@@ -24,12 +24,17 @@ public class TipoPagoBancarioServiceImpl implements TipoPagoBancarioService {
 
     @Override
     public TipoPagoBancario save(final TipoPagoBancarioDto tipoPagoBancarioDto) {
+    	tipoPagoBancarioDto.setActivo( Boolean.TRUE );
         return tipoPagoBancarioRepository.save(modelMapper.map(tipoPagoBancarioDto, TipoPagoBancario.class));
     }
 
 	@Override
 	public Collection<TipoPagoBancarioDto> findAll() {
-		return StreamSupport.stream(tipoPagoBancarioRepository.findAll().spliterator(), false)
+//		return StreamSupport.stream(tipoPagoBancarioRepository.findAll().spliterator(), false)
+//				.map(tipoPagoBancario -> modelMapper.map(tipoPagoBancario, TipoPagoBancarioDto.class))
+//				.collect(Collectors.toList());
+		
+		return StreamSupport.stream(tipoPagoBancarioRepository.findByActivo( Boolean.TRUE ).spliterator(), false)
 				.map(tipoPagoBancario -> modelMapper.map(tipoPagoBancario, TipoPagoBancarioDto.class))
 				.collect(Collectors.toList());
 	}
@@ -42,7 +47,16 @@ public class TipoPagoBancarioServiceImpl implements TipoPagoBancarioService {
 
 	@Override
 	public void deleteById(Long idTipoPagoBancario) {
-		tipoPagoBancarioRepository.deleteById(idTipoPagoBancario);
+		Optional<TipoPagoBancario> tipoPagoBancarioOpt = tipoPagoBancarioRepository.findById(idTipoPagoBancario);
+		
+		if( tipoPagoBancarioOpt.isPresent() ) {
+			
+//			tipoPagoBancarioRepository.deleteById(idTipoPagoBancario);
+			TipoPagoBancario tipoPagoBancario = tipoPagoBancarioOpt.get();
+			tipoPagoBancario.setActivo(Boolean.FALSE);
+			
+		}
+		
 		
 	}
 

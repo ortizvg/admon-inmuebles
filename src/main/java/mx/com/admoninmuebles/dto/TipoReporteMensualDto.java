@@ -11,5 +11,7 @@ public class TipoReporteMensualDto {
 	
 	@NotNull
 	private String descripcion;
+	
+	private boolean activo;
 
 }

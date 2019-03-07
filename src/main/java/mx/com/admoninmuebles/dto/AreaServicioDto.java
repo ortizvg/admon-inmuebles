@@ -13,5 +13,7 @@ public class AreaServicioDto {
     @NotNull
     @Size(min = 5, max = 50)
     private String nombre;
+    
+    private boolean activo;
 
 }

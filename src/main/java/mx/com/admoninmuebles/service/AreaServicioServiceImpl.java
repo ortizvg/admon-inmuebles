@@ -24,12 +24,14 @@ public class AreaServicioServiceImpl implements AreaServicioService {
 
     @Override
     public AreaServicio save(final AreaServicioDto userDto) {
+    	userDto.setActivo( Boolean.TRUE );
         return areaServicioRepository.save(modelMapper.map(userDto, AreaServicio.class));
     }
 
     @Override
     public Collection<AreaServicioDto> findAll() {
-        return StreamSupport.stream(areaServicioRepository.findAll().spliterator(), false).map(areaServicio -> modelMapper.map(areaServicio, AreaServicioDto.class)).collect(Collectors.toList());
+//        return StreamSupport.stream(areaServicioRepository.findAll().spliterator(), false).map(areaServicio -> modelMapper.map(areaServicio, AreaServicioDto.class)).collect(Collectors.toList());
+        return StreamSupport.stream(areaServicioRepository.findByActivo( Boolean.TRUE ).spliterator(), false).map(areaServicio -> modelMapper.map(areaServicio, AreaServicioDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -40,7 +42,13 @@ public class AreaServicioServiceImpl implements AreaServicioService {
 
     @Override
     public void delete(final Long id) {
-        areaServicioRepository.deleteById(id);
+    	Optional<AreaServicio> areaServicioOpt = areaServicioRepository.findById(id);
+    	if( areaServicioOpt.isPresent() ) {
+    		AreaServicio areaServicio = areaServicioOpt.get();
+    		areaServicio.setActivo( Boolean.FALSE );
+    		areaServicioRepository.save( areaServicio );
+//    		areaServicioRepository.deleteById(id);
+    	}
     }
 
 }

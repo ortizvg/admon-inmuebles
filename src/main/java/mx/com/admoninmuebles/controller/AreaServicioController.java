@@ -29,13 +29,15 @@ public class AreaServicioController {
         return "/catalogos/areas-servicio";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+//    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP')")
     @GetMapping(value = "/catalogos/area-servicio-crear")
     public String showForm(final AreaServicioDto areaServicioDto) {
         return "/catalogos/area-servicio-crear";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+//    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP')")
     @PostMapping(value = "/areaServicio")
     public String crearAreaServicio(final Locale locale, final Model model, @Valid final AreaServicioDto areaServicioDto, final BindingResult bindingResult) {
         areaServicioService.save(areaServicioDto);
@@ -49,7 +51,8 @@ public class AreaServicioController {
         return "/catalogos/area-servicio-crear";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+//    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP')")
     @GetMapping(value = "/catalogos/area-servicio-eliminar/{id}")
     public String eliminarAreaServicio(final @PathVariable long id) {
         areaServicioService.delete(id);
