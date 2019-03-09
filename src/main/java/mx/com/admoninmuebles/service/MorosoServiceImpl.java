@@ -52,17 +52,6 @@ public class MorosoServiceImpl implements MorosoService {
 		Long pagosPendientes = 0L;
 		
 		InmuebleDto inmuebleDto = inmuebleService.findById( inmuebleId );
-//		Long pagosTotal = pagoService.getTotalPagosPorInmueble( inmuebleId );
-//		Long pagosAtrasados = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.ATRASADO );
-//		Long pagosRealizados = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.PAGADO );
-//		Long pagosVerificacion = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.VERIFICACION );
-//		Long pagosPendientes = pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.CERCANO );
-		
-//		CompletableFuture<Long> pagosTotalFuture  = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmueble( inmuebleId ));
-//		CompletableFuture<Long> pagosAtrasadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.ATRASADO ) );
-//		CompletableFuture<Long> pagosRealizadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.PAGADO ) );
-//		CompletableFuture<Long> pagosVerificacionFuture   = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.VERIFICACION ) );
-//		CompletableFuture<Long> pagosPendientesFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNOmbre( inmuebleId, EstatusPago.CERCANO ) );
 		
 		CompletableFuture<Long> pagosTotalFuture  = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmueble( inmuebleId ));
 		CompletableFuture<Long> pagosAtrasadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre( inmuebleId, EstatusPago.ATRASADO, TipoPago.CUOTA ) );
