@@ -8,7 +8,7 @@
 $(document).ready(function() {
 	addControlState(document.getElementById('divNombre'),/*[[#{campo.requerido}]]*/);
 	addControlState(document.getElementById('divDescripcion'),/*[[#{campo.requerido}]]*/);
-	addControlState(document.getElementById('divLang'),/*[[#{campo.requerido}]]*/);
+// 	addControlState(document.getElementById('divLang'),/*[[#{campo.requerido}]]*/);
 });
 /*]]>*/
 </script>
@@ -29,7 +29,7 @@ $(document).ready(function() {
 				<div class="card-body">
 					<h3 class="card-title" th:text="#{tipopago.editar.titulo}"></h3>
 					<h6 class="card-subtitle" th:text="#{tipopago.editar.subtitulo}"></h6>
-					<form name="crearZonaForm" action="#" th:action="@{/catalogos/tipos-pago/editar}" th:object="${tipoPagoDto}" method="post">
+					<form name="editarTipoPagoForm" action="#" th:action="@{/catalogos/tipos-pago/editar}" th:object="${tipoPagoDto}" method="post">
 						<input type="hidden" class="form-control" th:field="*{id}"/>
 						<div id="divNombre" th:class="${#fields.hasErrors('name')}? 'form-group has-danger':'form-group'">
 							<label class="form-control-label" th:text="#{tipopago.nombre}"></label>
@@ -45,15 +45,15 @@ $(document).ready(function() {
 								<span th:if="${#fields.hasErrors('descripction')}" th:errors="*{descripction}"></span>
 							</span>
 						</div>
-						<div id="divLang" th:class="${#fields.hasErrors('lang')}? 'form-group has-danger':'form-group'">
+						<div id="divLang" th:class="${#fields.hasErrors('langg')}? 'form-group has-danger':'form-group'">
 							<label class="form-control-label" th:text="#{tipopago.lenguaje}"></label>
-							<select name="lang'" class="form-control" th:field="*{lang}" required>
+							<select name="langg'" class="form-control" th:field="*{langg}" required>
 								<option th:value="${null}" th:text="#{combo.seleccionar}"></option>
 								<option th:value="${'en'}" th:text="#{'English'}"></option>
 								<option th:value="${'es'}" th:text="#{'Español'}"></option>
 							</select>
 							<span class="form-control-feedback">
-								<span th:if="${#fields.hasErrors('lang')}" th:errors="*{lang}"></span>
+								<span th:if="${#fields.hasErrors('langg')}" th:errors="*{langg}"></span>
 							</span>
 						</div>
 

@@ -254,7 +254,7 @@ public class PagoServiceImpl implements PagoService {
 	@Override
 	public void generarPagosMensuales() {
 		Collection<Usuario> sociosActivos = usuarioRepository.findByRolesNombreAndActivo(RolConst.ROLE_SOCIO_BI, true);
-		TipoPago tipoPago = tipoPagoRepository.findByNameAndLang( TipoPago.CUOTA, "es" );
+		TipoPago tipoPago = tipoPagoRepository.findByNameAndLangg( TipoPago.CUOTA, "es" );
 		EstatusPago estatusPagoCercano = estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
 		sociosActivos.forEach( socio -> {
 			Pago pago = new Pago();

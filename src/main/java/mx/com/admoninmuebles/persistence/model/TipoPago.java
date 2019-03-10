@@ -47,7 +47,7 @@ public class TipoPago extends EntidadBase {
     @NotNull
     @Size(min = 1, max = 2)
     @Column(length = 2, unique = false, nullable = false)
-    private String lang;
+    private String langg;
     
     @NotNull
     private boolean activo;

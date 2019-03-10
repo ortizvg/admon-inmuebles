@@ -66,7 +66,7 @@ public class TipoPagoServiceImpl implements TipoPagoService {
 //				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
 //				.collect(Collectors.toList());
 		
-		return StreamSupport.stream(tipoPagoRepository.findAllByLangAndActivo( lang, Boolean.TRUE ).spliterator(), false)
+		return StreamSupport.stream(tipoPagoRepository.findAllByLanggAndActivo( lang, Boolean.TRUE ).spliterator(), false)
 				.map(tipoPago -> modelMapper.map(tipoPago, TipoPagoDto.class))
 				.collect(Collectors.toList());
 	}

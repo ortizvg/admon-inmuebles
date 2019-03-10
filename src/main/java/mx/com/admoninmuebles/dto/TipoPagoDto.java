@@ -8,7 +8,7 @@ public class TipoPagoDto {
     private Long id;
     private String name;
     private String descripction;
-    private String lang;
+    private String langg;
     private boolean activo;
 
 

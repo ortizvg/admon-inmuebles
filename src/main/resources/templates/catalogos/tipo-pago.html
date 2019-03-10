@@ -65,7 +65,7 @@
                         <td th:text="${tipoPago.id}"></td>
                         <td th:text="${tipoPago.name}"></td>
                         <td th:text="${tipoPago.descripction}"></td>
-                        <td th:text="${tipoPago.lang}"></td>
+                        <td th:text="${tipoPago.langg}"></td>
                         <td>
                           <a th:href="${'/catalogos/tipos-pago/'  + tipoPago.id + '/editar'}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
                           <a th:attr="data-id=''+${tipoPago.id}+'', data-nombre=''+${tipoPago.name}+''" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"><i class="fa fa-close text-danger"

@@ -136,7 +136,7 @@ public class ReservacionController {
     	}
     	
 		AreaComunDto areaComunDto = areaComunService.findById((Long) session.getAttribute("areaComunId"));
-		TipoPago tipoPagoReservaAreaComun = tipoPagoRepository.findByNameAndLang( TipoPago.RESERVA, locale.getLanguage() );
+		TipoPago tipoPagoReservaAreaComun = tipoPagoRepository.findByNameAndLangg( TipoPago.RESERVA, locale.getLanguage() );
     	
     	PagoDto pagoDto = new PagoDto();
     	pagoDto.setUsuarioId( optUserId );
