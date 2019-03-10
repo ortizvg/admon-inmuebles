@@ -1,7 +1,6 @@
 package mx.com.admoninmuebles.validation;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -8,8 +8,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import mx.com.admoninmuebles.validation.ComparacionCorreosAlternativos;
 
 @Data
+//@ComparacionCorreosAlternativos
 public class SocioCargaMasivaDto {
 
 	private Long id;

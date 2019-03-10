@@ -3,7 +3,6 @@ package mx.com.admoninmuebles.dto;
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -13,8 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 import mx.com.admoninmuebles.constant.ComunConst;
+import mx.com.admoninmuebles.validation.ComparacionCorreosAlternativos;
 
 @Data
+@ComparacionCorreosAlternativos
 public class UsuarioDto {
 
     private Long id;
