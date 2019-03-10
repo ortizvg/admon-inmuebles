@@ -68,6 +68,7 @@
 
     $.onSelect = function(start, end) {
       console.log('Dio click');
+      $("#titleReserva").val("");
       var mensaje;
       if (end.diff(start, 'days') == 1) {
         mensaje =/*[[#{reserva.areacomun.mensaje.reservarUnDia.areaComun}]]*/;
@@ -213,7 +214,7 @@
                 <input type="hidden" name="end">
                 <div class="form-group">
                   <label for="title" class="control-label" th:text="#{reserva.areacomun.evento.nombre}"></label>
-                  <input name="title" type="text" class="form-control" required="required">
+                  <input id="titleReserva" name="title" type="text" class="form-control" required="required">
                 </div>
                 <p></p>
               </div>

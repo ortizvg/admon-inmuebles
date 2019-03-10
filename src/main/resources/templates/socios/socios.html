@@ -59,6 +59,7 @@
                                                     <th th:text="#{usuario.usuario}"></th>
                                                     <th th:text="#{usuario.correo}"></th>
                                                     <th th:text="#{usuario.nombre}"></th>
+                                                    <th th:text="#{usuario.inmueble}"></th>
                                                     <th th:text="#{usuario.estatus}"></th>
                                                     <th th:text="#{tabla.accion}"></th>
                                                 </tr>
@@ -76,6 +77,7 @@
 	                                                    </td>
 	                                                    <td th:text="${socio.correo}"></td>
 	                                                    <td th:text="${socio.nombre}"></td>
+	                                                    <td th:text="${socio.inmuebleNombre}"></td>
 	                                                    <td>
 		                                                    <div th:switch="${socio.activo}"> 
 															  <span th:case="${true}" class="text-success" th:text="#{usuario.estatus.activo}"></span>

@@ -97,14 +97,28 @@ public class PagoDto {
 		if(this.usuarioVerificadorId == null ) {
 			return ComunConst.CADENA_VACIA;
 		}
-		return this.usuarioVerificadorNombre + " " + this.usuarioVerificadorApellidoPaterno + " " + this.usuarioVerificadorusuarioGeneradorApellidoMaterno;
+		StringBuffer usuarioVerificador = new StringBuffer()
+		.append( this.usuarioVerificadorNombre )
+		.append( ComunConst.CADENA_ESPACIO )
+		.append( this.usuarioVerificadorApellidoPaterno )
+		.append( ComunConst.CADENA_ESPACIO )
+		.append( this.usuarioVerificadorusuarioGeneradorApellidoMaterno == null ? ComunConst.CADENA_VACIA : this.usuarioVerificadorusuarioGeneradorApellidoMaterno );
+		
+		return usuarioVerificador.toString();
 	}
 	
 	public String getUsuarioGenerador() {
 		if(this.usuarioGeneradorId == null ) {
 			return ComunConst.USUARIO_SISTEMA;
 		}
-		return this.usuarioGeneradorNombre + " " + this.usuarioGeneradorApellidoPaterno + " " + this.usuarioGeneradorApellidoMaterno;
+		StringBuffer usuarioGenerador = new StringBuffer()
+			.append( this.usuarioGeneradorNombre )
+			.append( ComunConst.CADENA_ESPACIO )
+			.append( this.usuarioGeneradorApellidoPaterno )
+			.append( ComunConst.CADENA_ESPACIO )
+			.append( this.usuarioGeneradorApellidoMaterno == null ? ComunConst.CADENA_VACIA : this.usuarioGeneradorApellidoMaterno );
+		
+		return usuarioGenerador.toString();
 	}
 
 }
