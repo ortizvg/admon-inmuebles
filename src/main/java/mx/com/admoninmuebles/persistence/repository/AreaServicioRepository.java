@@ -11,5 +11,6 @@ import mx.com.admoninmuebles.persistence.model.AreaServicio;
 public interface AreaServicioRepository extends CrudRepository<AreaServicio, Long>{
 	
 	Collection<AreaServicio> findByActivo( final boolean activo);
+	boolean existsByNombre( final String nombre);
 
 }

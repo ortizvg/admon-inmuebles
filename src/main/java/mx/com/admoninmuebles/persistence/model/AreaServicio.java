@@ -30,7 +30,7 @@ public class AreaServicio extends EntidadBase {
 
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = false, unique=true)
     private String nombre;
     
     @NotNull

@@ -27,6 +27,9 @@ $(document).ready(function() {
           <h3 class="card-title" th:text="#{areaservicio.titulo}"></h3>
           <h6 class="card-subtitle" th:text="#{areaservicio.crear.titulo}"></h6>
           <form name="crearAreaServicioForm" action="#" th:action="@{/areaServicio}" th:object="${areaServicioDto}" method="post">
+          	<div class="alert alert-danger" th:if="${error}"> <i class="ti-na"></i> <span class="form-control-feedback" th:text="${error}"></span>
+	            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+	        </div>
             <input type="hidden" class="form-control" th:field="*{id}" />
             <div id="divNombre" th:class="${#fields.hasErrors('nombre')}? 'form-group has-danger':'form-group'">
               <label class="form-control-label" th:text="#{areaservicio.nombre}"></label>

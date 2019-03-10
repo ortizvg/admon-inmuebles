@@ -9,6 +9,8 @@ public interface ColoniaService {
     void save(ColoniaDto coloniaDto);
     
     void deleteById(final Long codigo);
+    
+    boolean isRegistrada(final Long id);
 
     Collection<ColoniaDto> findAll();
 

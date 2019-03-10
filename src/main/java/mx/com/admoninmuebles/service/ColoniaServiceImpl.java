@@ -7,6 +7,7 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,7 @@ public class ColoniaServiceImpl implements ColoniaService {
     
     @Autowired
     private InmuebleRepository inmuebleRepository;
-
+    
     @Override
     public void save(final ColoniaDto coloniaDto) {
         Optional<Asentamiento> optAsentamiento = asentamientoRepository.findById(coloniaDto.getId());
@@ -111,6 +112,14 @@ public class ColoniaServiceImpl implements ColoniaService {
 		 Collection<Zona> zonas = zonaRepository.findByAdminZonaId( adminZonaId );
 		 return StreamSupport.stream(asentamientoRepository.findByZonaIn( zonas ).spliterator(), false).map(asentamiento -> modelMapper.map(asentamiento, ColoniaDto.class))
 	                .collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean isRegistrada(Long id) {
+		Optional<Asentamiento> asentamientoOpt = asentamientoRepository.findById(id);
+		Asentamiento asentamiento = asentamientoOpt.get();
+		return asentamiento.getZona() != null;
+		
 	}
 
 }

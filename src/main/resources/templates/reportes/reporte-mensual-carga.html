@@ -40,7 +40,7 @@ $(document).ready(function() {
             
               
               <form name="reporteMensualForm" action="#" th:action="@{/reportes/reportes-mensuales/carga}" th:object="${reporteMensual}" method="post" enctype="multipart/form-data">
-              		<div class="alert alert-danger" th:if="${error}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${error}"></span>
+              		<div class="alert alert-danger" th:if="${error}"> <i class="ti-na"></i> <span class="form-control-feedback" th:text="${error}"></span>
 			            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
 			        </div>
 			        <div class="alert alert-success" th:if="${message}"> <i class="ti-user"></i> <span class="form-control-feedback" th:text="${message}"></span>

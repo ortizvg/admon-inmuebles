@@ -6,15 +6,21 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.controller.ReporteMensualController;
 import mx.com.admoninmuebles.dto.AreaServicioDto;
+import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.AreaServicio;
 import mx.com.admoninmuebles.persistence.repository.AreaServicioRepository;
 
 @Service
 public class AreaServicioServiceImpl implements AreaServicioService {
+	
+	Logger logger = LoggerFactory.getLogger(AreaServicioServiceImpl.class);
 
     @Autowired
     private AreaServicioRepository areaServicioRepository;
@@ -23,9 +29,17 @@ public class AreaServicioServiceImpl implements AreaServicioService {
     private ModelMapper modelMapper;
 
     @Override
-    public AreaServicio save(final AreaServicioDto userDto) {
-    	userDto.setActivo( Boolean.TRUE );
-        return areaServicioRepository.save(modelMapper.map(userDto, AreaServicio.class));
+    public AreaServicioDto save(final AreaServicioDto areaServicioDto) {
+    	
+    	if( areaServicioRepository.existsByNombre( areaServicioDto.getNombre() )) {
+    		throw new BusinessException("areaservicio.crear.mensaje.validacion.ya.existe");
+    	}
+    	
+    	areaServicioDto.setActivo( Boolean.TRUE );
+    	AreaServicio areaServicioCreada = null;
+    	areaServicioCreada =  areaServicioRepository.save(modelMapper.map(areaServicioDto, AreaServicio.class));
+        
+        return modelMapper.map(areaServicioCreada, AreaServicioDto.class);
     }
 
     @Override

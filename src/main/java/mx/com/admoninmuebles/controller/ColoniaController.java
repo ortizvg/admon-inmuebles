@@ -1,8 +1,6 @@
 package mx.com.admoninmuebles.controller;
 
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.ColoniaDto;
@@ -32,32 +32,19 @@ public class ColoniaController {
 
     @Autowired
     private ZonaService zonaService;
+    
+    @Autowired
+    private MessageSource messages;
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @GetMapping(value = "/catalogos/colonias")
     public String init(final ColoniaDto coloniaDto, final Model model, final HttpServletRequest request) {
-    	System.out.println("Inicio");
-    	URL urlFolderReportes = Thread.currentThread().getContextClassLoader().getResource("gesco");
-		URL urlFolderReportesSlash = Thread.currentThread().getContextClassLoader().getResource("/gesco");
-		InputStream inputStream1 = ColoniaController.class.getResourceAsStream("/gesco");
-		InputStream inputStream2 = getClass().getClassLoader().getResourceAsStream("gesco");
-		
-		try {
-			System.out.println( urlFolderReportes.getPath());
-			System.out.println( urlFolderReportes.toURI().getPath());
-		} catch (URISyntaxException e) {
-			System.out.println("TRONO");
-			e.printStackTrace();
-		}
     	
     	Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
 
 		 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 			 model.addAttribute("colonias", coloniaService.findByZonaIsNotNull());
-            
         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
-//	         ZonaDto zona = zonaService.findByAdminZonaId(usuarioLogueadoId).stream().findFirst().get();
-//        	 model.addAttribute("colonias", coloniaService.findByZonaCodigo(zona.getCodigo()));
         	 model.addAttribute("colonias", coloniaService.findByAdminZona( usuarioLogueadoId) );
         } 
         return "catalogos/colonias";
@@ -90,9 +77,14 @@ public class ColoniaController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')")
     @PostMapping(value = "/catalogos/colonia-agregar")
-    public String guardar(@Valid final ColoniaDto coloniaDto, final HttpSession session, final BindingResult bindingResult) {
+    public String guardar(@Valid final ColoniaDto coloniaDto, final HttpSession session, final BindingResult bindingResult, RedirectAttributes redirect, Locale locale) {
         if (bindingResult.hasErrors()) {
             return "catalogos/colonia-agregar";
+        }
+        
+        if( coloniaService.isRegistrada( coloniaDto.getId() ) ) {
+        	redirect.addFlashAttribute("error", messages.getMessage("colonia.crear.validacion.asentamiento.ya.resigstrado", null, locale));
+			return "redirect:/catalogos/colonia-agregar"; 
         }
         coloniaService.save(coloniaDto);
 
