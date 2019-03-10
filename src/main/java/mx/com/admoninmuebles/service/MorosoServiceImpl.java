@@ -53,7 +53,8 @@ public class MorosoServiceImpl implements MorosoService {
 		
 		InmuebleDto inmuebleDto = inmuebleService.findById( inmuebleId );
 		
-		CompletableFuture<Long> pagosTotalFuture  = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmueble( inmuebleId ));
+//		CompletableFuture<Long> pagosTotalFuture  = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmueble( inmuebleId ));
+		CompletableFuture<Long> pagosTotalFuture  = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmuebleYTipoPagoNombre( inmuebleId, TipoPago.CUOTA ));
 		CompletableFuture<Long> pagosAtrasadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre( inmuebleId, EstatusPago.ATRASADO, TipoPago.CUOTA ) );
 		CompletableFuture<Long> pagosRealizadosFuture   = CompletableFuture.supplyAsync(() -> pagoService.getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre( inmuebleId, EstatusPago.PAGADO, TipoPago.CUOTA ) );
 		CompletableFuture<Long> pagosVerificacionFuture   = CompletableFuture.supplyAsync(() ->  pagoService.getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre( inmuebleId, EstatusPago.VERIFICACION , TipoPago.CUOTA) );
