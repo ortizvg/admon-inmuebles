@@ -28,7 +28,7 @@ $(document).ready(function() {
     addControlState(document.getElementById('divColonia'),/*[[#{mensaje.colonia.requerido}]]*/);
     addControlState(document.getElementById('divCalle'),/*[[#{mensaje.calle.requerido}]]*/);
     addControlState(document.getElementById('divNumeroExterior'),/*[[#{mensaje.numeroexterior.requerido}]]*/);  
-    addControlState(document.getElementById('divContadorInmueble'),/*[[#{mensaje.inmueble.numeroexterior.requerido}]]*/);  
+    addControlState(document.getElementById('divContadorInmueble'),/*[[#{mensaje.inmueble.contador.requerido}]]*/);  
     
   
   $('#zonaCodigo').on('change', function() {
@@ -72,6 +72,9 @@ $(document).ready(function() {
       <div class="card">
         <div class="card-body">
           <form name="crearInmuebleForm" action="#" th:action="@{/inmueble-editar}" th:object="${inmuebleDto}" method="post" enctype="multipart/form-data">
+          	<div class="alert alert-danger" th:if="${error}"> <i class="ti-na"></i> <span class="form-control-feedback" th:text="${error}"></span>
+	            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+	        </div>
             <input name="imagenUrl" type="hidden" th:field="*{imagenUrl}" />
             <input name="id" type="hidden" th:field="*{id}" />
             <div class="form-body">
@@ -216,7 +219,7 @@ $(document).ready(function() {
               <div class="row">
                 <div id="divImagen" class="col-md-4" th:classappend="${#fields.hasErrors('imagen')}? 'form-group has-danger':'form-group'">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.imagen}"></label>
-                  <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" data-show-remove="false" th:title="#{mensaje.imagen.validacion}" th:attr="data-default-file=|*{imagenUrl}|">
+                  <input name="imagen" type="file" class="form-control dropify" th:field="*{imagen}" data-show-remove="false" accept="image/*" th:title="#{mensaje.imagen.validacion}" th:attr="data-default-file=|*{imagenUrl}|">
                   <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></span>
                   </span>
                 </div>

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.ColoniaDto;
@@ -31,6 +33,7 @@ import mx.com.admoninmuebles.service.InmuebleService;
 import mx.com.admoninmuebles.service.UsuarioService;
 import mx.com.admoninmuebles.service.ZonaService;
 import mx.com.admoninmuebles.storage.StorageService;
+import mx.com.admoninmuebles.validation.MimeTypeValidator;
 
 @Controller
 public class InmuebleController {
@@ -50,6 +53,9 @@ public class InmuebleController {
 
     @Autowired
     private InmuebleService inmuebleService;
+    
+    @Autowired
+    private MessageSource messages;
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/inmuebles")
@@ -134,11 +140,17 @@ public class InmuebleController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/inmueble-crear")
-    public String guardarInmueble(final Locale locale, final Model model, @Valid final InmuebleDto inmuebleDto, final BindingResult bindingResult) {
+    public String guardarInmueble(final Locale locale, final Model model, @Valid final InmuebleDto inmuebleDto, final BindingResult bindingResult, RedirectAttributes redirect) {
     	logger.info(inmuebleDto.toString());
         if (bindingResult.hasErrors()) {
             return "inmuebles/inmueble-crear";
         }
+        
+        if( !MimeTypeValidator.isImage( inmuebleDto.getImagen().getContentType() ) ) {
+        	 redirect.addFlashAttribute("error",   messages.getMessage("mensaje.inmueble.imagen.validacion", null, locale) );
+        	 return "redirect:/inmueble-crear";
+        }
+        
         inmuebleDto.setImagenUrl("/" + storageService.store(inmuebleDto.getImagen()));
         inmuebleService.save(inmuebleDto);
 
@@ -180,10 +192,15 @@ public class InmuebleController {
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @PostMapping(value = "/inmueble-editar")
-    public String editarInmueble(final Locale locale, final Model model, @Valid final InmuebleDto inmuebleDto, final BindingResult bindingResult) {
+    public String editarInmueble(final Locale locale, final Model model, @Valid final InmuebleDto inmuebleDto, final BindingResult bindingResult, RedirectAttributes redirect) {
         if (bindingResult.hasErrors()) {
             return "inmuebles/inmueble-editar";
         }
+        
+        if( !MimeTypeValidator.isImage( inmuebleDto.getImagen().getContentType() ) ) {
+       	 redirect.addFlashAttribute("error",   messages.getMessage("mensaje.inmueble.imagen.validacion", null, locale) );
+       	 return "redirect:/inmueble-editar";
+       }
 
         if (StringUtils.isEmpty(inmuebleDto.getImagenUrl())) {
             inmuebleDto.setImagenUrl("/" + storageService.store(inmuebleDto.getImagen()));

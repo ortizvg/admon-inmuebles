@@ -68,7 +68,7 @@
 	                                                <tr>
 	                                                    <td th:text="${iterator.index + 1}"></td>
 	                                                    <td th:switch="${socio.fotoUrl != null}">
-	                                                        <a th:href="${'/socio-detalle/'  + socio.id}">
+	                                                        <a th:href="${'/condomino-detalle/'  + socio.id}">
 	                                                        		<span  th:case="${false}" class="round round-success" width="100">S</span>
                                 									<img th:case="${true}" th:src="${socio.fotoUrl}" class="img-circle" width="100">
 	                                                        	<span th:text="${socio.username}"></span>
