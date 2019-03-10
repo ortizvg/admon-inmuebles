@@ -118,7 +118,16 @@ public class InmuebleServiceImpl implements InmuebleService {
 
 	@Override
 	public Collection<InmuebleDto> findByDireccionAsentamientoId(Long id) {
-		 return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoId(id).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+		 return StreamSupport.stream(inmuebleRepository.findByDireccionAsentamientoId(id).spliterator(), false)
+	        		.map(inmueble -> 
+						{
+							InmuebleDto inmuebleDto = modelMapper.map(inmueble, InmuebleDto.class);
+							inmuebleDto.setTotalSocios(inmueble.getSocios() != null ? inmueble.getSocios().size() : 0);
+							
+							return inmuebleDto;
+						}
+	        		)
+				 .collect(Collectors.toList());
 	}
 
 	@Override

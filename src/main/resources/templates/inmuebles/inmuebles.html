@@ -94,6 +94,7 @@
                     <tr>
                       <th th:text="#{tabla.id}"></th>
                       <th th:text="#{etiqueta.inmueble.nombre}"></th>
+                      <th th:text="#{etiqueta.inmueble.totalsocios}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
                   </thead>
@@ -102,6 +103,7 @@
                       <tr>
                         <td th:text="${iterator.index + 1}"></td>
                         <td th:text="${inmueble.nombre}"></td>
+                        <td th:text="${inmueble.totalSocios}"></td>
                         <td><a th:href="${'/inmueble-detalle/'  + inmueble.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
                           <a th:href="${'/inmueble-editar/'  + inmueble.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a> <a
                           th:attr="data-id=${inmueble.id}" th:attrappend="data-nombre=${inmueble.nombre}" class="btn btn-sm btn-icon btn-pure btn-outline modal-show"> <i
