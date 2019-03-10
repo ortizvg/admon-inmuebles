@@ -45,12 +45,12 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 		
 		Context datosPlantilla = new Context();
 		datosPlantilla.setVariable( PARAMETRO_CORREO_URL_ACTIVACION, urlActiacion );
-		datosPlantilla.setVariable( "nombre", usuarioDto.getUsername() );
+		datosPlantilla.setVariable( "nombre", usuarioDto.getNombreCompleto() );
+		datosPlantilla.setVariable( "username", usuarioDto.getUsername() );
 		
 		CorreoDto correoDto = new CorreoDto();
 		correoDto.setDe( env.getProperty( PROPIEDAD_CORREO_USUARIOS_DE ) );
 		correoDto.setAsunto(messages.getMessage(PROPIEDAD_CUENTA_ACTIVACION_ASUNTO , null, LocaleConst.LOCALE_MX ) );
-//		correoDto.setAsunto( "Activación de cuenta" );
 		correoDto.setPlantilla( PlantillaCorreoConst.ACTIVACION_CUENTA );
 		correoDto.setPara(usuarioDto.getCorreo());
 		correoDto.setDatosPlantilla( datosPlantilla );
@@ -69,7 +69,6 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 		CorreoDto correoDto = new CorreoDto();
 		correoDto.setDe( env.getProperty( PROPIEDAD_CORREO_USUARIOS_DE ) );
 		correoDto.setAsunto(messages.getMessage(PROPIEDAD_CUENTA_RECUPERACION_CONTRASENIA_ASUNTO , null, LocaleConst.LOCALE_MX ) );
-//		correoDto.setAsunto( "Recuperacion de contraseña" );
 		correoDto.setPlantilla( PlantillaCorreoConst.RECUPERA_CONTRASENIA );
 		correoDto.setPara(usuarioDto.getCorreo());
 		correoDto.setDatosPlantilla( datosPlantilla );

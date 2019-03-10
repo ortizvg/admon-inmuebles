@@ -12,5 +12,6 @@ public final class ComunConst {
 	public static final String USUARIO_SISTEMA = "Sistema";
 	public static final String CADENA_VACIA = "";
 	public static final String CADENA_ESPACIO= " ";
+	public static final String SEPARADOR_GUION_MEDIO = " - ";
 
 }

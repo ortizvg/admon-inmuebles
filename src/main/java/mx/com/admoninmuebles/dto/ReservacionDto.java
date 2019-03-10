@@ -1,6 +1,7 @@
 package mx.com.admoninmuebles.dto;
 
 import lombok.Data;
+import mx.com.admoninmuebles.constant.ComunConst;
 
 @Data
 public class ReservacionDto {
@@ -27,4 +28,13 @@ public class ReservacionDto {
     private Long pagoId;
     private String pagoEstatusPagoName;
     private String pagoEstatusPagoDescripction;
+    
+    public String getTitle() {
+    	StringBuffer titleSb = new StringBuffer()
+    	.append(this.title)
+    	.append( ComunConst.SEPARADOR_GUION_MEDIO )
+    	.append(this.areaComunNombre);
+    	
+    	return titleSb.toString();
+    }
 }

@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
+import mx.com.admoninmuebles.constant.ComunConst;
 
 @Data
 public class UsuarioDto {
@@ -117,7 +118,15 @@ public class UsuarioDto {
     
 
     public String getNombreCompleto() {
-        return String.format("%s %s %s", nombre, apellidoPaterno, apellidoMaterno);
+    	StringBuffer nombreCompleto = new StringBuffer()
+    			.append( this.nombre )
+    			.append( ComunConst.CADENA_ESPACIO )
+    			.append( this.apellidoPaterno )
+    			.append( ComunConst.CADENA_ESPACIO )
+    			.append( this.apellidoMaterno == null ? ComunConst.CADENA_VACIA : this.apellidoMaterno );
+    			
+    	return nombreCompleto.toString();
+    			
     }
 
 }
