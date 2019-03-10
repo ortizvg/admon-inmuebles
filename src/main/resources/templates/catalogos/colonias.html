@@ -50,6 +50,7 @@
                     <tr>
                       <th th:text="#{tabla.id}"></th>
                       <th th:text="#{colonia.nombre}"></th>
+                      <th th:text="#{colonia.codigopostal}"></th>
                       <th th:text="#{colonia.zona}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
@@ -59,6 +60,7 @@
                       <tr>
                         <td th:text="${iterator.index + 1}"></td>
                         <td th:text="${colonia.nombre}"></td>
+                        <td th:text="${colonia.codigoPostal}"></td>
                         <td th:text="|${colonia.zonaCodigo} - ${colonia.zonaNombre}|"></td>
                         <td>
                         	<a th:attr="data-id=''+${colonia.id}+'', data-nombre=''+${colonia.nombre}+''"  class="btn btn-sm btn-icon btn-pure btn-outline modal-show">
