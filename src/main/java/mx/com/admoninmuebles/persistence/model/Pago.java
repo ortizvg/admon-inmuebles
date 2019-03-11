@@ -1,7 +1,6 @@
 package mx.com.admoninmuebles.persistence.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -72,8 +71,9 @@ public class Pago extends EntidadBase {
     @NotNull
     private Boolean verificado;
     
-    @Column(nullable = true)
-    private LocalDate fechaPago;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_pago")
+    private Date fechaPago;
     
     //NUEVO
     @Temporal(TemporalType.TIMESTAMP)

@@ -52,15 +52,15 @@
 						              <div class="row">
 						                <div class="col-md-4 form-group">
 						                  <label class="form-control-label" th:text="#{notificaciones.fecha.inicial}"></label>
-						                  <p class="form-control-static" th:text="*{fechaExposicionInicial}"></p>
+						                  <p class="form-control-static"  th:text="*{#temporals.format(fechaExposicionInicial, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA_LOCAL_DATE)}"></p>
 						                </div>
 						                <div  class="col-md-4 form-group">
 						                  <label class="control-label" th:text="#{notificaciones.fecha.final}"></label>
-						                  <p class="form-control-static" th:text="*{fechaExposicionFinal}"></p>
+						                  <p class="form-control-static" th:text="*{#temporals.format(fechaExposicionFinal, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA_LOCAL_DATE)}"></p>
 						                </div>
 						                <div class="col-md-4 form-group">
 						                  <label class="control-label" th:text="#{notificaciones.fecha.creacion}"></label>
-						                  <p class="form-control-static" th:text="*{fechaCreacion}"></p>
+						                  <p class="form-control-static" th:text="*{#dates.format(fechaCreacion, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA)}"></p>
 						                </div>
 						              </div>
 						              <div class="row">

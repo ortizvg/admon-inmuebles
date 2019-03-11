@@ -1,7 +1,6 @@
 package mx.com.admoninmuebles.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.validation.constraints.Digits;
@@ -42,9 +41,9 @@ public class PagoDto {
 
 	private Boolean verificado;
 	
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @DateTimeFormat(iso = ISO.DATE)
-    private LocalDate fechaPago;
+    @DateTimeFormat(iso = ISO.NONE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date fechaPago;
     
     @DateTimeFormat(iso = ISO.NONE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")

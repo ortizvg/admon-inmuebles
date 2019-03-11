@@ -9,6 +9,8 @@ public final class ComunConst {
 	public static final Integer TAMANIO_5_MB = 5000000;
 	public static final Integer TAMANIO_PAGINACION = 15;
 	
+	public static final String FORMATO_FECHA = "dd/MM/yyyy HH:mm";
+	public static final String FORMATO_FECHA_LOCAL_DATE = "dd/MM/yyyy";
 	public static final String USUARIO_SISTEMA = "Sistema";
 	public static final String CADENA_VACIA = "";
 	public static final String CADENA_ESPACIO= " ";

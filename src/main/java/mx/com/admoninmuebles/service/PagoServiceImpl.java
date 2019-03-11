@@ -106,7 +106,7 @@ public class PagoServiceImpl implements PagoService {
     	 pago.setTipoPagoBancario( tipoPagoBancarioRepository.findByNameAndLang( TipoPagoBancario.TRANSFERENCIA, "es" ) );
     	 pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.VERIFICACION, "es") );
     	 pago.setVerificado(false);
-    	 pago.setFechaPago(LocalDate.now());
+    	 pago.setFechaPago(new Date());
     	 pago.setComprobantePago(comprobantePagoCreado);
     	
     	 Pago pagoCreado =  pagoRepository.save( pago );

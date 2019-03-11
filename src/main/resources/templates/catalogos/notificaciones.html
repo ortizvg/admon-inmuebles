@@ -71,8 +71,8 @@
 	                                                <td th:text="${iterator.index + 1}"></td>
 	                                                <td th:text="${notificacion.titulo}"></td>
 <!-- 	                                                <td th:text="${notificacion.descripcion}"></td> -->
-	                                                <td th:text="${notificacion.fechaExposicionInicial}"></td>
-	                                                <td th:text="${notificacion.fechaExposicionFinal}"></td>
+	                                                <td th:text="${#temporals.format(notificacion.fechaExposicionInicial, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA_LOCAL_DATE)}"></td>
+	                                                <td th:text="${#temporals.format(notificacion.fechaExposicionFinal, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA_LOCAL_DATE)}"></td>
 	                                                <td>
 	                                                	<a sec:authorize="hasRole('ADMIN_BI')" th:href="${'/catalogos/notificacion-editar/'  + notificacion.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-pencil text-inverse m-r-10" aria-hidden="true"></i></a>
 <!-- 	                                                	<a th:href="${'/catalogos/notificacion-eliminar/'  + notificacion.id}" class="btn btn-sm btn-icon btn-pure btn-outline"><i class="fa fa-close text-danger" aria-hidden="true"></i></a> -->
