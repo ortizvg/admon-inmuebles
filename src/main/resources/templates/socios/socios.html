@@ -41,13 +41,13 @@
 							<h4 class="card-title" th:text="#{socios.titulo}"></h4>
 							<h6 class="card-subtitle" th:text="#{socios.subtitulo}"></h6>
 							
-								    <div class="d-flex row">
-						        		<div class="mr-auto col-md-4">
+								    <div class="d-flex">
+						        		<div class="mr-auto">
 									  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 									  	</div>
-									  	<div>
-						                      <a th:href="@{/condomino-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
-						                      <a th:href="@{/condomino-carga-masivo}" class="btn btn-info-gesco waves-effect" th:text="#{boton.masivo}"></a>
+									  	<div class="ml-auto">
+						                      <a th:href="@{/condomino-crear}" class="btn btn-info-gesco waves-effect m-l-10" th:text="#{boton.nuevo}"></a>
+						                      <a th:href="@{/condomino-carga-masivo}" class="btn btn-info-gesco waves-effect m-l-10" th:text="#{boton.masivo}"></a>
 									  	</div>
 									</div>
 									

@@ -42,12 +42,12 @@
             <div class="card-body">
               <h4 class="card-title" th:text="#{reporte.mensual.listado.subtitulo}"></h4>
               <h6 class="card-subtitle" th:text="#{reporte.mensual.listado.titulo}"></h6>
-              <div class="row">
-        		<div class="col-4">
+              <div class="d-flex">
+        		<div class="mr-auto">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
 			  	</div>
-			  	<div class="col-2 ml-auto">
-			  		<a sec:authorize="hasRole('CONTADOR')" th:href="@{/reportes/reportes-mensuales/carga}" class="btn btn-block btn-info-gesco" th:text="#{boton.reporte.cargar}"></a>
+			  	<div class="ml-auto">
+			  		<a sec:authorize="hasRole('CONTADOR')" th:href="@{/reportes/reportes-mensuales/carga}" class="btn btn-block btn-info-gesco m-l-10" th:text="#{boton.reporte.cargar}"></a>
 			  	</div>
 			 </div>
 			 

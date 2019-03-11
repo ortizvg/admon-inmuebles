@@ -41,12 +41,12 @@
 							<h4 class="card-title" th:text="#{proveedores.titulo}"></h4>
 							<h6 class="card-subtitle" th:text="#{proveedores.subtitulo}"></h6>
 							
-									<div class="row">
-						        		<div class="col-4">
+									<div class="d-flex">
+						        		<div class="mr-auto">
 									  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 									  	</div>
-									  	<div class="col-1 ml-auto">
-						                    <a th:href="@{/proveedor-crear}" class="btn btn-info-gesco" th:text="#{boton.nuevo}"></a>
+									  	<div class="ml-auto">
+						                    <a th:href="@{/proveedor-crear}" class="btn btn-info-gesco m-l-10" th:text="#{boton.nuevo}"></a>
 									  	</div>
 									</div>
 									

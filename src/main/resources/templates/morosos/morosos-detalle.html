@@ -99,12 +99,12 @@
             <div class="card-body">
               <h4 class="card-title" th:text="#{mororos.detalle.subtitulo}"></h4>
               <h6 class="card-subtitle" th:text="#{mororos.detalle.subtitulo.detalle}"></h6>
-              <div class="row">
-        		<div class="col-4">
+              <div class="d-flex">
+        		<div class="mr-auto">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}"/>
 			  	</div>
-			  	<div class="col-2 ml-auto">
-                      <a th:href="@{/morosos/tablero}" class="btn  btn-block  btn-secondary waves-effect" th:text="#{boton.regresar}"></a>
+			  	<div class="ml-auto">
+                      <a th:href="@{/morosos/tablero}" class="btn  btn-block  btn-secondary waves-effect m-l-10" th:text="#{boton.regresar}"></a>
 			  	</div>
 			 </div>
 			 

@@ -38,12 +38,12 @@
               <h4 class="card-title" th:text="#{areacomun.titulo}"></h4>
               <h6 class="card-subtitle" th:text="#{areacomun.subtitulo}"></h6>
               
-              <div class="row">
-        		<div class="col-4">
+              <div class="d-flex">
+        		<div class="mr-auto">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 			  	</div>
-			  	<div class="col-1 ml-auto">
-                      <a th:href="@{/catalogos/area-comun-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.crear}"></a>
+			  	<div class="ml-auto">
+                      <a th:href="@{/catalogos/area-comun-crear}" class="btn btn-info-gesco waves-effect m-l-10" th:text="#{boton.crear}"></a>
 			  	</div>
 			 </div>
 			 

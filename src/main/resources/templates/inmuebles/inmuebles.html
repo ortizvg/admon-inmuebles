@@ -54,12 +54,12 @@
               <h4 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h4>
               <h6 class="card-subtitle" th:text="#{etiqueta.inmueble.subtitulo}"></h6>
               <!--               <a th:href="@{/inmueble-crear}" class="btn btn-info btn-rounded waves-effect" th:text="#{inmueble.nuevo}"></a> -->
-              <div class="row m-b-10">
-        		<div class="col-4">
+              <div class="d-flex m-b-10">
+        		<div class="mr-auto">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 			  	</div>
-			  	<div class="col-1 ml-auto">
-                     <a th:href="@{/inmueble-crear}" class="btn btn-info-gesco waves-effect" th:text="#{boton.nuevo}"></a>
+			  	<div class="ml-auto">
+                     <a th:href="@{/inmueble-crear}" class="btn btn-info-gesco waves-effect m-l-10" th:text="#{boton.nuevo}"></a>
 			  	</div>
 			 </div>
               <form name="buscarInmuebleForm" action="#" th:action="@{/inmuebles}" th:object="${inmuebleDto}" method="get">
