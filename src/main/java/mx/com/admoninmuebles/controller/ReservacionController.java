@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.AreaComunDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
@@ -137,12 +138,13 @@ public class ReservacionController {
     	
 		AreaComunDto areaComunDto = areaComunService.findById((Long) session.getAttribute("areaComunId"));
 		TipoPago tipoPagoReservaAreaComun = tipoPagoRepository.findByNameAndLangg( TipoPago.RESERVA, locale.getLanguage() );
+		reservacionDto.setAreaComunNombre( areaComunDto.getNombre() );
     	
     	PagoDto pagoDto = new PagoDto();
     	pagoDto.setUsuarioId( optUserId );
     	pagoDto.setTipoPagoId(tipoPagoReservaAreaComun.getId());
     	pagoDto.setMonto(areaComunDto.getCuotaPorDia());
-    	pagoDto.setConcepto(reservacionDto.getTitle());
+    	pagoDto.setConcepto( reservacionDto.getTitle() + ComunConst.SEPARADOR_GUION_MEDIO + reservacionDto.getAreaComunNombre() );
     	PagoDto pagoNuevo = pagoService.generarPagosPorSocio(pagoDto);
     	
         reservacionDto.setPagoId(pagoNuevo.getId());

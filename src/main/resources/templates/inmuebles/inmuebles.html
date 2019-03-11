@@ -75,7 +75,7 @@
                     </div>
                     <div id="divColonia" class="col-md-4 form-group">
                       <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>
-                      <select id="colonias" name="colonias" class="form-control" th:field="*{direccionAsentamientoId}" required>
+                      <select id="colonias" name="colonias" class="form-control" th:field="*{direccionAsentamientoId}">
                         <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
                         <option th:each="colonia : ${colonias}" th:value="${colonia.id}" th:text="${colonia.nombre}"></option>
                       </select>

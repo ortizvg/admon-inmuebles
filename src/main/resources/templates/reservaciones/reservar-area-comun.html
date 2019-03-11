@@ -58,8 +58,6 @@
         },
         dayClick: function( date, allDay, jsEvent, view ) { 
           if( !enableCalendar && mostrarMensajeSeleccion){
-          	console.log('Clik sobre dia no bloequeado');
-        	  console.log('Clik sobre dia bloequeado');
         	  var modal = $('#modalSeleccionAreaComun');
         	  modal.modal("show");
           } 
@@ -79,8 +77,6 @@
       var modal = $('#modalCrearEvento');
       modal.find('.modal-title').text(/*[[#{reserva.areacomun.encabezado.modal.reservar}]]*/)
       modal.find('.modal-body p').text(mensaje.format(start.format('DD-MM-YYYY'), end.format('DD-MM-YYYY')))
-//       $('input[name="start"]').val(start.format('DD-MM-YYYY'));
-//       $('input[name="end"]').val(end.format('DD-MM-YYYY));
       $('input[name="start"]').val(start.format('YYYY-MM-DD'));
       $('input[name="end"]').val(end.format('YYYY-MM-DD'));
       modal.modal("show");

@@ -76,33 +76,34 @@ public class InmuebleController {
             }
         }
         model.addAttribute("zonas", zonas);
-
-        if (null != inmuebleDto.getZonaCodigo()) {
-            Collection<ColoniaDto> colonias = coloniaService.findByZonaCodigo(inmuebleDto.getZonaCodigo());
-            model.addAttribute("colonias", colonias);
-            if (null != inmuebleDto.getDireccionAsentamientoId()) {
-                model.addAttribute("inmuebles", inmuebleService.findByDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId()));
-                return "inmuebles/inmuebles";
-            }
-        }
-
-        if (1 == zonas.size()) {
-            String zonaCodigo = zonas.iterator().next().getCodigo();
-            inmuebleDto.setZonaCodigo(zonaCodigo);
-            Collection<ColoniaDto> colonias = coloniaService.findByZonaCodigo(zonaCodigo);
-            model.addAttribute("colonias", colonias);
-            if (1 == colonias.size()) {
-                inmuebleDto.setDireccionAsentamientoId(colonias.iterator().next().getId());
-                model.addAttribute("inmuebles", inmuebleService.findByDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId()));
-            }
-
-        }
         
-//        if( inmuebleDto == null ) {
-//        	model.addAttribute("inmuebleDto", new InmuebleDto());
-//        }
-//        
+        if (null != inmuebleDto.getDireccionAsentamientoId() ) {
+        	 model.addAttribute("inmuebles", inmuebleService.findByDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId()));
+        } else if( null != inmuebleDto.getZonaCodigo() ) {
+        	 model.addAttribute("inmuebles", inmuebleService.findByZonaCodigo( inmuebleDto.getZonaCodigo() ));
+        }
 
+//        if (null != inmuebleDto.getZonaCodigo()) {
+//            Collection<ColoniaDto> colonias = coloniaService.findByZonaCodigo(inmuebleDto.getZonaCodigo());
+//            model.addAttribute("colonias", colonias);
+//            if (null != inmuebleDto.getDireccionAsentamientoId()) {
+//                model.addAttribute("inmuebles", inmuebleService.findByDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId()));
+//                return "inmuebles/inmuebles";
+//            }
+//        }
+//
+//        if (1 == zonas.size()) {
+//            String zonaCodigo = zonas.iterator().next().getCodigo();
+//            inmuebleDto.setZonaCodigo(zonaCodigo);
+//            Collection<ColoniaDto> colonias = coloniaService.findByZonaCodigo(zonaCodigo);
+//            model.addAttribute("colonias", colonias);
+//            if (1 == colonias.size()) {
+//                inmuebleDto.setDireccionAsentamientoId(colonias.iterator().next().getId());
+//                model.addAttribute("inmuebles", inmuebleService.findByDireccionAsentamientoId(inmuebleDto.getDireccionAsentamientoId()));
+//            }
+//
+//        }
+        
         return "inmuebles/inmuebles";
     }
 

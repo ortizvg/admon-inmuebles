@@ -11,9 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.validation.ComparacionFechas;
 

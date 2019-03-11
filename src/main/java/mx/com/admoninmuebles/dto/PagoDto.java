@@ -56,6 +56,7 @@ public class PagoDto {
 	private String tipoPagoBancarioDescripction;
 
 	private Long tipoPagoId;
+	private String tipoPagoName;
 	private String tipoPagoDescripction;
 
 	private Long estatusPagoId;

@@ -63,7 +63,7 @@ $(document).ready(function() {
 					</div>
 					<div id="divConcepto" th:class="${#fields.hasErrors('concepto')}? 'form-group has-danger':'form-group'">
 						<label class="form-control-label" th:text="#{pago.concepto}"></label>
-						<input name="concepto" class="form-control" th:field="*{concepto}" required maxlength="255" th:title="#{pago.concepto.mensaje.validacion}" />
+						<input name="concepto" class="form-control" th:field="*{concepto}" required maxlength="255" th:title="#{pago.concepto.mensaje.validacion}" th:disabled="${T(mx.com.admoninmuebles.persistence.model.TipoPago).RESERVA == pago.tipoPagoName}"/>
 						<span class="form-control-feedback">
 							<span th:if="${#fields.hasErrors('concepto')}" th:errors="*{concepto}"></span>
 						</span>
