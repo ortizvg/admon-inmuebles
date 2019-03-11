@@ -66,38 +66,32 @@ function cargarSociosPorInmueble() {
               
               <div class="alert alert-info" sec:authorize="hasRole('ADMIN_BI')">
                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Información</h3> 
-                 <p>
-                 	Como administrador tienes la opción de generar pagos para un bien inmueble o para un usuario del bien inmueble.
-                 </p>
+                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> <span  th:text="#{pago.generacion.alerta.informacion.titulo}"></span></h3> 
+                 <p th:text="#{pago.generacion.alerta.informacion.admin.bi}"></p>
              </div>
              <div class="alert alert-info" sec:authorize="hasRole('ADMIN_ZONA')">
                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Información</h3> 
-                 <p>
-                 	Como administrador tienes la opción de generar pagos para un bien inmueble de tu zona o para un usuario de un bien inmueble.
-                 </p>
+                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> <span  th:text="#{pago.generacion.alerta.informacion.titulo}"></span></h3> 
+                 <p th:text="#{pago.generacion.alerta.informacion.admin.zona}"></p>
              </div>
              <div class="alert alert-info" sec:authorize="hasRole('ADMIN_CORP')">
                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Información</h3> 
-                 <p>
-                 	Como administrador tienes la opción de generar pagos para un bien inmueble de cualquier zona o para un usuario de un bien inmueble.
-                 </p>
+                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> <span  th:text="#{pago.generacion.alerta.informacion.titulo}"></span></h3> 
+                 <p th:text="#{pago.generacion.alerta.informacion.admin.corp}"></p>
              </div>
               
               <form name="pagoGeneracionForm" action="#" th:action="@{/pagos/generacion}" th:object="${pago}" method="post">
               
                   <div id="divZona" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
                        <label class="form-control-label" for="rolId" th:text="#{pago.generacion.zona}"></label>
-                        <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
+                        <select  name="zona" id="zona" class="form-control select2"  onchange="cargarInmueblesPorZona();">	
                         	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 							<option th:each="zona : ${session.zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
                         </select>
                    </div>
                    <div id="divInmueble" th:class="${#fields.hasErrors('inmuebleId')}? 'form-group has-danger':'form-group'" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" >
                        <label class="form-control-label" for="colonia" th:text="#{pago.generacion.inmueble}"></label>
-                       <select  name="inmueble" id="inmueble" class="form-control" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
+                       <select  name="inmueble" id="inmueble" class="form-control select2" th:field="*{inmuebleId}" required onchange="cargarSociosPorInmueble();">
                        		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 							<option th:each="inmueble : ${session.inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
                        </select>
@@ -107,7 +101,7 @@ function cargarSociosPorInmueble() {
                    </div>
                    <div id="divSocio" class="form-group"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')">
                        <label class="form-control-label" for="inmueble" th:text="#{pago.generacion.socio}"></label>
-	                   <select name="socio" id="socio" class="form-control" th:field="*{usuarioId}" >	
+	                   <select name="socio" id="socio" class="form-control select2" th:field="*{usuarioId}" >	
 	                    	<option selected="selected" th:value="${null}" th:text="#{combo.seleccionar}"></option>
 							<option th:each="socio : ${session.socios}" th:value="${{socio.id}}" th:text="|${socio.nombre}  ${socio.apellidoPaterno} ${socio.apellidoMaterno}|"></option>
 	                   </select>
@@ -115,7 +109,7 @@ function cargarSociosPorInmueble() {
 		            
 		            <div id="divTipoPago" th:class="${#fields.hasErrors('tipoPagoId')}? 'form-group has-danger':'form-group'" >
 		              <label class="form-control-label" th:text="#{pago.tipopago}"></label>
-		              <select name="tipoPagoId" id="tipoPagoId" class="form-control" th:field="*{tipoPagoId}" required>
+		              <select name="tipoPagoId" id="tipoPagoId" class="form-control select2" th:field="*{tipoPagoId}" required>
 		                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 		                <option th:each="tipoPago : ${session.tiposPago}" th:value="${{tipoPago.id}}" th:text="${tipoPago.descripction}"></option>
 		              </select>

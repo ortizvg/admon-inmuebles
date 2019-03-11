@@ -23,10 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.dto.ReservacionDto;
 import mx.com.admoninmuebles.error.BusinessException;
-import mx.com.admoninmuebles.persistence.model.AreaComun;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
 import mx.com.admoninmuebles.persistence.model.Reservacion;
-import mx.com.admoninmuebles.persistence.repository.AreaComunRepository;
 import mx.com.admoninmuebles.persistence.repository.PagoRepository;
 import mx.com.admoninmuebles.persistence.repository.ReservacionRepository;
 import mx.com.admoninmuebles.util.UtilDate;
@@ -41,9 +39,6 @@ public class ReservacionServiceImpl implements ReservacionService {
     
     @Autowired
     private PagoRepository pagoRepository;
-    
-    @Autowired
-    private AreaComunRepository areaComunRepository;
     
     @Autowired
     private NotificacionReservacionService notificacionReservacionService;
