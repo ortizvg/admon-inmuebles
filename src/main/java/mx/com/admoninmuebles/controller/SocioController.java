@@ -234,7 +234,8 @@ public class SocioController {
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/condomino-eliminar/{id}")
     public String eliminarSocio(final @PathVariable Long id) {
-    	usuarioService.deleteById(id);
+    	logger.info("Eliminando Socio: " + id);
+    	socioService.eliminar(id);
         return "redirect:/condominos";
     }
     

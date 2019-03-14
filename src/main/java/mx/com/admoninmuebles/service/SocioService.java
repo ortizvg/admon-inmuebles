@@ -15,5 +15,6 @@ public interface SocioService {
 	Collection<UsuarioDto> findSociosByZonaCodigo(String zonaCodigo);
 	Collection<UsuarioDto> findSociosByAdminBiId(Long id);
 	Collection<UsuarioDto> findSociosByAdminZonaId(Long id);
+	boolean isSocioInInmuebleBySocioId(final Long id);
 
 }

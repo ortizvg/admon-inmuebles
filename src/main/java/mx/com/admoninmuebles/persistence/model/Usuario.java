@@ -23,6 +23,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,9 +36,13 @@ import lombok.EqualsAndHashCode;
 public class Usuario extends EntidadBase {
     private static final long serialVersionUID = 1L;
 
+//    @Id
+//    @Column(name = "id_usuario", unique = true, nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_usuario", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator( name = "native", strategy = "native")
     private Long id;
 
     @NotNull

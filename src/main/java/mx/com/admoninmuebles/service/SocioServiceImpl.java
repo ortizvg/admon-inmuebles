@@ -7,10 +7,14 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mx.com.admoninmuebles.constant.RolConst;
+import mx.com.admoninmuebles.controller.SocioController;
 import mx.com.admoninmuebles.dto.SocioDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
@@ -22,6 +26,8 @@ import mx.com.admoninmuebles.persistence.repository.UsuarioRepository;
 
 @Service
 public class SocioServiceImpl implements SocioService{
+	
+	Logger logger = LoggerFactory.getLogger(SocioServiceImpl.class);
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -71,8 +77,13 @@ public class SocioServiceImpl implements SocioService{
 		return modelMapper.map(socioCreado, SocioDto.class);
 	}
 
+	@Transactional
 	@Override
 	public void eliminar(Long idSocio) {
+		if( isSocioInInmuebleBySocioId( idSocio ) ) {
+			logger.info("Esta asociado: ");
+			usuarioRepository.deleteInmuelesSociosBySocioId( idSocio );
+		}
 		usuarioRepository.deleteById(idSocio);
 		
 	}
@@ -120,6 +131,18 @@ public class SocioServiceImpl implements SocioService{
 					return usuarioDto;
 					})
 				.collect(Collectors.toList());
+	}
+
+
+	@Override
+	public boolean isSocioInInmuebleBySocioId(Long id) {
+		logger.info("BusquedaSocioInmueble ID: " + id);
+		Long numeroRegistros = usuarioRepository.countInmuelesSociosBySocioId(id);
+		logger.info("numeroRegistros " + numeroRegistros);
+		if( numeroRegistros == 0 ) {
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
 	}
 	
 

@@ -10,6 +10,7 @@
 	var seleccione = /*[[#{etiqueta.seleccione}]]*/
 	var opcionSeleccione= '<option selected="selected" value="">'+seleccione+'</option>';
     $(document).ready(function() {
+        addControlState(document.getElementById('divZona'),/*[[#{mensaje.inmueble.colonia.requerido}]]*/);
         addControlState(document.getElementById('divColonia'),/*[[#{mensaje.inmueble.colonia.requerido}]]*/);
         $('.modal-show').click(function(event) {
             event.preventDefault();

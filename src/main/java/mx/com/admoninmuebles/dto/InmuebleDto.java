@@ -57,6 +57,7 @@ public class InmuebleDto {
     private String datosAdicionalesCorreo;
     private String datosAdicionalesNumeroCuenta;
     private String zonaCodigo;
+    private String direccionAsentamientoZonaNombre;
     @JsonIgnore
     private Integer totalSocios;
     private Collection<AreaComunDto> areasComunes;

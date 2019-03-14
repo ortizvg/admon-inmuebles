@@ -42,6 +42,12 @@
               <h3 class="card-title" th:text="#{etiqueta.inmueble.titulo}"></h3>
               <hr>
               <div class="row">
+                <div id="divInmuebleId" class="col-md-4 form-group">
+                  <label class="control-label" th:text="#{etiqueta.inmueble.codigo}"></label>
+                  <p class="form-control-static" th:text="*{id}"></p>
+                </div>
+              </div>
+              <div class="row">
                 <div id="divNombre" class="col-md-4 form-group">
                   <label class="control-label" th:text="#{etiqueta.inmueble.nombre}"></label>
                   <p class="form-control-static" th:text="*{nombre}"></p>
@@ -93,19 +99,25 @@
                 </div>
               </div>
               <div class="row">
-                <div id="divColonia" class="col-md-3 form-group">
+              	<div id="divZona" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{etiqueta.inmueble.zona}"></label>
+                  <p class="form-control-static" th:text="*{direccionAsentamientoZonaNombre}"></p>
+                </div>
+                <div id="divColonia" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.colonia}"></label>
                   <p class="form-control-static" th:text="*{direccionAsentamientoNombre}"></p>
                 </div>
-                <div id="divCalle" class="col-md-3 form-group">
+                <div id="divCalle" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.calle}"></label>
                   <p class="form-control-static" th:text="*{direccionCalle}"></p>
                 </div>
-                <div id="divNumeroExterior" class="col-md-3 form-group">
+              </div>
+              <div class="row">
+                <div id="divNumeroExterior" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.numeroexterior}"></label>
                   <p class="form-control-static" th:text="*{direccionNumeroExterior}"></p>
                 </div>
-                <div id="divNumeroInterior" class="col-md-3 form-group">
+                <div id="divNumeroInterior" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{etiqueta.inmueble.numerointerior}"></label>
                   <p class="form-control-static" th:text="*{direccionNumeroInterior}"></p>
                 </div>

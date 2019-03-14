@@ -38,6 +38,18 @@
 							<h6 class="card-subtitle">
 								<span th:text="#{socios.crear.masivo.subtitulo}"></span>
 							</h6>
+							
+							 <div class="alert alert-info" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')">
+				                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				                 <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> <span  th:text="#{socios.cargamasiva.alerta.informacion.titulo}"></span></h3> 
+				                 <p th:text="#{socios.cargamasiva.alerta.informacion.descripcion}"></p>
+				                 <div>
+				                 	<a th:href="@{/api/carga-masiva/manual}"><small class="text-info" th:text="#{socios.cargamasiva.manual}"> </small></a>
+				                 </div>
+				                 <div>
+				                 	<a th:href="@{/api/carga-masiva/plantilla}"><small class="text-info" th:text="#{socios.cargamasiva.plantilla}"> </small></a>
+				                 </div>
+				             </div>
 
 							<form name="crearSocioMasivoForm" action="#" enctype="multipart/form-data"
 								th:action="@{/condomino-masivo-crear}" th:object="${usuarioDto}"
