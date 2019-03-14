@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import mx.com.admoninmuebles.dto.AreaComunDto;
 import mx.com.admoninmuebles.persistence.model.AreaComun;
 import mx.com.admoninmuebles.persistence.repository.AreaComunRepository;
-import mx.com.admoninmuebles.persistence.repository.InmuebleRepository;
 
 @Service
 public class AreaComunServiceImpl implements AreaComunService {
@@ -20,9 +19,6 @@ public class AreaComunServiceImpl implements AreaComunService {
 	@Autowired
 	private AreaComunRepository areaComunRepository;
 	
-	@Autowired
-	private InmuebleRepository inmuebleRepository;
-
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -65,6 +61,16 @@ public class AreaComunServiceImpl implements AreaComunService {
 	public Collection<AreaComunDto> findByAdminZonaId(Long id) {
 		return StreamSupport.stream(areaComunRepository.findByAdminZonaId( id ).spliterator(), false)
 				.map(areaComun -> modelMapper.map(areaComun, AreaComunDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean isFiltro(AreaComunDto areaComunDto) {
+		return areaComunDto.getInmuebleId() != null;
+	}
+
+	@Override
+	public Collection<AreaComunDto> filtrar(AreaComunDto areaComunDto) {
+		return findByInmuebleId( areaComunDto.getInmuebleId() );
 	}
 
 }

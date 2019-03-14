@@ -19,4 +19,8 @@ public interface AreaComunService {
 	Collection<AreaComunDto> findByAdminBiId(Long id);
 	
 	Collection<AreaComunDto> findByAdminZonaId(Long id);
+	
+    boolean isFiltro( AreaComunDto areaComunDto  );
+    
+    Collection<AreaComunDto> filtrar( AreaComunDto areaComunDto );
 }

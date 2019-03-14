@@ -20,6 +20,7 @@ import mx.com.admoninmuebles.dto.AreaComunDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.AreaComunService;
 import mx.com.admoninmuebles.service.InmuebleService;
+import mx.com.admoninmuebles.service.ZonaService;
 
 @Controller
 public class AreaComunController {
@@ -28,20 +29,32 @@ public class AreaComunController {
 
     @Autowired
     private InmuebleService inmuebleService;
+    
+    @Autowired
+    private ZonaService zonaService;
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
     @GetMapping(value = "/catalogos/areas-comunes")
-    public String init(final Model model, final HttpServletRequest request) {
+    public String init(AreaComunDto areaComunDto, final Model model, final HttpServletRequest request, final HttpSession session) {
       
 	     Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
 	     if (request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
 	    	 model.addAttribute("areasComunes", areaComunService.findByAdminBiId( usuarioLogueadoId ) );
+	    	 session.setAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId ) );
 	     } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
 	    	 model.addAttribute("areasComunes", areaComunService.findByAdminZonaId( usuarioLogueadoId ) );
+	    	 session.setAttribute("zonas", zonaService.findByAdminZonaId( usuarioLogueadoId ) );
 	     } else if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 	    	 model.addAttribute("areasComunes", areaComunService.findAll());
+	    	 session.setAttribute("zonas", zonaService.findAll() );
+	    	 
 	     } 
-	        return "/catalogos/areas-comunes";
+	     
+	     if( areaComunService.isFiltro( areaComunDto ) ) {
+			model.addAttribute("areasComunes", areaComunService.filtrar( areaComunDto ) );
+	     }
+	     
+	     return "/catalogos/areas-comunes";
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
