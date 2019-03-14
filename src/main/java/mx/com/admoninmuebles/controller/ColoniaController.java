@@ -44,9 +44,16 @@ public class ColoniaController {
 
 		 if (request.isUserInRole(RolConst.ROLE_ADMIN_CORP)) {
 			 model.addAttribute("colonias", coloniaService.findByZonaIsNotNull());
+			 model.addAttribute("zonas", zonaService.findAll() );
         } else if (request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)) {
         	 model.addAttribute("colonias", coloniaService.findByAdminZona( usuarioLogueadoId) );
+        	 model.addAttribute("zonas", zonaService.findByAdminZonaId( usuarioLogueadoId ) );
         } 
+		 
+		if( coloniaService.isFiltro( coloniaDto ) ) {
+			model.addAttribute("colonias", coloniaService.filtrar( coloniaDto ) );
+		}
+		
         return "catalogos/colonias";
     }
 

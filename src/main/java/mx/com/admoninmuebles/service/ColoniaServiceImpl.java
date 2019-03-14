@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,6 +120,16 @@ public class ColoniaServiceImpl implements ColoniaService {
 		Asentamiento asentamiento = asentamientoOpt.get();
 		return asentamiento.getZona() != null;
 		
+	}
+
+	@Override
+	public boolean isFiltro(ColoniaDto coloniaDto) {
+		return StringUtils.isNotBlank( coloniaDto.getZonaCodigo() ) ;
+	}
+
+	@Override
+	public Collection<ColoniaDto> filtrar(ColoniaDto coloniaDto) {
+		return findByZonaCodigo( coloniaDto.getZonaCodigo() );
 	}
 
 }

@@ -36,7 +36,7 @@
             <div class="card-body">
               <h4 class="card-title" th:text="#{colonia.titulo}"></h4>
               <h6 class="card-subtitle" th:text="#{colonia.subtitulo}"></h6>
-			<div class="d-flex">
+			<div class="d-flex  m-b-10">
         		<div class="mr-auto">
 			  		<input class="form-control" id="filtroInputId" type="text" th:placeholder="#{etiqueta.busqueda}" />
 			  	</div>
@@ -44,6 +44,24 @@
                       <a th:href="@{/catalogos/colonia-agregar}" class="btn btn-info-gesco waves-effect m-l-10" th:text="#{boton.crear}"></a>
 			  	</div>
 			 </div>
+			  <form name="buscarColoniaeForm" action="#" th:action="@{/catalogos/colonias}" th:object="${coloniaDto}" method="get">
+                <div class="form-body">
+                  <div class="row">
+                    <div id="divZona" class="col-md-4 form-group">
+                      <label class="form-control-label" th:text="#{colonia.zona}"></label>
+                      <select id="zonaCodigo" name="zonaCodigo" class="form-control" th:field="*{zonaCodigo}">
+                        <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                        <option th:each="zona : ${zonas}" th:value="${zona.codigo}" th:text="|${zona.codigo} - ${zona.nombre}|"></option>
+                      </select>
+                      <span class="form-control-feedback"> </span>
+                    </div>
+                    <div class="col-md-4 form-group">
+                      <label class="col-md-12 form-control-label">&nbsp;</label>
+                      <button type="submit" class="btn btn-success btn-rounded" th:text="#{boton.buscar}"></button>
+                    </div>
+                  </div>
+                </div>
+              </form>
               <div class="table-responsive">
                 <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                   <thead>

@@ -27,5 +27,8 @@ public interface ColoniaService {
     Collection<ColoniaDto> findBycodigoPostalAndZonaCodigo(final String codigoPostal, String zonaCodigo);
     
     Collection<ColoniaDto> findByAdminZona(Long adminZonaId);
+    
+    boolean isFiltro( ColoniaDto coloniaDto );
+    Collection<ColoniaDto> filtrar( ColoniaDto coloniaDto );
 
 }
