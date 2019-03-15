@@ -42,5 +42,11 @@ public interface ZonaRepository extends CrudRepository<Zona, String> {
     @Query(value = "update gescopls.zonas_administradoresBi set zona_codigo = :codigoZona where administradoresbi_id_usuario = :userId",
             nativeQuery = true)
     void updateZonaAdministradoresBi(@Param("codigoZona") String codigoZona, @Param("userId") Long userId);
+    
+    @Modifying
+    @Query(value = "delete from gescopls.zonas_administradoresBi\n" + 
+			"where administradoresBi_id_usuario = ?1", 
+			nativeQuery = true)
+    void deleteAdminBiZonaByAdminBiId(Long id);
 	
 }

@@ -9,27 +9,29 @@
 <div width="100%" style="background: #f8f8f8; padding: 0px 0px; font-family:arial; line-height:28px; height:100%;  width: 100%; color: #514d6a;">
   <div style="max-width: 700px; padding:50px 0;  margin: 0px auto; font-size: 14px">
     <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; margin-bottom: 20px">
-<!--       <tbody> -->
-<!--         <tr> -->
-<!--           <td style="vertical-align: top; padding-bottom:30px;" align="center"> -->
-<!--             <img src="../../frontend/src/assets/own/images/logo-servis.jpg" alt="Pixeladmin Responsive web app kit" style="border:none"> -->
-<!--            </td> -->
-<!--         </tr> -->
-<!--       </tbody> -->
     </table>
     <div style="padding: 40px; background: #fff;">
       <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
         <tbody>
           <tr>
-            <td style="border-bottom:1px solid #f6f6f6;"><h1 style="font-size:14px; font-family:arial; margin:0px; font-weight:bold;">Estimado usuario <span th:text="${nombre}"></span>,</h1>
+            <td style="border-bottom:1px solid #f6f6f6;"><h1 style="font-size:14px; font-family:arial; margin:0px; font-weight:bold;">Estimado usuario <span th:text="${rol}"></span> <span style="font-weight:bold;" th:text="${nombre}"></span>,</h1>
               <p style="margin-top:0px; color:#bbbbbb;">Este es tu usuario para iniciar sesión <span th:text="${username}"></span></p></td>
           </tr>
           <tr>
-            <td style="padding:10px 0 30px 0;"><p>Clic en el siguiente botón para establecer su contraseña y activar el usuario</p>
+            <td style="padding:10px 0 30px 0;"><p>Da clic en el siguiente botón para establecer tu contraseña y activar tu usuario</p>
               <center>
                 <a th:href="${urlActivacion}" style="display: inline-block; padding: 11px 30px; margin: 20px 0px 30px; font-size: 15px; color: #fff; background: #00c0c8; border-radius: 60px; text-decoration:none;">Activar cuenta</a>
               </center>
-              <b>GESCO </b> </td>
+              <b>GESCO </b> 
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0 30px 0;"><p>Una vez activada tu cuenta podrás iniciar sesión dando clic en el siguiente enlace de nuestro</p>
+              <center>
+                  <a th:href="${url}"><span th:text="${url}"></span></a>
+              </center>
+             
+            </td>
           </tr>
           <tr>
             <td  style="border-top:1px solid #f6f6f6; padding-top:20px; color:#777">Si tiene problemas, favor de copiar el enalce en el navegador y si el problema persiste es nesario contactar al administrador contacto.cdmx@gesco-pls.com</td>
@@ -39,7 +41,6 @@
     </div>
     <div style="text-align: center; font-size: 12px; color: #b2b2b5; margin-top: 20px">
       <p> Gesco PLS <br>
-<!--         <a href="javascript: void(0);" style="color: #b2b2b5; text-decoration: underline;">Unsubscribe</a> </p> -->
     </div>
   </div>
 </div>

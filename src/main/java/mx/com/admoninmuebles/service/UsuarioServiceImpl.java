@@ -300,6 +300,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		
 		if( RolConst.ROLE_ADMIN_BI.equals( rolUsuarioEliminar.getNombre() ) ) {
 			inmuebleService.deleteByAdminBiId( idUsuario );
+			zonaRepository.deleteAdminBiZonaByAdminBiId( idUsuario );
 		}
 		
 		userRepository.deleteById(idUsuario);

@@ -12,10 +12,13 @@ import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.PlantillaCorreoConst;
 import mx.com.admoninmuebles.dto.CorreoDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
+import mx.com.admoninmuebles.persistence.model.Rol;
+import mx.com.admoninmuebles.persistence.repository.RolRepository;
 
 @Service
 public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 	
+	private final static String URL_PRINCIPAL_GESCO = "gesco.url.principal";
 	private final static String URL_ACTIVACION_CUENTA = "/usuarios/activar/";
 	private final static String URL_RECUPERACION_CONTRASENIA= "/usuarios/recuperar-contrasenia/";
 	private final static String PARAMETRO_CORREO_URL_ACTIVACION = "urlActivacion";
@@ -33,6 +36,9 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 	@Autowired
 	private CorreoService correoService;
 	
+	@Autowired
+	private RolRepository rolRepository;
+	
     @Autowired
     private Environment env;
     
@@ -41,12 +47,15 @@ public class CorreoUsuarioServiceImpl implements CorreoUsuarioService {
 
 	@Override
 	public void enviarActivacion( final UsuarioDto usuarioDto, final String urlContext ) {
+		Rol rol = rolRepository.findByUserId( usuarioDto.getId() ).get();
 		String urlActiacion = getUrlActivacion( usuarioDto, urlContext );
 		
 		Context datosPlantilla = new Context();
 		datosPlantilla.setVariable( PARAMETRO_CORREO_URL_ACTIVACION, urlActiacion );
 		datosPlantilla.setVariable( "nombre", usuarioDto.getNombreCompleto() );
 		datosPlantilla.setVariable( "username", usuarioDto.getUsername() );
+		datosPlantilla.setVariable( "rol", rol.getDescripcion() );
+		datosPlantilla.setVariable( "url", env.getProperty( URL_PRINCIPAL_GESCO ) );
 		
 		CorreoDto correoDto = new CorreoDto();
 		correoDto.setDe( env.getProperty( PROPIEDAD_CORREO_USUARIOS_DE ) );
