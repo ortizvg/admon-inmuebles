@@ -37,8 +37,10 @@ public interface PagoService {
     Long getTotalPagosPorInmuebleYTipoPagoNombre(Long idInmueble, String tipoPagoNombre);
     
     Collection<PagoDto> buscarPorSocioYEstatusPagoNombre(final Long idSocio, final String nombre);
-    
     Long getTotalPagosPorInmuebleYEstatusPagoNombreYTipoPagoNombre(Long idInmueble, String estatusPagoNombre, String tipoPagoNombre);
-    
     Collection<PagoDto> buscarPorInmuebleYEstatusPagoNombreYTipoPagoNombre(Long idInmueble, String estatusPagoNombre, String tipoPagoNombre);
+    
+    
+    boolean isFiltro( final PagoDto pagoDto );
+    Collection<PagoDto> filtrar( final PagoDto pagoDto );
 }

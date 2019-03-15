@@ -2,6 +2,7 @@ package mx.com.admoninmuebles.persistence.repository;
 
 import java.util.Collection;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -112,5 +113,6 @@ public interface PagoRepository extends CrudRepository<Pago, Long>  {
     		"where az.id_usuario = ?1 order by p.id_pago",
 			nativeQuery = true)
 	Collection<Pago> findByAdminZonaId(Long id);
+    
 
 }

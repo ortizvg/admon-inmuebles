@@ -88,6 +88,8 @@ public class PagoDto {
     
     private String comprobantePagoId;
     private String comprobantePagoNombre;
+    
+    private String zonaId;
 	
 	public String getSocio() {
 		return this.usuarioNombre + " " + this.usuarioApellidoPaterno + " " + this.usuarioApellidoMaterno;

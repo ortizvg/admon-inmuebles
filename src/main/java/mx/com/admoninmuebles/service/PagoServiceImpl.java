@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
@@ -11,11 +12,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +66,6 @@ public class PagoServiceImpl implements PagoService {
     @Autowired
     private InmuebleService inmuebleService;
     
-    @Autowired
-    private NotificacionService notificacionService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -74,9 +73,6 @@ public class PagoServiceImpl implements PagoService {
     @Autowired
     private NotificacionPagoService notificacionPagoService;
 
-    @Autowired
-    private MessageSource messages;
-    
     @Override
     public PagoDto pagarTranferenciaBancaria(final PagoDto pagoDto, Locale locale) {
     	
@@ -426,6 +422,24 @@ public class PagoServiceImpl implements PagoService {
 		return StreamSupport.stream(pagoRepository.findByEstatusPagoId( idEstatus ).spliterator(), false)
 				.map(pago -> modelMapper.map(pago, PagoDto.class))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean isFiltro(PagoDto pagoDto) {
+		return StringUtils.isNotBlank( pagoDto.getZonaId() ) || pagoDto.getInmuebleId() != null || pagoDto.getUsuarioId() != null;
+	}
+
+	@Override
+	public Collection<PagoDto> filtrar(PagoDto pagoDto) {
+		if( pagoDto.getUsuarioId() != null ) {
+			return buscarPorUsuario( pagoDto.getUsuarioId() );
+		} else if( pagoDto.getInmuebleId() != null ) {
+			return buscarPorInmueble( pagoDto.getInmuebleId() );
+		} else if ( StringUtils.isNotBlank(pagoDto.getZonaId()) ) {
+			return buscarPorCodigoZona( pagoDto.getZonaId());
+		}
+		return Collections.emptyList();
+			
 	}
 
 

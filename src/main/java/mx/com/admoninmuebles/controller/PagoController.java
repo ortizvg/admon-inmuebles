@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.PagoBusquedaDto;
 import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.persistence.model.EstatusPago;
@@ -50,31 +49,31 @@ public class PagoController {
     
     @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'SOCIO_BI')")
     @GetMapping(value = "/pagos")
-    public String showPagos(Model model, final HttpServletRequest request) {
+    public String showPagos(final PagoDto pagoDto, Model model, final HttpServletRequest request, final HttpSession session) {
     	
     	 Long usuarioLogueadoId = SecurityUtils.getCurrentUserId().get();
     	 
     	if ( request.isUserInRole( RolConst.ROLE_SOCIO_BI ) ) {
 			 model.addAttribute("pagos", pagoService.buscarPorUsuario( usuarioLogueadoId ));
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_ZONA ) ) {
-//        	 ZonaDto zona = zonaService.findByAdminZonaId( usuarioLogueadoId ).stream().findFirst().get();
-//        	 model.addAttribute("inmuebles", inmuebleService.findByZonaCodigo( zona.getCodigo() )  );
-//        	 model.addAttribute("inmuebles", inmuebleService.findByAdminZonaId( usuarioLogueadoId )  );
-//        	 model.addAttribute("pagos", pagoService.buscarPorCodigoZona( zona.getCodigo() ) );
         	 model.addAttribute("pagos", pagoService.buscarPorAdminZona( usuarioLogueadoId ) );
+        	 session.setAttribute("zonas", zonaService.findByAdminZonaId( usuarioLogueadoId ) );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_BI ) ) {
-//        	InmuebleDto inmueble = inmuebleService.findByAdminBiId( usuarioLogueadoId ).stream().findFirst().get();
-//        	model.addAttribute("socios", inmuebleService.findSociosByInmuebleId( inmueble.getId() ) );
        	 	model.addAttribute("pagos", pagoService.buscarPorAdminBi( usuarioLogueadoId ) );
+       	 	session.setAttribute("inmuebles", inmuebleService.findByAdminBiId( usuarioLogueadoId ) );
         } else if ( request.isUserInRole( RolConst.ROLE_ADMIN_CORP ) ) {
-//        	model.addAttribute("zonas", zonaService.findAll() );
         	model.addAttribute("pagos", pagoService.buscarTodo() );
+        	session.setAttribute("zonas", zonaService.findAll() );
         } else if ( request.isUserInRole( RolConst.ROLE_CONTADOR ) ) {
         	model.addAttribute("pagos", pagoService.buscarPorContador( usuarioLogueadoId ) );
+        	session.setAttribute("inmuebles", inmuebleService.findByContadorId( usuarioLogueadoId ) );
         } else {
         	model.addAttribute("pagos", Collections.emptyList() );
         }
     	
+    	 if( pagoService.isFiltro( pagoDto ) ) {
+ 			model.addAttribute("pagos", pagoService.filtrar( pagoDto ) );
+ 	     }
     	
         return "pagos/pagos";
     }
