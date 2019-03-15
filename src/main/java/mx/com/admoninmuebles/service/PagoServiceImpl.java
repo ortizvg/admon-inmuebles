@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.PagoPaypalDto;
@@ -99,8 +100,8 @@ public class PagoServiceImpl implements PagoService {
     	
     	 Pago pago =  pagoOpt.get();
     	 
-    	 pago.setTipoPagoBancario( tipoPagoBancarioRepository.findByNameAndLang( TipoPagoBancario.TRANSFERENCIA, "es" ) );
-    	 pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.VERIFICACION, "es") );
+    	 pago.setTipoPagoBancario( tipoPagoBancarioRepository.findByNameAndLang( TipoPagoBancario.TRANSFERENCIA, LocaleConst.LOCALE_ES ) );
+    	 pago.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.VERIFICACION, LocaleConst.LOCALE_ES ) );
     	 pago.setVerificado(false);
     	 pago.setFechaPago(new Date());
     	 pago.setComprobantePago(comprobantePagoCreado);
@@ -179,7 +180,7 @@ public class PagoServiceImpl implements PagoService {
         Pago pagoVerificado = pagoOpt.get();
         pagoVerificado.setVerificado(true);
         pagoVerificado.setFechaVerificacion(new Date());
-        pagoVerificado.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.PAGADO, "es") );
+        pagoVerificado.setEstatusPago( estatusPagoRepository.findByNameAndLang( EstatusPago.PAGADO, LocaleConst.LOCALE_ES ) );
         pagoVerificado.setUsuarioVerificador(usuarioVerificador);
         
         Pago pagoActualizado =  pagoRepository.save( pagoVerificado );
@@ -250,8 +251,8 @@ public class PagoServiceImpl implements PagoService {
 	@Override
 	public void generarPagosMensuales() {
 		Collection<Usuario> sociosActivos = usuarioRepository.findByRolesNombreAndActivo(RolConst.ROLE_SOCIO_BI, true);
-		TipoPago tipoPago = tipoPagoRepository.findByNameAndLangg( TipoPago.CUOTA, "es" );
-		EstatusPago estatusPagoCercano = estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
+		TipoPago tipoPago = tipoPagoRepository.findByNameAndLangg( TipoPago.CUOTA, LocaleConst.LOCALE_ES );
+		EstatusPago estatusPagoCercano = estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, LocaleConst.LOCALE_ES);
 		sociosActivos.forEach( socio -> {
 			Pago pago = new Pago();
 			pago.setTipoPago( tipoPago );
@@ -271,8 +272,8 @@ public class PagoServiceImpl implements PagoService {
 	@Override
 	public void actualizarEstatusPagosMensuales() {
 		
-		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
-		EstatusPago estatusPagoAtrasado= estatusPagoRepository.findByNameAndLang( EstatusPago.ATRASADO, "es");
+		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, LocaleConst.LOCALE_ES);
+		EstatusPago estatusPagoAtrasado= estatusPagoRepository.findByNameAndLang( EstatusPago.ATRASADO, LocaleConst.LOCALE_ES);
 		
 		LocalDate hoy = LocalDate.now();
 		Collection<Pago> pagosCercanos = pagoRepository.findByEstatusPagoId( estatusPagoCercano.getId() );
@@ -309,7 +310,7 @@ public class PagoServiceImpl implements PagoService {
 		
 		Collection<UsuarioDto> sociosActivos = inmuebleService.findSociosActivosByInmuebleId( pagoDto.getInmuebleId() );
 		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
-		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
+		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, LocaleConst.LOCALE_ES);
 		sociosActivos.forEach( socio -> {
 			Pago pago = new Pago();
 			pago.setTipoPago( tipoPago );
@@ -337,7 +338,7 @@ public class PagoServiceImpl implements PagoService {
 		
 		Usuario socio = usuarioRepository.findById( pagoDto.getUsuarioId() ).get();
 		TipoPago tipoPago = tipoPagoRepository.findById( pagoDto.getTipoPagoId()).get();
-		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, "es");
+		EstatusPago estatusPagoCercano =  estatusPagoRepository.findByNameAndLang( EstatusPago.CERCANO, LocaleConst.LOCALE_ES);
 		
 		Pago pago = new Pago();
 		pago.setTipoPago( tipoPago );
