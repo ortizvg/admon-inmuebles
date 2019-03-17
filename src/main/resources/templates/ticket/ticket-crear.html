@@ -6,10 +6,19 @@
 /*<![CDATA[*/
 $(document).ready(function() {
   addControlState(document.getElementById('divTitulo'),/*[[#{campo.requerido}]]*/);
-  addControlState(document.getElementById('divAreaServicio'),/*[[#{campo.requerido}]]*/);
   addControlState(document.getElementById('divDescripcion'),/*[[#{campo.requerido}]]*/);
 
 });
+
+function validaAreaServicio() {
+		var idTipoTicket = $("#tipoTicketId").val();
+		if(idTipoTicket == 3){
+		    $('#divAreaServicio').css('display', 'block');
+		}else{
+			$('#divAreaServicio').css('display', 'none');
+		}
+
+	}
 /*]]>*/
 </script>
 </head>
@@ -35,7 +44,7 @@ $(document).ready(function() {
               <div class="row">
                 <div id="divTipoTicket" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('tipoTicketId')}? 'has-danger'">
                   <label class="form-control-label" th:text="#{ticket.tipoticket}"></label>
-                  <select name="tipoTicketId" class="form-control" th:field="*{tipoTicketId}" required>
+                  <select name="tipoTicketId" id="tipoTicketId" class="form-control" th:field="*{tipoTicketId}" onchange="validaAreaServicio();" required>
                     <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
                     <option th:each="tipoTicket : ${session.tipoTicket}" th:value="${tipoTicket.id}" th:text="${tipoTicket.nombre}"></option>
                   </select>
@@ -43,13 +52,20 @@ $(document).ready(function() {
                     <span th:if="${#fields.hasErrors('tipoTicketId')}" th:errors="*{tipoTicketId}"></span>
                   </span>
                 </div>
-                <div id="divCarga" class="col-md-8 form-group" th:classappend="${#fields.hasErrors('titulo')}? ' has-danger'">
+                <div id="divCarga" class="col-md-4 form-group">
 				 <label class="form-control-label" th:text="#{ticket.evidencia}"></label>
-				 <input type="file" name="file" id="file" class="form-control" accept="image/*, application/pdf"/> 
+				 <input type="file" name="file" id="file" class="form-control"/> 
                 </div>
-                 <span class="form-control-feedback">
-                    <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
-                 </span>
+                <div id="divAreaServicio" style="display:none" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areaServicioId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.areaservicio}"></label>
+                  <select name="areaServicioId" id="areaServicioId" class="form-control" th:field="*{areaServicioId}">
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="areaServicio : ${session.areaServicio}" th:value="${areaServicio.id}" th:text="${areaServicio.nombre}"></option>
+                  </select>
+                  <span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('areaServicioId')}" th:errors="*{areaServicioId}"></span>
+                  </span>
+                </div>                 
                 <!-- div id="divGuarda" class="col-md-1 form-group" th:classappend="${#fields.hasErrors('titulo')}? ' has-danger'">
 				 <label class="form-control-label"></label>
 				 <button type="submit" class="btn btn-info-gesco waves-effect m-r-10" th:text="#{boton.guardar}"></button>

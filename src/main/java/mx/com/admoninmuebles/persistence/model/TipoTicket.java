@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,6 +19,18 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class TipoTicket extends EntidadBase {
     private static final long serialVersionUID = 1L;
+    
+    @Transient
+    public static final Long ADMINISTRATIVO = 1L;
+    
+    @Transient
+    public static final Long FINANCIERO = 2L;
+    
+    @Transient
+    public static final Long OPERACION = 3L;
+    
+    @Transient
+    public static final Long QUEJAS_SUGERENCIAS = 4L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

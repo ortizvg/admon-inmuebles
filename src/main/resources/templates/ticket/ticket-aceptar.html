@@ -39,14 +39,7 @@
                   <p class="form-control-static" th:text="*{direccion}"></p>
                 </div>
               </div>
-              <div class="row">
-                <div id="divEvidencia" class="col-md-4 form-group">
-                  <label class="control-label" th:text="#{ticket.evidencia}"></label>
-                  <p class="form-control-static" >
-<!--                   	<a th:href="@{|/ticket-download|}" th:text="*{titulo}"></a> -->
-                  	<a th:href="@{|/ticket-download/*{id}|}" th:text="*{titulo}"></a>
-                  </p>
-                </div>
+              <!--div class="row">
                 <div id="divTipoTicket" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.tipoticket}"></label>
                   <p class="form-control-static" th:text="*{tipoTicketNombre}"></p>
@@ -55,22 +48,15 @@
                   <label class="form-control-label" th:text="#{ticket.estatus}"></label>
                   <p class="form-control-static" th:text="*{estatus}"></p>
                 </div>
-              </div>
+              </div-->
               <div class="row">
                 <div id="divDescripcion" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.descripcion}"></label>
                   <p class="form-control-static" th:text="*{descripcion}"></p>
                 </div>
               </div>
-              <div class="row">
-                <div th:if="*{usuarioAsignadoId}" id="divProveedor" class="col-md-4 form-group">
-                  <label class="form-control-label" th:text="#{ticket.proveedor}"></label>
-                  <p class="form-control-static" th:text="*{nombreProveedor}"></p>
-                </div>
-              </div>
               <div class="modal-footer">
-                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-aceptar/'  + id}" class="btn btn-success" th:text="#{boton.aceptar}"></a>
-                <a th:if="*{estatus=='ASIGNADO'}" th:href="*{'/ticket-rechazar/' + id}" class="btn btn-danger" th:text="#{boton.rechazar}"></a>
+                <a th:if="*{estatus!='CERRADO'}" th:href="*{'/ticket-comentarios/' + id}" class="btn btn-success" th:text="#{boton.comentarios}"></a>
                 <a th:href="@{/tickets}" class="btn btn-secondary" th:text="#{boton.cerrar}"></a>
               </div>
             </div>

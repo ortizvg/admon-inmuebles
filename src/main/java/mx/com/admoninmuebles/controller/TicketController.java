@@ -2,6 +2,7 @@ package mx.com.admoninmuebles.controller;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
@@ -34,9 +35,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import mx.com.admoninmuebles.constant.EstatusTicketConst;
 import mx.com.admoninmuebles.constant.PrivilegioConst;
 import mx.com.admoninmuebles.constant.RolConst;
+import mx.com.admoninmuebles.dto.CambioTicketDto;
 import mx.com.admoninmuebles.dto.TicketDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.AreaServicioService;
+import mx.com.admoninmuebles.service.CambioTicketService;
+import mx.com.admoninmuebles.service.NotificacionService;
 import mx.com.admoninmuebles.service.TicketService;
 import mx.com.admoninmuebles.service.TipoTicketService;
 import mx.com.admoninmuebles.service.UsuarioService;
@@ -62,14 +66,27 @@ public class TicketController {
 	@Autowired
 	private ServletContext servletContext;
 
+	@Autowired
+	private CambioTicketService cambioTicketService;
+	
+	@Autowired
+	private NotificacionService notificacionService;
+	
 	@PreAuthorize("hasAuthority('" + PrivilegioConst.VER_TICKET + "')")
 	@GetMapping(value = "/tickets")
 	public String init(final TicketDto ticketDto, final Model model, final HttpServletRequest request) {
+		logger.info("TICKETDTO: " + ticketDto.toString() );
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
 		String nombreTicketsSesion = "tickets";
+		
+		if( ticketService.isFiltro( ticketDto ) ) {
+ 			model.addAttribute(nombreTicketsSesion, ticketService.filtrar( ticketDto ) );
+ 			return "ticket/tickets";
+	 	}
+		
 		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByUsuarioCreadorId(optId.get())));
-		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR)) {
+		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR) || request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByUsuarioAsignadoId(optId.get())));
 		} else {
 			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findAll()));
@@ -80,7 +97,7 @@ public class TicketController {
 	private Collection<TicketDto> revisaRetraso(Collection<TicketDto> tickets) {
 		for (TicketDto ticketDto : tickets) {
 			LocalDate fechaCreacion = UtilDate.dateToLocalDate(ticketDto.getFechaCreacion()); 
-			if(!EstatusTicketConst.ATENDIDO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(fechaCreacion, LocalDate.now()) > 5) {
+			if(!EstatusTicketConst.EN_PROCESO.equals(ticketDto.getEstatus()) && ChronoUnit.DAYS.between(fechaCreacion, LocalDate.now()) > 5) {
 				ticketDto.setRetraso(true);
 			}
 		}
@@ -90,47 +107,51 @@ public class TicketController {
 	@PreAuthorize("hasAuthority('ABRIR_TICKET')")
 	@GetMapping(value = "/ticket-crear")
 	public String ticketCrear(final TicketDto ticketDto, final HttpSession session) {
-		//session.setAttribute("areasServicio", areaServicioService.findAll());
 		session.setAttribute("tipoTicket", tipoTicketService.findAll());
+		session.setAttribute("areaServicio", areaServicioService.findAll());
 		return "ticket/ticket-crear";
 	}
 
 	@PreAuthorize("hasAuthority('ABRIR_TICKET')")
 	@PostMapping(value = "/ticket")
 	public String crearTicket(final Locale locale, @Valid final TicketDto ticketDto,
-			final BindingResult bindingResult, @RequestParam(name="file", required=false) MultipartFile file, RedirectAttributes redirect) {
+			final BindingResult bindingResult, @RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
 		String showPageFail = "ticket/ticket-crear"; 
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
 		if (optId.isPresent()) {
 			ticketDto.setUsuarioCreadorId(optId.get());
 		}
-    	final String MIME_TYPE_JPEG = "image/jpeg";
-    	final String MIME_TYPE_JPG = "image/jpg";
+    	final String MIME_TYPE_JPG = "image/jpeg";
     	final String MIME_TYPE_PDF = "application/pdf";
-    	final String MIME_TYPE_PNG = "image/png";
-    	final String MIME_TYPE_GIF= "image/gif";
-//        if (file.isEmpty()) {
-//        	redirect.addFlashAttribute("messageEmpty","");
-//            return showPageFail;
-//        }
-        
+    	final String MIME_TYPE_DOC = "application/msword";
+    	final String MIME_TYPE_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    	final String MIME_TYPE_TXT = "text/plain";
+    	String fileType = null;
+    	CambioTicketDto cambio = new CambioTicketDto();
+    	ArrayList<CambioTicketDto> cambios = null;
         try {
-        	
-        	if (!file.isEmpty()) {
-                String fileType = file.getContentType();
-                if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType) || MIME_TYPE_PNG.contains(fileType) || MIME_TYPE_GIF.contains(fileType) || MIME_TYPE_JPEG.contains(fileType))) {
-                	redirect.addFlashAttribute("messageType","");
-                	return showPageFail;
-                }else {
-                	ticketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
-                }
+            if (!file.isEmpty()) {
+            	fileType = file.getContentType();
+    			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType)
+    					|| MIME_TYPE_DOC.contains(fileType) || MIME_TYPE_DOCX.contains(fileType) || MIME_TYPE_TXT.contains(fileType))) {
+    				redirect.addFlashAttribute("messageType","");
+    				return showPageFail;
+    			}else {
+    				cambio.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
+    			}
             }
+            cambios = new ArrayList<>();
+            cambio.setComentario("Alta de ticket");
+//            cambios.add(cambio);
 			ticketDto.setFechaCreacion(new Date());
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
+//			ticketDto.setCambios(cambios);
 			ticketDto.setTitulo(file.getOriginalFilename());
-			ticketService.save(ticketDto);
+			cambio.setTicketId(ticketService.save(ticketDto).getId());
+ 			cambioTicketService.save(cambio);
+// 			notificacionService.save(notificacionDto)
 		} catch (Exception e) {
-			logger.error("Hubo un problema al crear el ticket", e);
+			logger.error("Hubo un problema al crear el ticket");
 			return showPageFail;
 		}
 		return "redirect:tickets";
@@ -153,14 +174,32 @@ public class TicketController {
 		model.addAttribute("ticketDto", ticketDto);
 		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			vista = "ticket/ticket-detalle";
-		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR)) {
+		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR) || request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			vista = "ticket/ticket-aceptar";
 		} else {
 			vista = "ticket/ticket-asignar";
-			//session.setAttribute("proveedores", usuarioService
-//					.findByRolesNombreAndAreasServicioId(RolConst.ROLE_PROVEEDOR, ticketDto.getAreaServicioId()));
-			session.setAttribute("proveedores", usuarioService
-							.findByRolesNombre(RolConst.ROLE_PROVEEDOR));
+			session.setAttribute("proveedores", usuarioService.findByRolesNombreAndAreasServicioId(RolConst.ROLE_PROVEEDOR, ticketDto.getAreaServicioId()));
+			session.setAttribute("contadores", usuarioService.findByRolesNombre(RolConst.ROLE_CONTADOR));
+			session.setAttribute("admins", usuarioService.findAllAdministradores());
+		}
+		return vista;
+	}
+	
+	@PreAuthorize("hasAuthority('" + PrivilegioConst.VER_TICKET + "')")
+	@GetMapping(value = "/ticket-regresar/{id}")
+	public String regresarDetalle(final @PathVariable long id, final Model model, final HttpServletRequest request,
+			final HttpSession session) {
+		String vista;
+		TicketDto ticketDto = ticketService.findById(id);
+		model.addAttribute("ticketDto", ticketDto);
+		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
+			vista = "redirect:/ticket-detalle";
+		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR)) {
+			vista = "ticket-aceptar";
+		} else {
+			vista = "ticket-asignar";
+			session.setAttribute("proveedores", usuarioService.findByRolesNombreAndAreasServicioId(RolConst.ROLE_PROVEEDOR, ticketDto.getAreaServicioId()));
+			session.setAttribute("contadores", usuarioService.findByRolesNombre(RolConst.ROLE_CONTADOR));
 		}
 		return vista;
 	}
@@ -170,7 +209,7 @@ public class TicketController {
 	public String asignar(final Locale locale, @Valid final TicketDto ticketDto, final BindingResult bindingResult) {
 		TicketDto ticketDtoTemp = ticketService.findById(ticketDto.getId());
 		ticketDtoTemp.setUsuarioAsignadoId(ticketDto.getUsuarioAsignadoId());
-		ticketDtoTemp.setEstatus(EstatusTicketConst.ASIGNADO);
+		ticketDtoTemp.setEstatus(EstatusTicketConst.EN_PROCESO);
 		ticketService.save(ticketDtoTemp);
 		return "redirect:tickets";
 	}
@@ -179,7 +218,7 @@ public class TicketController {
 	@GetMapping(value = "/ticket-aceptar/{id}")
 	public String aceptar(final @PathVariable long id) {
 		TicketDto ticketDtoTemp = ticketService.findById(id);
-		ticketDtoTemp.setEstatus(EstatusTicketConst.ACEPTADO);
+//		ticketDtoTemp.setEstatus(EstatusTicketConst.ACEPTADO);
 		ticketService.save(ticketDtoTemp);
 		return "redirect:/tickets";
 	}
@@ -188,7 +227,7 @@ public class TicketController {
 	@GetMapping(value = "/ticket-rechazar/{id}")
 	public String rechazar(final @PathVariable long id) {
 		TicketDto ticketDtoTemp = ticketService.findById(id);
-		ticketDtoTemp.setEstatus(EstatusTicketConst.RECHAZADO);
+//		ticketDtoTemp.setEstatus(EstatusTicketConst.RECHAZADO);
 		ticketDtoTemp.setUsuarioAsignadoId(null);
 		ticketDtoTemp.setUsuarioAsignadoNombre(null);
 		ticketDtoTemp.setUsuarioAsignadoApellidoPaterno(null);
@@ -198,15 +237,27 @@ public class TicketController {
 		return "redirect:/tickets";
 	}
 
+//	@PreAuthorize("hasAuthority('" + PrivilegioConst.ASIGNAR_TICKET + "')")
+	@GetMapping(value = "/ticket-comentarios/{id}")
+	public String comentarios(final @PathVariable long id, final Model model, final HttpServletRequest request,
+			final HttpSession session) {
+		Collection<CambioTicketDto> cambios = cambioTicketService.findByTicketId(id);
+		CambioTicketDto cambioTicketDto = new CambioTicketDto();
+		model.addAttribute("cambios", cambios);
+		model.addAttribute("idTicket", id);
+		model.addAttribute("cambioTicketDto", cambioTicketDto);
+		return "ticket/ticket-comentarios";
+	}
+
 	@PreAuthorize("hasAuthority('" + PrivilegioConst.ASIGNAR_TICKET + "')")
 	@GetMapping(value = "/ticket-terminar/{id}")
 	public String terminar(final @PathVariable long id) {
 		TicketDto ticketDtoTemp = ticketService.findById(id);
-		ticketDtoTemp.setEstatus(EstatusTicketConst.ATENDIDO);
+		ticketDtoTemp.setEstatus(EstatusTicketConst.CERRADO);
 		ticketService.save(ticketDtoTemp);
 		return "redirect:/tickets";
 	}
-
+	
 	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI')")
 	@GetMapping(value = "/ticket-eliminar/{id}")
 	public String eliminarTicket(final @PathVariable long id) {
@@ -216,19 +267,54 @@ public class TicketController {
 	
 	
 	@GetMapping(value="/ticket-download/{id}")
-	public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable Long id) {
-	    TicketDto ticketDto = ticketService.findById(id);
-	    String strMediaType = servletContext.getMimeType(ticketDto.getTitulo());
+	public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable long id) {
+		CambioTicketDto cambio = cambioTicketService.findById(id);
+		ByteArrayResource resource = new ByteArrayResource(cambio.getArchivoEvidencia());
+		String strMediaType = servletContext.getMimeType(cambio.getTituloArchivoEvidencia());
 	    MediaType mediaType = MediaType.parseMediaType(strMediaType);
-	    ByteArrayResource resource = new ByteArrayResource(ticketDto.getArchivoEvidencia());
 	    return ResponseEntity.ok()
                 // Content-Disposition
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+ticketDto.getTitulo())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+cambio.getTituloArchivoEvidencia())
                 // Content-Type
                 .contentType(mediaType) //
                 // Content-Lengh
-                .contentLength(ticketDto.getArchivoEvidencia().length) //
+//                .contentLength(ticketDto.getArchivoEvidencia().length)
+                .contentLength(cambio.getArchivoEvidencia().length)
                 .body(resource);
+	}
+	
+	@PostMapping(value = "/ticket-comentarios/{idTicket}")
+	public String agregarComentario(final Locale locale, @Valid final CambioTicketDto cambioTicketDto,@PathVariable Long idTicket, final Model model,
+			final BindingResult bindingResult, @RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
+		String showPageFail = "ticket/ticket-comentarios"; 
+    	final String MIME_TYPE_JPG = "image/jpeg";
+    	final String MIME_TYPE_PDF = "application/pdf";
+    	final String MIME_TYPE_DOC = "application/msword";
+    	final String MIME_TYPE_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    	final String MIME_TYPE_TXT = "text/plain";
+    	String fileType = null;
+        try {
+            if (!file.isEmpty()) {
+            	fileType = file.getContentType();
+    			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType)
+    					|| MIME_TYPE_DOC.contains(fileType) || MIME_TYPE_DOCX.contains(fileType) || MIME_TYPE_TXT.contains(fileType))) {
+    				redirect.addFlashAttribute("messageType","");
+    				return showPageFail;
+    			}else {
+    				cambioTicketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
+    				cambioTicketDto.setTituloArchivoEvidencia(file.getOriginalFilename());
+    			}
+            }
+            cambioTicketDto.setTicketId(idTicket);
+ 			cambioTicketService.save(cambioTicketDto);
+ 			Collection<CambioTicketDto> cambios = cambioTicketService.findByTicketId(idTicket);
+ 			model.addAttribute("cambios", cambios);
+ 			model.addAttribute("idTicket", idTicket);
+		} catch (Exception e) {
+			logger.error("Hubo un problema al agregar comentario al ticket: "+idTicket);
+			return showPageFail;
+		}
+		return "ticket/ticket-comentarios";
 	}
 
 }

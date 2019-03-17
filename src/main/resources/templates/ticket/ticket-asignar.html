@@ -38,46 +38,66 @@
                   <label class="control-label" th:text="#{ticket.direccion}"></label>
                   <p class="form-control-static" th:text="*{direccion}"></p>
                 </div>
-              </div>
-              <div class="row">
-                <div id="divEvidencia" class="col-md-4 form-group">
-                  <label class="control-label" th:text="#{ticket.evidencia}"></label>
-                  <p class="form-control-static" >
-<!--                   	<a th:href="@{|/ticket-download|}" th:text="*{titulo}"></a> -->
-                  	<a th:href="@{|/ticket-download/*{id}|}" th:text="*{titulo}"></a>
-                  </p>
-                </div>
                 <div id="divAreaServicio" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.tipoticket}"></label>
                   <p class="form-control-static" th:text="*{tipoTicketNombre}"></p>
                 </div>
-                <div id="divEstatus" class="col-md-4 form-group">
+              </div>
+              <div class="row">
+               <div id="divEstatus" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.estatus}"></label>
                   <p class="form-control-static" th:text="*{estatus}"></p>
                 </div>
-              </div>
-              <div class="row">
-                <div id="divDescripcion" class="col-md-4 form-group">
+                <div id="divDescripcion" class="col-md-8 form-group">
                   <label class="form-control-label" th:text="#{ticket.descripcion}"></label>
                   <p class="form-control-static" th:text="*{descripcion}"></p>
                 </div>
               </div>
               <div class="row">
-                <div id="divProveedor" th:unless="*{usuarioAsignadoId}" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('usuarioAsignadoId')}? 'has-danger'">
-                  <label class="form-control-label" th:text="#{ticket.proveedor}"></label> <select name="proveedor" class="form-control" th:field="*{usuarioAsignadoId}" required>
+                <div id="divProveedor" th:if="*{usuarioAsignadoId==null} and *{tipoTicketNombre == 'Operación'} and *{estatus=='ABIERTO'}" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('usuarioAsignadoId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.proveedor}"></label> 
+                  <select name="proveedor" class="form-control" th:field="*{usuarioAsignadoId}" required>
                     <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
                     <option th:each="proveedor : ${session.proveedores}" th:value="${proveedor.id}" th:text="${proveedor.nombreCompleto}"></option>
                   </select> <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('usuarioAsignadoId')}" th:errors="*{usuarioAsignadoId}"></span>
                   </span>
                 </div>
-                <div id="divProveedor" th:if="*{usuarioAsignadoId}" class="col-md-4 form-group">
+                
+                <div id="divContador" th:if="*{usuarioAsignadoId==null} and *{tipoTicketNombre == 'Financiero'}" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('usuarioAsignadoId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.contador}"></label> 
+                  <select name="contador" class="form-control" th:field="*{usuarioAsignadoId}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="contador : ${session.contadores}" th:value="${contador.id}" th:text="${contador.nombreCompleto}"></option>
+                  </select> <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('usuarioAsignadoId')}" th:errors="*{usuarioAsignadoId}"></span>
+                  </span>
+                </div>
+
+                <div id="divAdminBi" th:if="*{usuarioAsignadoId==null} and (*{tipoTicketNombre == 'Quejas y sugerencias'} or *{tipoTicketNombre == 'Administrativo'})" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('usuarioAsignadoId')}? 'has-danger'">
+                  <label class="form-control-label" th:text="#{ticket.admin}"></label> 
+                  <select name="admin" class="form-control" th:field="*{usuarioAsignadoId}" required>
+                    <option selected="selected" value="" th:text="#{etiqueta.seleccione}"></option>
+                    <option th:each="admin : ${session.admins}" th:value="${admin.id}" th:text="${admin.nombreCompleto}"></option>
+                  </select> <span class="form-control-feedback"> <span th:if="${#fields.hasErrors('usuarioAsignadoId')}" th:errors="*{usuarioAsignadoId}"></span>
+                  </span>
+                </div>
+                                
+                <div id="divProveedorNombre" th:if="*{usuarioAsignadoId} and *{tipoTicketNombre == 'Operación'}" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.proveedor.nombre}"></label>
                   <p   class="form-control-static" th:text="*{nombreProveedor}"></p>
+                </div>                
+                <div id="divContadorNombre" th:if="*{usuarioAsignadoId} and *{tipoTicketNombre == 'Financiero'}" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.contador.nombre}"></label>
+                  <p   class="form-control-static" th:text="*{nombreContador}"></p>
+                </div>                
+                <div id="divAdminNombre" th:if="*{usuarioAsignadoId} and (*{tipoTicketNombre == 'Quejas y sugerencias'} or *{tipoTicketNombre == 'Administrativo'})" class="col-md-4 form-group">
+                  <label class="form-control-label" th:text="#{ticket.admin.nombre}"></label>
+                  <p   class="form-control-static" th:text="*{nombreAdmin}"></p>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="submit" th:unless="*{usuarioAsignadoId}" class="btn btn-info-gesco" th:text="#{boton.asignar}"></button>
-                <a th:if="*{estatus=='ACEPTADO'}" th:href="*{'/ticket-terminar/' + id}" class="btn btn-success" th:text="#{boton.terminar}"></a>
+                <a th:if="*{estatus=='EN PROCESO'}" th:href="*{'/ticket-terminar/' + id}" class="btn btn-success" th:text="#{boton.terminar}"></a>
+                <a th:if="*{estatus!='CERRADO'}" th:href="*{'/ticket-comentarios/' + id}" class="btn btn-success" th:text="#{boton.comentarios}"></a>
                 <a th:href="@{/tickets}" class="btn btn-secondary" th:text="#{boton.cerrar}"></a>
               </div>
             </div>

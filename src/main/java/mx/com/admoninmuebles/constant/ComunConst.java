@@ -15,5 +15,6 @@ public final class ComunConst {
 	public static final String CADENA_VACIA = "";
 	public static final String CADENA_ESPACIO= " ";
 	public static final String SEPARADOR_GUION_MEDIO = " - ";
+	public static final String COMA = ",";
 
 }

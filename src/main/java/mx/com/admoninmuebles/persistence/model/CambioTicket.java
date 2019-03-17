@@ -32,11 +32,17 @@ public class CambioTicket extends EntidadBase {
     @Column(length = 4000, columnDefinition = "text", nullable = false)
     private String comentario;
 
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = true, nullable = false)
-    private String evidenciaImagenUrl;
+//    @NotNull
+//    @Size(min = 1, max = 50)
+//    @Column(length = 50, unique = true, nullable = false)
+//    private String evidenciaImagenUrl;
+    
+    @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
+    private byte[] archivoEvidencia;
 
+    @Column(length = 20, name = "titulo_archivo_evidencia", nullable = true)
+    private String tituloArchivoEvidencia;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ticket_fk", referencedColumnName = "id_ticket", nullable = false)
     private Ticket ticket;

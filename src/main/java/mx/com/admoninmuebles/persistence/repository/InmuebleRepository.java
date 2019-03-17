@@ -31,6 +31,15 @@ public interface InmuebleRepository extends CrudRepository<Inmueble, Long> {
     		"where inso.socios_id_usuario =  ?1", 
 			nativeQuery = true)
 	Inmueble findBySocioId(Long id);
+    
+    @Query(value = "select inm.* from gescopls.tickets t\r\n" + 
+    		"join gescopls.usuarios prov on t.id_usuario_asignado_fk = prov.id_usuario\r\n" + 
+    		"join gescopls.usuarios soc on t.id_usuario_creador_fk = soc.id_usuario\r\n" + 
+    		"join gescopls.inmuebles_socios inso on soc.id_usuario = inso.socios_id_usuario\r\n" + 
+    		"join gescopls.inmuebles inm on inso.Inmueble_id_inmueble = inm.id_inmueble\r\n" + 
+    		"where prov.id_usuario = ?1", 
+			nativeQuery = true)
+    Collection<Inmueble> findInmueblesByTicketAsignedToProveedorId( final Long idProveedor);
 	
 
 }

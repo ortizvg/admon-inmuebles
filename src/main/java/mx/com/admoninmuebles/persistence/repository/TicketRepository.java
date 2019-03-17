@@ -15,33 +15,57 @@ public interface TicketRepository extends CrudRepository<Ticket, Long> {
 
     Collection<Ticket> findByUsuarioAsignadoId(Long id);
     
-//    Collection<Ticket> findByUsuarioAsignadoIdAndEstatusTicketName(Long id, String estatusTicketName);
+    Collection<Ticket> findByUsuarioAsignadoIdAndEstatus(Long id, String estatusTicketName);
     
     @Query(value = "SELECT count(t.id_ticket) FROM gescopls.inmuebles_socios ist\r\n" + 
-    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario\n" +  
-    		"join gescopls.estatus_tickets et on t.id_estatus_ticket_fk = et.id_estatus_ticket\r\n" + 
-    		"join gescopls.tipos_ticket tt on t.id_tipo_ticket_fk = tt.id_id_tipo_ticket\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"join gescopls.tipos_ticket tt on t.id_tipo_ticket_fk = tt.id_tipo_ticket\r\n" + 
     		"where ist.Inmueble_id_inmueble = ?1\r\n" + 
-    		"and tt.name = ?2\r\n" + 
-    		"and et.name = ?3", 
+    		"and tt.id_tipo_ticket = ?2\r\n" + 
+    		"and t.estatus = ?3", 
 			nativeQuery = true)
-	Long countByInmuebleIdAndTipoTicketNameAndEstatusTicketName(Long inmuebleId, String tipoTicketName, String estatusTicketName);
+	Long countByInmuebleIdAndTipoTicketIdAndEstatusTicketName(Long inmuebleId, Long tipoTicketId, String estatusTicketName);
     
     @Query(value = "SELECT t.* FROM gescopls.inmuebles_socios ist\r\n" + 
-    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario\n" +  
-    		"join gescopls.estatus_tickets et on t.id_estatus_ticket_fk = et.id_estatus_ticket\r\n" + 
-    		"join gescopls.tipos_ticket tt on t.id_tipo_ticket_fk = tt.id_id_tipo_ticket\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"join gescopls.tipos_ticket tt on t.id_tipo_ticket_fk = tt.id_tipo_ticket\r\n" + 
     		"where ist.Inmueble_id_inmueble = ?1\r\n" + 
-    		"and tt.name = ?2\r\n" + 
-    		"and et.name = ?3", 
+    		"and tt.id_tipo_ticket = ?2\r\n" + 
+    		"and t.estatus = ?3", 
 			nativeQuery = true)
-    Collection<Ticket> findByInmuebleIdAndTipoTicketNameAndEstatusTicketName(Long inmuebleId, String tipoTicketName, String estatusTicketName);
+    Collection<Ticket> findByInmuebleIdAndTipoTicketNameAndEstatusTicketName(Long inmuebleId, Long tipoTicketId, String estatusTicketName);
+    
+    @Query(value = "SELECT count(t.id_ticket) FROM gescopls.inmuebles_socios ist\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"join gescopls.tipos_ticket tt on t.id_tipo_ticket_fk = tt.id_tipo_ticket\r\n" + 
+    		"where ist.Inmueble_id_inmueble = ?1\r\n" + 
+    		"and t.estatus = ?2", 
+			nativeQuery = true)
+	Long countByInmuebleIdAndEstatusTicketName(Long inmuebleId, String estatusTicketName);
+    
+    @Query(value = "SELECT t.* FROM gescopls.inmuebles_socios ist\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"where ist.Inmueble_id_inmueble = ?1\r\n" + 
+    		"and t.estatus = ?2", 
+			nativeQuery = true)
+    Collection<Ticket> findByInmuebleIdAndEstatusTicketName(Long inmuebleId, String tipoTicketName, String estatusTicketName);
     
     
     @Query(value = "SELECT count(t.id_ticket) FROM gescopls.inmuebles_socios ist\n" + 
-    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\n" + 
     		"where ist.Inmueble_id_inmueble = ?1", 
 			nativeQuery = true)
 	Long countByInmuebleId(Long id);
+    
+    @Query(value = "SELECT count(t.id_ticket) FROM gescopls.inmuebles_socios ist\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"join gescopls.tipos_ticket tt on t.id_tipo_ticket_fk = tt.id_tipo_ticket\r\n" + 
+    		"where ist.Inmueble_id_inmueble = ?1\r\n" + 
+    		"and tt.id_tipo_ticket = ?2",
+			nativeQuery = true)
+	Long countByInmuebleIdAndTipoTicketId(Long id,  Long tipoTicketId);
+    
+    
+    
     
 }

@@ -223,4 +223,9 @@ public class InmuebleServiceImpl implements InmuebleService {
 		
 	}
 
+	@Override
+	public Collection<InmuebleDto> findInmueblesByTicketAsignedToProveedorId(Long id) {
+		return StreamSupport.stream(inmuebleRepository.findInmueblesByTicketAsignedToProveedorId( id ).spliterator(), false).map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class)).collect(Collectors.toList());
+	}
+
 }

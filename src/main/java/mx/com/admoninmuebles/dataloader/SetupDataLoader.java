@@ -455,13 +455,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Ticket ticket = optTicket.orElse(new Ticket());
         if (!optTicket.isPresent()) {
             ticket.setFechaCreacion(new Date());
-            ticket.setTitulo(obtenNombreArchivo());
+//            ticket.setTitulo(obtenNombreArchivo());
             ticket.setDescripcion(descripcion);
             ticket.setEstatus(estatus);
             ticket.setUsuarioCreador(usuarioCreador);
             ticket.setUsuarioAsignado(usuarioAsignado);
             ticket.setTipoTicket(tipoTicket);
-            ticket.setArchivoEvidencia(obtenImagenBlob());
+//            ticket.setArchivoEvidencia(obtenImagenBlob());
             ticket = ticketRepository.save(ticket);
         }
         return ticket;

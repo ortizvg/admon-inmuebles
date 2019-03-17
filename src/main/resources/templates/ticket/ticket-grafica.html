@@ -2,13 +2,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<title th:text="#{tickets.grafica.titulo}"></title>
+<title th:text="#{ticket.grafico.titulo}"></title>
 <script th:inline="javascript">
   /*<![CDATA[*/
   		var serverContext = [[@{/}]];
   
 	    $(document).ready(function() {
 	    	
+	    	$("#tipoTicket").val( /*[[${session.tipoTicketSeleccionado}]]*/) ;
 	    	$("#inmueble").val( /*[[${session.inmuebleSeleccionado}]]*/) ;
 	    	$("#zona").val( /*[[${session.zonaCodigoSeleccionada}]]*/) ;
 	    	reporteTicketsInmueble();
@@ -33,11 +34,12 @@
 
 	    function poblarGraficoTicketsPorInmueble() {
 	    	var inmuebleId = $("#inmueble").val();
-	    	if( inmuebleId == '' || inmuebleId == null){
+	    	var tipoTicketId = $("#tipoTicket").val();
+	    	if( inmuebleId == '' || inmuebleId == null || tipoTicketId == '' || tipoTicketId == null){
 	    		return;
 	    	}
 	    	var nombreStatusPago = null;
-	    	$("#pagos-grafica-dona").empty();
+	    	$("#tickets-grafica-dona").empty();
 	    	request = $.getJSON(serverContext + "api/tickets/grafica/dona?inmuebleId=" + inmuebleId + "&tipoTicketId=" + tipoTicketId, function() {
 	           console.log('Petición exitosa');
 	        });
@@ -51,24 +53,25 @@
 	    		 		console.log(i);
 	    		 		console.log(row);
 	    		 		if( i == 0){
-	    		 			nombreStatusTicket='ABIERTO';
-	    		 		}else if( i == 1){
-	    		 			nombreStatusTicket='POR_DEFINIR';
-	    		 		}else if (i == 2){
 	    		 			nombreStatusTicket='CERRADO';
+	    		 		}else if( i == 1){
+	    		 			nombreStatusTicket='EN PROCESO';
+	    		 		}else if (i == 2){
+	    		 			nombreStatusTicket='ABIERTO';
 	    		 		}
 	    		 		
-	    		 		window.location.href = serverContext + "tickets/filtro?inmuebleId=" + inmuebleId + "&tipoTicketName=" + tipoTicketName + "&estatusTicketName=" + estatusTicketName;
+	    		 		$.redirect(serverContext + "tickets", {inmuebleId: inmuebleId, tipoTicketId: tipoTicketId, estatus: nombreStatusTicket}, "GET"); 
+// 	    		 		window.location.href = serverContext + "tickets/filtro?inmuebleId=" + inmuebleId + "&tipoTicketId=" + tipoTicketId + "&estatusTicketName=" + nombreStatusTicket;
 	    		 	});
 	    		 }
 	    		 
 	    		 if( jqXHR.status == 204 ){
-	    		 	$("#tickets-grafica-dona").html( "<div>"+ /*[[#{tickets.grafica.inmueble.pagos.cero}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-emoticon-sad'></i></span></div>" );
+	    		 	$("#tickets-grafica-dona").html( "<div>"+ /*[[#{ticket.grafico.tickets.cero}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-emoticon-sad'></i></span></div>" );
 	    		 }
 	    		 
 	 	    });
 	 	    request.fail(function(jqXHR, textStatus, errorThrown) {
-	 	    	$("#tickets-grafica-dona").html( "<div>"+ /*[[#{tickets.grafica.inmueble.pagos.error}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-minecraft'></i></span></div>" );
+	 	    	$("#tickets-grafica-dona").html( "<div>"+ /*[[#{ticket.grafico.tickets.error}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-minecraft'></i></span></div>" );
 	 	    });
 	 	
 	    }
@@ -76,7 +79,8 @@
 	    
 	    function reporteTicketsInmueble() {
 	    	var inmuebleId = $("#inmueble").val();
-	    	if( inmuebleId == '' || inmuebleId == null){
+	    	var tipoTicketId = $("#tipoTicket").val();
+	    	if( inmuebleId == '' || inmuebleId == null || tipoTicketId == '' || tipoTicketId == null){
 	    		return;
 	    	}
 	    	var nombreStatusPago = null;
@@ -103,12 +107,12 @@
 	    		 }
 	    		 
 	    		 if( jqXHR.status == 204 ){
-	    		 	$("#inmuebleInforamcion").html( "<div>"+ /*[[#{tickets.grafica.inmueble.pagos.cero}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-emoticon-sad'></i></span></div>" );
+	    		 	$("#inmuebleInforamcion").html( "<div>"+ /*[[#{ticket.grafico.tickets.cero}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-emoticon-sad'></i></span></div>" );
 	    		 }
 	    		 
 	 	    });
 	 	    request.fail(function(jqXHR, textStatus, errorThrown) {
-	 	    	$("#inmuebleInforamcion").html( "<div>"+ /*[[#{tickets.grafica.inmueble.pagos.error}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-minecraft'></i></span></div>" );
+	 	    	$("#inmuebleInforamcion").html( "<div>"+ /*[[#{ticket.grafico.tickets.error}]]*/ +"</div><div><span class='text-muted display-5'><i class='mdi mdi-minecraft'></i></span></div>" );
 	 	    });
 	 	
 	    }
@@ -122,56 +126,61 @@
     <div class="container-fluid">
       <div class="row page-titles">
         <div class="col-md-6 col-8 align-self-center">
-          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{tickets.grafica.titulo.principal}"></h3>
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{ticket.grafico.titulo}"></h3>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title" th:text="#{tickets.grafica.subtitulo}"></h4>
-              <h6 class="card-subtitle" th:text="#{tickets.grafica.subtitulo.detalle}"></h6>
+              <h4 class="card-title" th:text="#{ticket.grafico.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{ticket.grafico.subtitulo.detalle}"></h6>
 			 
-			   <form name="pagoGeneracionForm" action="#">
 			   	<div class="row">
-			      <div id="divZona" class="form-group col-md-6"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
-	                    <label class="form-control-label" for="rolId" th:text="#{morosos.zona}"></label>
+			      <div id="divZona" class="form-group col-md-4"  sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA')">
+	                    <label class="form-control-label" for="rolId" th:text="#{ticket.grafico.zona}"></label>
 	                     <select  name="zona" id="zona" class="form-control"  onchange="cargarInmueblesPorZona();">	
 	                     	<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
 							<option th:each="zona : ${zonas}" th:value="${{zona.codigo}}" th:text="${zona.nombre}"></option>
 	                     </select>
 	               </div>
-	               <div id="divInmueble" class="form-group col-md-6" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')" >
-	               	     <label class="form-control-label" for="inmueble" th:text="#{morosos.inmueble}"></label>
+	               <div id="divInmueble" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'PROVEEDOR')" >
+	               	     <label class="form-control-label" for="inmueble" th:text="#{ticket.grafico.inmueble}"></label>
 	                    <select  name="inmueble" id="inmueble" class="form-control" onchange="poblarGraficoTicketsPorInmueble();reporteTicketsInmueble();">
 	                    		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
 								<option th:each="inmueble : ${inmuebles}" th:value="${{inmueble.id}}" th:text="${inmueble.nombre}"></option>
 		                </select>
 	               </div>
+	                <div id="divTipoTicket" class="form-group col-md-4" sec:authorize="hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'PROVEEDOR')" >
+	               	     <label class="form-control-label" for="tipoTicket" th:text="#{ticket.grafico.tipo.ticket}"></label>
+	                    <select  name="tipoTicket" id="tipoTicket" class="form-control" onchange="poblarGraficoTicketsPorInmueble();reporteTicketsInmueble();">
+	                    		<option selected="selected" value="" th:text="#{combo.seleccionar}"></option>	
+								<option th:each="tipoTicket : ${tiposTicket}" th:value="${{tipoTicket.id}}" th:text="${tipoTicket.nombre}"></option>
+		                </select>
+	               </div>
 			   	</div>
-               </form>
                
                <div class="row text-center">
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body ">
-                                <h4 class="card-title" th:text="#{tickets.grafica.inmueble.titulo}"></h4>
+                                <h4 class="card-title" th:text="#{ticket.grafico.inmueble.titulo}"></h4>
                                 <div id="inmuebleInformacion">
 <!--                                 	<img id="inmubleImagenUrlId" src="../images/servicios/ICONOS_SERVICIOS_01_MTTO.png" width="200px" /> -->
                                 	<img id="inmubleImagenUrlId" width="200px" />
                                 	<h4 id="nombreInmuebleId" class="m-t-20"></h4>
                                 	<div class="row">
-	                                    <div class="col-md-3 text-success">
+	                                    <div class="col-md-4 text-info">
 	                                        <span id="ticketsAbiertos" class="display-6" ></span>
-	                                        <h6 class="text-muted" th:text="#{tickets.grafica.pago.pagado}"></h6>
+	                                        <h6 class="text-info" th:text="#{ticket.grafico.estatus.abierto}"></h6>
 	                                    </div>
-	                                    <div class="col-md-3 text-warning">
+	                                    <div class="col-md-4 text-muted">
 	                                        <span id="ticketsEnProceso" class="display-6"></span>
-	                                        <h6 class="text-muted"  th:text="#{tickets.grafica.pago.pendiente}"></h6>
+	                                        <h6 class="text-muted"  th:text="#{ticket.grafico.estatus.enproceso}"></h6>
 	                                    </div>
-	                                    <div class="col-md-3 text-muted">
+	                                    <div class="col-md-4 text-success">
 	                                        <span id="ticketsCerrados" class="display-6"></span>
-	                                        <h6 class="text-muted"  th:text="#{tickets.grafica.pago.verificando}"></h6>
+	                                        <h6 class="text-success"  th:text="#{ticket.grafico.estatus.cerrado}"></h6>
 	                                    </div>
                                 	</div>
                                 </div>
@@ -181,7 +190,7 @@
                		<div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" th:text="#{tickets.grafica.grafico.titulo}"></h4>
+                                <h4 class="card-title" th:text="#{ticket.grafico.porcentage.titulo}"></h4>
                                 <div id="tickets-grafica-dona"></div>
                             </div>
                         </div>

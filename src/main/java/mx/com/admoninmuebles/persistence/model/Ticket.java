@@ -1,6 +1,5 @@
 package mx.com.admoninmuebles.persistence.model;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -33,11 +32,11 @@ public class Ticket extends EntidadBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_ticket")
     private Long id;
-
-    @NotNull
-    @Size(min = 0, max = 100)
-    @Column(length = 100, nullable = true)
-    private String titulo;
+//
+//    @NotNull
+//    @Size(min = 1, max = 100)
+//    @Column(length = 100, nullable = false)
+//    private String titulo;
 
     @NotNull
     @Size(min = 1, max = 4000)
@@ -47,9 +46,9 @@ public class Ticket extends EntidadBase {
     @NotNull
     private String estatus;
 
-    //@ManyToOne
-    //@JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio", nullable = false)
-    //private AreaServicio areaServicio;
+    @ManyToOne
+    @JoinColumn(name = "id_area_servicio_fk", referencedColumnName = "id_area_servicio", nullable = true)
+    private AreaServicio areaServicio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_creador_fk", nullable = false)
@@ -66,9 +65,9 @@ public class Ticket extends EntidadBase {
     @JoinColumn(name = "id_tipo_ticket_fk", referencedColumnName = "id_tipo_ticket", nullable = false)
     private TipoTicket tipoTicket;
     
-    @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
-    private byte[] archivoEvidencia;
-
+//    @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
+//    private byte[] archivoEvidencia;
+   
     public void addCambioTicket(final CambioTicket cambioTicket) {
         cambios.add(cambioTicket);
         cambioTicket.setTicket(this);

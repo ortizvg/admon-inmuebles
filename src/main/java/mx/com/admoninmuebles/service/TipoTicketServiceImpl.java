@@ -46,4 +46,10 @@ public class TipoTicketServiceImpl implements TipoTicketService {
 		
 	}
 
+	@Override
+	public TipoTicketDto findByNombre(String nombre) {
+		Optional<TipoTicket> tipoTicket = tipoTicketRepository.findByNombre( nombre );
+		return modelMapper.map(tipoTicket.get(), TipoTicketDto.class);
+	}
+
 }

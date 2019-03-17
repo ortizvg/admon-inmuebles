@@ -29,7 +29,9 @@ public interface InmuebleService {
     Collection<UsuarioDto> findSociosActivosByInmuebleId(Long id);
     
     Collection<TicketDto> findTicketsByInmuebleId(Long id);
-
+    
+    Collection<InmuebleDto> findInmueblesByTicketAsignedToProveedorId(Long id);
+    
     InmuebleDto findById(Long id);
 
     void deleteById(Long id);

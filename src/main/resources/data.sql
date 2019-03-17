@@ -112,15 +112,8 @@ INSERT INTO `roles_privilegios` VALUES (34,2);
 INSERT INTO `roles_privilegios` VALUES (34,3);
 INSERT INTO `roles_privilegios` VALUES (34,4);
 INSERT INTO `roles_privilegios` VALUES (34,5);
+INSERT INTO `roles_privilegios` VALUES (35,7);
 /*!40000 ALTER TABLE `roles_privilegios` ENABLE KEYS */;
-UNLOCK TABLES;
-
-LOCK TABLES `tipos_ticket` WRITE;
-/*!40000 ALTER TABLE `tipos_ticket` DISABLE KEYS */;
-INSERT INTO `tipos_ticket` VALUES (1,'2019-02-27 20:51:40','2019-02-27 20:51:40','Administrativo',NULL,NULL);
-INSERT INTO `tipos_ticket` VALUES (2,'2019-02-27 20:51:40','2019-02-27 20:51:40','Solicitud de servicios',NULL,NULL);
-INSERT INTO `tipos_ticket` VALUES (3,'2019-02-27 20:51:40','2019-02-27 20:51:40','Quejas y sugerencias',NULL,NULL);
-/*!40000 ALTER TABLE `tipos_ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
 LOCK TABLES `usuarios` WRITE;
@@ -252,4 +245,9 @@ insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, a
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (8, 'Statement of income', 'en', true);
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (9, 'Expenses and income', 'en', true);
 insert into tipos_reporte_mensual (id_tipo_reporte_mensual, descripcion, lang, activo) values (10, 'Defaulters', 'en', true);
+
+INSERT INTO gescopls.tipos_ticket(id_tipo_ticket,fecha_creacion,fecha_modificacion,nombre,id_creado_por_fk,id_modificado_por_fk) VALUES(1,null, null, 'Administrativo', null,  null );
+INSERT INTO gescopls.tipos_ticket(id_tipo_ticket,fecha_creacion,fecha_modificacion,nombre,id_creado_por_fk,id_modificado_por_fk) VALUES(2,null, null, 'Financiero', null,  null );
+INSERT INTO gescopls.tipos_ticket(id_tipo_ticket,fecha_creacion,fecha_modificacion,nombre,id_creado_por_fk,id_modificado_por_fk) VALUES(3,null, null, 'Operación', null,  null );
+INSERT INTO gescopls.tipos_ticket(id_tipo_ticket,fecha_creacion,fecha_modificacion,nombre,id_creado_por_fk,id_modificado_por_fk) VALUES(4,null, null, 'Quejas y sugerencias', null,  null );
 

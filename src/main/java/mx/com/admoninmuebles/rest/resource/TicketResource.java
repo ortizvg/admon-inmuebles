@@ -20,10 +20,10 @@ public class TicketResource {
 	@Autowired
 	private GraficoDonaTicketService graficoDonaTicketService;
 	
-    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
+    @PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'PROVEEDOR')")
 	@GetMapping("/tickets/reporte")
     public ResponseEntity<ReporteTicketDto> buscarSociosPorInmueble( @RequestParam(name = "inmuebleId", required = false) Long inmuebleId,
-			@RequestParam(name = "tipoTicketId", required = false) String tipoTicketId  ) {
+			@RequestParam(name = "tipoTicketId", required = false) Long tipoTicketId  ) {
         try {
         	ReporteTicketDto reporteTicketDto =  graficoDonaTicketService.generarReporteTicketsPorInmuebleId( inmuebleId, tipoTicketId);
             return new ResponseEntity<>(reporteTicketDto, HttpStatus.OK);
@@ -32,11 +32,11 @@ public class TicketResource {
         }
     }
 	
-	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR')")
+	@PreAuthorize("hasAnyRole('ADMIN_CORP', 'ADMIN_ZONA', 'ADMIN_BI', 'CONTADOR', 'PROVEEDOR')")
 	@GetMapping("/tickets/grafica/dona")
     public ResponseEntity<GraficaDonaMorrisDto> generarGraficaDonaTickets(
 			@RequestParam(name = "inmuebleId", required = false) Long inmuebleId,
-			@RequestParam(name = "tipoTicketId", required = false) String tipoTicketId ) {
+			@RequestParam(name = "tipoTicketId", required = false) Long tipoTicketId ) {
 		
         try {
         	

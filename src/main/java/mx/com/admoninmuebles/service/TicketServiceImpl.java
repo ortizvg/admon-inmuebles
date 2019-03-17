@@ -1,14 +1,17 @@
 package mx.com.admoninmuebles.service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.TicketDto;
 import mx.com.admoninmuebles.persistence.model.Ticket;
 import mx.com.admoninmuebles.persistence.repository.TicketRepository;
@@ -53,4 +56,14 @@ public class TicketServiceImpl implements TicketService {
         ticketRepository.deleteById(id);
     }
 
+	@Override
+	public boolean isFiltro(TicketDto ticketDto) {
+		return StringUtils.isNotBlank( ticketDto.getEstatus()) || ticketDto.getInmuebleId() != null || ticketDto.getTipoTicketId() != null;
+	}
+
+	@Override
+	public Collection<TicketDto> filtrar(TicketDto ticketDto) {
+		return StreamSupport.stream(ticketRepository.findByInmuebleIdAndTipoTicketNameAndEstatusTicketName(ticketDto.getInmuebleId(), ticketDto.getTipoTicketId(), ticketDto.getEstatus()).spliterator(), false).map(ticket -> modelMapper.map(ticket, TicketDto.class)).collect(Collectors.toList());
+	}
+	
 }

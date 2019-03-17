@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title th:text="#{ticket.titulo}"></title>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+
+  /*]]>*/
+</script>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+          <h3 class="text-themecolor m-b-0 m-t-0 text-gesco-secundario" th:text="#{ticket.titulo.principal}"></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" th:text="#{ticket.subtitulo}"></h4>
+              <h6 class="card-subtitle" th:text="#{ticket.titulo}"></h6>
+              <form name="agregarComentarioForm" action="#" enctype="multipart/form-data" th:action="@{'/ticket-comentarios/'+${idTicket}}" th:object="${cambioTicketDto}" method="post">
+              <div class="table-responsive">
+                <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-page-size="20">
+                  <thead>
+                    <tr>
+                      <th th:text="#{ticket.comentario}"></th>
+                      <th th:text="#{ticket.evidencia}"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th:block th:each="cambio : ${cambios}">
+                      <tr>
+                        <td th:text="${cambio.comentario}"></td>
+                        <td th:if="${cambio.archivoEvidencia}">
+                        	<a th:href="@{|/ticket-download/${cambio.id}|}" th:text="${cambio.tituloArchivoEvidencia}"></a>
+                        </td>
+                        <td th:unless="${cambio.archivoEvidencia}">
+                        	<a th:text="#{ticket.sin.evidencia}"></a>
+                        </td>
+                      </tr>
+                    </th:block>
+                  </tbody>
+                  <tfoot th:if="${#lists.size(cambios) > 20}">
+                    <tr>
+                      <td colspan="6">
+                        <div class="text-right">
+                          <ul class="pagination">
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+                
+              <div class="row">
+                <!--div id="divDescripcion" class="col-md-8 form-group" th:classappend="${#fields.hasErrors('comentario')}? ' has-danger'"-->
+                <div id="divDescripcion" class="col-md-8 form-group" >
+                  <label class="form-control-label" th:text="#{ticket.comentario}"></label>
+                  <textarea name="comentario" class="form-control" th:field="*{comentario}" maxlength="4000" rows="10" required></textarea>
+                  <!--  >span class="form-control-feedback">
+                    <span th:if="${#fields.hasErrors('comentario')}" th:errors="*{comentario}"></span>
+                  </span-->
+                </div>
+              
+              	<div id="divCarga" class="col-md-4 form-group">
+				 <label class="form-control-label" th:text="#{ticket.evidencia}"></label>
+				 <input type="file" name="file" id="file" class="form-control"/> 
+				</div>              
+              </div>                           
+                <div class="modal-footer">
+                	<button type="submit" class="btn btn-info-gesco" th:text="#{boton.agregar}"></button>
+                	<a th:href="${'../ticket-detalle/'  + idTicket}" class="btn btn-secondary" th:text="#{boton.cerrar}"></a>
+              	</div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

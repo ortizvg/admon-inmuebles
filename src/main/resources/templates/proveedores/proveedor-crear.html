@@ -132,8 +132,8 @@ function cargarColonias() {
 								                    <span th:if="${#fields.hasErrors('datosAdicionalesNumeroCuenta')}" th:errors="*{datosAdicionalesNumeroCuenta}"></span>
 								                  </span>
 								                </div>
-								                <div id="divZona"  th:class="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'">
-		                                		   <div class="col-md-12 m-b-20">
+<!-- 								                <div id="divZona"  th:class="${#fields.hasErrors('zonaSeleccionado')}? 'form-group has-danger':'form-group'"> -->
+								                <div id="divZona" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('zonaSeleccionado')}? 'has-danger'">
 										              <label class="form-control-label" th:text="#{colonia.zona}"></label>
 										              <select name="zonaSeleccionado" class="form-control" th:field="*{zonaSeleccionado}" required>
 										                <option selected="selected" value="" th:text="#{combo.seleccionar}"></option>
@@ -142,13 +142,12 @@ function cargarColonias() {
 										              <span class="form-control-feedback">
 										                <span th:if="${#fields.hasErrors('zonaSeleccionado')}" th:errors="*{zonaSeleccionado}"></span>
 										              </span>
-								              	</div>
-								            </div>
+								            	</div>
 												<div id="divAreasServicio" class="col-md-4 form-group" th:classappend="${#fields.hasErrors('areasServicioSeleccionados')}? 'has-danger'">
 								                  <label class="form-control-label" th:text="#{proveedores.areasservicio}"></label>
 								                  <select  name="areaServicio" class="form-control" th:field="*{areasServicioSeleccionados}" required multiple="multiple">	
 													<option th:each="areaServicio : ${session.areasServicio}" th:value="${{areaServicio.id}}" th:text="${areaServicio.nombre}"></option>
-		                                        </select>
+		                                        	</select>
 								                  <span class="form-control-feedback">
 								                    <span th:if="${#fields.hasErrors('areasServicioSeleccionados')}" th:errors="*{areasServicioSeleccionados}"></span>
 								                  </span>

@@ -40,14 +40,6 @@
                   <label class="form-control-label" th:text="#{ticket.estatus}"></label>
                   <p class="form-control-static" th:text="*{estatus}"></p>
                 </div>
-                <div id="divEvidencia" class="col-md-4 form-group">
-                  <label class="control-label" th:text="#{ticket.evidencia}"></label>
-                  <p class="form-control-static" >
-<!--                   	<a th:href="@{|/ticket-download/${ticketDto.id}|}" th:text="*{titulo}"></a> -->
-                  	<a th:href="@{|/ticket-download/*{id}|}" th:text="*{titulo}"></a>
-<!--                   	<a th:href="@{|/api/archivos/${pago.comprobantePagoId}|}" th:text="*{comprobantePagoNombre}"></a> -->
-                  </p>
-                </div>
               </div>
               <div class="row">
                 <div id="divDescripcion" class="col-md-4 form-group">
@@ -56,7 +48,7 @@
                 </div>
               </div>
                <div class="row" >
-                <div id="divProveedor" th:unless="*{estatus}=='ABIERTO'" class="col-md-4 form-group">
+                <div id="divProveedor" th:if="*{estatus=='ABIERTO'}" class="col-md-4 form-group">
                   <label class="form-control-label" th:text="#{ticket.proveedor}"></label>
                   <p class="form-control-static" th:text="*{nombreProveedor}"></p>
                 </div>

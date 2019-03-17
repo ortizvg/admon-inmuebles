@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -18,13 +16,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.constant.RolConst;
-import mx.com.admoninmuebles.constant.SimbolosConst;
 import mx.com.admoninmuebles.constant.SociosConst;
 import mx.com.admoninmuebles.dto.CargaSocioDto;
 import mx.com.admoninmuebles.dto.ErrorDto;
-import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.persistence.model.Inmueble;
@@ -79,7 +76,7 @@ public class CargaSocioServiceImpl implements CargaSocioService {
 			while((line = br.readLine()) != null) {
 				if( !line.isEmpty() ) {
 					contadorLinea++;
-					String[] arrayStr = line.split(SimbolosConst.COMA);
+					String[] arrayStr = line.split(ComunConst.COMA);
 					agregarSocio(arrayStr, contadorLinea, socio, rolSocio.getId() );
 				}
 			}

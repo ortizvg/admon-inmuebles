@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import mx.com.admoninmuebles.constant.EstatusPagoConst;
+import mx.com.admoninmuebles.constant.ColorConst;
 import mx.com.admoninmuebles.constant.LocaleConst;
 import mx.com.admoninmuebles.dto.GraficaDonaMorrisDataDto;
 import mx.com.admoninmuebles.dto.GraficaDonaMorrisDto;
@@ -108,15 +108,19 @@ public class MorosoServiceImpl implements MorosoService {
 	@Override
 	public GraficaDonaMorrisDto generarGraficaDonaPorInmuebleId( Long inmuebleId ) {
 		
+		final String ESTATUS_PAGO_COLOR_PAGADO = ColorConst.COLOR_SUCCESS;
+		final String ESTATUS_PAGO_COLOR_CERCANO = ColorConst.COLOR_WARNIGN;
+		final String ESTATUS_PAGO_COLOR_VERIFICACION = ColorConst.COLOR_MUTED;
+		final String ESTATUS_PAGO_COLOR_ATRASADO = ColorConst.COLOR_DANGER;
 		final String IDENTIFICADOR_TIPO_GRAFICA = "pagos-grafica-dona";
 		
 		ReporteInmuebleMorososDto reporte = generarReporteMorososPorInmuebleId( inmuebleId );
 		
 		List<String> coloresEstatusPagos = new ArrayList<> ();
-		coloresEstatusPagos.add( EstatusPagoConst.ESTATUS_PAGO_COLOR_PAGADO );
-		coloresEstatusPagos.add( EstatusPagoConst.ESTATUS_PAGO_COLOR_CERCANO );
-		coloresEstatusPagos.add( EstatusPagoConst.ESTATUS_PAGO_COLOR_VERIFICACION );
-		coloresEstatusPagos.add( EstatusPagoConst.ESTATUS_PAGO_COLOR_ATRASADO );
+		coloresEstatusPagos.add( ESTATUS_PAGO_COLOR_PAGADO );
+		coloresEstatusPagos.add( ESTATUS_PAGO_COLOR_CERCANO );
+		coloresEstatusPagos.add( ESTATUS_PAGO_COLOR_VERIFICACION );
+		coloresEstatusPagos.add( ESTATUS_PAGO_COLOR_ATRASADO );
 		
 		GraficaDonaMorrisDataDto pagosAtrasados = new GraficaDonaMorrisDataDto();
 		pagosAtrasados.setLabel( messages.getMessage("mororos.tablero.pago.atrasado", null, LocaleConst.LOCALE_MX )  );

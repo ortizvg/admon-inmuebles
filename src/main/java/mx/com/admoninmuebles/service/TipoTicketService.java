@@ -10,4 +10,5 @@ public interface TipoTicketService {
     Collection<TipoTicketDto> findAll();
     TipoTicketDto findById(Long idTipoTicket);
     void deleteById(Long idTipoTicket);
+    TipoTicketDto findByNombre(String nombre);
 }
