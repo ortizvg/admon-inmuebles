@@ -17,9 +17,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ContraseniaConfirmacionValidator.class)
 @Documented
 public @interface ContraseniaConfirmacion {
-	
 
-//    String message() default "Passwords don't match";
     String message() default "{mx.com.admoninmuebles.validation.ContraseniaConfirmacion.message}";
 
     Class<?>[] groups() default {};

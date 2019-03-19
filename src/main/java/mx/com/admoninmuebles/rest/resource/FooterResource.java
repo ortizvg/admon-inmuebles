@@ -1,11 +1,7 @@
 package mx.com.admoninmuebles.rest.resource;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;

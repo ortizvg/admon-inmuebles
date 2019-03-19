@@ -183,8 +183,6 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
 		
 		StringBuffer notificacionDesc = new StringBuffer();
-//		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.morosos.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX)  );
-//		notificacionDesc.append("\n");
 		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX) ).append(ComunConst.CADENA_ESPACIO).append( pago.getConcepto() );
 		notificacionDesc.append(",\n");
 		notificacionDesc.append(messages.getMessage("notificacion.pago.monto" , null, LocaleConst.LOCALE_MX) ).append(ComunConst.CADENA_ESPACIO).append( pago.getMonto() );
@@ -211,9 +209,6 @@ public class NotificacionPagoServiceImpl implements NotificacionPagoService {
 		Long diasAtraso = fechavencimientoPago.until(fechaActual, ChronoUnit.DAYS );
 		
 		StringBuffer notificacionDesc = new StringBuffer();
-//		StringBuffer notificacionDesc = new StringBuffer(  messages.getMessage("notificacion.morosos.recordatorio.pago.descripcion" , null, LocaleConst.LOCALE_MX)  );
-//		notificacionDesc.append("\n");
-		notificacionDesc.append( messages.getMessage("morosos.notificacion.recordatorio.pago.deudor" , null, LocaleConst.LOCALE_MX) ).append(ComunConst.CADENA_ESPACIO).append( pago.getUsuario().getNombre());
 		notificacionDesc.append(",\n");
 		notificacionDesc.append( messages.getMessage("notificacion.pago.concepto" , null, LocaleConst.LOCALE_MX) ).append(ComunConst.CADENA_ESPACIO).append( pago.getConcepto() );
 		notificacionDesc.append(",\n");

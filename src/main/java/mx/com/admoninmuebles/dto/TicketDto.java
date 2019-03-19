@@ -37,6 +37,7 @@ public class TicketDto {
     private String estatus;
     private Long usuarioCreadorId;
     private String usuarioCreadorNombre;
+    private String usuarioCreadorCorreo;
     private String usuarioCreadorApellidoPaterno;
     private String usuarioCreadorApellidoMaterno;
     private String usuarioCreadorInmuebleNombre;
@@ -45,6 +46,7 @@ public class TicketDto {
     private String usuarioCreadorInmuebleDireccionAsentamientoNombre;
     private Long usuarioAsignadoId;
     private String usuarioAsignadoNombre;
+    private String usuarioAsignadoCorreo;
     private String usuarioAsignadoApellidoPaterno;
     private String usuarioAsignadoApellidoMaterno;
     

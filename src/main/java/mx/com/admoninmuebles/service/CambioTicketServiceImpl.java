@@ -23,8 +23,10 @@ public class CambioTicketServiceImpl implements CambioTicketService {
     private ModelMapper modelMapper;
 
     @Override
-    public CambioTicket save(final CambioTicketDto cambioTicketDto) {
-        return cambioTicketRepository.save(modelMapper.map(cambioTicketDto, CambioTicket.class));
+    public CambioTicketDto save(final CambioTicketDto cambioTicketDto) {
+    	CambioTicket cambioTicket =  cambioTicketRepository.save(modelMapper.map(cambioTicketDto, CambioTicket.class));
+        
+        return modelMapper.map(cambioTicket, CambioTicketDto.class);
     }
 
 	@Override

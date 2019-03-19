@@ -35,8 +35,6 @@ import mx.com.admoninmuebles.service.InmuebleService;
 @Component
 public class CargaMasivaSocioValidatorImpl implements CargaMasivaSocioValidator {
 
-
-
 	@Autowired
 	private InmuebleRepository inmuebleRepository;
 	

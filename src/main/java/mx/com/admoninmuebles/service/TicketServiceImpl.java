@@ -1,7 +1,6 @@
 package mx.com.admoninmuebles.service;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -11,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import mx.com.admoninmuebles.dto.PagoDto;
 import mx.com.admoninmuebles.dto.TicketDto;
 import mx.com.admoninmuebles.persistence.model.Ticket;
 import mx.com.admoninmuebles.persistence.repository.TicketRepository;
@@ -26,8 +24,9 @@ public class TicketServiceImpl implements TicketService {
     private ModelMapper modelMapper;
 
     @Override
-    public Ticket save(final TicketDto ticketDto) {
-        return ticketRepository.save(modelMapper.map(ticketDto, Ticket.class));
+    public TicketDto save(final TicketDto ticketDto) {
+        Ticket ticket =  ticketRepository.save(modelMapper.map(ticketDto, Ticket.class));
+        return modelMapper.map(ticket, TicketDto.class);
     }
 
     @Override

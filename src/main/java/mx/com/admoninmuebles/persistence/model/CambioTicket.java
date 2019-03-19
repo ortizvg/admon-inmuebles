@@ -37,10 +37,10 @@ public class CambioTicket extends EntidadBase {
 //    @Column(length = 50, unique = true, nullable = false)
 //    private String evidenciaImagenUrl;
     
-    @Column(name = "archivo_evidencia", columnDefinition = "BLOB", nullable = true)
+    @Column(name = "archivo_evidencia", columnDefinition = "MEDIUMBLOB", nullable = true)
     private byte[] archivoEvidencia;
 
-    @Column(length = 20, name = "titulo_archivo_evidencia", nullable = true)
+    @Column(length = 255, name = "titulo_archivo_evidencia", nullable = true)
     private String tituloArchivoEvidencia;
     
     @ManyToOne(fetch = FetchType.LAZY)

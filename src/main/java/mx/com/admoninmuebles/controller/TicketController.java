@@ -17,6 +17,7 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.constant.EstatusTicketConst;
 import mx.com.admoninmuebles.constant.PrivilegioConst;
 import mx.com.admoninmuebles.constant.RolConst;
@@ -40,7 +42,7 @@ import mx.com.admoninmuebles.dto.TicketDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.AreaServicioService;
 import mx.com.admoninmuebles.service.CambioTicketService;
-import mx.com.admoninmuebles.service.NotificacionService;
+import mx.com.admoninmuebles.service.NotificacionTicketService;
 import mx.com.admoninmuebles.service.TicketService;
 import mx.com.admoninmuebles.service.TipoTicketService;
 import mx.com.admoninmuebles.service.UsuarioService;
@@ -64,13 +66,16 @@ public class TicketController {
 	private UsuarioService usuarioService;
 	
 	@Autowired
+	private NotificacionTicketService notificacionTicketService;
+	
+	@Autowired
 	private ServletContext servletContext;
 
 	@Autowired
 	private CambioTicketService cambioTicketService;
 	
-	@Autowired
-	private NotificacionService notificacionService;
+    @Autowired
+    private MessageSource messages;
 	
 	@PreAuthorize("hasAuthority('" + PrivilegioConst.VER_TICKET + "')")
 	@GetMapping(value = "/tickets")
@@ -117,6 +122,7 @@ public class TicketController {
 	public String crearTicket(final Locale locale, @Valid final TicketDto ticketDto,
 			final BindingResult bindingResult, @RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
 		String showPageFail = "ticket/ticket-crear"; 
+		String showPageFailRedirect = "redirect:/ticket-crear"; 
 		Optional<Long> optId = SecurityUtils.getCurrentUserId();
 		if (optId.isPresent()) {
 			ticketDto.setUsuarioCreadorId(optId.get());
@@ -131,11 +137,15 @@ public class TicketController {
     	ArrayList<CambioTicketDto> cambios = null;
         try {
             if (!file.isEmpty()) {
+                if( file.getSize() > ComunConst.TAMANIO_5_MB ) {
+               	 	redirect.addFlashAttribute("error", messages.getMessage("ticket.crear.archivo.validacion.tamanio", null, locale) );
+               	 	return showPageFailRedirect;
+                }
             	fileType = file.getContentType();
     			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType)
     					|| MIME_TYPE_DOC.contains(fileType) || MIME_TYPE_DOCX.contains(fileType) || MIME_TYPE_TXT.contains(fileType))) {
-    				redirect.addFlashAttribute("messageType","");
-    				return showPageFail;
+    				redirect.addFlashAttribute("error", messages.getMessage("ticket.crear.archivo.validacion.tipo", null, locale));
+    				return showPageFailRedirect;
     			}else {
     				cambio.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
     			}
@@ -147,9 +157,10 @@ public class TicketController {
 			ticketDto.setEstatus(EstatusTicketConst.ABIERTO);
 //			ticketDto.setCambios(cambios);
 			ticketDto.setTitulo(file.getOriginalFilename());
-			cambio.setTicketId(ticketService.save(ticketDto).getId());
+			TicketDto ticketCreado =  ticketService.save(ticketDto);
+			cambio.setTicketId(ticketCreado.getId());
  			cambioTicketService.save(cambio);
-// 			notificacionService.save(notificacionDto)
+ 			notificacionTicketService.notificarCreacionTicket( ticketCreado );
 		} catch (Exception e) {
 			logger.error("Hubo un problema al crear el ticket");
 			return showPageFail;
@@ -210,7 +221,8 @@ public class TicketController {
 		TicketDto ticketDtoTemp = ticketService.findById(ticketDto.getId());
 		ticketDtoTemp.setUsuarioAsignadoId(ticketDto.getUsuarioAsignadoId());
 		ticketDtoTemp.setEstatus(EstatusTicketConst.EN_PROCESO);
-		ticketService.save(ticketDtoTemp);
+//		ticketService.save(ticketDtoTemp);
+		notificacionTicketService.notificarAsignacionTicket( ticketService.save( ticketDtoTemp ) );
 		return "redirect:tickets";
 	}
 
@@ -254,7 +266,8 @@ public class TicketController {
 	public String terminar(final @PathVariable long id) {
 		TicketDto ticketDtoTemp = ticketService.findById(id);
 		ticketDtoTemp.setEstatus(EstatusTicketConst.CERRADO);
-		ticketService.save(ticketDtoTemp);
+		TicketDto ticketTerminadoDto = ticketService.save(ticketDtoTemp);
+		notificacionTicketService.notificarCierreTicket(ticketTerminadoDto);
 		return "redirect:/tickets";
 	}
 	
@@ -287,6 +300,7 @@ public class TicketController {
 	public String agregarComentario(final Locale locale, @Valid final CambioTicketDto cambioTicketDto,@PathVariable Long idTicket, final Model model,
 			final BindingResult bindingResult, @RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
 		String showPageFail = "ticket/ticket-comentarios"; 
+		String showPageFailRedirect = "redirect:/ticket-comentarios/" + idTicket; 
     	final String MIME_TYPE_JPG = "image/jpeg";
     	final String MIME_TYPE_PDF = "application/pdf";
     	final String MIME_TYPE_DOC = "application/msword";
@@ -295,24 +309,29 @@ public class TicketController {
     	String fileType = null;
         try {
             if (!file.isEmpty()) {
+            	 if( file.getSize() > ComunConst.TAMANIO_5_MB ) {
+                	 	redirect.addFlashAttribute("error", messages.getMessage("ticket.crear.archivo.validacion.tamanio", null, locale) );
+                	 	return showPageFailRedirect;
+                 }
             	fileType = file.getContentType();
     			if(!(MIME_TYPE_JPG.contains(fileType) || MIME_TYPE_PDF.contains(fileType)
     					|| MIME_TYPE_DOC.contains(fileType) || MIME_TYPE_DOCX.contains(fileType) || MIME_TYPE_TXT.contains(fileType))) {
-    				redirect.addFlashAttribute("messageType","");
-    				return showPageFail;
+    				redirect.addFlashAttribute("error", messages.getMessage("ticket.crear.archivo.validacion.tipo", null, locale));
+    				return showPageFailRedirect;
     			}else {
     				cambioTicketDto.setArchivoEvidencia(IOUtils.toByteArray(file.getInputStream()));
     				cambioTicketDto.setTituloArchivoEvidencia(file.getOriginalFilename());
     			}
             }
             cambioTicketDto.setTicketId(idTicket);
- 			cambioTicketService.save(cambioTicketDto);
+            CambioTicketDto cambioTicketCreadoDto = cambioTicketService.save(cambioTicketDto);
+ 			notificacionTicketService.notificarComentarioTicket(cambioTicketCreadoDto);
  			Collection<CambioTicketDto> cambios = cambioTicketService.findByTicketId(idTicket);
  			model.addAttribute("cambios", cambios);
  			model.addAttribute("idTicket", idTicket);
 		} catch (Exception e) {
-			logger.error("Hubo un problema al agregar comentario al ticket: "+idTicket);
-			return showPageFail;
+			logger.error("Hubo un problema al agregar comentario al ticket: "+idTicket, e);
+			return showPageFailRedirect;
 		}
 		return "ticket/ticket-comentarios";
 	}

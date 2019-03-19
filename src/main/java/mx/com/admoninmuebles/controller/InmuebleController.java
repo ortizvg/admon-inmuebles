@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.com.admoninmuebles.constant.ComunConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.ColoniaDto;
 import mx.com.admoninmuebles.dto.InmuebleDto;
 import mx.com.admoninmuebles.dto.ZonaDto;
+import mx.com.admoninmuebles.error.BusinessException;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.ColoniaService;
 import mx.com.admoninmuebles.service.ContadorService;
@@ -151,6 +153,11 @@ public class InmuebleController {
         	 redirect.addFlashAttribute("error",   messages.getMessage("mensaje.inmueble.imagen.validacion", null, locale) );
         	 return "redirect:/inmueble-crear";
         }
+        
+        if( inmuebleDto.getImagen().getSize() > ComunConst.TAMANIO_5_MB ) {
+        	 redirect.addFlashAttribute("error",   messages.getMessage("mensaje.inmueble.imagen.validacion.tamanio", null, locale) );
+        	 return "redirect:/inmueble-crear";
+		}
         
         inmuebleDto.setImagenUrl("/" + storageService.store(inmuebleDto.getImagen()));
         inmuebleService.save(inmuebleDto);

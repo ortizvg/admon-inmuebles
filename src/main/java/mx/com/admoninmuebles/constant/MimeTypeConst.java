@@ -15,7 +15,9 @@ public final class MimeTypeConst {
 	
 	public static final Collection<String> IMAGE_MIME_TYPES = new ArrayList<String>()
 	{
-	    {
+		private static final long serialVersionUID = 1L;
+
+		{
 	        add( MimeTypeUtils.IMAGE_GIF_VALUE );
 	        add( MimeTypeUtils.IMAGE_JPEG_VALUE );
 	        add( MimeTypeUtils.IMAGE_PNG_VALUE );
