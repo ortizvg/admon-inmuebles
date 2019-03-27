@@ -54,6 +54,7 @@
                       <th th:text="#{ticket.tipoticket}"></th>
                       <th th:text="#{ticket.estatus}"></th>
                       <th th:text="#{ticket.fechacreacion}"></th>
+                      <th th:text="#{ticket.comentarios}"></th>
                       <th th:text="#{tabla.accion}"></th>
                     </tr>
                   </thead>
@@ -74,6 +75,9 @@
                         </div>
                       </td>
                         <td th:text="${#dates.format(ticket.fechaCreacion, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA)}"></td>
+                        <td>
+                        	<a th:href="*{'/ticket-comentarios/' + ticket.id}" class="btn btn-success" th:text="#{boton.comentarios}"></a>
+                        </td>
                         <td>
                           <a th:href="${'ticket-detalle/'  + ticket.id}" class="btn btn-sm btn-icon btn-pure btn-outline"> <i class="fa fa-info text-inverse m-r-10" aria-hidden="true"></i></a>
                         </td>

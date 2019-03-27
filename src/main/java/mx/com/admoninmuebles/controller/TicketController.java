@@ -4,9 +4,13 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +43,7 @@ import mx.com.admoninmuebles.constant.PrivilegioConst;
 import mx.com.admoninmuebles.constant.RolConst;
 import mx.com.admoninmuebles.dto.CambioTicketDto;
 import mx.com.admoninmuebles.dto.TicketDto;
+import mx.com.admoninmuebles.dto.UsuarioDto;
 import mx.com.admoninmuebles.security.SecurityUtils;
 import mx.com.admoninmuebles.service.AreaServicioService;
 import mx.com.admoninmuebles.service.CambioTicketService;
@@ -93,7 +98,11 @@ public class TicketController {
 			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByUsuarioCreadorId(optId.get())));
 		} else if (request.isUserInRole(RolConst.ROLE_PROVEEDOR) || request.isUserInRole(RolConst.ROLE_CONTADOR)) {
 			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByUsuarioAsignadoId(optId.get())));
-		} else {
+		} else if(request.isUserInRole(RolConst.ROLE_ADMIN_ZONA)){
+			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByAdminZonaId(optId.get())));
+		}else if(request.isUserInRole(RolConst.ROLE_ADMIN_BI)) {
+			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findByAdminBiId(optId.get())));
+		}else {
 			model.addAttribute(nombreTicketsSesion, revisaRetraso(ticketService.findAll()));
 		}
 		return "ticket/tickets";
@@ -182,6 +191,7 @@ public class TicketController {
 			final HttpSession session) {
 		String vista;
 		TicketDto ticketDto = ticketService.findById(id);
+		Optional<Long> optId = SecurityUtils.getCurrentUserId();
 		model.addAttribute("ticketDto", ticketDto);
 		if (request.isUserInRole(RolConst.ROLE_SOCIO_BI)) {
 			vista = "ticket/ticket-detalle";
@@ -191,7 +201,8 @@ public class TicketController {
 			vista = "ticket/ticket-asignar";
 			session.setAttribute("proveedores", usuarioService.findByRolesNombreAndAreasServicioId(RolConst.ROLE_PROVEEDOR, ticketDto.getAreaServicioId()));
 			session.setAttribute("contadores", usuarioService.findByRolesNombre(RolConst.ROLE_CONTADOR));
-			session.setAttribute("admins", usuarioService.findAllAdministradores());
+			List<UsuarioDto> listAdminBi = new ArrayList<>();
+			session.setAttribute("admins", listAdminBi.add(usuarioService.findById(optId.get())));
 		}
 		return vista;
 	}

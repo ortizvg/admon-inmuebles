@@ -65,7 +65,24 @@ public interface TicketRepository extends CrudRepository<Ticket, Long> {
 			nativeQuery = true)
 	Long countByInmuebleIdAndTipoTicketId(Long id,  Long tipoTicketId);
     
+    @Query(value = "select t.* from gescopls.usuarios u  \r\n" + 
+    		"inner join gescopls.inmuebles i on u.id_usuario = i.id_admin_bi_fk \r\n" + 
+    		"inner join gescopls.inmuebles_socios ist on i.id_inmueble = ist.Inmueble_id_inmueble\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"where u.id_usuario =  ?1 order by t.id_ticket desc", 
+			nativeQuery = true)
+    Collection<Ticket> findByAdminBiId(Long id);
     
+    @Query(value = "select t.* from gescopls.usuarios az\r\n" + 
+    		"inner join gescopls.zonas z on az.id_usuario = z.id_admin_zona_fk\r\n" + 
+    		"inner join gescopls.asentamientos a on  z.codigo = a.id_zona_fk\r\n" + 
+    		"inner join gescopls.direcciones d on a.id_asentamiento = d.id_asentamiento_fk\r\n" + 
+    		"inner join gescopls.inmuebles i on d.id_direccion = i.id_direccion_fk\r\n" + 
+    		"inner join gescopls.inmuebles_socios ist on i.id_inmueble = ist.Inmueble_id_inmueble\r\n" + 
+    		"join gescopls.tickets t on ist.socios_id_usuario = t.id_usuario_creador_fk\r\n" + 
+    		"where az.id_usuario = ?1 order by t.id_ticket desc", 
+			nativeQuery = true)
+    Collection<Ticket> findByAdminZonaId(Long id);
     
     
 }

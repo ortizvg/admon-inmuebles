@@ -21,4 +21,7 @@ public interface TicketService {
     
     boolean isFiltro( final TicketDto ticketDto );
     Collection<TicketDto> filtrar( final TicketDto ticketDto );
+    
+    Collection<TicketDto> findByAdminZonaId(Long id);
+    Collection<TicketDto> findByAdminBiId(Long id);
 }

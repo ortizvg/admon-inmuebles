@@ -24,6 +24,7 @@ public class CambioTicketServiceImpl implements CambioTicketService {
 
     @Override
     public CambioTicketDto save(final CambioTicketDto cambioTicketDto) {
+    	modelMapper.getConfiguration().setAmbiguityIgnored(true);
     	CambioTicket cambioTicket =  cambioTicketRepository.save(modelMapper.map(cambioTicketDto, CambioTicket.class));
         
         return modelMapper.map(cambioTicket, CambioTicketDto.class);

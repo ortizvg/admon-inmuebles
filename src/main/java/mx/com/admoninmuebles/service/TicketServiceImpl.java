@@ -57,12 +57,22 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public boolean isFiltro(TicketDto ticketDto) {
-		return StringUtils.isNotBlank( ticketDto.getEstatus()) || ticketDto.getInmuebleId() != null || ticketDto.getTipoTicketId() != null;
+		return ticketDto.getTipoTicketId() != null;
 	}
 
 	@Override
 	public Collection<TicketDto> filtrar(TicketDto ticketDto) {
 		return StreamSupport.stream(ticketRepository.findByInmuebleIdAndTipoTicketNameAndEstatusTicketName(ticketDto.getInmuebleId(), ticketDto.getTipoTicketId(), ticketDto.getEstatus()).spliterator(), false).map(ticket -> modelMapper.map(ticket, TicketDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<TicketDto> findByAdminZonaId(Long id) {
+		return StreamSupport.stream(ticketRepository.findByAdminZonaId(id).spliterator(), false).map(ticket -> modelMapper.map(ticket, TicketDto.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<TicketDto> findByAdminBiId(Long id) {
+		return StreamSupport.stream(ticketRepository.findByAdminBiId(id).spliterator(), false).map(ticket -> modelMapper.map(ticket, TicketDto.class)).collect(Collectors.toList());
 	}
 	
 }

@@ -33,6 +33,8 @@ $(document).ready(function() {
                 <table id="tableId" class="table m-t-30 table-hover no-wrap contact-list" data-th-attr="data-page-size=${T(mx.com.admoninmuebles.constant.ComunConst).TAMANIO_PAGINACION}">
                   <thead>
                     <tr>
+                      <th th:text="#{ticket.comentario.usuario.agrego}"></th>
+                      <th th:text="#{ticket.comentario.fecha.hora}"></th>
                       <th th:text="#{ticket.comentario}"></th>
                       <th th:text="#{ticket.evidencia}"></th>
                     </tr>
@@ -40,6 +42,8 @@ $(document).ready(function() {
                   <tbody>
                     <th:block th:each="cambio : ${cambios}">
                       <tr>
+                      	<td th:text="${cambio.modificadoPor.nombreCompleto}"></td>
+						<td th:text="${#dates.format(cambio.fechaModificacion, T(mx.com.admoninmuebles.constant.ComunConst).FORMATO_FECHA)}"></td>
                         <td th:text="${cambio.comentario}"></td>
                         <td th:if="${cambio.archivoEvidencia}">
                         	<a th:href="@{|/ticket-download/${cambio.id}|}" th:text="${cambio.tituloArchivoEvidencia}"></a>
